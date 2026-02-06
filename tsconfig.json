@@ -46,14 +46,7 @@
     // Other
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "allowJs": false
-  },
-  "angularCompilerOptions": {
-    "enableI18nLegacyMessageIdFormat": false,
-    "strictInjectionParameters": true,
-    "strictInputAccessModifiers": true,
-    "strictTemplates": true
-  },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "dist"]
+    "allowJs": false,
+    "types": ["vitest/globals"]
+  }
 }
