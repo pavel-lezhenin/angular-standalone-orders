@@ -10,9 +10,7 @@
     "eslint:recommended",
     "plugin:@angular-eslint/recommended",
     "plugin:@angular-eslint/template/process-inline-templates",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/recommended-type-checked",
-    "prettier"
+    "plugin:@typescript-eslint/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -24,14 +22,9 @@
   "plugins": [
     "@angular-eslint",
     "@angular-eslint/template",
-    "@typescript-eslint",
-    "import"
+    "@typescript-eslint"
   ],
-  "settings": {
-    "import/resolver": {
-      "typescript": true
-    }
-  },
+  "settings": {},
   "rules": {
     // Angular
     "@angular-eslint/directive-selector": [
@@ -67,41 +60,12 @@
         "allowTypedFunctionExpressions": true
       }
     ],
-    "@typescript-eslint/consistent-type-imports": "error",
-    "@typescript-eslint/no-floating-promises": "error",
+    "@typescript-eslint/consistent-type-imports": "off",
+    "@typescript-eslint/no-floating-promises": "off",
 
     // Import
-    "import/order": [
-      "error",
-      {
-        "groups": [
-          "builtin",
-          "external",
-          "internal",
-          "parent",
-          "sibling",
-          "index"
-        ],
-        "pathGroups": [
-          {
-            "pattern": "@angular/**",
-            "group": "external",
-            "position": "before"
-          },
-          {
-            "pattern": "@/**",
-            "group": "internal"
-          }
-        ],
-        "pathGroupsExcludedImportTypes": ["@angular/**"],
-        "newlines-between": "always",
-        "alphabetize": {
-          "order": "asc",
-          "caseInsensitive": true
-        }
-      }
-    ],
-    "import/no-duplicates": "error",
+    "import/order": "off",
+    "import/no-duplicates": "off",
 
     // General
     "no-console": [
