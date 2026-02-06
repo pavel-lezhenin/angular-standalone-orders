@@ -295,17 +295,21 @@ canActivate: [permissionGuard('products', 'edit')]
 
 ### Permissions Matrix
 
-| Role | Shop (Cart/Profile) | Dashboard | Customers | Permissions | Orders | Products | Categories |
-|------|-------------|-----------|-----------|-------------|--------|----------|-----------|
-| **User** | 👁️ View own cart, profile, orders | ❌ | ❌ | ❌ | 👁️ View own | ❌ | ❌ |
-| **Manager** | 👁️ View own | 👁️ View | ❌ | ❌ | 👁️ View, ✏️ Edit (status) | ⚙️ CRUD | ⚙️ CRUD |
-| **Admin** | ⚙️ View all | ⚙️ All | ⚙️ CRUD | ⚙️ CRUD | ⚙️ CRUD | ⚙️ CRUD | ⚙️ CRUD |
+| Role | Shop (Cart/Profile) | Dashboard | Customers | Permissions | Orders (Own) | Orders (All) | Products | Categories |
+|------|-------------|-----------|-----------|-------------|--------|----------|----------|-----------|
+| **User** | 👁️ View own | ❌ | ❌ | ❌ | 👁️ View | ❌ | ❌ | ❌ |
+| **Manager** | 👁️ View own | 👁️ View | ❌ | ❌ | ❌ | 👁️ View, ✏️ Edit (status) | ⚙️ CRUD | ⚙️ CRUD |
+| **Admin** | ⚙️ View all | ⚙️ All | ⚙️ CRUD | ⚙️ CRUD | ⚙️ CRUD | ⚙️ CRUD | ⚙️ CRUD | ⚙️ CRUD |
 
 **Legend:**
 - 👁️ View = Read-only access
 - ✏️ Edit (status) = Can modify specific field only (order status)
 - ⚙️ CRUD = Create, Read, Update, Delete (full access)
 - ❌ = No access
+
+**Notes:**
+- **Orders (Own)** = Only orders created by the current user
+- **Orders (All)** = All orders in the system (admin/manager scope)
 
 ---
 
