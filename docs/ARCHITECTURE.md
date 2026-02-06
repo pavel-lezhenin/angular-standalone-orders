@@ -295,21 +295,26 @@ canActivate: [permissionGuard('products', 'edit')]
 
 ### Permissions Matrix
 
-| Role | Shop (Cart/Profile) | Dashboard | Customers | Permissions | Orders (Own) | Orders (All) | Products | Categories |
-|------|-------------|-----------|-----------|-------------|--------|----------|----------|-----------|
-| **User** | 👁️ View own | ❌ | ❌ | ❌ | 👁️ View | ❌ | ❌ | ❌ |
-| **Manager** | 👁️ View own | 👁️ View | ❌ | ❌ | ❌ | 👁️ View, ✏️ Edit (status) | ⚙️ CRUD | ⚙️ CRUD |
-| **Admin** | ⚙️ View all | ⚙️ All | ⚙️ CRUD | ⚙️ CRUD | ⚙️ CRUD | ⚙️ CRUD | ⚙️ CRUD | ⚙️ CRUD |
+| Role | Cart | Profile | Orders (Own) | Orders (All) | Cancelled Orders | Customers | Products | Categories |
+|------|------|---------|--------|----------|----------|-----------|----------|-----------|
+| **User** | ⚙️ CRUD | ✏️ Edit | 👁️ View, ✏️ Cancel | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Manager** | ❌ | ❌ | ❌ | 👁️ View, ✏️ Edit (status) | 👁️ View | ❌ | ⚙️ CRUD | ⚙️ CRUD |
+| **Admin** | ⚙️ CRUD | ⚙️ CRUD | ⚙️ CRUD | ⚙️ CRUD | ⚙️ CRUD | ⚙️ CRUD | ⚙️ CRUD | ⚙️ CRUD |
 
 **Legend:**
 - 👁️ View = Read-only access
-- ✏️ Edit (status) = Can modify specific field only (order status)
+- ✏️ Edit = Can modify specific fields
+- ✏️ Cancel = Can cancel own orders
+- ✏️ Edit (status) = Can change order status (queue → processing → completed)
 - ⚙️ CRUD = Create, Read, Update, Delete (full access)
 - ❌ = No access
 
 **Notes:**
-- **Orders (Own)** = Only orders created by the current user
-- **Orders (All)** = All orders in the system (admin/manager scope)
+- **Cart** = Shopping cart management (user can only manage own, admin can manage all)
+- **Profile** = User profile editing (email, password, name)
+- **Orders (Own)** = Only orders created by the current user (shop flow)
+- **Orders (All)** = All orders in system (admin/manager scope)
+- **Cancelled Orders** = Separate view for cancelled orders (manager sees reason, admin can restore)
 
 ---
 
