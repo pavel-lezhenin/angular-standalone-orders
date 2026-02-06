@@ -596,10 +596,17 @@ export class CustomersComponent {
 
 **Goal:** RBAC UI for managing permissions
 
+### Permissions Structure
+
+- **User**: View own cart/profile, view own orders
+- **Manager**: View dashboard, view all orders (can edit status), CRUD products & categories
+- **Admin**: All access to everything
+
 ### Deliverables
 
 - [ ] `features/admin/permissions/permissions.component.ts`
 - [ ] Permissions table (role × section × action)
+- [ ] Checkbox toggles for each permission
 
 ### Implementation
 
@@ -607,8 +614,34 @@ export class CustomersComponent {
 export class PermissionsComponent {
   permissions$ = signal<Permission[]>([]);
   roles: UserRole[] = ['user', 'manager', 'admin'];
-  sections = ['dashboard', 'orders', 'products', 'categories', 'customers', 'permissions'];
+  sections = ['shop', 'dashboard', 'orders', 'products', 'categories', 'customers', 'permissions'];
   actions = ['view', 'create', 'edit', 'delete'];
+  
+  // Permission matrix definition (in seed data)
+  defaultPermissions = [
+    // User: only shop access
+    { role: 'user', section: 'shop', action: 'view', granted: true },
+    { role: 'user', section: 'dashboard', action: 'view', granted: false },
+    
+    // Manager: dashboard, orders (view+edit), products, categories
+    { role: 'manager', section: 'dashboard', action: 'view', granted: true },
+    { role: 'manager', section: 'orders', action: 'view', granted: true },
+    { role: 'manager', section: 'orders', action: 'edit', granted: true },  // Can change status
+    { role: 'manager', section: 'orders', action: 'delete', granted: false }, // Cannot delete
+    { role: 'manager', section: 'products', action: 'view', granted: true },
+    { role: 'manager', section: 'products', action: 'create', granted: true },
+    { role: 'manager', section: 'products', action: 'edit', granted: true },
+    { role: 'manager', section: 'products', action: 'delete', granted: true },
+    { role: 'manager', section: 'categories', action: 'view', granted: true },
+    { role: 'manager', section: 'categories', action: 'create', granted: true },
+    { role: 'manager', section: 'categories', action: 'edit', granted: true },
+    { role: 'manager', section: 'categories', action: 'delete', granted: true },
+    { role: 'manager', section: 'customers', action: 'view', granted: false },
+    { role: 'manager', section: 'permissions', action: 'view', granted: false },
+    
+    // Admin: all access
+    { role: 'admin', section: '*', action: '*', granted: true },
+  ];
   
   async loadPermissions() {
     this.permissions$.set(await this.permissionRepo.getAll());
@@ -626,6 +659,7 @@ export class PermissionsComponent {
     }
   }
 }
+```
 ```
 
 ### Matrix Layout

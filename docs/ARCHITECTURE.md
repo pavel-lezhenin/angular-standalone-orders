@@ -295,11 +295,17 @@ canActivate: [permissionGuard('products', 'edit')]
 
 ### Permissions Matrix
 
-| Role | Dashboard | Customers | Permissions | Orders | Products | Categories |
-|------|-----------|-----------|-------------|--------|----------|-----------|
-| User | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| Manager | ✅ (view) | ❌ | ❌ | ✅ | ✅ | ❌ |
-| Admin | ✅ (all) | ✅ (all) | ✅ (all) | ✅ | ✅ | ✅ |
+| Role | Shop (Cart/Profile) | Dashboard | Customers | Permissions | Orders | Products | Categories |
+|------|-------------|-----------|-----------|-------------|--------|----------|-----------|
+| **User** | ✅ View own cart, profile, orders | ❌ | ❌ | ❌ | ✅ View own | ❌ | ❌ |
+| **Manager** | ✅ View own | ✅ View | ❌ | ❌ | ✅ View, Edit (status) | ✅ CRUD | ✅ CRUD |
+| **Admin** | ✅ View all | ✅ All | ✅ CRUD | ✅ CRUD | ✅ CRUD | ✅ CRUD | ✅ CRUD |
+
+**Legend:**
+- ✅ View = Read access only
+- ✅ Edit (status) = Can change order status but not delete
+- ✅ CRUD = Create, Read, Update, Delete
+- ❌ = No access
 
 ---
 
