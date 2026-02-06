@@ -10,7 +10,8 @@
     "eslint:recommended",
     "plugin:@angular-eslint/recommended",
     "plugin:@angular-eslint/template/process-inline-templates",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -24,7 +25,6 @@
     "@angular-eslint/template",
     "@typescript-eslint"
   ],
-  "settings": {},
   "rules": {
     // Angular
     "@angular-eslint/directive-selector": [
@@ -60,12 +60,8 @@
         "allowTypedFunctionExpressions": true
       }
     ],
-    "@typescript-eslint/consistent-type-imports": "off",
-    "@typescript-eslint/no-floating-promises": "off",
-
-    // Import
-    "import/order": "off",
-    "import/no-duplicates": "off",
+    "@typescript-eslint/no-floating-promises": "warn",
+    "@typescript-eslint/consistent-type-imports": "error",
 
     // General
     "no-console": [
@@ -95,6 +91,15 @@
       "rules": {
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-non-null-assertion": "off"
+      }
+    },
+    {
+      "files": ["*.html"],
+      "parser": "@angular-eslint/template-parser",
+      "rules": {
+        "@typescript-eslint/no-floating-promises": "off",
+        "@typescript-eslint/consistent-type-imports": "off",
+        "@typescript-eslint/ban-ts-comment": "off"
       }
     }
   ]
