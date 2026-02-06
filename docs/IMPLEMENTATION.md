@@ -85,6 +85,14 @@ class AuthService {
 }
 ```
 
+### Patterns Used
+
+- **ROUTING** — No lazy loading yet, simple service structure
+- **FORMS** — Will be used in Phase 2.2 (login)
+- **ERROR_HANDLING** — Service error states, try-catch blocks
+- **AUTHENTICATION** — Session management via AuthService
+- **PERFORMANCE** — Signals for reactive state updates
+
 ### Testing
 
 ```bash
@@ -115,12 +123,20 @@ class AuthService {
 
 ### Deliverables
 
-- [ ] `features/auth/login.component.ts` — Email/password form
-- [ ] `features/auth/login.component.html` — Login template
+- [ ] `features/auth/login.component.ts` — Email/password form (Reactive Forms)
+- [ ] `features/auth/login.component.html` — Login template (with aria labels)
 - [ ] `features/auth/login.component.scss` — Styling
-- [ ] `features/auth/auth.routes.ts` — Auth routing
+- [ ] `features/auth/auth.routes.ts` — Auth routing with functional guards
 - [ ] Update auth.guard.ts with proper implementation
 - [ ] Update admin.guard.ts with proper implementation
+
+### Patterns Used
+
+- **ROUTING** — [Functional guards + lazy loading](../../../docs/framework/angular/patterns/ROUTING.md)
+- **FORMS** — [Reactive Forms + validation](../../../docs/framework/angular/patterns/FORMS.md) in login.component
+- **AUTHENTICATION** — [AuthService signals](../../../docs/framework/angular/patterns/AUTHENTICATION.md) + session management
+- **ERROR_HANDLING** — Display invalid credentials error
+- **ACCESSIBILITY** — Form labels with aria-describedby, error announcements
 
 ### Implementation Details
 
@@ -180,8 +196,13 @@ admin@demo / demo → Admin role
 ### Deliverables
 
 - [ ] `pages/landing.component.ts`
-- [ ] `pages/landing.component.html`
+- [ ] `pages/landing.component.html` — With semantic HTML
 - [ ] `pages/landing.component.scss`
+
+### Patterns Used
+
+- **ACCESSIBILITY** — [Semantic HTML, proper heading hierarchy](../../../docs/framework/angular/patterns/ACCESSIBILITY.md)
+- **ROUTING** — Links to auth/shop/admin using routerLink
 
 ### Content
 
@@ -225,8 +246,16 @@ admin@demo / demo → Admin role
 - [ ] `features/shop/category-filter.component` — Category sidebar
 - [ ] `features/shop/product-detail.component` — Modal or page
 - [ ] `features/shop/cart.component` — Shopping cart
+- [ ] `features/shop/checkout.component` — Order creation (Reactive Forms)
 - [ ] `features/shop/user-profile.component` — Orders history
 - [ ] `features/shop/shop.routes.ts`
+
+### Patterns Used
+
+- **FORMS** — [Reactive Forms in checkout](../../../docs/framework/angular/patterns/FORMS.md) for address/payment
+- **PERFORMANCE** — [OnPush + @for with track](../../../docs/framework/angular/patterns/PERFORMANCE.md) for products grid
+- **ERROR_HANDLING** — Show validation errors in checkout form, handle cart save errors
+- **ACCESSIBILITY** — Product images with alt text, form labels with aria-describedby
 
 ### Implementation Pattern
 
@@ -296,11 +325,17 @@ export class CartComponent {
 
 ### Deliverables
 
-- [ ] `shared/ui/table.component.ts` — Generic data table
-- [ ] `shared/ui/modal.component.ts` — Modal wrapper
+- [ ] `shared/ui/table.component.ts` — Generic data table with accessibility
+- [ ] `shared/ui/modal.component.ts` — Modal wrapper (a11y focused)
 - [ ] `shared/ui/sidebar.component.ts` — Navigation sidebar
 - [ ] `shared/ui/filter-panel.component.ts` — Filter controls
-- [ ] `shared/ui/trello-board.component.ts` — Drag-drop board
+- [ ] `shared/ui/trello-board.component.ts` — Drag-drop board (CDK)
+
+### Patterns Used
+
+- **PERFORMANCE** — [OnPush for all components](../../../docs/framework/angular/patterns/PERFORMANCE.md)
+- **ACCESSIBILITY** — [ARIA roles, labels, focus management](../../../docs/framework/angular/patterns/ACCESSIBILITY.md) in table & modal
+- **ERROR_HANDLING** — Empty states in table when no data
 
 ### Table Component
 
@@ -379,9 +414,15 @@ export class ModalComponent {
 ### Deliverables
 
 - [ ] `features/admin/admin-layout.component.ts` — Main layout
-- [ ] `features/admin/admin-layout.component.html`
+- [ ] `features/admin/admin-layout.component.html` — With role-based menu
 - [ ] `features/admin/admin-layout.component.scss`
-- [ ] `features/admin/admin.routes.ts` — Nested routes
+- [ ] `features/admin/admin.routes.ts` — Nested routes with guards
+
+### Patterns Used
+
+- **ROUTING** — [Nested routes in admin.routes.ts](../../../docs/framework/angular/patterns/ROUTING.md) with functional guards
+- **PERFORMANCE** — [OnPush change detection](../../../docs/framework/angular/patterns/PERFORMANCE.md)
+- **ACCESSIBILITY** — [Navigation landmarks](../../../docs/framework/angular/patterns/ACCESSIBILITY.md) (nav, main roles)
 
 ### Implementation
 
@@ -499,9 +540,15 @@ export class DashboardComponent {
 
 ### Deliverables
 
-- [ ] `features/admin/customers/customers.component.ts`
-- [ ] `features/admin/customers/customer-edit.component.ts`
+- [ ] `features/admin/customers/customers.component.ts` — Customer table
+- [ ] `features/admin/customers/customer-edit.component.ts` — Edit modal (Reactive Forms)
 - [ ] Edit modal for changing roles
+
+### Patterns Used
+
+- **FORMS** — [Reactive Forms in customer-edit](../../../docs/framework/angular/patterns/FORMS.md) for role selection
+- **ERROR_HANDLING** — Show delete confirmation, display save errors
+- **ACCESSIBILITY** — Modal with proper focus management, form labels
 
 ### Implementation
 
@@ -739,8 +786,15 @@ export class OrdersBoardComponent {
 ### Deliverables
 
 - [ ] `features/admin/products/products.component.ts` — Table
-- [ ] `features/admin/products/product-edit.component.ts` — Edit modal
+- [ ] `features/admin/products/product-edit.component.ts` — Edit modal (Reactive Forms)
+- [ ] `features/admin/products/product-create.component.ts` — Create modal (Reactive Forms)
 - [ ] Image upload (base64)
+
+### Patterns Used
+
+- **FORMS** — [Reactive Forms with custom validators](../../../docs/framework/angular/patterns/FORMS.md) for product fields
+- **ERROR_HANDLING** — Display validation errors, image upload errors, API errors
+- **ACCESSIBILITY** — Form labels, image alt attributes, proper focus management in modal
 
 ### Product Edit Component
 
@@ -807,8 +861,13 @@ export class ProductEditComponent {
 
 ### Deliverables
 
-- [ ] `features/admin/categories/categories.component.ts`
-- [ ] `features/admin/categories/category-edit.component.ts`
+- [ ] `features/admin/categories/categories.component.ts` — Table
+- [ ] `features/admin/categories/category-edit.component.ts` — Edit modal (Reactive Forms)
+
+### Patterns Used
+
+- **FORMS** — [Simple Reactive Forms validation](../../../docs/framework/angular/patterns/FORMS.md) in category-edit
+- **ERROR_HANDLING** — Prevent delete if category has products, show validation errors
 
 ### Implementation
 
@@ -908,6 +967,12 @@ const demoProducts = [
 - [ ] E2E tests (3 user journeys)
 - [ ] Performance verification
 - [ ] Build success
+
+### Patterns Used
+
+- **ERROR_HANDLING** — E2E tests verify error states, validation messages
+- **ACCESSIBILITY** — Verify form labels, ARIA attributes in E2E tests
+- **PERFORMANCE** — Verify OnPush works, @for track with no DOM thrashing
 
 ### Unit Tests
 
@@ -1042,7 +1107,26 @@ Total: ~21 hours (4-5 full days)
 
 ---
 
-## 🚀 Starting Phase 2.1
+## � Patterns Used in Phase 2
+
+This implementation uses the following Angular framework patterns. Refer to these guides for detailed examples:
+
+| Pattern | Phases | Purpose |
+|---------|--------|---------|
+| [ROUTING](../../../docs/framework/angular/patterns/ROUTING.md) | 2.2, 2.3, 2.6, 2.14 | Lazy-loaded areas, functional guards, nested routes |
+| [FORMS](../../../docs/framework/angular/patterns/FORMS.md) | 2.2, 2.4, 2.8, 2.11, 2.12 | Reactive Forms, validation, error handling |
+| [ERROR_HANDLING](../../../docs/framework/angular/patterns/ERROR_HANDLING.md) | All phases | Service error states, UI error display, try-catch |
+| [AUTHENTICATION](../../../docs/framework/angular/patterns/AUTHENTICATION.md) | 2.1, 2.2 | AuthService signals, session management, guards |
+| [PERFORMANCE](../../../docs/framework/angular/patterns/PERFORMANCE.md) | 2.4, 2.5, 2.6+ | OnPush change detection, @for track, lazy loading |
+| [ACCESSIBILITY](../../../docs/framework/angular/patterns/ACCESSIBILITY.md) | 2.3, 2.5, 2.8, 2.11, 2.14 | Semantic HTML, ARIA roles, form labels |
+
+**Not Used:**
+- **STATE_MANAGEMENT** — Signals are built into services; no separate state management library needed
+- **API_MOCKING** — BFF uses IndexedDB; MSW not needed. Can add for E2E tests if desired
+
+---
+
+## �🚀 Starting Phase 2.1
 
 To begin:
 
