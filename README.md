@@ -1,59 +1,250 @@
-# AngularStandaloneOrders
+# Angular Orders Management Platform
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.3.
+> **Production-ready Angular template** — Full-stack orders management system with RBAC, IndexedDB BFF, and modern Angular 21 patterns.
 
-## Development server
+**Part of [Front-Templates](../../) collection** — Enterprise-grade template with proven architecture patterns.
 
-To start a local development server, run:
+## 🎯 What Is This?
 
-```bash
-ng serve
-```
+A **mid-sized Angular application template** demonstrating:
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- ✅ **Modern Angular 21** — Standalone components, signals, reactive patterns
+- ✅ **Layered architecture** — Core/Features/Shared/Pages with clear boundaries
+- ✅ **Role-based access control** — RBAC system with 3 roles (user/manager/admin)
+- ✅ **IndexedDB BFF layer** — Offline-first with repositories pattern
+- ✅ **Enterprise patterns** — Guards, interceptors, error handling, testing
+- ✅ **TypeScript strict mode** — Full type safety throughout
 
-## Code scaffolding
+**Best for:** Learning, prototypes, MVPs, admin dashboards, internal tools
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+**Not for:** Public SaaS, high-traffic sites, real-time collaboration — [see limitations](./docs/USE_CASES.md)
 
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+## 🚀 Quick Start
 
 ```bash
-ng build
+# Clone, install root deps
+git clone --recursive <repo> && cd front-templates && pnpm install
+
+# Navigate to package (IMPORTANT!)
+cd packages/angular-standalone-orders
+
+# Install package deps (separate pnpm-lock.yaml)
+pnpm install
+
+# Start dev server
+pnpm dev  # http://localhost:4200
+
+# Demo users
+user@demo / demo        (User role)
+manager@demo / demo     (Manager role)
+admin@demo / demo       (Admin role)
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## 📚 Documentation
 
-## Running unit tests
+**Start here if you want to:**
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+| Goal | Read |
+|------|------|
+| Understand the architecture | [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) |
+| Build Phase 2 features | [docs/IMPLEMENTATION.md](./docs/IMPLEMENTATION.md) |
+| See what you can/can't do | [docs/USE_CASES.md](./docs/USE_CASES.md) |
+| Deep dive into design | [docs/PHASE2_PLAN.md](./docs/PHASE2_PLAN.md) |
+
+## 🏗️ Architecture (30 Seconds)
+
+```
+UI Components (Pages, Features, Shared)
+    ↓
+Feature Services (Auth, Shop, Admin)
+    ↓
+Core/BFF Layer (Database, Repositories, Services)
+    ↓
+IndexedDB (Single Source of Truth)
+```
+
+**Key principle:** Layered architecture with unidirectional dependencies. Features are lazy-loaded and self-contained.
+
+## 📐 File Structure
+
+```
+src/app/
+├── core/bff/              # Data layer (IndexedDB operations)
+│   ├── database.service   # DB initialization
+│   ├── repositories/      # CRUD operations
+│   └── services/          # Business logic + RBAC
+├── features/              # Lazy-loaded modules
+│   ├── auth/              # Login + guards
+│   ├── shop/              # Products + cart
+│   └── admin/             # Dashboard + CRUD
+├── shared/                # Reusable components & utils
+├── pages/                 # Route components
+└── app.routes.ts          # Root routing
+```
+
+See [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) for full details.
+
+## 🔐 Role-Based Access Control
+
+| Feature | User | Manager | Admin |
+|---------|------|---------|-------|
+| Shop | ✅ | ✅ | ✅ |
+| Dashboard | — | ✅ | ✅ |
+| Customers | — | — | ✅ |
+| Permissions | — | — | ✅ |
+| Orders | — | ✅ | ✅ |
+| Products | — | ✅ | ✅ |
+| Categories | — | — | ✅ |
+
+## 📋 Phase 2 Includes
+
+- **BFF Layer** — IndexedDB with 5 repositories (user, product, order, category, cart)
+- **Auth Module** — Login, session, guards, 3 demo users
+- **Shop** — Products with filter, cart, checkout
+- **Admin Dashboard** — Stats, 5 latest orders
+- **Orders Board** — Trello-like with drag-drop (CDK)
+- **Customers, Products, Categories** — Full CRUD
+- **Permissions Matrix** — RBAC UI
+- **Shared Components** — Table, modal, sidebar, filter-panel, trello-board
+- **Tests** — 80%+ coverage target
+
+**Duration:** ~21 hours (14 sequential phases)
+
+## 🛠️ Commands
 
 ```bash
-ng test
+# Development
+pnpm dev          # Start dev server
+pnpm build        # Production build
+pnpm lint         # ESLint
+pnpm format       # Prettier
+
+# Testing
+pnpm test         # Unit tests
+pnpm test:watch   # Watch mode
+pnpm e2e          # Playwright E2E tests
+pnpm test:cov     # Coverage report
 ```
 
-## Running end-to-end tests
+## 💡 Key Patterns
 
-For end-to-end (e2e) testing, run:
+### Signals for State
+```typescript
+users$ = signal<User[]>([]);
+userCount = computed(() => this.users$().length);
+effect(() => console.log(`Users: ${this.userCount()}`));
+```
+
+### Repository Pattern
+```typescript
+async getProducts(): Promise<Product[]> {
+  return this.productRepository.getAll();  // All data ops go here
+}
+```
+
+### Route Guards
+```typescript
+canActivate: [authGuard, adminGuard]  // Protect sensitive routes
+```
+
+### Lazy Loading
+```typescript
+{ path: 'admin', loadComponent: () => import('./admin-layout.component') }
+```
+
+See [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) for more patterns.
+
+## ⚠️ Important Limitations
+
+**This template is NOT suitable for:**
+
+- ❌ High-traffic public sites (scalability limited by IndexedDB)
+- ❌ Multi-device sync (data lives only in browser)
+- ❌ Real-time collaboration (no WebSockets)
+- ❌ Sensitive financial data (client-side only)
+- ❌ Mobile apps (web app only)
+
+**To use in production:**
+1. Replace IndexedDB with REST/GraphQL API
+2. Implement secure authentication (OAuth/JWT)
+3. Move sensitive data to backend
+4. Add WebSockets for real-time
+
+See [docs/USE_CASES.md](./docs/USE_CASES.md) for full analysis + migration guide.
+
+## 🧪 Testing
+
+**Targets:**
+- BFF services: 90%+ coverage
+- Guards: 85%+ coverage
+- Components: 70%+ coverage
+- Overall: 80%+
 
 ```bash
-ng e2e
+pnpm test          # Run all tests
+pnpm test:cov      # Coverage report
+pnpm e2e           # E2E tests (3 user journeys)
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## 📊 Bundle Size
 
-## Additional Resources
+```
+Core Angular:     ~150KB
+App code:         ~100KB
+Gzipped total:    ~65KB
+```
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## 🚨 Current Status
+
+| Component | Status |
+|-----------|--------|
+| Phase 1 setup | ✅ Complete |
+| Phase 2 planning | ✅ Complete |
+| Phase 2 implementation | 🚧 Ready to start |
+
+## 🤝 Contributing
+
+Follow these when adding features:
+
+1. ✅ Keep to the architecture (Core/Shared/Features)
+2. ✅ Write tests (80%+ target)
+3. ✅ Use TypeScript strict mode
+4. ✅ Use signals, not BehaviorSubject
+5. ✅ Keep files < 300 lines
+6. ✅ Use reactive forms
+7. ✅ Make mobile responsive
+
+See [AGENTS.md](./AGENTS.md) for detailed guidelines.
+
+## 📖 Learning Resources
+
+This template teaches:
+
+- Angular 21 standalone components
+- Signals & computed properties
+- Repository pattern
+- RBAC implementation
+- Guards & interceptors
+- Lazy loading
+- Reactive forms
+- Testing strategy
+- Layered architecture
+
+**Great for:** Learning modern Angular patterns.
+
+## 🔗 Links
+
+- **Root docs:** [../../docs/](../../docs/)
+- **Architecture deep dive:** [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)
+- **Implementation roadmap:** [docs/IMPLEMENTATION.md](./docs/IMPLEMENTATION.md)
+- **Use cases & limitations:** [docs/USE_CASES.md](./docs/USE_CASES.md)
+- **Complete plan:** [docs/PHASE2_PLAN.md](./docs/PHASE2_PLAN.md)
+- **AI agents:** [AGENTS.md](./AGENTS.md)
+
+## 📄 License
+
+MIT — See [../../LICENSE](../../LICENSE)
+
+---
+
+**Ready to build?** Start with [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) to understand the design, then [docs/IMPLEMENTATION.md](./docs/IMPLEMENTATION.md) for Phase 2 features.
