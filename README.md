@@ -88,13 +88,16 @@ See [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) for full details.
 
 | Feature | User | Manager | Admin |
 |---------|------|---------|-------|
-| Shop | ✅ | ✅ | ✅ |
-| Dashboard | — | ✅ | ✅ |
+| Shop (Products, Cart) | ✅ | ✅ | ✅ |
+| Profile Edit | ✅ | — | ✅ |
+| Orders (Own) | ✅ | — | ✅ |
+| Orders (All, Manage) | — | ✅ | ✅ |
+| Cancelled Orders | — | ✅ | ✅ |
 | Customers | — | — | ✅ |
-| Permissions | — | — | ✅ |
-| Orders | — | ✅ | ✅ |
 | Products | — | ✅ | ✅ |
-| Categories | — | — | ✅ |
+| Categories | — | ✅ | ✅ |
+
+See [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md#permissions-matrix) for detailed permissions.
 
 ## 📋 Phase 2 Includes
 

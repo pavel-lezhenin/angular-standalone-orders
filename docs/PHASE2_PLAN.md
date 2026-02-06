@@ -145,23 +145,38 @@ pages/
 
 ### Roles & Permissions Matrix
 
-| Role    | Dashboard | Customers | Permissions | Orders | Products | Categories |
-|---------|-----------|-----------|-------------|--------|----------|-----------|
-| User    | ❌        | ❌        | ❌          | ❌     | ❌       | ❌        |
-| Manager | ✅ (view) | ❌        | ❌          | ✅     | ✅       | ❌        |
-| Admin   | ✅ (all)  | ✅ (all)  | ✅ (all)    | ✅     | ✅       | ✅        |
+| Role | Cart | Profile | Orders (Own) | Orders (All) | Cancelled Orders | Customers | Products | Categories |
+|------|------|---------|--------|----------|----------|-----------|----------|-----------|
+| **User** | ⚙️ CRUD | ✏️ Edit | 👁️ View, ✏️ Cancel | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Manager** | ❌ | ❌ | ❌ | 👁️ View, ✏️ Edit (status) | 👁️ View | ❌ | ⚙️ CRUD | ⚙️ CRUD |
+| **Admin** | ⚙️ CRUD | ⚙️ CRUD | ⚙️ CRUD | ⚙️ CRUD | ⚙️ CRUD | ⚙️ CRUD | ⚙️ CRUD | ⚙️ CRUD |
+
+**Legend:**
+- 👁️ View = Read-only access
+- ✏️ Edit = Can modify specific fields
+- ✏️ Cancel = Can cancel own orders
+- ✏️ Edit (status) = Can change order status (queue → processing → completed)
+- ⚙️ CRUD = Create, Read, Update, Delete (full access)
+- ❌ = No access
+
+**Notes:**
+- **Cart** = Shopping cart management (user can only manage own, admin can manage all)
+- **Profile** = User profile editing (email, password, name)
+- **Orders (Own)** = Only orders created by the current user (shop flow)
+- **Orders (All)** = All orders in system (admin/manager scope)
+- **Cancelled Orders** = Separate view for cancelled orders (manager sees reason, admin can restore)
 
 ### Permission System
 
 ```typescript
 // permission.service.hasAccess(section: string, action: string): boolean
 // Examples:
-- hasAccess('dashboard', 'view') → check if can view dashboard
-- hasAccess('customers', 'delete') → check if can delete customers
-- hasAccess('products', 'edit') → check if can edit products
+- hasAccess('cart', 'edit') → User can edit cart, Admin can edit any cart
+- hasAccess('orders', 'edit') → Manager can change order status, Admin full access
+- hasAccess('products', 'create') → Manager/Admin can create products
 
-// Sections: dashboard, customers, permissions, orders, products, categories
-// Actions: view, create, edit, delete
+// Sections: cart, profile, orders, cancelled_orders, customers, products, categories
+// Actions: view, create, edit, delete, cancel
 ```
 
 ---
@@ -271,6 +286,28 @@ Category
 ---
 
 ## 🎯 Implementation Phases (Sequential)
+
+**Total Duration:** ~21 hours  
+**14 Sequential Phases**
+
+| # | Phase | Duration | Key Deliverables |
+|---|-------|----------|------------------|
+| 2.1 | BFF Foundation | 2h | Database, repositories, services |
+| 2.2 | Authentication | 1.5h | Login, guards, session |
+| 2.3 | Landing Page | 0.5h | Home page, navigation |
+| 2.4 | Shop Module | 3h | Products, cart, checkout |
+| 2.5 | Shared UI | 2h | Reusable components |
+| 2.6 | Admin Layout | 1h | Sidebar, routing |
+| 2.7 | Dashboard | 1h | Stats, widgets |
+| 2.8 | Customers | 1h | User management |
+| 2.9 | Permissions | 1.5h | RBAC matrix |
+| 2.10 | Orders Board | 2.5h | Trello drag-drop |
+| 2.11 | Products | 1.5h | CRUD, image upload |
+| 2.12 | Categories | 1h | Category management |
+| 2.13 | Seed Data | 1h | Demo data |
+| 2.14 | Tests & Polish | 2h | Coverage, E2E, build |
+
+---
 
 ### Phase 2.1: BFF Foundation (Database + Services)
 - [ ] Create IndexedDB database.service.ts

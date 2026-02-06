@@ -370,6 +370,30 @@ canActivate: [permissionGuard('products', 'edit')]
 }
 ```
 
+---
+
+## 📊 Entity Relationships
+
+```
+User
+  ├─ Cart (1:1)
+  ├─ Orders (1:many)
+  └─ Permissions (through role)
+
+Product
+  ├─ Category (N:1)
+  ├─ OrderItems (1:many)
+  └─ CartItems (1:many)
+
+Order
+  ├─ User (N:1)
+  ├─ OrderItems (1:many)
+  └─ Updates (status changes tracked)
+
+Category
+  └─ Products (1:many)
+```
+
 ### Initialization
 
 ```typescript
@@ -655,7 +679,37 @@ With: Core loaded (~80KB) + features on-demand (30-50KB each)
 
 ---
 
-## 📖 Summary
+## � Demo Users & Data
+
+**Default Demo Users:**
+```
+Email               | Password | Role
+--------------------|----------|--------
+user@demo           | demo     | User
+manager@demo        | demo     | Manager
+admin@demo          | demo     | Admin
+```
+
+**Demo Categories:**
+- Electronics
+- Clothing
+- Books
+- Home & Garden
+
+**Demo Products:**
+- 10-15 sample products distributed across categories
+- Each with name, description, price (10-500), image (base64)
+- Pre-assigned to categories
+
+**Initialization:**
+- Seed runs automatically on first app load
+- Checks IndexedDB version (v1.0)
+- Creates demo users, categories, products
+- No seed on subsequent app loads
+
+---
+
+## �📖 Summary
 
 This architecture provides:
 
