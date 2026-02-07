@@ -98,6 +98,53 @@ See [FAKEBFF_ARCHITECTURE.md](./docs/FAKEBFF_ARCHITECTURE.md) and [ARCHITECTURE.
 ## 📐 File Structure
 
 ```
+src/
+├── app/
+│   ├── app.component.ts
+│   ├── app.config.ts
+│   ├── app.routes.ts              # Top-level routing to areas
+│   └── core/                      # Core layer (singleton services)
+│       ├── bff/                   # Backend-for-Frontend (IndexedDB)
+│       │   ├── database.service.ts
+│       │   ├── fake-bff.service.ts
+│       │   ├── repositories/
+│       │   ├── services/
+│       │   └── models/
+│       ├── guards/
+│       │   ├── auth.guard.ts
+│       │   ├── admin.guard.ts
+│       │   └── permission.guard.ts
+│       └── interceptors/
+│           └── api.interceptor.ts
+│
+├── areas/                         # User areas (lazy-loaded)
+│   ├── auth/                      # Public: login, register
+│   │   ├── auth.routes.ts
+│   │   └── login/
+│   ├── shop/                      # User: products, cart, checkout
+│   │   ├── shop.routes.ts
+│   │   ├── shop-layout.component.ts
+│   │   ├── products/
+│   │   ├── cart/
+│   │   └── checkout/
+│   └── admin/                     # Manager/Admin: dashboard, orders, etc
+│       ├── admin.routes.ts
+│       ├── admin-layout.component.ts
+│       ├── dashboard/
+│       ├── customers/
+│       ├── orders/
+│       ├── products/
+│       ├── categories/
+│       └── permissions/
+│
+├── shared/                        # Reusable components, utils
+│   ├── ui/
+│   ├── directives/
+│   ├── pipes/
+│   └── utils/
+│
+└── entities/                      # Domain models (optional)
+```
 src/app/
 ├── core/
 │   ├── bff/                           # Data layer (IndexedDB)

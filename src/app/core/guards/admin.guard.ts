@@ -1,24 +1,22 @@
+import type { CanActivateFn } from '@angular/router';
 import { inject } from '@angular/core';
-import { Router, CanActivateFn, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
-export const adminGuard: CanActivateFn = (
-  route: ActivatedRouteSnapshot,
-  state: RouterStateSnapshot,
-) => {
+/**
+ * Admin/Manager guard.
+ * Protects routes that require admin or manager role.
+ */
+export const adminGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
-  const user = authService.getCurrentUser();
 
-  if (!user) {
-    router.navigate(['/auth/login']);
-    return false;
+  const user = authService.currentUser();
+  
+  if (user && (user.role === 'admin' || user.role === 'manager')) {
+    return true;
   }
 
-  if (user.role !== 'admin' && user.role !== 'manager') {
-    router.navigate(['/']);
-    return false;
-  }
-
-  return true;
+  // Redirect to login or access denied
+  return router.createUrlTree(['/auth/login']);
 };

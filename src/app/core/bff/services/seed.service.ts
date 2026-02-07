@@ -34,7 +34,7 @@ export class SeedService {
       {
         id: uuidv4(),
         email: 'user@demo',
-        password: 'demo',
+        password: 'User123!',
         role: 'user',
         profile: {
           firstName: 'Demo',
@@ -46,7 +46,7 @@ export class SeedService {
       {
         id: uuidv4(),
         email: 'manager@demo',
-        password: 'demo',
+        password: 'Manager123!',
         role: 'manager',
         profile: {
           firstName: 'Demo',
@@ -58,7 +58,7 @@ export class SeedService {
       {
         id: uuidv4(),
         email: 'admin@demo',
-        password: 'demo',
+        password: 'Admin123!',
         role: 'admin',
         profile: {
           firstName: 'Demo',

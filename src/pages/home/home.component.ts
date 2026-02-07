@@ -1,52 +1,45 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [RouterLink, MatButtonModule, MatCardModule],
   template: `
-    <div class="home-page">
-      <h1>Welcome to Orders Management</h1>
-      <p>Manage your orders efficiently</p>
-      <nav>
-        <ul>
-          <li><a routerLink="/orders">View Orders</a></li>
-          <li><a routerLink="/auth">Login</a></li>
-        </ul>
-      </nav>
+    <div class="landing-page">
+      <mat-card class="hero">
+        <mat-card-header>
+          <mat-card-title>Orders Management Platform</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>Professional order management system with role-based access control</p>
+          <div class="actions">
+            <a mat-raised-button color="primary" routerLink="/auth/login">
+              Get Started
+            </a>
+          </div>
+        </mat-card-content>
+      </mat-card>
     </div>
   `,
   styles: [`
-    .home-page {
-      padding: 2rem;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-    
-    h1 {
-      color: #333;
-      margin-bottom: 1rem;
-    }
-    
-    nav ul {
-      list-style: none;
-      padding: 0;
+    .landing-page {
+      min-height: 100vh;
       display: flex;
-      gap: 1rem;
+      align-items: center;
+      justify-content: center;
+      padding: var(--app-spacing);
     }
-    
-    nav a {
-      padding: 0.5rem 1rem;
-      background: #007bff;
-      color: white;
-      text-decoration: none;
-      border-radius: 4px;
+
+    .hero {
+      max-width: 600px;
+      text-align: center;
     }
-    
-    nav a:hover {
-      background: #0056b3;
+
+    .actions {
+      margin-top: calc(var(--app-spacing) * 2);
     }
   `],
 })

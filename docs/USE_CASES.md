@@ -25,13 +25,13 @@
 **Why:** IndexedDB allows offline operation, data syncs when online
 
 ### 3. **Learning & Training**
-- Learning modern Angular 21
+- Learning modern Angular 21 (standalone components, signals)
 - Understanding enterprise patterns
-- RBAC implementation
-- Layered architecture
+- RBAC implementation (areas-based architecture)
+- Layered architecture (Core/Areas/Shared)
 - Testing strategies
 
-**Why:** Well-documented, clear patterns, good practices throughout
+**Why:** Well-documented, areas-based RBAC, clear patterns, good practices throughout
 
 ### 4. **Enterprise Internal Tools**
 - Admin dashboards
@@ -235,7 +235,7 @@ If user opens app in 2 tabs and edits same product:
 
 ```typescript
 // Frontend (this template)
-features/
+areas/
 ├── auth/      → Login (delegates to backend)
 ├── shop/      → Load products from API
 └── admin/     → Manage data via API
@@ -334,13 +334,13 @@ frontend/ (this template + modifications)
 ### Keep These (Core Patterns)
 
 ```typescript
-✅ Layered architecture (Core/Features/Shared)
+✅ Layered architecture (Core/Areas/Shared)
 ✅ Repository pattern for data access
-✅ RBAC permission system
+✅ RBAC permission system (3 user areas)
 ✅ Route guards for access control
 ✅ Signals for state management
 ✅ Reactive forms for validation
-✅ Lazy-loaded features
+✅ Lazy-loaded areas (auth/shop/admin)
 ```
 
 ### Replace These (Replace with Backend)

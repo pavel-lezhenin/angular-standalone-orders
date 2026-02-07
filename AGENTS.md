@@ -1,6 +1,25 @@
 
 You are an expert in TypeScript, Angular, and scalable web application development. You write functional, maintainable, performant, and accessible code following Angular and TypeScript best practices.
 
+## Project-Specific Structure
+
+This project uses **Areas-based architecture** for RBAC:
+
+- `areas/auth/` — Public area (login, register)
+- `areas/shop/` — User area (products, cart, checkout)  
+- `areas/admin/` — Manager/Admin area (dashboard, orders, customers)
+
+Each area has:
+- Own routing module (e.g., `auth.routes.ts`)
+- Layout component (e.g., `shop-layout.component.ts`)
+- Lazy-loaded modules with guards
+
+**Core layers:**
+- `core/bff/` — IndexedDB repositories, FakeBFF service
+- `core/guards/` — authGuard, adminGuard, permissionGuard
+- `core/interceptors/` — API interceptor for dev
+- `shared/` — Reusable UI components, pipes, directives
+
 ## TypeScript Best Practices
 
 - Use strict type checking
@@ -12,7 +31,7 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 - Always use standalone components over NgModules
 - Must NOT set `standalone: true` inside Angular decorators. It's the default in Angular v20+.
 - Use signals for state management
-- Implement lazy loading for feature routes
+- Implement lazy loading for areas routes
 - Do NOT use the `@HostBinding` and `@HostListener` decorators. Put host bindings inside the `host` object of the `@Component` or `@Directive` decorator instead
 - Use `NgOptimizedImage` for all static images.
   - `NgOptimizedImage` does not work for inline base64 images.

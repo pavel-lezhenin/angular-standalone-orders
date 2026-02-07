@@ -1,35 +1,32 @@
+import type { CanActivateFn } from '@angular/router';
 import { inject } from '@angular/core';
-import { Router, CanActivateFn, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
 import { PermissionService } from '../services/permission.service';
 
-export const permissionGuard: CanActivateFn = (
-  route: ActivatedRouteSnapshot,
-  state: RouterStateSnapshot,
-) => {
-  const authService = inject(AuthService);
+/**
+ * Permission-based guard.
+ * Protects routes based on custom permission checks.
+ * 
+ * Usage:
+ * ```typescript
+ * {
+ *   path: 'products',
+ *   canActivate: [permissionGuard],
+ *   data: { section: 'products', action: 'view' }
+ * }
+ * ```
+ */
+export const permissionGuard: CanActivateFn = (route) => {
   const permissionService = inject(PermissionService);
   const router = inject(Router);
-  const user = authService.getCurrentUser();
 
-  if (!user) {
-    router.navigate(['/auth/login']);
-    return false;
-  }
+  const section = route.data['section'] as string;
+  const action = route.data['action'] as string;
 
-  // Get required permission from route data
-  const requiredSection = route.data['section'] as string;
-  const requiredAction = route.data['action'] as string;
-
-  if (!requiredSection || !requiredAction) {
-    console.warn('Permission guard requires section and action in route data');
-    return false;
-  }
-
-  if (permissionService.hasAccess(requiredSection, requiredAction)) {
+  if (permissionService.hasAccess(section, action)) {
     return true;
   }
 
-  router.navigate(['/']);
-  return false;
+  // Redirect to access denied or login
+  return router.createUrlTree(['/auth/login']);
 };

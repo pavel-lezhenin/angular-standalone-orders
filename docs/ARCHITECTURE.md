@@ -14,9 +14,9 @@ The application follows a **layered architecture** with clear separation of conc
 └────────────────────┬────────────────────────────────┘
                      │
 ┌────────────────────▼────────────────────────────────┐
-│                 FEATURE LAYER                       │
-│  Auth, Shop, Admin Modules                          │
-│  Feature Services, Route Guards, Interceptors       │
+│                 AREAS LAYER                         │
+│  Auth (public), Shop (user), Admin (manager/admin)  │
+│  Area Services, Route Guards, Lazy Loading          │
 └────────────────────┬────────────────────────────────┘
                      │
 ┌────────────────────▼────────────────────────────────┐
@@ -47,6 +47,43 @@ The application follows a **layered architecture** with clear separation of conc
 ---
 
 ## 📂 Layer Structure
+
+### Areas Layer (`areas/`)
+
+**Purpose:** User-facing areas with different access levels based on RBAC.
+
+```
+areas/
+├── auth/                     # Public area (authentication)
+│   ├── auth.routes.ts
+│   └── login/
+│       ├── login.component.ts
+│       ├── login.component.html
+│       └── login.component.scss
+│
+├── shop/                     # User area (shopping)
+│   ├── shop.routes.ts
+│   ├── shop-layout.component.ts
+│   ├── products/
+│   ├── cart/
+│   └── checkout/
+│
+└── admin/                    # Admin area (manager/admin roles)
+    ├── admin.routes.ts
+    ├── admin-layout.component.ts
+    ├── dashboard/
+    ├── customers/
+    ├── orders/
+    ├── products/
+    ├── categories/
+    └── permissions/
+```
+
+**Key Principles:**
+- ✅ Areas are **lazy-loaded** — loaded only when accessed
+- ✅ Areas have **route guards** — authGuard, adminGuard, permissionGuard
+- ✅ Each area has its own **routing module** and **layout component**
+- ✅ RBAC segregation: Auth (public) → Shop (user) → Admin (manager/admin)
 
 ### Core/BFF Layer (`app/core/bff/`)
 

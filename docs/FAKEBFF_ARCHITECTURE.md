@@ -261,11 +261,17 @@ When ready for production, create `packages/orders-bff/` (Node.js Backend):
 ```
 packages/
 ├── angular-standalone-orders/     # This package (frontend)
-│   ├── src/app/
-│   │   ├── core/
-│   │   │   ├── bff/              # ← Delete after migrating!
-│   │   │   └── services/
-│   │   ├── features/
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── core/
+│   │   │   │   ├── bff/              # ← Delete after migrating!
+│   │   │   │   ├── guards/
+│   │   │   │   └── interceptors/
+│   │   │   └── shared/
+│   │   ├── areas/                     # User areas (RBAC)
+│   │   │   ├── auth/                  # Public: login
+│   │   │   ├── shop/                  # User: products, cart
+│   │   │   └── admin/                 # Manager/Admin: dashboard, orders
 │   │   └── pages/
 │   └── package.json
 │

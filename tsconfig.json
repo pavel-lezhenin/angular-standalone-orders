@@ -38,7 +38,7 @@
       "@app/*": ["./src/app/*"],
       "@core/*": ["./src/app/core/*"],
       "@shared/*": ["./src/app/shared/*"],
-      "@features/*": ["./src/app/features/*"],
+      "@areas/*": ["./src/areas/*"],
       "@entities/*": ["./src/app/entities/*"],
       "@pages/*": ["./src/app/pages/*"]
     },
@@ -48,5 +48,9 @@
     "resolveJsonModule": true,
     "allowJs": false,
     "types": ["vitest/globals"]
+  },
+  "angularCompilerOptions": {
+    "strictTemplates": true,
+    "strictInjectionParameters": true
   }
 }

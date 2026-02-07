@@ -35,18 +35,18 @@
 
 ### Deliverables
 
-- [x] `database.service.ts` — IndexedDB initialization
-- [ ] `repositories/user.repository.ts` — User CRUD
-- [ ] `repositories/product.repository.ts` — Product CRUD
-- [ ] `repositories/order.repository.ts` — Order CRUD + status
-- [ ] `repositories/category.repository.ts` — Category CRUD
-- [ ] `repositories/cart.repository.ts` — Cart operations
-- [ ] `services/permission.service.ts` — RBAC
-- [ ] `services/auth.service.ts` — Session management
-- [ ] `services/seed.service.ts` — Demo data
-- [ ] `core/bff/guards/auth.guard.ts` — Require authentication
-- [ ] `core/bff/guards/admin.guard.ts` — Require admin/manager
-- [ ] `core/bff/guards/permission.guard.ts` — Custom permissions
+- [x] `core/bff/database.service.ts` — IndexedDB initialization
+- [ ] `core/bff/repositories/user.repository.ts` — User CRUD
+- [ ] `core/bff/repositories/product.repository.ts` — Product CRUD
+- [ ] `core/bff/repositories/order.repository.ts` — Order CRUD + status
+- [ ] `core/bff/repositories/category.repository.ts` — Category CRUD
+- [ ] `core/bff/repositories/cart.repository.ts` — Cart operations
+- [ ] `core/bff/services/permission.service.ts` — RBAC
+- [ ] `core/bff/services/auth.service.ts` — Session management
+- [ ] `core/bff/services/seed.service.ts` — Demo data
+- [x] `core/guards/auth.guard.ts` — Require authentication
+- [x] `core/guards/admin.guard.ts` — Require admin/manager
+- [x] `core/guards/permission.guard.ts` — Custom permissions
 - [ ] Unit tests (database, repositories)
 
 ### Implementation Details
@@ -98,6 +98,159 @@ class AuthService {
 ```bash
 # Unit tests cover:
 ✅ Database initialization
+✅ Repository operations
+✅ Service business logic
+```
+
+---
+
+## 🔐 Phase 2.2: Authentication (1.5 hours)
+
+**Goal:** Implement login/logout with session management in areas/auth/
+
+### Deliverables
+
+- [x] `areas/auth/login/login.component.ts` — Login form
+- [x] `areas/auth/login/login.component.html` — Material form template
+- [x] `areas/auth/login/login.component.scss` — Styling with gradient
+- [x] `areas/auth/auth.routes.ts` — Auth routing
+- [ ] `core/bff/services/auth.service.ts` — Login/logout logic
+- [ ] Update `app.routes.ts` — Import auth routes
+- [ ] Unit tests (login component, auth service)
+- [ ] E2E test (login flow)
+
+### Implementation Details
+
+```typescript
+// Login Component
+@Component({
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrl: './login.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class LoginComponent {
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  
+  loginForm = new FormGroup({
+    email: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [Validators.required, Validators.minLength(4)]),
+  });
+  
+  loading = signal(false);
+  error = signal<string | null>(null);
+  
+  async onSubmit(): Promise<void> {
+    if (this.loginForm.invalid) return;
+    
+    this.loading.set(true);
+    this.error.set(null);
+    
+    try {
+      const { email, password } = this.loginForm.value;
+      await this.authService.login(email!, password!);
+      
+      const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/shop';
+      await this.router.navigateByUrl(returnUrl);
+    } catch (e) {
+      this.error.set('Invalid credentials');
+    } finally {
+      this.loading.set(false);
+    }
+  }
+}
+
+// AuthService
+@Injectable({ providedIn: 'root' })
+export class AuthService {
+  private http = inject(HttpClient);
+  
+  currentUser = signal<User | null>(null);
+  
+  async login(email: string, password: string): Promise<void> {
+    const user = await this.http.post<User>('/api/auth/login', { email, password }).toPromise();
+    this.currentUser.set(user ?? null);
+    localStorage.setItem('currentUser', JSON.stringify(user));
+  }
+  
+  async logout(): Promise<void> {
+    this.currentUser.set(null);
+    localStorage.removeItem('currentUser');
+  }
+  
+  isAuthenticated(): boolean {
+    return this.currentUser() !== null;
+  }
+}
+
+// Route Guards
+export const authGuard: CanActivateFn = () => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
+  
+  if (authService.isAuthenticated()) {
+    return true;
+  }
+  
+  return router.createUrlTree(['/auth/login']);
+};
+
+export const adminGuard: CanActivateFn = () => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
+  
+  const user = authService.currentUser();
+  if (user && (user.role === 'admin' || user.role === 'manager')) {
+    return true;
+  }
+  
+  return router.createUrlTree(['/auth/login']);
+};
+```
+
+### Routing Setup
+
+```typescript
+// app.routes.ts
+export const routes: Routes = [
+  {
+    path: 'auth',
+    loadChildren: () => import('./areas/auth/auth.routes').then(m => m.AUTH_ROUTES),
+  },
+  {
+    path: 'shop',
+    canActivate: [authGuard],
+    loadChildren: () => import('./areas/shop/shop.routes').then(m => m.SHOP_ROUTES),
+  },
+  {
+    path: 'admin',
+    canActivate: [authGuard, adminGuard],
+    loadChildren: () => import('./areas/admin/admin.routes').then(m => m.ADMIN_ROUTES),
+  },
+  { path: '', redirectTo: '/shop', pathMatch: 'full' },
+];
+
+// areas/auth/auth.routes.ts
+export const AUTH_ROUTES: Routes = [
+  { path: 'login', loadComponent: () => import('./login/login.component').then(c => c.LoginComponent) },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+];
+```
+
+### Testing
+
+```bash
+# Unit tests cover:
+✅ Login form validation
+✅ AuthService login/logout
+✅ Guards redirect behavior
+
+# E2E tests:
+✅ Login with valid credentials
+✅ Login with invalid credentials
+✅ Redirect to returnUrl after login
+✅ Logout clears session
 ✅ IndexedDB store creation
 ✅ Repository CRUD operations
 ✅ Permission service logic
