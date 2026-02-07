@@ -76,6 +76,12 @@ bff/
 └── index.ts                  # Export all public APIs
 ```
 
+**Key Principles:**
+- ✅ Repositories follow **data mapper pattern** — clean separation between data & domain
+- ✅ FakeBFF simulates **REST API** during development — easy testing without backend
+- ✅ All operations are **async** — IndexedDB is promise-based
+- ✅ Single **IndexedDB instance** — initialized once, reused throughout app
+
 **Development vs Production:**
 
 In **development** (current):

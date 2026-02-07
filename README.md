@@ -100,21 +100,40 @@ See [FAKEBFF_ARCHITECTURE.md](./docs/FAKEBFF_ARCHITECTURE.md) and [ARCHITECTURE.
 ```
 src/app/
 ├── core/
-│   ├── bff/                       # FakeBFF layer
-│   │   ├── database.service       # IndexedDB wrapper
-│   │   ├── fake-bff.service       # Mock REST API handler
-│   │   ├── repositories/          # CRUD + queries
-│   │   ├── services/              # Auth, Permissions, Seed
-│   │   └── models/                # Type definitions
-│   ├── guards/                    # Route guards (auth, admin, etc)
-│   └── interceptors/              # APIInterceptor (routes /api/*)
-├── features/                      # Lazy-loaded feature modules
-│   ├── auth/                      # Login page + forms
-│   ├── shop/                      # Products + Cart
-│   └── admin/                     # Dashboard + Management
-├── shared/                        # Reusable components & utils
-├── pages/                         # Route container components
-└── app.routes.ts                  # Root routing config
+│   ├── bff/                           # Data layer (IndexedDB)
+│   │   ├── database.service.ts        # IndexedDB wrapper
+│   │   ├── fake-bff.service.ts        # Mock REST API
+│   │   ├── repositories/              # CRUD operations
+│   │   │   ├── base.repository.ts
+│   │   │   ├── user.repository.ts
+│   │   │   └── ...
+│   │   ├── services/
+│   │   │   ├── seed.service.ts        # Demo data
+│   │   │   └── index.ts
+│   │   ├── models/                    # TypeScript types
+│   │   └── index.ts
+│   │
+│   ├── services/                      # Application logic
+│   │   ├── auth.service.ts            # Authentication
+│   │   ├── permission.service.ts      # RBAC
+│   │   └── index.ts
+│   │
+│   ├── guards/                        # Route protection
+│   │   ├── auth.guard.ts              # Require login
+│   │   ├── admin.guard.ts             # Require admin role
+│   │   └── permission.guard.ts        # Custom permissions
+│   │
+│   └── interceptors/                  # HTTP middleware
+│       └── api.interceptor.ts         # Routes /api/* to FakeBFF
+│
+├── features/                          # Lazy-loaded modules
+│   ├── auth/                          # Login page + forms
+│   ├── shop/                          # Products + Cart
+│   └── admin/                         # Dashboard + Management
+│
+├── shared/                            # Reusable components & utils
+├── pages/                             # Route container components
+└── app.routes.ts                      # Root routing config
 ```
 
 See [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) for full details.
