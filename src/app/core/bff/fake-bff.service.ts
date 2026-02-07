@@ -88,6 +88,9 @@ export class FakeBFFService {
     if (req.method === 'GET' && req.url.match(/\/api\/users\/[\w-]+\/cart$/)) {
       return this.handleGetCart(req);
     }
+    if (req.method === 'PUT' && req.url.match(/\/api\/users\/[\w-]+\/cart$/)) {
+      return this.handleUpdateCart(req);
+    }
     if (req.method === 'POST' && req.url.match(/\/api\/users\/[\w-]+\/cart\/items$/)) {
       return this.handleAddCartItem(req);
     }
@@ -233,12 +236,48 @@ export class FakeBFFService {
 
       return new HttpResponse({
         status: 200,
-        body: { cart: cart || { userId, items: [], updatedAt: Date.now() } },
+        body: cart || { userId, items: [], updatedAt: Date.now() },
       });
     } catch (err) {
       return new HttpResponse({
         status: 500,
         body: { error: 'Failed to fetch cart' },
+      });
+    }
+  }
+
+  private async handleUpdateCart(req: HttpRequest<unknown>): Promise<HttpResponse<unknown>> {
+    try {
+      const userId = req.url.match(/\/users\/([\w-]+)\/cart/)?.[1];
+      if (!userId) {
+        return new HttpResponse({ status: 400, body: { error: 'Invalid user ID' } });
+      }
+
+      const { items, updatedAt } = req.body as { items: Cart['items']; updatedAt: number };
+      const existingCart = await this.cartRepo.getByUserId(userId);
+
+      if (existingCart) {
+        // Update existing cart
+        await this.cartRepo.update(userId, {
+          userId,
+          items,
+          updatedAt,
+        });
+      } else {
+        // Create new cart
+        await this.cartRepo.create({
+          userId,
+          items,
+          updatedAt,
+        });
+      }
+
+      const updatedCart = await this.cartRepo.getByUserId(userId);
+      return new HttpResponse({ status: 200, body: updatedCart });
+    } catch (err) {
+      return new HttpResponse({
+        status: 500,
+        body: { error: 'Failed to update cart' },
       });
     }
   }

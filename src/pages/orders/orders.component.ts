@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { signal } from '@angular/core';
+import { LayoutService } from '@/shared/services/layout.service';
 
 export interface Order {
   id: string;
@@ -126,7 +127,7 @@ export interface Order {
     }
   `],
 })
-export class OrdersComponent {
+export class OrdersComponent implements OnInit {
   orders = signal<Order[]>([
     {
       id: '1',
@@ -153,4 +154,14 @@ export class OrdersComponent {
 
   loading = signal(false);
   error = signal<string | null>(null);
+
+  constructor(private layoutService: LayoutService) {}
+
+  ngOnInit(): void {
+    this.layoutService.setTitle('Orders Platform');
+    this.layoutService.setNavItems([
+      { label: 'All Orders', route: '/orders' },
+      { label: 'Shop', route: '/shop' },
+    ]);
+  }
 }

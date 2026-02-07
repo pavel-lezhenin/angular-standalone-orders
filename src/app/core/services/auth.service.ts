@@ -1,6 +1,5 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { FakeBFFService } from '../bff/fake-bff.service';
 import { User } from '../bff/models';
 
 @Injectable({
@@ -9,15 +8,7 @@ import { User } from '../bff/models';
 export class AuthService {
   currentUser = signal<User | null>(null);
 
-  constructor(
-    private http: HttpClient,
-    private fakeBFF: FakeBFFService,
-  ) {}
-
-  async initialize(): Promise<void> {
-    // Initialize FakeBFF (seeds demo data if needed)
-    await this.fakeBFF.initialize();
-  }
+  constructor(private http: HttpClient) {}
 
   async login(email: string, password: string): Promise<User> {
     const response = await this.http

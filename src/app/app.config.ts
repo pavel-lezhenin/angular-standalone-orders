@@ -1,22 +1,29 @@
-import type { ApplicationConfig } from '@angular/core';
+import { ApplicationConfig, provideAppInitializer, PLATFORM_ID } from '@angular/core';
 import { provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { HttpInterceptorFn } from '@angular/common/http';
+import { isPlatformBrowser } from '@angular/common';
 
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import { DatabaseService, FakeBFFService, SeedService } from './core/bff';
-import { AuthService } from './core/services/auth.service';
-import { PermissionService } from './core/services/permission.service';
+import { FakeBFFService } from './core/bff';
 import { inject } from '@angular/core';
 import { from, switchMap, Observable } from 'rxjs';
 import { HttpRequest, HttpHandlerFn, HttpEvent } from '@angular/common/http';
 
 /**
  * API Interceptor (functional style for Angular 21+)
+ * Only intercepts in browser, not in SSR
  */
 const apiInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> => {
+  const platformId = inject(PLATFORM_ID);
+  
+  // Skip interception on server - let requests go through
+  if (!isPlatformBrowser(platformId)) {
+    return next(req);
+  }
+  
   const fakeBFF = inject(FakeBFFService);
   
   if (req.url.startsWith('/api/')) {
@@ -33,39 +40,30 @@ const apiInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, next: Http
   return next(req);
 };
 
+/**
+ * Initialize FakeBFF on app startup
+ * This is the ONLY place where BFF initialization should happen
+ * Only runs in browser (not in SSR)
+ */
+function initializeBFF(): Promise<void> {
+  const platformId = inject(PLATFORM_ID);
+  
+  // Skip initialization on server
+  if (!isPlatformBrowser(platformId)) {
+    return Promise.resolve();
+  }
+  
+  const fakeBFF = inject(FakeBFFService);
+  return fakeBFF.initialize();
+}
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
     provideHttpClient(withInterceptors([apiInterceptor])),
-    // BFF Layer Services
-    DatabaseService,
-    FakeBFFService,
-    AuthService,
-    PermissionService,
-    SeedService,
+    // Initialize BFF before app starts (Angular 21+ style)
+    provideAppInitializer(initializeBFF),
   ],
 };
-
-/**
- * Initialize application: setup database and restore session
- */
-export async function initializeApp(authService: AuthService, db: DatabaseService) {
-  try {
-    // Initialize IndexedDB
-    await db.initialize();
-    console.log('✅ Database initialized');
-
-    // Initialize auth service (seed demo data if needed)
-    await authService.initialize();
-    console.log('✅ Auth service initialized');
-
-    // Restore user session if exists
-    await authService.restoreSession();
-    console.log('✅ Session restored');
-  } catch (error) {
-    console.error('❌ App initialization failed:', error);
-    throw error;
-  }
-}

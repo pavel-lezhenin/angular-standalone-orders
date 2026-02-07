@@ -52,6 +52,20 @@ $light-theme: mat.define-theme(
   --app-bg-color: #{$md-background};
   --app-surface-color: #{$md-background};
 
+  /* Surface Colors */
+  --surface-primary: #ffffff;
+  --surface-secondary: #f7fafc;
+  --surface-tertiary: #f5f7fa;
+  --surface-gradient-start: #f5f7fa;
+  --surface-gradient-end: #c3cfe2;
+
+  /* Text Colors */
+  --text-primary: #2d3748;
+  --text-secondary: #4a5568;
+  --text-tertiary: #718096;
+  --text-muted: #666;
+  --text-heading: #333;
+
   /* Spacing & Typography */
   --app-spacing: #{$md-spacing-unit};
   --app-font-family: #{$md-font-family};
@@ -60,6 +74,24 @@ $light-theme: mat.define-theme(
   --breakpoint-mobile: #{$md-breakpoint-mobile};
   --breakpoint-tablet: #{$md-breakpoint-tablet};
   --breakpoint-desktop: #{$md-breakpoint-desktop};
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Surface Colors - Dark Mode */
+    --surface-primary: #1a202c;
+    --surface-secondary: #2d3748;
+    --surface-tertiary: #374151;
+    --surface-gradient-start: #2d3748;
+    --surface-gradient-end: #1a202c;
+
+    /* Text Colors - Dark Mode */
+    --text-primary: #f7fafc;
+    --text-secondary: #cbd5e0;
+    --text-tertiary: #a0aec0;
+    --text-muted: #a0aec0;
+    --text-heading: #e2e8f0;
+  }
 }
 
 /* Google Fonts */
