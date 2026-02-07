@@ -5,8 +5,8 @@ import { adminGuard, authGuard } from './core';
 export const routes: Routes = [
   {
     path: '',
-    loadComponent: () => import('../pages/home/home.component').then(m => m.HomeComponent),
-    title: 'Home - Orders Platform',
+    loadComponent: () => import('../pages/landing/landing.component').then(m => m.LandingComponent),
+    title: 'Welcome - Orders Platform',
   },
   {
     path: 'auth',

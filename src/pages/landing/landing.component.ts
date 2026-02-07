@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-landing',
   standalone: true,
   imports: [RouterLink, MatButtonModule, MatCardModule],
   template: `
@@ -18,6 +18,9 @@ import { MatCardModule } from '@angular/material/card';
           <div class="actions">
             <a mat-raised-button color="primary" routerLink="/auth/login">
               Get Started
+            </a>
+            <a mat-button routerLink="/shop">
+              Browse Shop
             </a>
           </div>
         </mat-card-content>
@@ -40,7 +43,10 @@ import { MatCardModule } from '@angular/material/card';
 
     .actions {
       margin-top: calc(var(--app-spacing) * 2);
+      display: flex;
+      gap: var(--app-spacing);
+      justify-content: center;
     }
   `],
 })
-export class HomeComponent {}
+export class LandingComponent {}
