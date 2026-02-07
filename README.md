@@ -46,7 +46,8 @@ admin@demo / demo       (Admin role)
 
 | Goal | Read |
 |------|------|
-| Understand the architecture | [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) |
+| Understand the data layer | [docs/FAKEBFF_ARCHITECTURE.md](./docs/FAKEBFF_ARCHITECTURE.md) |
+| Understand overall architecture | [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) |
 | Build Phase 2 features | [docs/IMPLEMENTATION.md](./docs/IMPLEMENTATION.md) |
 | See what you can/can't do | [docs/USE_CASES.md](./docs/USE_CASES.md) |
 | Deep dive into design | [docs/PHASE2_PLAN.md](./docs/PHASE2_PLAN.md) |
@@ -56,30 +57,45 @@ admin@demo / demo       (Admin role)
 ```
 UI Components (Pages, Features, Shared)
     ↓
-Feature Services (Auth, Shop, Admin)
+Feature Services (make HTTP requests)
     ↓
-Core/BFF Layer (Database, Repositories, Services)
+APIInterceptor (routes /api/* to FakeBFF)
+    ↓
+FakeBFFService (simulates REST API)
+    ↓
+Repositories + DatabaseService
     ↓
 IndexedDB (Single Source of Truth)
 ```
 
-**Key principle:** Layered architecture with unidirectional dependencies. Features are lazy-loaded and self-contained.
+**Key principle:** 
+- Services make **normal HTTP requests** to `/api/` endpoints
+- **APIInterceptor** automatically routes them to **FakeBFFService** 
+- In production: just remove the interceptor, point to real backend
+- **Zero coupling** to mock layer
+
+See [FAKEBFF_ARCHITECTURE.md](./docs/FAKEBFF_ARCHITECTURE.md) for details.
 
 ## 📐 File Structure
 
 ```
 src/app/
-├── core/bff/              # Data layer (IndexedDB operations)
-│   ├── database.service   # DB initialization
-│   ├── repositories/      # CRUD operations
-│   └── services/          # Business logic + RBAC
-├── features/              # Lazy-loaded modules
-│   ├── auth/              # Login + guards
-│   ├── shop/              # Products + cart
-│   └── admin/             # Dashboard + CRUD
-├── shared/                # Reusable components & utils
-├── pages/                 # Route components
-└── app.routes.ts          # Root routing
+├── core/
+│   ├── bff/                       # FakeBFF layer
+│   │   ├── database.service       # IndexedDB wrapper
+│   │   ├── fake-bff.service       # Mock REST API handler
+│   │   ├── repositories/          # CRUD + queries
+│   │   ├── services/              # Auth, Permissions, Seed
+│   │   └── models/                # Type definitions
+│   ├── guards/                    # Route guards (auth, admin, etc)
+│   └── interceptors/              # APIInterceptor (routes /api/*)
+├── features/                      # Lazy-loaded feature modules
+│   ├── auth/                      # Login page + forms
+│   ├── shop/                      # Products + Cart
+│   └── admin/                     # Dashboard + Management
+├── shared/                        # Reusable components & utils
+├── pages/                         # Route container components
+└── app.routes.ts                  # Root routing config
 ```
 
 See [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) for full details.

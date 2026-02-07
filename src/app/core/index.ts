@@ -5,4 +5,4 @@ export * from './bff';
 export { authGuard, adminGuard, permissionGuard } from './guards';
 
 // Interceptors
-export { AuthInterceptor } from './interceptors';
+export { APIInterceptor } from './interceptors';

@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
-import { UserRepository } from '../repositories/user.repository';
-import { SeedService } from './seed.service';
+import { HttpClient } from '@angular/common/http';
+import { FakeBFFService } from '../fake-bff.service';
 import { User } from '../models';
 
 @Injectable({
@@ -10,38 +10,35 @@ export class AuthService {
   currentUser = signal<User | null>(null);
 
   constructor(
-    private userRepo: UserRepository,
-    private seedService: SeedService,
+    private http: HttpClient,
+    private fakeBFF: FakeBFFService,
   ) {}
 
   async initialize(): Promise<void> {
-    // Seed demo data on first run
-    const userCount = await this.userRepo.count();
-    if (userCount === 0) {
-      await this.seedService.seedAll();
-    }
+    // Initialize FakeBFF (seeds demo data if needed)
+    await this.fakeBFF.initialize();
   }
 
   async login(email: string, password: string): Promise<User> {
-    const user = await this.userRepo.getByEmail(email);
+    const response = await this.http
+      .post<{ user: User; token: string }>('/api/auth/login', { email, password })
+      .toPromise();
 
-    if (!user) {
-      throw new Error(`User ${email} not found`);
+    if (!response?.user) {
+      throw new Error('Login failed');
     }
 
-    // Simple password comparison (demo only - NOT SECURE for production)
-    if (user.password !== password) {
-      throw new Error('Invalid password');
-    }
+    // Store token and user
+    sessionStorage.setItem('authToken', response.token);
+    sessionStorage.setItem('currentUserId', response.user.id);
+    this.currentUser.set(response.user);
 
-    // Set current user in session storage
-    sessionStorage.setItem('currentUserId', user.id);
-    this.currentUser.set(user);
-
-    return user;
+    return response.user;
   }
 
   async logout(): Promise<void> {
+    await this.http.post('/api/auth/logout', {}).toPromise();
+    sessionStorage.removeItem('authToken');
     sessionStorage.removeItem('currentUserId');
     this.currentUser.set(null);
   }
@@ -64,9 +61,11 @@ export class AuthService {
   async restoreSession(): Promise<void> {
     const userId = sessionStorage.getItem('currentUserId');
     if (userId) {
-      const user = await this.userRepo.getById(userId);
-      if (user) {
-        this.currentUser.set(user);
+      // In real app, would verify JWT token here
+      // For now, we just restore the user from session
+      const response = await this.http.get<{ user: User }>('/api/auth/me').toPromise();
+      if (response?.user) {
+        this.currentUser.set(response.user);
       }
     }
   }

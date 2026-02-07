@@ -1,6 +1,9 @@
 // Database
 export { DatabaseService } from './database.service';
 
+// FakeBFF Service
+export { FakeBFFService } from './fake-bff.service';
+
 // Repositories
 export {
   BaseRepository,

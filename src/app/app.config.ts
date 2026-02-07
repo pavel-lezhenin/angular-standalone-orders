@@ -6,8 +6,8 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import { DatabaseService, AuthService, PermissionService, SeedService } from './core';
-import { AuthInterceptor } from './core/interceptors/auth.interceptor';
+import { DatabaseService, AuthService, PermissionService, SeedService, FakeBFFService } from './core';
+import { APIInterceptor } from './core/interceptors';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -17,11 +17,12 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
     // BFF Layer Services
     DatabaseService,
+    FakeBFFService,
     AuthService,
     PermissionService,
     SeedService,
-    // HTTP Interceptor
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    // HTTP Interceptor for API requests
+    { provide: HTTP_INTERCEPTORS, useClass: APIInterceptor, multi: true },
   ],
 };
 
