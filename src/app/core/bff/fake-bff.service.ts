@@ -1,6 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, PLATFORM_ID, inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { HttpRequest, HttpResponse } from '@angular/common/http';
 import { of, throwError } from 'rxjs';
+import { DatabaseService } from './database.service';
 import { UserRepository } from './repositories/user.repository';
 import { ProductRepository } from './repositories/product.repository';
 import { OrderRepository } from './repositories/order.repository';
@@ -21,8 +23,10 @@ import { User, Product, Order, Category, Cart } from './models';
 })
 export class FakeBFFService {
   private initialized = false;
+  private platformId = inject(PLATFORM_ID);
 
   constructor(
+    private db: DatabaseService,
     private userRepo: UserRepository,
     private productRepo: ProductRepository,
     private orderRepo: OrderRepository,
@@ -33,6 +37,16 @@ export class FakeBFFService {
 
   async initialize(): Promise<void> {
     if (this.initialized) return;
+
+    // Skip initialization on server
+    if (!isPlatformBrowser(this.platformId)) {
+      console.log('FakeBFFService: Skipping initialization (SSR)');
+      this.initialized = true;
+      return;
+    }
+
+    // Initialize database first
+    await this.db.initialize();
 
     const userCount = await this.userRepo.count();
     if (userCount === 0) {

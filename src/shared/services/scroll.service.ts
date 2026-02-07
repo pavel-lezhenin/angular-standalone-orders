@@ -7,7 +7,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class ScrollService {
-  private readonly TOP_BAR_HEIGHT = 64;
+  private readonly ADDITIONAL_OFFSET = 20;
 
   /**
    * Scrolls smoothly to an element by ID
@@ -20,8 +20,11 @@ export class ScrollService {
       return;
     }
 
+    const topBar = document.querySelector('.top-bar');
+    const topBarHeight = topBar?.getBoundingClientRect().height ?? 64;
+
     const elementPosition = element.getBoundingClientRect().top;
-    const offsetPosition = elementPosition + window.pageYOffset - this.TOP_BAR_HEIGHT;
+    const offsetPosition = elementPosition + window.scrollY - topBarHeight - this.ADDITIONAL_OFFSET;
 
     window.scrollTo({
       top: offsetPosition,

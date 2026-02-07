@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, PLATFORM_ID, inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
@@ -7,13 +8,38 @@ export class DatabaseService {
   private readonly DB_NAME = 'OrdersDB';
   private readonly DB_VERSION = 1;
   private db: IDBDatabase | null = null;
+  private initPromise: Promise<void> | null = null;
+  private platformId = inject(PLATFORM_ID);
+
+  /**
+   * Check if running in browser (not SSR)
+   */
+  private get isBrowser(): boolean {
+    return isPlatformBrowser(this.platformId);
+  }
 
   /**
    * Initialize IndexedDB database
    * Creates 7 object stores on first load
    */
   async initialize(): Promise<void> {
-    return new Promise((resolve, reject) => {
+    // Skip initialization on server
+    if (!this.isBrowser) {
+      console.log('DatabaseService: Skipping initialization (SSR)');
+      return Promise.resolve();
+    }
+
+    // Return existing promise if already initializing
+    if (this.initPromise) {
+      return this.initPromise;
+    }
+
+    // Already initialized
+    if (this.db) {
+      return Promise.resolve();
+    }
+
+    this.initPromise = new Promise((resolve, reject) => {
       const request = indexedDB.open(this.DB_NAME, this.DB_VERSION);
 
       request.onerror = () => {
@@ -23,6 +49,7 @@ export class DatabaseService {
 
       request.onsuccess = () => {
         this.db = request.result;
+        this.initPromise = null;
         console.log('Database opened successfully');
         resolve();
       };
@@ -99,6 +126,9 @@ export class DatabaseService {
    * Perform read transaction
    */
   async read<T>(storeName: string, key: IDBValidKey): Promise<T | undefined> {
+    if (!this.isBrowser || !this.db) {
+      return undefined;
+    }
     return new Promise((resolve, reject) => {
       const transaction = this.db!.transaction([storeName], 'readonly');
       const store = transaction.objectStore(storeName);
@@ -113,6 +143,9 @@ export class DatabaseService {
    * Perform write transaction
    */
   async write<T>(storeName: string, data: T, mode: 'add' | 'put' = 'put'): Promise<void> {
+    if (!this.isBrowser || !this.db) {
+      return Promise.resolve();
+    }
     return new Promise((resolve, reject) => {
       const transaction = this.db!.transaction([storeName], 'readwrite');
       const store = transaction.objectStore(storeName);
@@ -127,6 +160,9 @@ export class DatabaseService {
    * Perform delete transaction
    */
   async delete(storeName: string, key: IDBValidKey): Promise<void> {
+    if (!this.isBrowser || !this.db) {
+      return Promise.resolve();
+    }
     return new Promise((resolve, reject) => {
       const transaction = this.db!.transaction([storeName], 'readwrite');
       const store = transaction.objectStore(storeName);
@@ -141,6 +177,9 @@ export class DatabaseService {
    * Query all records from store
    */
   async getAll<T>(storeName: string): Promise<T[]> {
+    if (!this.isBrowser || !this.db) {
+      return [];
+    }
     return new Promise((resolve, reject) => {
       const transaction = this.db!.transaction([storeName], 'readonly');
       const store = transaction.objectStore(storeName);
@@ -155,6 +194,9 @@ export class DatabaseService {
    * Clear all records from store
    */
   async clear(storeName: string): Promise<void> {
+    if (!this.isBrowser || !this.db) {
+      return Promise.resolve();
+    }
     return new Promise((resolve, reject) => {
       const transaction = this.db!.transaction([storeName], 'readwrite');
       const store = transaction.objectStore(storeName);
@@ -169,6 +211,9 @@ export class DatabaseService {
    * Query records by index
    */
   async getByIndex<T>(storeName: string, indexName: string, value: IDBValidKey): Promise<T[]> {
+    if (!this.isBrowser || !this.db) {
+      return [];
+    }
     return new Promise((resolve, reject) => {
       const transaction = this.db!.transaction([storeName], 'readonly');
       const store = transaction.objectStore(storeName);
@@ -188,6 +233,9 @@ export class DatabaseService {
     indexName: string,
     value: IDBValidKey,
   ): Promise<T | undefined> {
+    if (!this.isBrowser || !this.db) {
+      return undefined;
+    }
     return new Promise((resolve, reject) => {
       const transaction = this.db!.transaction([storeName], 'readonly');
       const store = transaction.objectStore(storeName);
@@ -203,6 +251,9 @@ export class DatabaseService {
    * Count records in store
    */
   async count(storeName: string): Promise<number> {
+    if (!this.isBrowser || !this.db) {
+      return 0;
+    }
     return new Promise((resolve, reject) => {
       const transaction = this.db!.transaction([storeName], 'readonly');
       const store = transaction.objectStore(storeName);

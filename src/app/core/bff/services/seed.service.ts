@@ -21,8 +21,8 @@ export class SeedService {
     if (this.seeded) return;
 
     await this.seedUsers();
-    await this.seedCategories();
-    await this.seedProducts();
+    const categories = await this.seedCategories();
+    await this.seedProducts(categories);
 
     this.seeded = true;
     console.log('✅ Database seeded with demo data');
@@ -75,7 +75,7 @@ export class SeedService {
     console.log('✅ Demo users created (3)');
   }
 
-  private async seedCategories(): Promise<void> {
+  private async seedCategories(): Promise<Category[]> {
     const categories: Category[] = [
       {
         id: uuidv4(),
@@ -103,11 +103,11 @@ export class SeedService {
       await this.categoryRepo.create(category);
     }
     console.log('✅ Demo categories created (4)');
+    return categories;
   }
 
-  private async seedProducts(): Promise<void> {
+  private async seedProducts(categories: Category[]): Promise<void> {
     const now = Date.now();
-    const categories = await this.categoryRepo.getAll();
 
     if (!categories || categories.length === 0) {
       throw new Error('Categories must be seeded before products');
