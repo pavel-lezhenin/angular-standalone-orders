@@ -6,7 +6,9 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import { DatabaseService, AuthService, PermissionService, SeedService, FakeBFFService } from './core';
+import { DatabaseService, FakeBFFService, SeedService } from './core/bff';
+import { AuthService } from './core/services/auth.service';
+import { PermissionService } from './core/services/permission.service';
 import { APIInterceptor } from './core/interceptors';
 
 export const appConfig: ApplicationConfig = {

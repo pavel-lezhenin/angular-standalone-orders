@@ -14,8 +14,8 @@ export {
   CartRepository,
 } from './repositories';
 
-// Services
-export { AuthService, PermissionService, SeedService } from './services';
+// Services (only seed - auth/permission are in core/services)
+export { SeedService } from './services/seed.service';
 
 // Models
 export type {

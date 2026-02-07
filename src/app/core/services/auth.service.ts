@@ -1,75 +1,72 @@
-import { Injectable, signal, computed, inject } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import type { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { FakeBFFService } from '../bff/fake-bff.service';
+import { User } from '../bff/models';
 
-export interface AuthCredentials {
-  email: string;
-  password: string;
-}
-
-export interface AuthResponse {
-  token: string;
-  user: {
-    id: string;
-    email: string;
-    name: string;
-  };
-}
-
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root',
+})
 export class AuthService {
-  private readonly tokenKey = 'auth_token';
-  private readonly userState = signal<AuthResponse['user'] | null>(null);
-  private readonly loadingState = signal(false);
-  private readonly errorState = signal<string | null>(null);
-  private readonly http = inject(HttpClient);
+  currentUser = signal<User | null>(null);
 
-  readonly user = this.userState.asReadonly();
-  readonly loading = this.loadingState.asReadonly();
-  readonly error = this.errorState.asReadonly();
-  readonly isAuthenticated = computed(() => this.userState() !== null);
+  constructor(
+    private http: HttpClient,
+    private fakeBFF: FakeBFFService,
+  ) {}
 
-  constructor() {
-    this.loadUserFromStorage();
+  async initialize(): Promise<void> {
+    // Initialize FakeBFF (seeds demo data if needed)
+    await this.fakeBFF.initialize();
   }
 
-  login(credentials: AuthCredentials): Observable<AuthResponse> {
-    this.loadingState.set(true);
-    this.errorState.set(null);
+  async login(email: string, password: string): Promise<User> {
+    const response = await this.http
+      .post<{ user: User; token: string }>('/api/auth/login', { email, password })
+      .toPromise();
 
-    return this.http.post<AuthResponse>('/api/auth/login', credentials).pipe(
-      tap((response) => {
-        this.setAuth(response);
-        this.loadingState.set(false);
-      }),
-    );
-  }
-
-  logout(): void {
-    localStorage.removeItem(this.tokenKey);
-    this.userState.set(null);
-  }
-
-  private setAuth(response: AuthResponse): void {
-    localStorage.setItem(this.tokenKey, response.token);
-    this.userState.set(response.user);
-  }
-
-  private loadUserFromStorage(): void {
-    const token = localStorage.getItem(this.tokenKey);
-    if (token) {
-      // In real app, verify token here
-      // For demo, just mark as authenticated
-      this.userState.set({
-        id: '1',
-        email: 'user@example.com',
-        name: 'Test User',
-      });
+    if (!response?.user) {
+      throw new Error('Login failed');
     }
+
+    // Store token and user
+    sessionStorage.setItem('authToken', response.token);
+    sessionStorage.setItem('currentUserId', response.user.id);
+    this.currentUser.set(response.user);
+
+    return response.user;
   }
 
-  getToken(): string | null {
-    return localStorage.getItem(this.tokenKey);
+  async logout(): Promise<void> {
+    await this.http.post('/api/auth/logout', {}).toPromise();
+    sessionStorage.removeItem('authToken');
+    sessionStorage.removeItem('currentUserId');
+    this.currentUser.set(null);
+  }
+
+  isAuthenticated(): boolean {
+    return this.currentUser() !== null;
+  }
+
+  getCurrentUser(): User | null {
+    if (!this.currentUser()) {
+      const userId = sessionStorage.getItem('currentUserId');
+      if (userId) {
+        return this.currentUser();
+      }
+      return null;
+    }
+    return this.currentUser();
+  }
+
+  async restoreSession(): Promise<void> {
+    const userId = sessionStorage.getItem('currentUserId');
+    if (userId) {
+      // In real app, would verify JWT token here
+      // For now, we just restore the user from session
+      const response = await this.http.get<{ user: User }>('/api/auth/me').toPromise();
+      if (response?.user) {
+        this.currentUser.set(response.user);
+      }
+    }
   }
 }
