@@ -192,7 +192,7 @@ core/
 
 ---
 
-## 📂 Layer Structure
+### Features Layer (`features/`)
 
 Each feature is **self-contained and independently lazy-loaded**. Features can import from Core and Shared, but NOT from other features.
 
