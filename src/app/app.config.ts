@@ -46,15 +46,23 @@ const apiInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, next: Http
  * Only runs in browser (not in SSR)
  */
 function initializeBFF(): Promise<void> {
+  console.log('🎯 initializeBFF called');
   const platformId = inject(PLATFORM_ID);
   
   // Skip initialization on server
   if (!isPlatformBrowser(platformId)) {
+    console.log('⏭️ Skipping BFF init (SSR)');
     return Promise.resolve();
   }
   
+  console.log('🚀 Starting BFF initialization (browser)');
   const fakeBFF = inject(FakeBFFService);
-  return fakeBFF.initialize();
+  return fakeBFF.initialize().then(() => {
+    console.log('✅ BFF initialization complete from app.config');
+  }).catch((error) => {
+    console.error('❌ BFF initialization failed:', error);
+    throw error;
+  });
 }
 
 export const appConfig: ApplicationConfig = {

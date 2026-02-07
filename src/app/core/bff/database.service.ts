@@ -23,6 +23,8 @@ export class DatabaseService {
    * Creates 7 object stores on first load
    */
   async initialize(): Promise<void> {
+    console.log('🗄️ DatabaseService.initialize() called');
+    
     // Skip initialization on server
     if (!this.isBrowser) {
       console.log('DatabaseService: Skipping initialization (SSR)');
@@ -31,30 +33,36 @@ export class DatabaseService {
 
     // Return existing promise if already initializing
     if (this.initPromise) {
+      console.log('⏳ DatabaseService: Already initializing, waiting...');
       return this.initPromise;
     }
 
     // Already initialized
     if (this.db) {
+      console.log('✅ DatabaseService: Already initialized');
       return Promise.resolve();
     }
+
+    console.log(`🔧 Opening IndexedDB: ${this.DB_NAME} v${this.DB_VERSION}`);
 
     this.initPromise = new Promise((resolve, reject) => {
       const request = indexedDB.open(this.DB_NAME, this.DB_VERSION);
 
       request.onerror = () => {
-        console.error('Database failed to open:', request.error);
+        console.error('❌ Database failed to open:', request.error);
+        this.initPromise = null;
         reject(request.error);
       };
 
       request.onsuccess = () => {
+        console.log('✅ Database opened successfully (onsuccess event)');
         this.db = request.result;
         this.initPromise = null;
-        console.log('Database opened successfully');
         resolve();
       };
 
       request.onupgradeneeded = (event) => {
+        console.log('🔄 Database upgrade needed');
         const db = (event.target as IDBOpenDBRequest).result;
 
         // Users store
@@ -110,6 +118,8 @@ export class DatabaseService {
         }
       };
     });
+
+    return this.initPromise;
   }
 
   /**
@@ -144,6 +154,7 @@ export class DatabaseService {
    */
   async write<T>(storeName: string, data: T, mode: 'add' | 'put' = 'put'): Promise<void> {
     if (!this.isBrowser || !this.db) {
+      console.warn(`⚠️ write: Not in browser or DB not initialized`);
       return Promise.resolve();
     }
     return new Promise((resolve, reject) => {
@@ -151,7 +162,10 @@ export class DatabaseService {
       const store = transaction.objectStore(storeName);
       const request = mode === 'add' ? store.add(data) : store.put(data);
 
-      request.onerror = () => reject(request.error);
+      request.onerror = () => {
+        console.error(`❌ write error in ${storeName} (${mode}):`, request.error);
+        reject(request.error);
+      };
       request.onsuccess = () => resolve();
     });
   }
@@ -239,10 +253,22 @@ export class DatabaseService {
     return new Promise((resolve, reject) => {
       const transaction = this.db!.transaction([storeName], 'readonly');
       const store = transaction.objectStore(storeName);
+      
+      // Check if index exists
+      if (!store.indexNames.contains(indexName)) {
+        console.error(`❌ Index '${indexName}' does not exist in store '${storeName}'`);
+        console.log(`Available indexes:`, Array.from(store.indexNames));
+        resolve(undefined);
+        return;
+      }
+      
       const index = store.index(indexName);
       const request = index.get(value);
 
-      request.onerror = () => reject(request.error);
+      request.onerror = () => {
+        console.error(`❌ getOneByIndex error in ${storeName}.${indexName}:`, request.error);
+        reject(request.error);
+      };
       request.onsuccess = () => resolve(request.result);
     });
   }

@@ -9,8 +9,6 @@ import { User, Product, Category } from '../models';
   providedIn: 'root',
 })
 export class SeedService {
-  private seeded = false;
-
   constructor(
     private userRepo: UserRepository,
     private productRepo: ProductRepository,
@@ -18,17 +16,31 @@ export class SeedService {
   ) {}
 
   async seedAll(): Promise<void> {
-    if (this.seeded) return;
+    console.log('🌱 Starting database seed...');
+    try {
+      await this.seedUsers();
+      const categories = await this.seedCategories();
+      await this.seedProducts(categories);
 
-    await this.seedUsers();
-    const categories = await this.seedCategories();
-    await this.seedProducts(categories);
-
-    this.seeded = true;
-    console.log('✅ Database seeded with demo data');
+      // Verify data was created
+      const userCount = await this.userRepo.count();
+      const categoryCount = await this.categoryRepo.count();
+      const productCount = await this.productRepo.count();
+      
+      console.log('✅ Database seeded with demo data');
+      console.log(`   Users: ${userCount}, Categories: ${categoryCount}, Products: ${productCount}`);
+      
+      // Verify admin user exists
+      const adminUser = await this.userRepo.getByEmail('admin@demo');
+      console.log(`   Admin user check: ${adminUser ? '✅ EXISTS' : '❌ NOT FOUND'}`);
+    } catch (error) {
+      console.error('❌ Seed failed:', error);
+      throw error;
+    }
   }
 
   private async seedUsers(): Promise<void> {
+    console.log('👥 Creating demo users...');
     const now = Date.now();
     const users: User[] = [
       {
@@ -70,7 +82,13 @@ export class SeedService {
     ];
 
     for (const user of users) {
-      await this.userRepo.create(user);
+      try {
+        await this.userRepo.create(user);
+        console.log(`  ✓ Created user: ${user.email}`);
+      } catch (error) {
+        console.error(`  ✗ Failed to create user ${user.email}:`, error);
+        throw error;
+      }
     }
     console.log('✅ Demo users created (3)');
   }

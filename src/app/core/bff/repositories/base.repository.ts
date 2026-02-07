@@ -19,7 +19,17 @@ export abstract class BaseRepository<T extends { id: string }> {
   }
 
   async create(item: T): Promise<void> {
-    await this.db.write(this.storeName, item, 'add');
+    try {
+      await this.db.write(this.storeName, item, 'add');
+    } catch (error: any) {
+      // If item already exists, log and skip (don't throw)
+      if (error.name === 'ConstraintError') {
+        console.warn(`⚠️ Item with id ${item.id} already exists in ${this.storeName}, skipping`);
+        return;
+      }
+      console.error(`❌ Failed to create item in ${this.storeName}:`, error);
+      throw error;
+    }
   }
 
   async update(id: string, updates: Partial<T>): Promise<void> {

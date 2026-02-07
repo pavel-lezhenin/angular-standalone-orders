@@ -36,7 +36,10 @@ export class FakeBFFService {
   ) {}
 
   async initialize(): Promise<void> {
-    if (this.initialized) return;
+    if (this.initialized) {
+      console.log('FakeBFF already initialized');
+      return;
+    }
 
     // Skip initialization on server
     if (!isPlatformBrowser(this.platformId)) {
@@ -45,15 +48,27 @@ export class FakeBFFService {
       return;
     }
 
+    console.log('🚀 Initializing FakeBFF...');
+
     // Initialize database first
     await this.db.initialize();
 
     const userCount = await this.userRepo.count();
-    if (userCount === 0) {
+    console.log(`📊 Current user count: ${userCount}`);
+    
+    // Check if admin user exists
+    const adminUser = await this.userRepo.getByEmail('admin@demo');
+    console.log(`🔍 Admin user exists: ${!!adminUser}`);
+    
+    if (!adminUser) {
+      console.log('📦 Admin user not found, reseeding database...');
       await this.seedService.seedAll();
+    } else {
+      console.log('✓ Database already has data');
     }
 
     this.initialized = true;
+    console.log('✅ FakeBFF initialized successfully');
   }
 
   /**
@@ -119,20 +134,33 @@ export class FakeBFFService {
   private async handleAuthLogin(req: HttpRequest<unknown>): Promise<HttpResponse<unknown>> {
     try {
       const { email, password } = req.body as { email: string; password: string };
+      console.log(`🔐 Login attempt for: ${email}`);
+      
       const user = await this.userRepo.getByEmail(email);
 
-      if (!user || user.password !== password) {
+      if (!user) {
+        console.log(`❌ User not found: ${email}`);
         return new HttpResponse({
           status: 401,
           body: { error: 'Invalid credentials' },
         });
       }
 
+      if (user.password !== password) {
+        console.log(`❌ Invalid password for: ${email}`);
+        return new HttpResponse({
+          status: 401,
+          body: { error: 'Invalid credentials' },
+        });
+      }
+
+      console.log(`✅ Login successful: ${email} (${user.role})`);
       return new HttpResponse({
         status: 200,
         body: { user, token: `mock-token-${user.id}` },
       });
     } catch (err) {
+      console.error('❌ Login error:', err);
       return new HttpResponse({
         status: 500,
         body: { error: 'Internal server error' },
