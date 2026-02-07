@@ -28,11 +28,15 @@ import { CartButtonComponent } from '../cart-button/cart-button.component';
         <!-- Authenticated user menu -->
         <button mat-button [matMenuTriggerFor]="userMenu" class="user-button">
           <mat-icon>account_circle</mat-icon>
-          <span class="user-name">{{ user.profile.firstName }}</span>
+          <span class="user-name">{{ getUserDisplayName(user.role) }}</span>
           <mat-icon>arrow_drop_down</mat-icon>
         </button>
         
         <mat-menu #userMenu="matMenu">
+          <button mat-menu-item (click)="navigateToAccount()">
+            <mat-icon>person</mat-icon>
+            <span>Account</span>
+          </button>
           <button mat-menu-item (click)="navigateToCart()">
             <mat-icon>shopping_cart</mat-icon>
             <span>Cart</span>
@@ -80,8 +84,28 @@ export class UserMenuComponent {
     private router: Router
   ) {}
 
+  /**
+   * Get display name based on user role
+   */
+  getUserDisplayName(role?: string): string {
+    switch (role) {
+      case 'admin':
+        return 'Admin';
+      case 'manager':
+        return 'Manager';
+      case 'user':
+        return 'User';
+      default:
+        return 'User';
+    }
+  }
+
   navigateToLogin(): void {
     this.router.navigate(['/auth/login']);
+  }
+
+  navigateToAccount(): void {
+    this.router.navigate(['/account']);
   }
 
   navigateToCart(): void {

@@ -30,6 +30,12 @@ export const routes: Routes = [
         loadComponent: () => import('../pages/orders/orders.component').then(m => m.OrdersComponent),
         title: 'Admin - Orders Platform',
       },
+      {
+        path: 'account',
+        canActivate: [authGuard],
+        loadComponent: () => import('../pages/account/account.component').then(m => m.AccountComponent),
+        title: 'My Account - Orders Platform',
+      },
     ],
   },
   {

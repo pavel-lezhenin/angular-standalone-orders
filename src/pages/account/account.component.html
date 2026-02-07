@@ -1,0 +1,166 @@
+<div class="account-page">
+  @if (user(); as currentUser) {
+    <mat-card class="profile-card">
+      <mat-card-header>
+        <div class="header-content">
+          <div class="header-left">
+            <mat-icon class="profile-icon">account_circle</mat-icon>
+            <div class="header-text">
+              <mat-card-title>My Account</mat-card-title>
+              <mat-card-subtitle>Manage your profile information</mat-card-subtitle>
+            </div>
+          </div>
+          <mat-chip [color]="getRoleBadgeColor(currentUser.role)" highlighted>
+            {{ getRoleDisplayName(currentUser.role) }}
+          </mat-chip>
+        </div>
+      </mat-card-header>
+
+      <mat-divider />
+
+      <mat-card-content>
+        <form [formGroup]="profileForm" class="profile-form">
+          <!-- Personal Information Section -->
+          <section class="form-section">
+            <h3 class="section-title">
+              <mat-icon>person</mat-icon>
+              Personal Information
+            </h3>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>First Name</mat-label>
+                <input 
+                  matInput 
+                  formControlName="firstName" 
+                  [readonly]="!isEditMode()"
+                />
+                @if (!isEditMode()) {
+                  <mat-icon matSuffix>lock</mat-icon>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Last Name</mat-label>
+                <input 
+                  matInput 
+                  formControlName="lastName" 
+                  [readonly]="!isEditMode()"
+                />
+                @if (!isEditMode()) {
+                  <mat-icon matSuffix>lock</mat-icon>
+                }
+              </mat-form-field>
+            </div>
+          </section>
+
+          <!-- Contact Information Section -->
+          <section class="form-section">
+            <h3 class="section-title">
+              <mat-icon>contact_mail</mat-icon>
+              Contact Information
+            </h3>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="email" readonly />
+                <mat-icon matSuffix>lock</mat-icon>
+                <mat-hint>Email cannot be changed</mat-hint>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Phone</mat-label>
+                <input 
+                  matInput 
+                  formControlName="phone" 
+                  [readonly]="!isEditMode()"
+                />
+                @if (!isEditMode()) {
+                  <mat-icon matSuffix>lock</mat-icon>
+                }
+              </mat-form-field>
+            </div>
+          </section>
+
+          <!-- Payment Information Section (Placeholder) -->
+          <section class="form-section">
+            <h3 class="section-title">
+              <mat-icon>payment</mat-icon>
+              Payment Information
+            </h3>
+            <p class="placeholder-text">
+              Payment methods and billing information will be available in a future update.
+            </p>
+          </section>
+
+          <!-- Shipping Address Section (Placeholder) -->
+          <section class="form-section">
+            <h3 class="section-title">
+              <mat-icon>local_shipping</mat-icon>
+              Shipping Address
+            </h3>
+            <p class="placeholder-text">
+              Shipping address management will be available in a future update.
+            </p>
+          </section>
+        </form>
+      </mat-card-content>
+
+      <mat-divider />
+
+      <mat-card-actions class="card-actions">
+        @if (!isEditMode()) {
+          <button mat-raised-button color="primary" (click)="toggleEditMode()">
+            <mat-icon>edit</mat-icon>
+            Edit Profile
+          </button>
+        } @else {
+          <button mat-button (click)="toggleEditMode()">
+            Cancel
+          </button>
+          <button 
+            mat-raised-button 
+            color="primary" 
+            (click)="saveProfile()"
+            [disabled]="!profileForm.valid"
+          >
+            <mat-icon>save</mat-icon>
+            Save Changes
+          </button>
+        }
+      </mat-card-actions>
+    </mat-card>
+
+    <!-- Account Stats Card -->
+    <mat-card class="stats-card">
+      <mat-card-header>
+        <mat-card-title>Account Statistics</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="stat-item">
+          <mat-icon>shopping_bag</mat-icon>
+          <div class="stat-content">
+            <span class="stat-label">Total Orders</span>
+            <span class="stat-value">-</span>
+          </div>
+        </div>
+        <mat-divider />
+        <div class="stat-item">
+          <mat-icon>event</mat-icon>
+          <div class="stat-content">
+            <span class="stat-label">Member Since</span>
+            <span class="stat-value">{{ currentUser.createdAt | date:'mediumDate' }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  } @else {
+    <mat-card class="error-card">
+      <mat-card-content>
+        <mat-icon>error_outline</mat-icon>
+        <p>Unable to load account information. Please log in.</p>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>
