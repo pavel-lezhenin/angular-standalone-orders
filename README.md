@@ -54,12 +54,13 @@ admin@demo / demo       (Admin role)
 
 ## 🏗️ Architecture (30 Seconds)
 
+### 💻 Development (Current)
 ```
 UI Components (Pages, Features, Shared)
     ↓
-Feature Services (make HTTP requests)
+Feature Services (make HTTP requests to /api/*)
     ↓
-APIInterceptor (routes /api/* to FakeBFF)
+APIInterceptor (dev-only, routes to FakeBFF)
     ↓
 FakeBFFService (simulates REST API)
     ↓
@@ -68,13 +69,31 @@ Repositories + DatabaseService
 IndexedDB (Single Source of Truth)
 ```
 
+### 🚀 Production (Future)
+```
+UI Components (Pages, Features, Shared)
+    ↓
+Feature Services (make HTTP requests to /api/*)
+    ↓
+Real Backend (packages/orders-bff/)
+    ↓
+Real Database (PostgreSQL, MongoDB, etc)
+```
+
 **Key principle:** 
 - Services make **normal HTTP requests** to `/api/` endpoints
-- **APIInterceptor** automatically routes them to **FakeBFFService** 
-- In production: just remove the interceptor, point to real backend
-- **Zero coupling** to mock layer
+- In **development**: APIInterceptor routes them to FakeBFFService
+- In **production**: remove interceptor, real backend handles requests
+- **Zero coupling** to mock layer — no code changes needed!
 
-See [FAKEBFF_ARCHITECTURE.md](./docs/FAKEBFF_ARCHITECTURE.md) for details.
+**Migration to Production:**
+1. Create `packages/orders-bff/` (Express.js backend)
+2. Implement same `/api/*` endpoints as FakeBFFService
+3. Remove APIInterceptor from `app.config.ts`
+4. Update API base URL in providers
+5. Frontend code stays unchanged ✅
+
+See [FAKEBFF_ARCHITECTURE.md](./docs/FAKEBFF_ARCHITECTURE.md) and [ARCHITECTURE.md](./docs/ARCHITECTURE.md) for details.
 
 ## 📐 File Structure
 

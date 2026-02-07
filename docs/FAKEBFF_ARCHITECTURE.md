@@ -248,9 +248,131 @@ app.post('/api/auth/login', async (req, res) => {
   res.json({ user, token })
 })
 
-// Your service doesn't change!
-// Just remove APIInterceptor
+// Same /api/* endpoints as FakeBFFService!
+// Frontend code stays IDENTICAL
 ```
+
+---
+
+## Real BFF Architecture Example
+
+When ready for production, create `packages/orders-bff/` (Node.js Backend):
+
+```
+packages/
+├── angular-standalone-orders/     # This package (frontend)
+│   ├── src/app/
+│   │   ├── core/
+│   │   │   ├── bff/              # ← Delete after migrating!
+│   │   │   └── services/
+│   │   ├── features/
+│   │   └── pages/
+│   └── package.json
+│
+└── orders-bff/                    # ← Create this for production
+    ├── src/
+    │   ├── routes/
+    │   │   ├── auth.routes.ts              # POST /api/auth/login
+    │   │   ├── products.routes.ts          # GET /api/products
+    │   │   ├── orders.routes.ts            # GET/POST /api/orders
+    │   │   └── cart.routes.ts              # Cart operations
+    │   │
+    │   ├── controllers/
+    │   │   ├── auth.controller.ts          # Login logic + JWT
+    │   │   ├── products.controller.ts
+    │   │   ├── orders.controller.ts
+    │   │   └── cart.controller.ts
+    │   │
+    │   ├── middleware/
+    │   │   ├── auth.middleware.ts          # JWT verification
+    │   │   ├── error-handler.ts            # Global error handling
+    │   │   └── logger.ts
+    │   │
+    │   ├── database/
+    │   │   ├── models/
+    │   │   │   ├── User.ts                 # Sequelize/TypeORM models
+    │   │   │   ├── Product.ts
+    │   │   │   ├── Order.ts
+    │   │   │   └── Cart.ts
+    │   │   ├── seeders/                    # Populate test data
+    │   │   └── connection.ts
+    │   │
+    │   └── index.ts                        # Express app bootstrap
+    │
+    ├── .env.example
+    ├── package.json
+    ├── tsconfig.json
+    ├── pnpm-lock.yaml
+    └── README.md
+```
+
+### Migration Steps (Detailed)
+
+**Step 1: Create Backend Package**
+```bash
+cd packages/
+mkdir orders-bff
+cd orders-bff
+pnpm init
+npm install express cors jsonwebtoken sequelize pg
+touch src/index.ts
+```
+
+**Step 2: Implement Same Endpoints**
+```typescript
+// Copy endpoint structure from FakeBFFService
+// POST /api/auth/login
+// GET /api/products
+// GET /api/orders
+// POST /api/orders
+// etc.
+```
+
+**Step 3: Update Frontend Config**
+```typescript
+// app.config.ts (remove APIInterceptor)
+import { provideHttpClient, withBaseUrl } from '@angular/common/http'
+
+export function appConfig(): ApplicationConfig {
+  return {
+    providers: [
+      provideHttpClient(
+        withBaseUrl('http://localhost:3000')  // ← Point to real backend
+      ),
+      // Remove: { provide: HTTP_INTERCEPTORS, useClass: APIInterceptor }
+    ]
+  }
+}
+```
+
+**Step 4: Delete Mock Layer**
+```bash
+rm -rf src/app/core/bff/fake-bff.service.ts
+rm -rf src/app/core/interceptors/api.interceptor.ts
+```
+
+**Step 5: Start Both Servers**
+```bash
+# Terminal 1: Frontend
+cd packages/angular-standalone-orders && pnpm dev
+
+# Terminal 2: Backend  
+cd packages/orders-bff && pnpm dev
+
+# All endpoints work identically! ✅
+```
+
+### Comparison Table
+
+| Aspect | FakeBFF (Dev) | Real Backend (Prod) |
+|--------|--------------|---------------------|
+| **Location** | `src/app/core/bff/` | `packages/orders-bff/` |
+| **Technology** | Angular + IndexedDB | Express/NestJS + PostgreSQL |
+| **Persistence** | Browser storage | Real database |
+| **Data** | Single user/browser | Multi-user/multi-node |
+| **Offline** | ✅ Works without internet | ❌ Requires connection |
+| **API Endpoints** | Identical | Identical |
+| **Service Code** | Unchanged | Unchanged ✅ |
 
 ---
 

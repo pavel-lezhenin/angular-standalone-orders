@@ -59,7 +59,10 @@ bff/
 │
 ├── database.service.ts       # IndexedDB initialization & lifecycle
 │
+├── fake-bff.service.ts       # Mock REST API (development only!)
+│
 ├── repositories/             # Data access objects (CRUD operations)
+│   ├── base.repository.ts    # Abstract base with standard CRUD
 │   ├── user.repository.ts    # User CRUD + role management
 │   ├── product.repository.ts # Product CRUD
 │   ├── order.repository.ts   # Order CRUD + status management
@@ -67,30 +70,129 @@ bff/
 │   └── cart.repository.ts    # Cart operations (add, remove, clear)
 │
 ├── services/                 # Business logic & cross-cutting concerns
-│   ├── permission.service.ts # RBAC: hasAccess(section, action)
-│   ├── auth.service.ts       # Session management, login/logout
 │   ├── seed.service.ts       # Initialize demo data
 │   └── index.ts              # Barrel export
-│
-├── guards/                   # Route protection
-│   ├── auth.guard.ts         # Require authentication
-│   ├── admin.guard.ts        # Require admin/manager role
-│   └── permission.guard.ts   # Custom permission checking
-│
-├── interceptors/             # HTTP middleware
-│   └── auth.interceptor.ts   # Add token to requests (mock)
 │
 └── index.ts                  # Export all public APIs
 ```
 
+**Development vs Production:**
+
+In **development** (current):
+```
+Angular Service → HTTP Request
+    ↓
+APIInterceptor
+    ↓
+FakeBFFService (mock-bff.service.ts)
+    ↓
+Repositories + IndexedDB
+```
+
+In **production** (planned):
+```
+Angular Service → HTTP Request
+    ↓
+Real Backend (orders-bff package)
+    ↓
+Real Database (PostgreSQL/MongoDB)
+```
+
 **Key Principles:**
 - ✅ Repositories follow **data mapper pattern** — clean separation between data & domain
-- ✅ Services contain **business logic** — permission checking, session management
-- ✅ Guards implement **access control** — checked before route activation
+- ✅ FakeBFF simulates **REST API** during development — easy testing without backend
 - ✅ All operations are **async** — IndexedDB is promise-based
 - ✅ Single **IndexedDB instance** — initialized once, reused throughout app
 
-### Features Layer (`features/`)
+---
+
+## 📦 Real BFF Structure (When Creating Backend)
+
+When ready for production, create a separate `packages/orders-bff/` (Node.js + Express):
+
+```
+packages/
+├── angular-standalone-orders/      # Frontend (Vue/React/Angular)
+│   └── src/app/core/
+│       ├── bff/ (mock-bff removed)
+│       └── services/
+│
+└── orders-bff/                     # ← Real Backend-For-Frontend
+    ├── src/
+    │   ├── routes/
+    │   │   ├── auth.routes.ts       # POST /api/auth/login, etc
+    │   │   ├── products.routes.ts   # GET /api/products, etc
+    │   │   ├── orders.routes.ts     # GET/POST /api/orders
+    │   │   └── cart.routes.ts       # Cart operations
+    │   │
+    │   ├── controllers/
+    │   │   ├── auth.controller.ts   # Login logic, JWT generation
+    │   │   ├── products.controller.ts
+    │   │   └── orders.controller.ts
+    │   │
+    │   ├── middleware/
+    │   │   ├── auth.middleware.ts   # JWT verification
+    │   │   └── error-handler.ts
+    │   │
+    │   ├── database/
+    │   │   ├── models/
+    │   │   │   ├── User.ts          # Sequelize/TypeORM models
+    │   │   │   ├── Product.ts
+    │   │   │   └── Order.ts
+    │   │   └── connection.ts
+    │   │
+    │   └── index.ts                 # Express app server
+    │
+    ├── package.json
+    ├── .env.example
+    └── README.md
+```
+
+**Migration Steps:**
+1. Create `packages/orders-bff/` with Express server
+2. Implement `/api/*` endpoints matching FakeBFFService
+3. Remove APIInterceptor from `app.config.ts`
+4. Update API base URL: `provideHttpClient(withBaseUrl('http://localhost:3000'))`
+5. Delete `src/app/core/bff/fake-bff.service.ts`
+6. Frontend code stays **unchanged** — services still call `/api/*`
+
+### Core/Application Services Layer (`app/core/services/`)
+
+**Purpose:** Business logic and application state management.
+
+```
+core/services/
+├── auth.service.ts          # Session management, login/logout
+├── permission.service.ts    # RBAC: hasAccess(section, action)
+└── index.ts                 # Barrel export
+```
+
+**Key Principles:**
+- ✅ Services make **HTTP requests** to `/api/*` endpoints
+- ✅ Services are **intercepted** by APIInterceptor in development
+- ✅ In production, real backend handles requests
+- ✅ No coupling to mock layer — services don't know about FakeBFF
+
+### Route Guards & Interceptors (`app/core/guards/` & `app/core/interceptors/`)
+
+```
+core/
+├── guards/
+│   ├── auth.guard.ts        # Require authentication
+│   ├── admin.guard.ts       # Require admin/manager role
+│   └── permission.guard.ts  # Custom permission checking
+│
+└── interceptors/
+    └── api.interceptor.ts   # Routes /api/* to FakeBFFService (dev only!)
+```
+
+**Key Principles:**
+- ✅ Guards implement **access control** — checked before route activation
+- ✅ APIInterceptor is **development-only** — removed in production
+
+---
+
+## 📂 Layer Structure
 
 Each feature is **self-contained and independently lazy-loaded**. Features can import from Core and Shared, but NOT from other features.
 
