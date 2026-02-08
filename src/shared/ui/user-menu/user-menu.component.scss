@@ -1,0 +1,21 @@
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.user-button {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.user-name {
+  margin: 0 0.25rem;
+}
+
+@media (max-width: 768px) {
+  .user-name {
+    display: none;
+  }
+}
