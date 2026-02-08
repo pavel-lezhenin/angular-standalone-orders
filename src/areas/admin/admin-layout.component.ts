@@ -4,9 +4,7 @@ import { CommonModule } from '@angular/common';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '../../app/core/services/auth.service';
-import { Router } from '@angular/router';
 import { TopBarComponent } from '../../shared/ui/top-bar/top-bar.component';
 
 interface MenuItem {
@@ -27,7 +25,6 @@ interface MenuItem {
     MatSidenavModule,
     MatListModule,
     MatIconModule,
-    MatButtonModule,
     TopBarComponent,
   ],
   templateUrl: './admin-layout.component.html',
@@ -52,13 +49,5 @@ export class AdminLayoutComponent {
     return this.menuItems.filter(item => item.roles.includes(user.role as 'admin' | 'manager'));
   });
 
-  constructor(
-    private authService: AuthService,
-    private router: Router,
-  ) {}
-
-  async logout(): Promise<void> {
-    await this.authService.logout();
-    this.router.navigate(['/auth/login']);
-  }
+  constructor(private authService: AuthService) {}
 }
