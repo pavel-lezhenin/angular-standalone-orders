@@ -25,12 +25,6 @@ export const routes: Routes = [
         title: 'Shop - Orders Platform',
       },
       {
-        path: 'admin',
-        canActivate: [authGuard, adminGuard],
-        loadComponent: () => import('../pages/orders/orders.component').then(m => m.OrdersComponent),
-        title: 'Admin - Orders Platform',
-      },
-      {
         path: 'account',
         canActivate: [authGuard],
         loadComponent: () => import('../pages/account/account.component').then(m => m.AccountComponent),
@@ -41,6 +35,10 @@ export const routes: Routes = [
   {
     path: 'auth',
     loadChildren: () => import('../areas/auth/auth.routes').then(m => m.authRoutes),
+  },
+  {
+    path: 'admin',
+    loadChildren: () => import('../areas/admin/admin.routes').then(m => m.adminRoutes),
   },
   {
     path: '**',

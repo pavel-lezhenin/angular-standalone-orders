@@ -60,4 +60,39 @@ export class AuthService {
       }
     }
   }
+
+  /**
+   * Get redirect path based on user role
+   * @returns Path to redirect after login
+   */
+  getRedirectPath(): string {
+    const user = this.currentUser();
+    if (!user) {
+      return '/auth/login';
+    }
+
+    // Admin and Manager → Admin panel
+    if (user.role === 'admin' || user.role === 'manager') {
+      return '/admin';
+    }
+
+    // Regular User → Shop
+    return '/shop';
+  }
+
+  /**
+   * Check if current user has admin or manager role
+   */
+  isAdminOrManager(): boolean {
+    const user = this.currentUser();
+    return user?.role === 'admin' || user?.role === 'manager';
+  }
+
+  /**
+   * Check if current user has admin role
+   */
+  isAdmin(): boolean {
+    const user = this.currentUser();
+    return user?.role === 'admin';
+  }
 }

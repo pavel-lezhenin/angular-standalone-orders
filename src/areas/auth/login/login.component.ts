@@ -93,8 +93,8 @@ export class LoginComponent {
     try {
       await this.authService.login(email, password);
 
-      // Get return URL from query params or default to /shop
-      const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/shop';
+      // Get return URL from query params or use role-based redirect
+      const returnUrl = this.route.snapshot.queryParams['returnUrl'] || this.authService.getRedirectPath();
       await this.router.navigateByUrl(returnUrl);
     } catch (error) {
       this.errorMessage.set(

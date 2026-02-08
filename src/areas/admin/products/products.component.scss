@@ -1,0 +1,36 @@
+.products {
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+
+    h1 {
+      margin: 0;
+      font-size: 32px;
+      font-weight: 300;
+    }
+
+    button {
+      mat-icon {
+        margin-right: 8px;
+      }
+    }
+  }
+
+  .placeholder {
+    text-align: center;
+    color: rgba(0, 0, 0, 0.6);
+    padding: 40px 20px 20px;
+    font-size: 16px;
+    margin: 0;
+  }
+
+  .info {
+    text-align: center;
+    color: rgba(0, 0, 0, 0.4);
+    padding: 0 20px 40px;
+    font-size: 14px;
+    margin: 0;
+  }
+}

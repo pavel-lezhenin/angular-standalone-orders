@@ -1,0 +1,46 @@
+<div class="admin-layout">
+  <!-- Top Bar (same as landing) -->
+  <app-top-bar 
+    title="Orders Management Platform" 
+    [navItems]="[]" />
+
+  <!-- Admin Content with Sidebar -->
+  <mat-sidenav-container class="admin-container">
+    <!-- Sidebar -->
+    <mat-sidenav mode="side" opened class="admin-sidenav">
+      <div class="sidebar-header">
+        <h2>Admin Panel</h2>
+        <p class="user-info">{{ currentUser()?.profile?.firstName }} {{ currentUser()?.profile?.lastName }}</p>
+        <p class="user-role">{{ currentUser()?.role }}</p>
+      </div>
+
+      <mat-nav-list>
+        @for (item of visibleMenuItems(); track item.route) {
+          <a
+            mat-list-item
+            [routerLink]="item.route"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: item.route === '/admin' }"
+          >
+            <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+            <span matListItemTitle>{{ item.label }}</span>
+          </a>
+        }
+
+        <mat-divider></mat-divider>
+
+        <a mat-list-item (click)="logout()">
+          <mat-icon matListItemIcon>logout</mat-icon>
+          <span matListItemTitle>Logout</span>
+        </a>
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <!-- Main Content -->
+    <mat-sidenav-content class="admin-content">
+      <div class="content-wrapper">
+        <router-outlet />
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

@@ -1,0 +1,30 @@
+<div class="dashboard">
+  <h1>Dashboard</h1>
+
+  <div class="stats-grid">
+    @for (stat of stats; track stat.label) {
+      <mat-card class="stat-card" [class]="'stat-' + stat.color">
+        <mat-card-content>
+          <div class="stat-icon">
+            <mat-icon>{{ stat.icon }}</mat-icon>
+          </div>
+          <div class="stat-info">
+            <div class="stat-value">{{ stat.value }}</div>
+            <div class="stat-label">{{ stat.label }}</div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    }
+  </div>
+
+  <div class="recent-section">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Recent Orders</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p class="placeholder">Recent orders will appear here</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
