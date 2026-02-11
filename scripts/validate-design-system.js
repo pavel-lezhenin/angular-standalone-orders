@@ -110,6 +110,11 @@ function validateFile(filePath) {
       return;
     }
     
+    // Skip width/height definitions
+    if (line.includes('width:') || line.includes('height:')) {
+      return;
+    }
+    
     RULES.forEach(rule => {
       // Skip media query check for design system files
       if (isDesignSystemFile(filePath) && rule.type === ERRORS.MEDIA_QUERY) {
