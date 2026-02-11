@@ -56,10 +56,10 @@ const RULES = [
     message: (match, value, unit) => `Hardcoded spacing ${match} - use --spacing-* CSS variables`
   },
   {
-    name: 'No @media queries in components',
-    pattern: /@media\s*\(/g,
+    name: 'No responsive @media queries in components',
+    pattern: /@media\s*\([^)]*(?:min-width|max-width|min-height|max-height)[^)]*\)/g,
     type: ERRORS.MEDIA_QUERY,
-    message: (match) => `@media query found - use :host-context(.mobile/.tablet/.desktop) instead`
+    message: (match) => `Responsive @media query found - use :host-context(.mobile/.tablet/.desktop) instead`
   },
   {
     name: 'No ::ng-deep in styling',
