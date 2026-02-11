@@ -20,4 +20,5 @@ export interface User {
     address: string;
   };
   createdAt: number;
+  updatedAt: number;
 }

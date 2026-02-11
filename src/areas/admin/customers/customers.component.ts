@@ -130,7 +130,11 @@ export class CustomersComponent implements OnInit {
     const dialogRef = this.dialog.open(CustomerFormDialogComponent, {
       width: '500px',
       maxWidth: '90vw',
-      data: { mode: 'create' },
+      data: {
+        mode: 'create',
+        title: 'Create Customer',
+        submitLabel: 'Create',
+      },
       disableClose: true,
     });
 
@@ -158,7 +162,11 @@ export class CustomersComponent implements OnInit {
     const dialogRef = this.dialog.open(CustomerFormDialogComponent, {
       width: '500px',
       maxWidth: '90vw',
-      data: { mode: 'edit', user },
+      data: {
+        mode: 'edit',
+        user,
+        title: 'Edit Customer',
+      },
       disableClose: true,
     });
 

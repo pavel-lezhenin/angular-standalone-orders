@@ -19,31 +19,37 @@ export interface DialogConfig {
    * - notification: Only close button in top-right
    * - form: Cancel + Submit buttons (default)
    * - confirm: Cancel + Confirm buttons
+   * @default 'form'
    */
   type?: 'notification' | 'form' | 'confirm';
 
   /**
-   * Submit button label (default: 'Submit')
+   * Submit button label
+   * @default 'Update'
    */
   submitLabel?: string;
 
   /**
-   * Cancel button label (default: 'Cancel')
+   * Cancel button label
+   * @default 'Cancel'
    */
   cancelLabel?: string;
 
   /**
-   * Whether dialog can be closed via backdrop click (default: false)
+   * Whether dialog can be closed via backdrop click
+   * @default true (prevents backdrop close)
    */
   disableBackdropClick?: boolean;
 
   /**
-   * Width of the dialog
+   * Width of the dialog (not used in component, set via MatDialog config)
+   * @deprecated Use MatDialog open config instead
    */
   width?: string;
 
   /**
-   * Max width of the dialog
+   * Max width of the dialog (not used in component, set via MatDialog config)
+   * @deprecated Use MatDialog open config instead
    */
   maxWidth?: string;
 }
@@ -122,7 +128,7 @@ export class DialogComponent implements OnInit {
   /**
    * Submit button label
    */
-  protected readonly submitLabel = computed(() => this.config?.submitLabel || 'Submit');
+  protected readonly submitLabel = computed(() => this.config?.submitLabel || 'Update');
 
   /**
    * Cancel button label

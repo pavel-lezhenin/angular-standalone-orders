@@ -55,6 +55,7 @@ export class SeedService {
           address: '123 Main St, New York, NY 10001',
         },
         createdAt: now,
+        updatedAt: now,
       },
       {
         id: uuidv4(),
@@ -68,6 +69,7 @@ export class SeedService {
           address: '456 Oak Ave, Los Angeles, CA 90001',
         },
         createdAt: now,
+        updatedAt: now,
       },
       {
         id: uuidv4(),
@@ -81,6 +83,7 @@ export class SeedService {
           address: '789 Pine Blvd, Chicago, IL 60601',
         },
         createdAt: now,
+        updatedAt: now,
       },
     ];
 

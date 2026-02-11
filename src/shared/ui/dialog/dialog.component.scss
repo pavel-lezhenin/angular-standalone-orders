@@ -2,8 +2,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  min-width: 300px;
-  max-width: 100%;
+  max-height: 80vh;
   
   &.loading {
     pointer-events: none;
@@ -15,13 +14,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0;
-  margin-bottom: 16px;
+  margin: 0;
+  padding: var(--spacing-md) var(--spacing-xl) var(--spacing-sm) var(--spacing-xl);
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-  padding-bottom: 12px;
-
-  h2 {
-    margin: 0;
+  
+  h2[mat-dialog-title] {
+    display: flex;
+    align-items: center;
+    margin: 0 !important;
+    padding: 0 !important;
     font-size: 1.25rem;
     font-weight: 500;
     flex: 1;
@@ -29,7 +30,7 @@
   }
 
   .close-button {
-    margin-left: 16px;
+    margin-left: var(--spacing-md);
     transition: all 0.2s ease;
 
     &:hover:not(:disabled) {
@@ -44,26 +45,23 @@
 }
 
 .dialog-content {
-  flex: 1;
-  overflow-y: auto;
-  padding: 0;
-  margin-bottom: 20px;
-  min-height: 100px;
+  overflow-y: auto !important;
+  padding: var(--spacing-lg) var(--spacing-xl) !important;
+  margin: 0 !important;
   color: var(--text-secondary);
-
-  // Custom scrollbar styling
+  
+  // Custom scrollbar
   &::-webkit-scrollbar {
-    width: 8px;
+    width: calc(var(--spacing-xs) * 1.5);
   }
 
   &::-webkit-scrollbar-track {
-    background: var(--surface-secondary);
-    border-radius: 4px;
+    background: transparent;
   }
 
   &::-webkit-scrollbar-thumb {
     background: rgba(0, 0, 0, 0.2);
-    border-radius: 4px;
+    border-radius: var(--spacing-xs);
 
     &:hover {
       background: rgba(0, 0, 0, 0.3);
@@ -72,14 +70,20 @@
 }
 
 .dialog-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  padding: 16px 0 0;
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  gap: var(--spacing-sm);
+  padding: var(--spacing-lg) var(--spacing-xl) !important;
+  margin: 0 !important;
   border-top: 1px solid rgba(0, 0, 0, 0.12);
+  min-height: auto !important;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
 
   button {
-    min-width: 80px;
+    margin: 0 !important;
     transition: all 0.2s ease;
 
     &:disabled {
@@ -104,7 +108,7 @@
     }
 
     span.spinner-active {
-      margin-left: 8px;
+      margin-left: calc(var(--spacing-sm) - 4px);
     }
   }
 }

@@ -75,6 +75,14 @@ $light-theme: mat.define-theme(
   --app-spacing: #{$md-spacing-unit};
   --app-font-family: #{$md-font-family};
 
+  /* Spacing Scale */
+  --spacing-xs: calc(var(--app-spacing) * 0.25); /* 4px */
+  --spacing-sm: calc(var(--app-spacing) * 0.75); /* 12px */
+  --spacing-md: var(--app-spacing); /* 16px */
+  --spacing-lg: calc(var(--app-spacing) * 1.25); /* 20px */
+  --spacing-xl: calc(var(--app-spacing) * 1.5); /* 24px */
+  --spacing-2xl: calc(var(--app-spacing) * 2); /* 32px */
+
   /* Breakpoints */
   --breakpoint-mobile: #{$md-breakpoint-mobile};
   --breakpoint-tablet: #{$md-breakpoint-tablet};

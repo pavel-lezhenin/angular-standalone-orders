@@ -113,6 +113,26 @@ export class FakeBFFService {
       return this.handleGetOrder(req);
     }
 
+    // User endpoints
+    if (req.method === 'GET' && req.url.includes('/api/users') && !req.url.includes('/cart')) {
+      // Check if it's a specific user by ID (e.g., /api/users/123)
+      const userIdMatch = req.url.match(/\/api\/users\/([\w-]+)$/);
+      if (userIdMatch) {
+        return this.handleGetUser(req);
+      }
+      // Otherwise, it's a list request
+      return this.handleGetUsers(req);
+    }
+    if (req.method === 'POST' && req.url.endsWith('/api/users')) {
+      return this.handleCreateUser(req);
+    }
+    if (req.method === 'PUT' && req.url.match(/\/api\/users\/[\w-]+$/) && !req.url.includes('/cart')) {
+      return this.handleUpdateUser(req);
+    }
+    if (req.method === 'DELETE' && req.url.match(/\/api\/users\/[\w-]+$/) && !req.url.includes('/cart')) {
+      return this.handleDeleteUser(req);
+    }
+
     // Cart endpoints
     if (req.method === 'GET' && req.url.match(/\/api\/users\/[\w-]+\/cart$/)) {
       return this.handleGetCart(req);
@@ -218,6 +238,147 @@ export class FakeBFFService {
       return new HttpResponse({
         status: 500,
         body: { error: 'Failed to fetch categories' },
+      });
+    }
+  }
+
+  // User handlers
+  private async handleGetUsers(req: HttpRequest<unknown>): Promise<HttpResponse<unknown>> {
+    try {
+      // Parse query parameters
+      const url = new URL(req.url, 'http://localhost');
+      const page = parseInt(url.searchParams.get('page') || '1');
+      const limit = parseInt(url.searchParams.get('limit') || '20');
+      const search = url.searchParams.get('search') || '';
+      const role = url.searchParams.get('role') || undefined;
+
+      // Get all users
+      let users = await this.userRepo.getAll();
+
+      // Apply filters
+      if (search) {
+        const searchLower = search.toLowerCase();
+        users = users.filter(user => 
+          user.email.toLowerCase().includes(searchLower) ||
+          user.profile.firstName.toLowerCase().includes(searchLower) ||
+          user.profile.lastName.toLowerCase().includes(searchLower)
+        );
+      }
+
+      if (role) {
+        users = users.filter(user => user.role === role);
+      }
+
+      // Apply pagination
+      const total = users.length;
+      const startIndex = (page - 1) * limit;
+      const endIndex = startIndex + limit;
+      const paginatedUsers = users.slice(startIndex, endIndex);
+
+      // Map to DTO (exclude password)
+      const data = paginatedUsers.map(({ password, ...user }) => user);
+
+      return new HttpResponse({ 
+        status: 200, 
+        body: { 
+          data,
+          total,
+          page,
+          limit,
+        } 
+      });
+    } catch (err) {
+      console.error('Failed to fetch users:', err);
+      return new HttpResponse({
+        status: 500,
+        body: { error: 'Failed to fetch users' },
+      });
+    }
+  }
+
+  private async handleGetUser(req: HttpRequest<unknown>): Promise<HttpResponse<unknown>> {
+    try {
+      const id = req.url.split('/').pop()!;
+      const user = await this.userRepo.getById(id);
+
+      if (!user) {
+        return new HttpResponse({ status: 404, body: { error: 'User not found' } });
+      }
+
+      // Exclude password
+      const { password, ...userWithoutPassword } = user;
+      return new HttpResponse({ status: 200, body: userWithoutPassword });
+    } catch (err) {
+      return new HttpResponse({
+        status: 500,
+        body: { error: 'Failed to fetch user' },
+      });
+    }
+  }
+
+  private async handleCreateUser(req: HttpRequest<unknown>): Promise<HttpResponse<unknown>> {
+    try {
+      const body = req.body as Partial<User>;
+      
+      // Create user with all required fields
+      const userData: User = {
+        ...(body as User),
+        id: body.id || crypto.randomUUID(),
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+      };
+
+      await this.userRepo.create(userData);
+      
+      // Return without password
+      const { password, ...userWithoutPassword } = userData;
+      return new HttpResponse({ status: 201, body: userWithoutPassword });
+    } catch (err) {
+      console.error('Failed to create user:', err);
+      return new HttpResponse({
+        status: 500,
+        body: { error: 'Failed to create user' },
+      });
+    }
+  }
+
+  private async handleUpdateUser(req: HttpRequest<unknown>): Promise<HttpResponse<unknown>> {
+    try {
+      const id = req.url.split('/').pop()!;
+      const updates = {
+        ...(req.body as Partial<User>),
+        updatedAt: Date.now(),
+      };
+
+      await this.userRepo.update(id, updates);
+      
+      const updatedUser = await this.userRepo.getById(id);
+      if (!updatedUser) {
+        return new HttpResponse({ status: 404, body: { error: 'User not found' } });
+      }
+
+      // Return without password
+      const { password, ...userWithoutPassword } = updatedUser;
+      return new HttpResponse({ status: 200, body: userWithoutPassword });
+    } catch (err) {
+      console.error('Failed to update user:', err);
+      return new HttpResponse({
+        status: 500,
+        body: { error: 'Failed to update user' },
+      });
+    }
+  }
+
+  private async handleDeleteUser(req: HttpRequest<unknown>): Promise<HttpResponse<unknown>> {
+    try {
+      const id = req.url.split('/').pop()!;
+      await this.userRepo.delete(id);
+      return new HttpResponse({ status: 204, body: null });
+    } catch (err) {
+      console.error('Failed to delete user:', err);
+      return new HttpResponse({
+        status: 500,
+        body: { error: 'Failed to delete user' },
       });
     }
   }

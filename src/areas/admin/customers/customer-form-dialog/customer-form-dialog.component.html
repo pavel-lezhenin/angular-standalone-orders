@@ -1,137 +1,110 @@
-<div class="dialog-wrapper">
-  <!-- Dialog Header -->
-  <h2 mat-dialog-title>{{ dialogTitle }}</h2>
+<app-dialog (submit)="onSubmit()" (cancel)="onCancel()">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-content">
+      <!-- Email -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input
+          matInput
+          type="email"
+          formControlName="email"
+          placeholder="user@example.com"
+          required
+        />
+        @if (form.get('email')?.touched && form.get('email')?.invalid) {
+          <mat-error>{{ getErrorMessage('email') }}</mat-error>
+        }
+      </mat-form-field>
 
-  <!-- Dialog Content -->
-  <mat-dialog-content>
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <div class="form-content">
-        <!-- Email -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Email</mat-label>
-          <input
-            matInput
-            type="email"
-            formControlName="email"
-            placeholder="user@example.com"
-            required
-          />
-          @if (form.get('email')?.touched && form.get('email')?.invalid) {
-            <mat-error>{{ getErrorMessage('email') }}</mat-error>
+      <!-- Password -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>
+          {{ data.mode === 'create' ? 'Password' : 'Password (leave empty to keep current)' }}
+        </mat-label>
+        <input
+          matInput
+          type="password"
+          formControlName="password"
+          placeholder="Enter password"
+          [required]="data.mode === 'create'"
+        />
+        @if (form.get('password')?.touched && form.get('password')?.invalid) {
+          <mat-error>{{ getErrorMessage('password') }}</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Role -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Role</mat-label>
+        <mat-select formControlName="role" required>
+          @for (role of roles; track role) {
+            <mat-option [value]="role">{{ role }}</mat-option>
           }
-        </mat-form-field>
+        </mat-select>
+        @if (form.get('role')?.touched && form.get('role')?.invalid) {
+          <mat-error>{{ getErrorMessage('role') }}</mat-error>
+        }
+      </mat-form-field>
 
-        <!-- Password -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>
-            {{ data.mode === 'create' ? 'Password' : 'Password (leave empty to keep current)' }}
-          </mat-label>
-          <input
-            matInput
-            type="password"
-            formControlName="password"
-            placeholder="Enter password"
-            [required]="data.mode === 'create'"
-          />
-          @if (form.get('password')?.touched && form.get('password')?.invalid) {
-            <mat-error>{{ getErrorMessage('password') }}</mat-error>
-          }
-        </mat-form-field>
+      <!-- First Name -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>First Name</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="firstName"
+          placeholder="John"
+          required
+        />
+        @if (form.get('firstName')?.touched && form.get('firstName')?.invalid) {
+          <mat-error>{{ getErrorMessage('firstName') }}</mat-error>
+        }
+      </mat-form-field>
 
-        <!-- Role -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Role</mat-label>
-          <mat-select formControlName="role" required>
-            @for (role of roles; track role) {
-              <mat-option [value]="role">{{ role }}</mat-option>
-            }
-          </mat-select>
-          @if (form.get('role')?.touched && form.get('role')?.invalid) {
-            <mat-error>{{ getErrorMessage('role') }}</mat-error>
-          }
-        </mat-form-field>
+      <!-- Last Name -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Last Name</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="lastName"
+          placeholder="Doe"
+          required
+        />
+        @if (form.get('lastName')?.touched && form.get('lastName')?.invalid) {
+          <mat-error>{{ getErrorMessage('lastName') }}</mat-error>
+        }
+      </mat-form-field>
 
-        <!-- First Name -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>First Name</mat-label>
-          <input
-            matInput
-            type="text"
-            formControlName="firstName"
-            placeholder="John"
-            required
-          />
-          @if (form.get('firstName')?.touched && form.get('firstName')?.invalid) {
-            <mat-error>{{ getErrorMessage('firstName') }}</mat-error>
-          }
-        </mat-form-field>
+      <!-- Phone -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Phone</mat-label>
+        <input
+          matInput
+          type="tel"
+          formControlName="phone"
+          placeholder="+1 234 567 8900"
+          required
+        />
+        @if (form.get('phone')?.touched && form.get('phone')?.invalid) {
+          <mat-error>{{ getErrorMessage('phone') }}</mat-error>
+        }
+      </mat-form-field>
 
-        <!-- Last Name -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Last Name</mat-label>
-          <input
-            matInput
-            type="text"
-            formControlName="lastName"
-            placeholder="Doe"
-            required
-          />
-          @if (form.get('lastName')?.touched && form.get('lastName')?.invalid) {
-            <mat-error>{{ getErrorMessage('lastName') }}</mat-error>
-          }
-        </mat-form-field>
-
-        <!-- Phone -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Phone</mat-label>
-          <input
-            matInput
-            type="tel"
-            formControlName="phone"
-            placeholder="+1 234 567 8900"
-            required
-          />
-          @if (form.get('phone')?.touched && form.get('phone')?.invalid) {
-            <mat-error>{{ getErrorMessage('phone') }}</mat-error>
-          }
-        </mat-form-field>
-
-        <!-- Address -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Address</mat-label>
-          <textarea
-            matInput
-            formControlName="address"
-            placeholder="123 Main St, City, Country"
-            rows="2"
-            required
-          ></textarea>
-          @if (form.get('address')?.touched && form.get('address')?.invalid) {
-            <mat-error>{{ getErrorMessage('address') }}</mat-error>
-          }
-        </mat-form-field>
-      </div>
-    </form>
-  </mat-dialog-content>
-
-  <!-- Dialog Actions -->
-  <mat-dialog-actions align="end">
-    <button
-      mat-stroked-button
-      (click)="onCancel()"
-      type="button"
-    >
-      Cancel
-    </button>
-
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="onSubmit()"
-      [disabled]="form.invalid"
-      type="submit"
-    >
-      {{ submitLabel }}
-    </button>
-  </mat-dialog-actions>
-</div>
+      <!-- Address -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Address</mat-label>
+        <textarea
+          matInput
+          formControlName="address"
+          placeholder="123 Main St, City, Country"
+          rows="2"
+          required
+        ></textarea>
+        @if (form.get('address')?.touched && form.get('address')?.invalid) {
+          <mat-error>{{ getErrorMessage('address') }}</mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </form>
+</app-dialog>

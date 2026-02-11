@@ -3,13 +3,14 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  gap: var(--spacing-md);
 }
 
 .page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
 
   h1 {
     margin: 0;
@@ -27,7 +28,7 @@
 :host-context(.mobile) .page-header {
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--spacing-unit);
+  gap: var(--spacing-md);
 
   button {
     width: 100%;
