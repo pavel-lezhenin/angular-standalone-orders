@@ -8,7 +8,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import { FakeBFFService } from './core/bff';
+import { FakeBFFService } from '@bff';
 import { inject } from '@angular/core';
 import { from, switchMap, Observable } from 'rxjs';
 import { HttpRequest, HttpHandlerFn, HttpEvent } from '@angular/common/http';

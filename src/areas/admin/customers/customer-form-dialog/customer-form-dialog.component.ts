@@ -13,7 +13,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-import { User } from '@core/bff/models';
+import { User } from '@bff/models';
 import { UserRole } from '@core/types';
 
 export interface CustomerFormDialogData {

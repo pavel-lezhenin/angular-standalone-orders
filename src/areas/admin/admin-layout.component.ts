@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
-import { AuthService } from '../../app/core/services/auth.service';
+import { AuthService } from '@core/services/auth.service';
 import { TopBarComponent } from '../../shared/ui/top-bar/top-bar.component';
 
 interface MenuItem {

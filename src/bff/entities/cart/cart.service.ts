@@ -1,7 +1,7 @@
 import { Injectable, signal, computed, effect, PLATFORM_ID, inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { AuthService } from '@/app/core/services/auth.service';
+import { AuthService } from '@core/services/auth.service';
 import { CartItem } from './models';
 import { firstValueFrom } from 'rxjs';
 

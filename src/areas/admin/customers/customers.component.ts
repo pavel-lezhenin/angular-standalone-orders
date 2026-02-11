@@ -6,7 +6,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { PageEvent } from '@angular/material/paginator';
 
-import { User } from '@core/bff/models';
+import { User } from '@bff/models';
 import { CustomerService } from './services/customer.service';
 import { CustomerFormDialogComponent } from './customer-form-dialog/customer-form-dialog.component';
 import { CustomerTableComponent } from './customer-table/customer-table.component';

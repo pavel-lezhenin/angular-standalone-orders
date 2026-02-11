@@ -7,7 +7,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { User } from '@core/bff/models';
+import { User } from '@bff/models';
 import { UserRole } from '@core/types';
 import { formatDate } from '@shared/utils';
 

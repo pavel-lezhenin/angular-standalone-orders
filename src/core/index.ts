@@ -1,5 +1,5 @@
 // BFF Layer
-export * from './bff';
+export * from '../bff';
 
 // Services
 export { AuthService } from './services/auth.service';
