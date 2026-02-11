@@ -1,0 +1,28 @@
+.filters-container {
+  display: flex;
+  gap: var(--spacing-unit);
+  align-items: center;
+  padding: var(--spacing-unit);
+  background: var(--surface-secondary);
+  border-radius: 8px;
+  margin-bottom: var(--spacing-unit);
+}
+
+.search-field {
+  flex: 1;
+  min-width: 300px;
+}
+
+.role-field {
+  width: 200px;
+}
+
+:host-context(.mobile) .filters-container {
+  flex-direction: column;
+  gap: var(--spacing-sm, 0.75rem);
+}
+
+:host-context(.mobile) .search-field,
+:host-context(.mobile) .role-field {
+  width: 100%;
+}

@@ -4,6 +4,7 @@ import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { HttpInterceptorFn } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
@@ -71,6 +72,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
     provideHttpClient(withInterceptors([apiInterceptor])),
+    provideAnimations(), // Required for Material Dialog, Snackbar, etc.
     // Initialize BFF before app starts (Angular 21+ style)
     provideAppInitializer(initializeBFF),
   ],

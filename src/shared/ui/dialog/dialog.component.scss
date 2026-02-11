@@ -1,0 +1,142 @@
+.dialog-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 300px;
+  max-width: 100%;
+  
+  &.loading {
+    pointer-events: none;
+    user-select: none;
+  }
+}
+
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+  margin-bottom: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  padding-bottom: 12px;
+
+  h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 500;
+    flex: 1;
+    color: var(--text-heading);
+  }
+
+  .close-button {
+    margin-left: 16px;
+    transition: all 0.2s ease;
+
+    &:hover:not(:disabled) {
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.dialog-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0;
+  margin-bottom: 20px;
+  min-height: 100px;
+  color: var(--text-secondary);
+
+  // Custom scrollbar styling
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--surface-secondary);
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.3);
+    }
+  }
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 0 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+
+  button {
+    min-width: 80px;
+    transition: all 0.2s ease;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  .submit-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    .button-spinner {
+      display: inline-block;
+      
+      ::ng-deep .mat-mdc-progress-spinner circle {
+        stroke: white !important;
+      }
+    }
+
+    span.spinner-active {
+      margin-left: 8px;
+    }
+  }
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(2px);
+  z-index: 10;
+  pointer-events: all;
+  cursor: wait;
+}
+
+// Accessibility helper
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// Focus styles for accessibility
+button:focus-visible {
+  outline: 2px solid var(--app-primary);
+  outline-offset: 2px;
+}

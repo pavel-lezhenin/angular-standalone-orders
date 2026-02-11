@@ -37,7 +37,7 @@
       "@/*": ["./src/*"],
       "@app/*": ["./src/app/*"],
       "@core/*": ["./src/app/core/*"],
-      "@shared/*": ["./src/app/shared/*"],
+      "@shared/*": ["./src/shared/*"],
       "@areas/*": ["./src/areas/*"],
       "@entities/*": ["./src/app/entities/*"],
       "@pages/*": ["./src/app/pages/*"]

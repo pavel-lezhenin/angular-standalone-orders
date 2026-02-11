@@ -28,6 +28,4 @@ export type {
   Permission,
   Category,
   Session,
-  UserRole,
-  OrderStatus,
 } from './models';

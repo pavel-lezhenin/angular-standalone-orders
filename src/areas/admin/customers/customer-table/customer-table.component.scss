@@ -1,0 +1,53 @@
+:host {
+  display: flex;
+  flex-direction: column;
+}
+
+.customers-table {
+  width: 100%;
+
+  th {
+    font-weight: 500;
+    font-size: 14px;
+  }
+
+  td {
+    font-size: 14px;
+  }
+}
+
+// Role badge colors using CSS theme variables
+.badge-admin {
+  background-color: var(--app-error);
+  color: white;
+}
+
+.badge-manager {
+  background-color: var(--app-primary);
+  color: white;
+}
+
+.badge-user {
+  background-color: var(--app-tertiary);
+  color: white;
+}
+
+.mat-mdc-no-data-row {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-muted);
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  gap: 1rem;
+  color: var(--text-secondary);
+}
+
+mat-paginator {
+  margin-top: auto;
+}

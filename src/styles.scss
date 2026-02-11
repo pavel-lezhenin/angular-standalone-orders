@@ -59,6 +59,11 @@ $light-theme: mat.define-theme(
   --surface-gradient-start: #f5f7fa;
   --surface-gradient-end: #c3cfe2;
 
+  /* Error State Colors */
+  --error-container: #ffebee;
+  --on-error-container: #c62828;
+  --error-light: #ffcdd2;
+
   /* Text Colors */
   --text-primary: #2d3748;
   --text-secondary: #4a5568;

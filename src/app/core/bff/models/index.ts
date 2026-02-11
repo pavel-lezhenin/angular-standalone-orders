@@ -1,9 +1,32 @@
 /**
  * BFF data models for Orders Management Platform
+ *
+ * DESIGN NOTES:
+ *
+ * User Profile:
+ * - All profile fields (firstName, lastName, phone, address) are required
+ * - Address stored in profile is user's default/primary address
+ * - Future: Can extend to UserDetails with multiple addresses, payment methods, preferences
+ *
+ * Order:
+ * - deliveryAddress is required and stores snapshot of address at order time
+ * - This ensures order history remains accurate even if user changes their profile address
+ * - By default, checkout should pre-fill with user's profile.address
+ *
+ * Future enhancement (if needed):
+ * interface UserAddress {
+ *   id: string;
+ *   userId: string;
+ *   type: 'home' | 'work' | 'other';
+ *   street: string;
+ *   city: string;
+ *   country: string;
+ *   postalCode: string;
+ *   isDefault: boolean;
+ * }
  */
 
-export type UserRole = 'user' | 'manager' | 'admin';
-export type OrderStatus = 'queue' | 'processing' | 'completed';
+import { OrderStatus, UserRole } from '@core/types';
 
 export interface User {
   id: string;
@@ -13,7 +36,8 @@ export interface User {
   profile: {
     firstName: string;
     lastName: string;
-    phone?: string;
+    phone: string;
+    address: string;
   };
   createdAt: number;
 }
@@ -47,6 +71,7 @@ export interface Order {
   status: OrderStatus;
   items: OrderItem[];
   total: number;
+  deliveryAddress: string; // Required - snapshot of delivery address for this order
   createdAt: number;
   updatedAt: number;
 }

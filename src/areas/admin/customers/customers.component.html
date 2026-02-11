@@ -1,16 +1,32 @@
-<div class="customers">
-  <div class="header">
+<div class="customers-container">
+  <div class="page-header">
     <h1>Customers Management</h1>
-    <button mat-raised-button color="primary">
-      <mat-icon>add</mat-icon>
-      Add Customer
-    </button>
+    @if (canCreate()) {
+      <button 
+        mat-raised-button 
+        color="primary"
+        (click)="openCreateDialog()"
+        [disabled]="isLoading()"
+      >
+        <mat-icon>add</mat-icon>
+        Add Customer
+      </button>
+    }
   </div>
-  
-  <mat-card>
-    <mat-card-content>
-      <p class="placeholder">Customers management will be implemented here</p>
-      <p class="info">Features: View, Edit, Delete customers (Admin only)</p>
-    </mat-card-content>
-  </mat-card>
+
+  <app-customer-filters (filtersChange)="onFiltersChange($event)" />
+
+  <app-customer-table
+    [users]="users()"
+    [isLoading]="isLoading()"
+    [totalUsers]="totalUsers()"
+    [currentPage]="currentPage()"
+    [pageSize]="pageSize()"
+    [pageSizeOptions]="pageSizeOptions"
+    [canEdit]="canEdit()"
+    [canDelete]="canDelete()"
+    (pageChange)="onPageChange($event)"
+    (editClick)="openEditDialog($event)"
+    (deleteClick)="deleteUser($event)"
+  />
 </div>
