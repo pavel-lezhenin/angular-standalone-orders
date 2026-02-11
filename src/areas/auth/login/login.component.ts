@@ -16,6 +16,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 
 import { AuthService } from '@core/services/auth.service';
+import { BaseComponent } from '@core';
 
 /**
  * Login form component with email/password authentication.
@@ -38,7 +39,7 @@ import { AuthService } from '@core/services/auth.service';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
-export class LoginComponent {
+export class LoginComponent extends BaseComponent {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
@@ -56,9 +57,6 @@ export class LoginComponent {
     ],
     rememberMe: [false],
   });
-
-  /** Loading state during login */
-  readonly isLoading = signal(false);
 
   /** Error message to display */
   readonly errorMessage = signal<string | null>(null);
@@ -85,7 +83,7 @@ export class LoginComponent {
       return;
     }
 
-    this.isLoading.set(true);
+    this.startLoading();
     this.errorMessage.set(null);
 
     const { email, password } = this.loginForm.value;
@@ -100,7 +98,7 @@ export class LoginComponent {
       this.errorMessage.set(
         'Invalid email or password. Please try again.'
       );
-      this.isLoading.set(false);
+      this.stopLoading();
     }
   }
 

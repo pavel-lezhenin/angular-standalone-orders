@@ -49,6 +49,13 @@
   padding: var(--spacing-lg) var(--spacing-xl) !important;
   margin: 0 !important;
   color: var(--text-secondary);
+
+  .dialog-message {
+    text-align: center;
+    white-space: pre-wrap;
+    word-break: break-word;
+    line-height: 1.6;
+  }
 }
 
 .dialog-actions {

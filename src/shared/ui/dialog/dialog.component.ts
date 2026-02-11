@@ -1,58 +1,11 @@
-import { Component, output, signal, computed, inject, OnInit } from '@angular/core';
+import { Component, output, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
-
-/**
- * Dialog configuration interface
- */
-export interface DialogConfig {
-  /**
-   * Dialog title
-   */
-  title: string;
-
-  /**
-   * Dialog type
-   * - notification: Only close button in top-right
-   * - form: Cancel + Submit buttons (default)
-   * - confirm: Cancel + Confirm buttons
-   * @default 'form'
-   */
-  type?: 'notification' | 'form' | 'confirm';
-
-  /**
-   * Submit button label
-   * @default 'Update'
-   */
-  submitLabel?: string;
-
-  /**
-   * Cancel button label
-   * @default 'Cancel'
-   */
-  cancelLabel?: string;
-
-  /**
-   * Whether dialog can be closed via backdrop click
-   * @default true (prevents backdrop close)
-   */
-  disableBackdropClick?: boolean;
-
-  /**
-   * Width of the dialog (not used in component, set via MatDialog config)
-   * @deprecated Use MatDialog open config instead
-   */
-  width?: string;
-
-  /**
-   * Max width of the dialog (not used in component, set via MatDialog config)
-   * @deprecated Use MatDialog open config instead
-   */
-  maxWidth?: string;
-}
+import { BaseComponent } from '@core';
+import { DialogConfig } from './dialog.config';
 
 /**
  * Shared dialog component for consistent dialog UX across the app.
@@ -99,7 +52,7 @@ export interface DialogConfig {
   templateUrl: './dialog.component.html',
   styleUrl: './dialog.component.scss',
 })
-export class DialogComponent implements OnInit {
+export class DialogComponent extends BaseComponent implements OnInit {
   /**
    * Dialog configuration injected via MAT_DIALOG_DATA
    */
@@ -109,11 +62,6 @@ export class DialogComponent implements OnInit {
    * Dialog reference for programmatic control
    */
   protected readonly dialogRef = inject(MatDialogRef<DialogComponent>);
-
-  /**
-   * Loading state signal
-   */
-  protected readonly isLoading = signal(false);
 
   /**
    * Whether the dialog can be closed (disabled during loading)
@@ -183,7 +131,11 @@ export class DialogComponent implements OnInit {
    * @param loading - Whether dialog is in loading state
    */
   public setLoading(loading: boolean): void {
-    this.isLoading.set(loading);
+    if (loading) {
+      this.startLoading();
+    } else {
+      this.stopLoading();
+    }
   }
 
   /**

@@ -9,6 +9,7 @@ import { OrderRepository } from './repositories/order.repository';
 import { CategoryRepository } from './repositories/category.repository';
 import { CartRepository } from './repositories/cart.repository';
 import { SeedService } from './services/seed.service';
+import { randomDelay } from './utils';
 import type { User, Product, Order, Category, Cart } from './models';
 
 /**
@@ -244,6 +245,7 @@ export class FakeBFFService {
 
   // User handlers
   private async handleGetUsers(req: HttpRequest<unknown>): Promise<HttpResponse<unknown>> {
+    await randomDelay();
     try {
       // Parse query parameters
       const url = new URL(req.url, 'http://localhost');
@@ -317,6 +319,7 @@ export class FakeBFFService {
   }
 
   private async handleCreateUser(req: HttpRequest<unknown>): Promise<HttpResponse<unknown>> {
+    await randomDelay();
     try {
       const body = req.body as Partial<User>;
       
@@ -343,6 +346,7 @@ export class FakeBFFService {
   }
 
   private async handleUpdateUser(req: HttpRequest<unknown>): Promise<HttpResponse<unknown>> {
+    await randomDelay();
     try {
       const id = req.url.split('/').pop()!;
       const updates = {
@@ -370,6 +374,7 @@ export class FakeBFFService {
   }
 
   private async handleDeleteUser(req: HttpRequest<unknown>): Promise<HttpResponse<unknown>> {
+    await randomDelay();
     try {
       const id = req.url.split('/').pop()!;
       await this.userRepo.delete(id);

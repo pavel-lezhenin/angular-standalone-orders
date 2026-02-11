@@ -17,7 +17,13 @@
 
   <!-- Dialog Content -->
   <mat-dialog-content class="dialog-content custom-scrollbar">
-    <ng-content></ng-content>
+    @if (config.message) {
+      <div class="dialog-message">
+        {{ config.message }}
+      </div>
+    } @else {
+      <ng-content></ng-content>
+    }
   </mat-dialog-content>
 
   <!-- Dialog Actions (for form/confirm types) -->

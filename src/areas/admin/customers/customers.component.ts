@@ -3,10 +3,16 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { PageEvent } from '@angular/material/paginator';
 
-import { UserDTO } from '@core';
+import { UserDTO, NotificationService, BaseComponent } from '@core';
+import { generateDeleteMessage } from '@shared/utils';
+import { ConfirmDialogService } from '@shared/ui/dialog';
+import {
+  createFormDialogConfig,
+  editFormDialogConfig,
+} from '@shared/ui/dialog/dialog.config';
 import { CustomerService } from './services/customer.service';
 import { CustomerFormDialogComponent } from './customer-form-dialog/customer-form-dialog.component';
 import { CustomerTableComponent } from './customer-table/customer-table.component';
@@ -39,16 +45,16 @@ import {
   templateUrl: './customers.component.html',
   styleUrl: './customers.component.scss',
 })
-export class CustomersComponent implements OnInit {
+export class CustomersComponent extends BaseComponent implements OnInit {
   private readonly customerService = inject(CustomerService);
   private readonly dialog = inject(MatDialog);
-  private readonly snackBar = inject(MatSnackBar);
+  private readonly confirmDialogService = inject(ConfirmDialogService);
+  private readonly notificationService = inject(NotificationService);
 
   /**
    * Local state
    */
   protected readonly users = signal<UserDTO[]>([]);
-  protected readonly isLoading = signal(false);
   protected readonly canCreate = signal(false);
   protected readonly canEdit = signal(false);
   protected readonly canDelete = signal(false);
@@ -85,7 +91,7 @@ export class CustomersComponent implements OnInit {
    * Load users with pagination and filters
    */
   private async loadUsers(): Promise<void> {
-    this.isLoading.set(true);
+    this.startLoading();
     try {
       const filters = this.currentFilters();
       const response = await this.customerService.loadUsers({
@@ -97,11 +103,11 @@ export class CustomersComponent implements OnInit {
 
       this.users.set(response.data);
       this.totalUsers.set(response.total);
-    } catch (error) {
-      console.error('Failed to load users:', error);
-      this.showError('Failed to load users');
+    } catch (err: unknown) {
+      console.error('Failed to load users:', err);
+      this.notificationService.error('Failed to load users');
     } finally {
-      this.isLoading.set(false);
+      this.stopLoading();
     }
   }
 
@@ -127,29 +133,23 @@ export class CustomersComponent implements OnInit {
    * Open create dialog
    */
   protected openCreateDialog(): void {
-    const dialogRef = this.dialog.open(CustomerFormDialogComponent, {
-      width: '500px',
-      maxWidth: '90vw',
-      data: {
-        mode: 'create',
-        title: 'Create Customer',
-        submitLabel: 'Create',
-      },
-      disableClose: true,
-    });
+    const dialogRef = this.dialog.open(
+      CustomerFormDialogComponent,
+      createFormDialogConfig('Create Customer', 'Create')
+    );
 
     dialogRef.afterClosed().subscribe(async (result) => {
       if (result?.formValue) {
-        this.isLoading.set(true);
+        this.startLoading();
         try {
           await this.customerService.createUser(result.formValue);
           await this.loadUsers();
-          this.showSuccess('User created successfully');
-        } catch (error) {
-          console.error('Failed to create user:', error);
-          this.showError('Failed to create user');
+          this.notificationService.success('User created successfully');
+        } catch (err: unknown) {
+          console.error('Failed to create user:', err);
+          this.notificationService.error('Failed to create user');
         } finally {
-          this.isLoading.set(false);
+          this.stopLoading();
         }
       }
     });
@@ -159,72 +159,44 @@ export class CustomersComponent implements OnInit {
    * Open edit dialog
    */
   protected openEditDialog(user: UserDTO): void {
-    const dialogRef = this.dialog.open(CustomerFormDialogComponent, {
-      width: '500px',
-      maxWidth: '90vw',
-      data: {
-        mode: 'edit',
-        user,
-        title: 'Edit Customer',
-      },
-      disableClose: true,
-    });
+    const dialogRef = this.dialog.open(
+      CustomerFormDialogComponent,
+      editFormDialogConfig(user, 'Edit Customer')
+    );
 
     dialogRef.afterClosed().subscribe(async (result) => {
       if (result?.formValue) {
-        this.isLoading.set(true);
+        this.startLoading();
         try {
           await this.customerService.updateUser(user.id, result.formValue);
           await this.loadUsers();
-          this.showSuccess('User updated successfully');
-        } catch (error) {
-          console.error('Failed to update user:', error);
-          this.showError('Failed to update user');
+          this.notificationService.success('User updated successfully');
+        } catch (err: unknown) {
+          console.error('Failed to update user:', err);
+          this.notificationService.error('Failed to update user');
         } finally {
-          this.isLoading.set(false);
+          this.stopLoading();
         }
       }
     });
   }
 
   /**
-   * Delete user with confirmation
+   * Delete user with confirmation dialog
    */
-  protected async deleteUser(user: UserDTO): Promise<void> {
-    if (!confirm(`Are you sure you want to delete user ${user.email}?`)) {
-      return;
-    }
-
-    this.isLoading.set(true);
-    try {
-      await this.customerService.deleteUser(user.id);
-      await this.loadUsers();
-      this.showSuccess('User deleted successfully');
-    } catch (error) {
-      console.error('Failed to delete user:', error);
-      this.showError('Failed to delete user');
-    } finally {
-      this.isLoading.set(false);
-    }
-  }
-
-  /**
-   * Show success notification
-   */
-  private showSuccess(message: string): void {
-    this.snackBar.open(message, 'Close', {
-      duration: 3000,
-      panelClass: ['snackbar-success'],
-    });
-  }
-
-  /**
-   * Show error notification
-   */
-  private showError(message: string): void {
-    this.snackBar.open(message, 'Close', {
-      duration: 5000,
-      panelClass: ['snackbar-error'],
-    });
+  protected deleteUser(user: UserDTO): void {
+    const message = generateDeleteMessage(user, user.id);
+    
+    this.confirmDialogService.openDeleteConfirm(
+      message,
+      async () => {
+        await this.customerService.deleteUser(user.id);
+        await this.loadUsers();
+        this.notificationService.success('User deleted successfully');
+      },
+      () => {
+        this.notificationService.error('Failed to delete user');
+      }
+    );
   }
 }

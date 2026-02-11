@@ -22,24 +22,15 @@ $light-theme: mat.define-theme(
 @include mat.all-component-themes($light-theme);
 
 /* Component-specific token overrides */
+/* Note: Use CSS custom properties for component token overrides in Material Design 3 */
 
 :root {
   /* Form Fields - sizing */
-  @include mat.form-field-overrides(
-    (
-      container-height: config.$component-height,
-      container-vertical-padding: config.$component-vertical-padding,
-    )
-  );
+  --mdc-text-field-container-height: #{config.$component-height};
 
   /* Buttons - all variants use same height */
-  @include mat.button-overrides(
-    (
-      filled-container-height: config.$component-height,
-      outlined-container-height: config.$component-height,
-      text-container-height: config.$component-height,
-      tonal-container-height: config.$component-height,
-      protected-container-height: config.$component-height,
-    )
-  );
+  --mdc-filled-button-container-height: #{config.$component-height};
+  --mdc-outlined-button-container-height: #{config.$component-height};
+  --mdc-text-button-container-height: #{config.$component-height};
+  --mdc-tonal-button-container-height: #{config.$component-height};
 }
