@@ -26,18 +26,21 @@ export abstract class BaseComponent {
    * Loading state signal
    */
   protected readonly isLoading = signal(false);
+  get loading(): boolean {
+    return this.isLoading();
+  }
 
   /**
    * Set loading state to true
    */
-  protected startLoading(): void {
+  startLoading(): void {
     this.isLoading.set(true);
   }
 
   /**
    * Set loading state to false
    */
-  protected stopLoading(): void {
+  stopLoading(): void {
     this.isLoading.set(false);
   }
 }

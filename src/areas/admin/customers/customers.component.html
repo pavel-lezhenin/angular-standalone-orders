@@ -18,7 +18,6 @@
 
   <app-customer-table
     [users]="users()"
-    [isLoading]="isLoading()"
     [totalUsers]="totalUsers()"
     [currentPage]="currentPage()"
     [pageSize]="pageSize()"
@@ -29,4 +28,6 @@
     (editClick)="openEditDialog($event)"
     (deleteClick)="deleteUser($event)"
   />
+
+  <app-page-loader [isLoading]="isLoading()" />
 </div>

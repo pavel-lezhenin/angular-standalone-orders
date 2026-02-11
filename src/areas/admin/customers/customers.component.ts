@@ -6,9 +6,11 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { PageEvent } from '@angular/material/paginator';
 
-import { UserDTO, NotificationService, BaseComponent } from '@core';
+import { UserDTO, BaseComponent } from '@core';
 import { generateDeleteMessage } from '@shared/utils';
 import { ConfirmDialogService } from '@shared/ui/dialog';
+import { PageLoaderComponent } from '@shared/ui/page-loader';
+import { NotificationService } from '@shared/services/notification.service';
 import {
   createFormDialogConfig,
   editFormDialogConfig,
@@ -40,6 +42,7 @@ import {
     MatSnackBarModule,
     CustomerTableComponent,
     CustomerFiltersComponent,
+    PageLoaderComponent,
   ],
   providers: [CustomerService],
   templateUrl: './customers.component.html',

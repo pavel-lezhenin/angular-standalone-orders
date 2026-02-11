@@ -48,10 +48,7 @@
         type="submit"
         class="submit-button"
       >
-        @if (isLoading()) {
-          <mat-spinner diameter="20" class="button-spinner"></mat-spinner>
-        }
-        <span [class.spinner-active]="isLoading()">{{ submitLabel() }}</span>
+        {{ submitLabel() }}
       </button>
     </mat-dialog-actions>
   }
@@ -59,6 +56,7 @@
   <!-- Loading overlay (optional visual indicator) -->
   @if (isLoading()) {
     <div class="loading-overlay" aria-live="polite" aria-busy="true">
+      <mat-spinner diameter="40"></mat-spinner>
       <span class="visually-hidden">Loading, please wait...</span>
     </div>
   }

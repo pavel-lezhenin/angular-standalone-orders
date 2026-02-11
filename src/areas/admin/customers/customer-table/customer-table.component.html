@@ -68,13 +68,6 @@
   </tr>
 </table>
 
-@if (isLoading()) {
-  <div class="loading-container">
-    <mat-spinner diameter="50"></mat-spinner>
-    <p>Loading customers...</p>
-  </div>
-}
-
 <mat-paginator
   [length]="totalUsers()"
   [pageSize]="pageSize()"

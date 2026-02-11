@@ -82,19 +82,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--spacing-sm);
-
-    .button-spinner {
-      display: inline-block;
-      
-      ::ng-deep .mat-mdc-progress-spinner circle {
-        stroke: white;
-      }
-    }
-
-    span.spinner-active {
-      margin-left: calc(var(--spacing-sm) - var(--spacing-xs));
-    }
   }
 }
 
@@ -113,6 +100,9 @@
   left: 0;
   right: 0;
   bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: var(--color-white-70);
   backdrop-filter: blur(var(--spacing-2px));
   z-index: 10;

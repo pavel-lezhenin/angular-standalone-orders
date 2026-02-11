@@ -5,7 +5,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { UserDTO } from '@core';
 import { UserRole } from '@core/types';
@@ -27,7 +26,6 @@ import { formatDate } from '@shared/utils';
     MatIconModule,
     MatTooltipModule,
     MatChipsModule,
-    MatProgressSpinnerModule,
     MatPaginatorModule,
   ],
   templateUrl: './customer-table.component.html',
@@ -35,7 +33,6 @@ import { formatDate } from '@shared/utils';
 })
 export class CustomerTableComponent {
   readonly users = input.required<UserDTO[]>();
-  readonly isLoading = input(false);
   readonly totalUsers = input(0);
   readonly currentPage = input(1);
   readonly pageSize = input(20);

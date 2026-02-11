@@ -15,6 +15,11 @@
   --app-font-family: #{config.$base-font-family};
 
   /* ============================================
+   * Layout Sizing
+   * ============================================ */
+  --top-bar-height: #{config.$top-bar-height};
+
+  /* ============================================
    * Theme Colors (Material 3)
    * ============================================ */
   --app-primary: #{config.$color-primary};
