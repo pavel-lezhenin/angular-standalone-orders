@@ -247,12 +247,11 @@ export class FakeBFFService {
   private async handleGetUsers(req: HttpRequest<unknown>): Promise<HttpResponse<unknown>> {
     await randomDelay();
     try {
-      // Parse query parameters
-      const url = new URL(req.url, 'http://localhost');
-      const page = parseInt(url.searchParams.get('page') || '1');
-      const limit = parseInt(url.searchParams.get('limit') || '20');
-      const search = url.searchParams.get('search') || '';
-      const role = url.searchParams.get('role') || undefined;
+      // Parse query parameters from HttpRequest.params (Angular stores them separately)
+      const page = parseInt(req.params.get('page') || '1');
+      const limit = parseInt(req.params.get('limit') || '20');
+      const search = req.params.get('search') || '';
+      const role = req.params.get('role') || undefined;
 
       // Get all users
       let users = await this.userRepo.getAll();
@@ -261,9 +260,11 @@ export class FakeBFFService {
       if (search) {
         const searchLower = search.toLowerCase();
         users = users.filter(user => 
+          user.id.toLowerCase().includes(searchLower) ||
           user.email.toLowerCase().includes(searchLower) ||
           user.profile.firstName.toLowerCase().includes(searchLower) ||
-          user.profile.lastName.toLowerCase().includes(searchLower)
+          user.profile.lastName.toLowerCase().includes(searchLower) ||
+          user.profile.phone.toLowerCase().includes(searchLower)
         );
       }
 

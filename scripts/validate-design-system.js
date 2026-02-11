@@ -50,6 +50,13 @@ const RULES = [
     message: (match) => `Hardcoded color ${match} - use CSS variables (--text-*, --surface-*, --color-*)`
   },
   {
+    id: 'color-named',
+    name: 'No hardcoded named colors',
+    pattern: /(?:^|[:\s])(?:color|background(?:-color)?|border(?:-color)?|fill|stroke)\s*:\s*(white|black|red|blue|green|yellow|orange|purple|pink|gray|grey|cyan|magenta|brown|navy|teal|olive|maroon|silver|aqua|fuchsia|lime)\b/gi,
+    type: ERRORS.HARDCODED_COLOR,
+    message: (match) => `Hardcoded named color found - use CSS variables (--color-white, --text-*, --surface-*)`
+  },
+  {
     id: 'color-func',
     name: 'No hardcoded color functions',
     pattern: /\b(rgb|rgba)\s*\(/g,
@@ -99,10 +106,11 @@ if (filterRule === '--help' || filterRule === '-h') {
 }
 
 if (filterRule && filterRule !== '') {
-  const matchedRule = RULES.find(r => r.id === filterRule || r.id.includes(filterRule));
-  if (matchedRule) {
-    rulesToCheck = [matchedRule];
-    console.log(`🔍 Checking only: ${matchedRule.name}\n`);
+  const matchedRules = RULES.filter(r => r.id === filterRule || r.id.startsWith(filterRule + '-'));
+  if (matchedRules.length > 0) {
+    rulesToCheck = matchedRules;
+    const ruleNames = matchedRules.map(r => r.name).join(', ');
+    console.log(`🔍 Checking: ${ruleNames}\n`);
   } else {
     console.error(`❌ Unknown rule: "${filterRule}". Use --help to see available rules.\n`);
     process.exit(1);
