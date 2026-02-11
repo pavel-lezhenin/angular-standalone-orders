@@ -21,8 +21,8 @@
   h2[mat-dialog-title] {
     display: flex;
     align-items: center;
-    margin: 0 !important;
-    padding: 0 !important;
+    margin: 0;
+    padding: 0;
     font-size: var(--font-size-xl);
     font-weight: var(--font-weight-medium);
     flex: 1;
@@ -45,9 +45,9 @@
 }
 
 .dialog-content {
-  overflow-y: auto !important;
-  padding: var(--spacing-lg) var(--spacing-xl) !important;
-  margin: 0 !important;
+  overflow-y: auto;
+  padding: var(--spacing-lg) var(--spacing-xl);
+  margin: 0;
   color: var(--text-secondary);
 
   .dialog-message {
@@ -59,16 +59,16 @@
 }
 
 .dialog-actions {
-  display: grid !important;
+  display: grid;
   grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
   gap: var(--spacing-sm);
-  padding: var(--spacing-lg) var(--spacing-xl) !important;
-  margin: 0 !important;
+  padding: var(--spacing-lg) var(--spacing-xl);
+  margin: 0;
   border-top: var(--spacing-1px) solid var(--color-black-12);
-  min-height: auto !important;
+  min-height: auto;
 
   button {
-    margin: 0 !important;
+    margin: 0;
     transition: all 0.2s ease;
 
     &:disabled {
@@ -88,7 +88,7 @@
       display: inline-block;
       
       ::ng-deep .mat-mdc-progress-spinner circle {
-        stroke: white !important;
+        stroke: white;
       }
     }
 
@@ -103,8 +103,8 @@
  * ============================================ */
 
 /* Mobile Styles */
-:host-context(.mobile) ::ng-deep .mat-mdc-dialog-actions {
-  grid-template-columns: 1fr !important;
+:host-context(.mobile) .dialog-actions {
+  grid-template-columns: 1fr;
 }
 
 .loading-overlay {
