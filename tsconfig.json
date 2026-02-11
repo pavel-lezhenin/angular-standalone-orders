@@ -36,9 +36,11 @@
     "paths": {
       "@/*": ["./src/*"],
       "@app/*": ["./src/app/*"],
+      "@core": ["./src/core"],
       "@core/*": ["./src/core/*"],
       "@shared/*": ["./src/shared/*"],
       "@areas/*": ["./src/areas/*"],
+      "@bff": ["./src/bff"],
       "@bff/*": ["./src/bff/*"]
     },
 

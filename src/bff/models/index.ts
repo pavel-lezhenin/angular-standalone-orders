@@ -1,5 +1,5 @@
 // Cart types from business entities
-export { CartItem, Cart } from '@bff/entities/cart/models';
+export type { CartItem, Cart } from '@bff/entities/cart/models';
 
 // BFF models
 export type { User } from './user';

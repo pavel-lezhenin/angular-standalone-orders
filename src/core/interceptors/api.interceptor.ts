@@ -8,7 +8,7 @@ import {
 } from '@angular/common/http';
 import { Observable, from } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { FakeBFFService } from '../bff/fake-bff.service';
+import { FakeBFFService } from '@bff';
 
 /**
  * API Interceptor

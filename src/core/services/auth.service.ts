@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { User } from '../bff/models';
+import { User } from '@bff';
 
 @Injectable({
   providedIn: 'root',
