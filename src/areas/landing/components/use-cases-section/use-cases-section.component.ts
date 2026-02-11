@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { SectionWrapperComponent } from '../../ui/section-wrapper/section-wrapper.component';
+import { SectionWrapperComponent } from '../ui/section-wrapper/section-wrapper.component';
 
 /**
  * Use cases showcase grid

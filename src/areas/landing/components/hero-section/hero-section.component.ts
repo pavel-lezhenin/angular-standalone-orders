@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { SectionWrapperComponent } from '../../ui/section-wrapper/section-wrapper.component';
+import { SectionWrapperComponent } from '../ui/section-wrapper/section-wrapper.component';
 
 /**
  * Hero banner with CTA buttons

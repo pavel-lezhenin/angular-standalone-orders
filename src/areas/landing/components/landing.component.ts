@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { LayoutService } from '@/shared/services/layout.service';
 import { ScrollService } from '@/shared/services/scroll.service';
 import { FooterComponent } from '@/shared/ui/footer/footer.component';
-import { HeroSectionComponent } from './components/hero-section/hero-section.component';
-import { FeaturesSectionComponent } from './components/features-section/features-section.component';
-import { UseCasesSectionComponent } from './components/use-cases-section/use-cases-section.component';
-import { ContactSectionComponent } from './components/contact-section/contact-section.component';
-import { FaqSectionComponent } from './components/faq-section/faq-section.component';
+import { HeroSectionComponent } from './hero-section/hero-section.component';
+import { FeaturesSectionComponent } from './features-section/features-section.component';
+import { UseCasesSectionComponent } from './use-cases-section/use-cases-section.component';
+import { ContactSectionComponent } from './contact-section/contact-section.component';
+import { FaqSectionComponent } from './faq-section/faq-section.component';
 
 /**
  * Landing page - orchestrates marketing widgets
