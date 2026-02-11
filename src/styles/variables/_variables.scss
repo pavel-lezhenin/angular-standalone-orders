@@ -60,8 +60,22 @@
   --color-separator: #555;
   
   /* Semi-transparent colors */
-  --color-black-60: rgba(0, 0, 0, 0.6);
+  --color-white: #ffffff;
+  --color-black-04: rgba(0, 0, 0, 0.04);
+  --color-black-06: rgba(0, 0, 0, 0.06);
+  --color-black-08: rgba(0, 0, 0, 0.08);
+  --color-black-10: rgba(0, 0, 0, 0.1);
+  --color-black-12: rgba(0, 0, 0, 0.12);
+  --color-black-30: rgba(0, 0, 0, 0.3);
   --color-black-40: rgba(0, 0, 0, 0.4);
+  --color-black-60: rgba(0, 0, 0, 0.6);
+  /* White with transparency */
+  --color-white-07: rgba(255, 255, 255, 0.07);
+  --color-white-10: rgba(255, 255, 255, 0.1);
+  --color-white-70: rgba(255, 255, 255, 0.7);
+  --color-white-95: rgba(255, 255, 255, 0.95);
+  /* Dark theme */
+  --color-dark-95: rgba(30, 30, 30, 0.95);
 
   /* ============================================
    * Gradient Colors (Dashboard Stats)
@@ -78,6 +92,8 @@
   /* ============================================
    * Spacing Scale (calculated from --app-spacing)
    * ============================================ */
+  --spacing-1px: 1px;                   /* Use for minimal spacing/borders */
+  --spacing-2px: 2px;                   /* Use for minimal spacing */
   --spacing-xs: calc(var(--app-spacing) * 0.25);   /* 4px */
   --spacing-xxs: calc(var(--app-spacing) * 0.5);   /* 8px */
   --spacing-sm: calc(var(--app-spacing) * 0.75);   /* 12px */

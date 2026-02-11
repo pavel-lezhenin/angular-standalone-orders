@@ -3,7 +3,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 24px;
+    margin-bottom: var(--spacing-xl);
 
     h1 {
       margin: 0;
@@ -13,14 +13,14 @@
 
     button {
       mat-icon {
-        margin-right: 8px;
+        margin-right: var(--spacing-xxs);
       }
     }
   }
 
   .placeholder {
     text-align: center;
-    color: rgba(0, 0, 0, 0.6);
+    color: var(--color-black-60);
     padding: var(--spacing-3xl) var(--spacing-lg) var(--spacing-lg);
     font-size: var(--font-size-md);
     margin: 0;
@@ -28,7 +28,7 @@
 
   .info {
     text-align: center;
-    color: rgba(0, 0, 0, 0.4);
+    color: var(--color-black-40);
     padding: 0 var(--spacing-lg) var(--spacing-3xl);
     font-size: var(--font-size-sm);
     margin: 0;

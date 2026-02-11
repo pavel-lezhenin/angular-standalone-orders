@@ -8,7 +8,7 @@
   font-size: var(--font-size-4xl);
   font-weight: var(--font-weight-bold);
   text-align: center;
-  margin-bottom: 1rem;
+  margin-bottom: var(--spacing-md);
   color: var(--text-heading);
 }
 
@@ -16,12 +16,12 @@
   font-size: var(--font-size-lg);
   text-align: center;
   color: var(--text-muted);
-  margin-bottom: 3rem;
+  margin-bottom: var(--spacing-5xl);
 }
 
 .features-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(var(--spacing-4xl), 1fr));
   gap: var(--spacing-2xl);
 }
 
@@ -34,7 +34,7 @@
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 var(--spacing-xxs) var(--spacing-lg) var(--color-black-12);
   }
 
   .feature-icon {
@@ -42,13 +42,13 @@
     width: 48px;
     height: 48px;
     color: var(--app-primary);
-    margin-bottom: 1rem;
+    margin-bottom: var(--spacing-md);
   }
 
   h3 {
     font-size: var(--font-size-xl);
     font-weight: var(--font-weight-semibold);
-    margin-bottom: 0.75rem;
+    margin-bottom: var(--spacing-sm);
     color: var(--text-primary);
   }
 

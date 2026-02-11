@@ -13,11 +13,11 @@
 
 .admin-sidenav {
   width: 260px;
-  border-right: 1px solid rgba(0, 0, 0, 0.12);
+  border-right: var(--spacing-1px) solid var(--color-black-12);
 }
 
 mat-nav-list {
-  padding-top: 8px;
+  padding-top: var(--spacing-xxs);
 
   a {
     cursor: pointer;
@@ -31,7 +31,7 @@ mat-nav-list {
     }
 
     &:hover {
-      background-color: rgba(0, 0, 0, 0.04);
+      background-color: var(--color-black-04);
     }
   }
 }

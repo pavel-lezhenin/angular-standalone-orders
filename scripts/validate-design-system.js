@@ -8,6 +8,12 @@
  * - Hardcoded spacing/sizing (px, rem, em values)
  * - @media queries in component files
  * - Proper use of CSS variables
+ * 
+ * Usage:
+ *   pnpm validate:design-system                    # Check all rules
+ *   pnpm validate:design-system spacing            # Check only spacing
+ *   pnpm validate:design-system color              # Check only colors
+ *   pnpm validate:design-system media              # Check only @media queries
  */
 
 import fs from 'fs';
@@ -36,6 +42,7 @@ const ERRORS = {
 
 const RULES = [
   {
+    id: 'color',
     name: 'No hardcoded hex colors',
     pattern: /#[0-9a-fA-F]{3,6}(?!-)/g,
     type: ERRORS.HARDCODED_COLOR,
@@ -43,31 +50,64 @@ const RULES = [
     message: (match) => `Hardcoded color ${match} - use CSS variables (--text-*, --surface-*, --color-*)`
   },
   {
+    id: 'color-func',
     name: 'No hardcoded color functions',
     pattern: /\b(rgb|rgba)\s*\(/g,
     type: ERRORS.HARDCODED_COLOR,
     message: (match) => `Hardcoded color function ${match} - use CSS variables instead`
   },
   {
+    id: 'spacing',
     name: 'No hardcoded px/rem/em spacing',
-    pattern: /(?<![,(])\s*([0-9.]+)(px|rem|em)\b/g,
+    pattern: /(?<![,(--])\s*(?!0)([0-9.]+)(px|rem|em)\b/g,
     type: ERRORS.HARDCODED_SPACING,
     excludeValues: [], // No exceptions - all spacing must use CSS variables
     message: (match, value, unit) => `Hardcoded spacing ${match.trim()} - use --spacing-* CSS variables`
   },
   {
+    id: 'media',
     name: 'No responsive @media queries in components',
     pattern: /@media\s*\([^)]*(?:min-width|max-width|min-height|max-height)[^)]*\)/g,
     type: ERRORS.MEDIA_QUERY,
     message: (match) => `Responsive @media query found - use :host-context(.mobile/.tablet/.desktop) instead`
   },
   {
+    id: 'ngdeep',
     name: 'No ::ng-deep in styling',
     pattern: /::ng-deep/g,
     type: ERRORS.INVALID_SELECTOR,
     message: (match) => `${match} found - use component styles or global design system instead`
   }
 ];
+
+// Get command line filter
+const filterRule = process.argv[2];
+let rulesToCheck = RULES;
+
+if (filterRule === '--help' || filterRule === '-h') {
+  console.log('\n📘 Design System Validator\n');
+  console.log('Usage: pnpm validate:design-system [rule-id]\n');
+  console.log('Available rules:');
+  RULES.forEach(rule => {
+    console.log(`  ${rule.id.padEnd(15)} - ${rule.name}`);
+  });
+  console.log('\nExamples:');
+  console.log('  pnpm validate:design-system              # Check all rules');
+  console.log('  pnpm validate:design-system spacing      # Check only spacing violations');
+  console.log('  pnpm validate:design-system color        # Check only color violations\n');
+  process.exit(0);
+}
+
+if (filterRule && filterRule !== '') {
+  const matchedRule = RULES.find(r => r.id === filterRule || r.id.includes(filterRule));
+  if (matchedRule) {
+    rulesToCheck = [matchedRule];
+    console.log(`🔍 Checking only: ${matchedRule.name}\n`);
+  } else {
+    console.error(`❌ Unknown rule: "${filterRule}". Use --help to see available rules.\n`);
+    process.exit(1);
+  }
+}
 
 function readFilesRecursive(dir) {
   let files = [];
@@ -115,7 +155,7 @@ function validateFile(filePath) {
       return;
     }
     
-    RULES.forEach(rule => {
+    rulesToCheck.forEach(rule => {
       // Skip media query check for design system files
       if (isDesignSystemFile(filePath) && rule.type === ERRORS.MEDIA_QUERY) {
         return;

@@ -33,7 +33,7 @@ button {
   &::after {
     content: '';
     flex: 1;
-    border-bottom: 1px solid;
+    border-bottom: var(--spacing-1px) solid;
     opacity: 0.2;
   }
 
@@ -59,7 +59,7 @@ button {
   display: flex;
   align-items: center;
   gap: var(--spacing-xxs);
-  margin-bottom: 1rem;
+  margin-bottom: var(--spacing-md);
 
   mat-icon {
     font-size: var(--font-size-xl);

@@ -22,7 +22,7 @@
     font-size: var(--font-size-md);
     font-weight: var(--font-weight-semibold);
     margin-bottom: var(--spacing-md);
-    color: #ffffff;
+    color: var(--color-white);
   }
 
   ul {
@@ -42,7 +42,7 @@
     transition: color 0.2s;
 
     &:hover {
-      color: #ffffff;
+      color: var(--color-white);
     }
   }
 }
@@ -63,7 +63,7 @@
   }
 
   &:hover {
-    color: #ffffff;
+    color: var(--color-white);
     background: transparent;
   }
 }
@@ -77,7 +77,7 @@
     color: var(--color-text-gray);
 
     &:hover {
-      color: #ffffff;
+      color: var(--color-white);
       background: var(--color-overlay-light);
     }
   }
@@ -88,7 +88,7 @@
   justify-content: space-between;
   align-items: center;
   padding-top: var(--spacing-2xl);
-  border-top: 1px solid var(--color-border-dark);
+  border-top: var(--spacing-1px) solid var(--color-border-dark);
   flex-wrap: wrap;
   gap: var(--spacing-md);
 }
@@ -111,7 +111,7 @@
     transition: color 0.2s;
 
     &:hover {
-      color: #ffffff;
+      color: var(--color-white);
     }
   }
 
