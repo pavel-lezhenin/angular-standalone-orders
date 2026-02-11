@@ -50,9 +50,9 @@ const RULES = [
   },
   {
     name: 'No hardcoded px/rem/em spacing',
-    pattern: /:\s*([0-9.]+)(px|rem|em)(?!\))/g,
+    pattern: /([0-9.]+)(px|rem|em)\b/g,
     type: ERRORS.HARDCODED_SPACING,
-    excludeValues: ['0', '1px', '2px'], // Allow zero and very small values
+    excludeValues: [], // No exceptions - all spacing must use CSS variables
     message: (match, value, unit) => `Hardcoded spacing ${match} - use --spacing-* CSS variables`
   },
   {
@@ -105,7 +105,7 @@ function validateFile(filePath) {
   const issues = [];
   
   lines.forEach((line, lineNum) => {
-    // Skip comments
+    // Skip comment-only lines
     if (line.trim().startsWith('//') || line.trim().startsWith('/*')) {
       return;
     }
@@ -116,8 +116,10 @@ function validateFile(filePath) {
         return;
       }
       
+      // Create a fresh regex for each line to avoid state issues
+      const regex = new RegExp(rule.pattern.source, 'g');
       let match;
-      while ((match = rule.pattern.exec(line)) !== null) {
+      while ((match = regex.exec(line)) !== null) {
         const fullMatch = match[0];
         
         // Check if this is something we should exclude
@@ -131,7 +133,7 @@ function validateFile(filePath) {
           column: match.index + 1,
           message: rule.message(fullMatch, match[1], match[2]),
           type: rule.type,
-          severity: rule.type === ERRORS.MEDIA_QUERY ? 'error' : 'warning'
+          severity: (rule.type === ERRORS.MEDIA_QUERY || rule.type === ERRORS.HARDCODED_SPACING || rule.type === ERRORS.HARDCODED_COLOR) ? 'error' : 'warning'
         });
       }
     });
