@@ -1,0 +1,150 @@
+/* ============================================
+ * Design System - CSS Variables
+ * 
+ * Single source of truth for all design tokens.
+ * DO NOT split into multiple :root {} declarations!
+ * ============================================ */
+
+@use 'config' as config;
+
+:root {
+  /* ============================================
+   * Base Configuration
+   * ============================================ */
+  --app-spacing: #{config.$base-spacing};
+  --app-font-family: #{config.$base-font-family};
+
+  /* ============================================
+   * Theme Colors (Material 3)
+   * ============================================ */
+  --app-primary: #{config.$color-primary};
+  --app-secondary: #{config.$color-secondary};
+  --app-tertiary: #{config.$color-tertiary};
+  --app-error: #{config.$color-error};
+  --app-background: #{config.$color-background};
+
+  /* ============================================
+   * Surface Colors
+   * ============================================ */
+  --surface-primary: #ffffff;
+  --surface-secondary: #f7fafc;
+  --surface-tertiary: #f5f7fa;
+  --surface-gradient-start: #f5f7fa;
+  --surface-gradient-end: #c3cfe2;
+
+  /* ============================================
+   * Error State Colors
+   * ============================================ */
+  --error-container: #ffebee;
+  --on-error-container: #c62828;
+  --error-light: #ffcdd2;
+
+  /* ============================================
+   * Text Colors
+   * ============================================ */
+  --text-primary: #2d3748;
+  --text-secondary: #4a5568;
+  --text-tertiary: #718096;
+  --text-muted: #666;
+  --text-heading: #333;
+
+  /* ============================================
+   * Additional Colors
+   * ============================================ */
+  --color-border: #d4d4d4;
+  --color-border-dark: #444;
+  --color-overlay-dark: rgba(0, 0, 0, 0.6);
+  --color-overlay-light: rgba(255, 255, 255, 0.1);
+  --color-text-light: #e0e0e0;
+  --color-text-gray: #b0b0b0;
+  --color-separator: #555;
+
+  /* ============================================
+   * Spacing Scale (calculated from --app-spacing)
+   * ============================================ */
+  --spacing-xs: calc(var(--app-spacing) * 0.25);   /* 4px */
+  --spacing-xxs: calc(var(--app-spacing) * 0.5);   /* 8px */
+  --spacing-sm: calc(var(--app-spacing) * 0.75);   /* 12px */
+  --spacing-md: var(--app-spacing);                 /* 16px */
+  --spacing-lg: calc(var(--app-spacing) * 1.25);   /* 20px */
+  --spacing-xl: calc(var(--app-spacing) * 1.5);    /* 24px */
+  --spacing-2xl: calc(var(--app-spacing) * 2);     /* 32px */
+  --spacing-3xl: calc(var(--app-spacing) * 2.5);   /* 40px */
+  --spacing-4xl: calc(var(--app-spacing) * 3);     /* 48px */
+  --spacing-5xl: calc(var(--app-spacing) * 4);     /* 64px */
+  --spacing-6xl: calc(var(--app-spacing) * 5);     /* 80px */
+  --spacing-7xl: calc(var(--app-spacing) * 6);     /* 96px */
+
+  /* ============================================
+   * Typography - Font Sizes
+   * ============================================ */
+  --font-size-2xs: 0.6875rem;   /* 11px */
+  --font-size-xxs: 0.75rem;     /* 12px */
+  --font-size-xs: 0.8125rem;    /* 13px */
+  --font-size-sm: 0.875rem;     /* 14px */
+  --font-size-base: 0.9rem;     /* 14.4px */
+  --font-size-md: 1rem;         /* 16px */
+  --font-size-lg: 1.125rem;     /* 18px */
+  --font-size-xl: 1.25rem;      /* 20px */
+  --font-size-1xl: 1.5rem;      /* 24px */
+  --font-size-2xl: 1.75rem;     /* 28px */
+  --font-size-3xl: 2rem;        /* 32px */
+  --font-size-4xl: 2.5rem;      /* 40px */
+  --font-size-5xl: 3rem;        /* 48px */
+  --font-size-6xl: 3.5rem;      /* 56px */
+
+  /* ============================================
+   * Typography - Line Heights
+   * ============================================ */
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+
+  /* ============================================
+   * Typography - Font Weights
+   * ============================================ */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+
+  /* ============================================
+   * Component Sizes
+   * ============================================ */
+  /* Form Fields */
+  --form-field-height: 3rem;        /* 48px */
+  --form-field-height-dense: 2.5rem; /* 40px */
+  
+  /* Buttons */
+  --button-height: 3rem;            /* 48px */
+  --button-height-small: 2rem;      /* 32px */
+  --button-height-large: 3.5rem;    /* 56px */
+  
+  /* Icons */
+  --icon-size-sm: 1rem;             /* 16px */
+  --icon-size-md: 1.5rem;           /* 24px */
+  --icon-size-lg: 2rem;             /* 32px */
+}
+
+/* ============================================
+ * Dark Mode Overrides
+ * ============================================ */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Surface Colors - Dark Mode */
+    --surface-primary: #1a202c;
+    --surface-secondary: #2d3748;
+    --surface-tertiary: #374151;
+    --surface-gradient-start: #2d3748;
+    --surface-gradient-end: #1a202c;
+
+    /* Text Colors - Dark Mode */
+    --text-primary: #f7fafc;
+    --text-secondary: #cbd5e0;
+    --text-tertiary: #a0aec0;
+    --text-muted: #a0aec0;
+    --text-heading: #e2e8f0;
+  }
+}

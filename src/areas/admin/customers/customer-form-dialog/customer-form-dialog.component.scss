@@ -1,7 +1,7 @@
 .form-content {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--spacing-xxs);
   padding: 0;
 }
 

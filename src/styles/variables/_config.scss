@@ -1,0 +1,22 @@
+/* ============================================
+ * Base Configuration (SCSS Variables)
+ * 
+ * These SCSS variables are used as the source
+ * for CSS variables in _variables.scss
+ * and for Material theme configuration in _material.scss
+ * ============================================ */
+
+// Base Units
+$base-spacing: 1rem; // 16px
+$base-font-family: 'Raleway', 'Helvetica Neue', sans-serif;
+
+// Component Sizing - Form Fields & Buttons (Material Token Overrides only)
+$component-height: 40px;            // Standard form field and button height
+$component-vertical-padding: 8px;   // Vertical padding inside form field
+
+// Material Theme Colors (Seed Colors)
+$color-primary: #6d5e0f;
+$color-secondary: #665e40;
+$color-tertiary: #43664e;
+$color-error: #ba1a1a;
+$color-background: #fff9ee;

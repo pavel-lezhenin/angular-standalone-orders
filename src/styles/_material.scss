@@ -1,0 +1,45 @@
+/* Material Custom Theme */
+@use '@angular/material' as mat;
+@use 'variables/config' as config;
+
+@include mat.core();
+
+/* M3 Theme Definition */
+$light-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: light,
+      primary: mat.$yellow-palette,
+      tertiary: mat.$green-palette,
+    ),
+    typography: (
+      brand-family: config.$base-font-family,
+      plain-family: config.$base-font-family,
+    ),
+  )
+);
+
+@include mat.all-component-themes($light-theme);
+
+/* Component-specific token overrides */
+
+:root {
+  /* Form Fields - sizing */
+  @include mat.form-field-overrides(
+    (
+      container-height: config.$component-height,
+      container-vertical-padding: config.$component-vertical-padding,
+    )
+  );
+
+  /* Buttons - all variants use same height */
+  @include mat.button-overrides(
+    (
+      filled-container-height: config.$component-height,
+      outlined-container-height: config.$component-height,
+      text-container-height: config.$component-height,
+      tonal-container-height: config.$component-height,
+      protected-container-height: config.$component-height,
+    )
+  );
+}

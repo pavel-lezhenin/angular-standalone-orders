@@ -7,8 +7,8 @@
 
     h1 {
       margin: 0;
-      font-size: 32px;
-      font-weight: 300;
+      font-size: var(--font-size-3xl);
+      font-weight: var(--font-weight-light);
     }
 
     button {
@@ -21,16 +21,16 @@
   .placeholder {
     text-align: center;
     color: rgba(0, 0, 0, 0.6);
-    padding: 40px 20px 20px;
-    font-size: 16px;
+    padding: var(--spacing-3xl) var(--spacing-lg) var(--spacing-lg);
+    font-size: var(--font-size-md);
     margin: 0;
   }
 
   .info {
     text-align: center;
     color: rgba(0, 0, 0, 0.4);
-    padding: 0 20px 40px;
-    font-size: 14px;
+    padding: 0 var(--spacing-lg) var(--spacing-3xl);
+    font-size: var(--font-size-sm);
     margin: 0;
   }
 }

@@ -1,7 +1,7 @@
 .lead-form-card {
   max-width: 600px;
   margin: 0 auto;
-  padding: 1rem;
+  padding: var(--spacing-md);
 }
 
 ::ng-deep .lead-form-card .mat-mdc-card-header {
@@ -9,15 +9,15 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--spacing-xl);
 }
 
 ::ng-deep .lead-form-card .mat-mdc-card-title {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
+  gap: var(--spacing-xxs);
+  font-size: var(--font-size-1xl);
+  margin-bottom: var(--spacing-xxs);
 
   mat-icon {
     color: var(--app-primary);
@@ -27,7 +27,7 @@
 form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--spacing-xxs);
 }
 
 mat-form-field {
@@ -35,25 +35,25 @@ mat-form-field {
 }
 
 .channel-selection {
-  margin: 0.5rem 0;
+  margin: var(--spacing-xxs) 0;
 
   .section-label {
     display: block;
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: rgba(0, 0, 0, 0.6);
-    margin-bottom: 0.75rem;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-sm);
   }
 
   mat-radio-group {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: var(--spacing-xxs);
   }
 }
 
 .consent-section {
-  margin: 0.5rem 0;
+  margin: var(--spacing-xxs) 0;
 
   a {
     color: var(--app-primary);
@@ -66,39 +66,45 @@ mat-form-field {
 
   .consent-error {
     color: #d32f2f;
-    font-size: 0.75rem;
-    margin-top: 0.25rem;
+    font-size: var(--font-size-xxs);
+    margin-top: var(--spacing-xs);
   }
 }
 
 .submit-button {
-  margin-top: 1rem;
-  padding: 0.75rem 2rem;
-  font-size: 1rem;
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-2xl);
+  font-size: var(--font-size-md);
   
   mat-icon {
-    margin-right: 0.5rem;
+    margin-right: var(--spacing-xxs);
   }
 }
 
-/* Mobile styles */
-@media (max-width: 768px) {
-  .lead-form-card {
-    padding: 0.5rem;
-  }
+/* ============================================
+ * Responsive Styles
+ * ============================================ */
 
-  ::ng-deep .lead-form-card .mat-mdc-card-title {
-    font-size: 1.25rem;
-  }
-
-  .channel-selection mat-radio-group {
-    gap: 0.5rem;
-  }
+/* Mobile Styles */
+:host-context(.mobile) .lead-form-card {
+  padding: var(--spacing-xxs);
 }
+
+:host-context(.mobile) ::ng-deep .lead-form-card .mat-mdc-card-title {
+  font-size: var(--font-size-xl);
+}
+
+:host-context(.mobile) .channel-selection mat-radio-group {
+  gap: var(--spacing-xxs);
+}
+
+/* ============================================
+ * Theme Support
+ * ============================================ */
 
 /* Dark mode */
 @media (prefers-color-scheme: dark) {
   .channel-selection .section-label {
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--text-secondary);
   }
 }

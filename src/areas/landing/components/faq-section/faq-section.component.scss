@@ -1,12 +1,12 @@
 :host {
   display: block;
-  padding: 5rem 0;
+  padding: var(--spacing-6xl) 0;
   background: var(--surface-secondary);
 }
 
 .section-title {
-  font-size: 2.5rem;
-  font-weight: 700;
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
   text-align: center;
   margin-bottom: 1rem;
   color: var(--text-heading);
@@ -27,12 +27,12 @@ mat-accordion {
 }
 
 ::ng-deep .mat-expansion-panel-header {
-  padding: 1.25rem 1.5rem;
+  padding: var(--spacing-lg) var(--spacing-xl);
 }
 
 ::ng-deep .mat-panel-title {
-  font-weight: 600;
-  font-size: 1rem;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-md);
 }
 
 p {
@@ -41,9 +41,9 @@ p {
 }
 
 :host-context(.mobile) {
-  padding: 3rem 0;
+  padding: var(--spacing-4xl) 0;
 
   .section-title {
-    font-size: 2rem;
+    font-size: var(--font-size-3xl);
   }
 }

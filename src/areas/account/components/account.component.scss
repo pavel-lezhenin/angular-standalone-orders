@@ -1,31 +1,18 @@
 .account-page {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: var(--spacing-2xl);
   display: grid;
-  gap: 2rem;
+  gap: var(--spacing-2xl);
   grid-template-columns: 1fr;
-
-  @media (min-width: 768px) {
-    grid-template-columns: 2fr 1fr;
-  }
 }
 
 .profile-card {
   grid-column: 1;
-
-  @media (min-width: 768px) {
-    grid-column: 1;
-  }
 }
 
 .stats-card {
   grid-column: 1;
-
-  @media (min-width: 768px) {
-    grid-column: 2;
-    grid-row: 1;
-  }
 }
 
 // Card Header
@@ -34,20 +21,20 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: 0.5rem 0;
+  padding: var(--spacing-xxs) 0;
 }
 
 .header-left {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: var(--spacing-md);
 }
 
 .profile-icon {
-  font-size: 3rem;
+  font-size: var(--font-size-5xl);
   width: 3rem;
   height: 3rem;
-  color: var(--primary-color, #1976d2);
+  color: var(--app-primary);
 }
 
 .header-text {
@@ -57,11 +44,11 @@
 
 // Form
 .profile-form {
-  padding: 1.5rem 0;
+  padding: var(--spacing-xl) 0;
 }
 
 .form-section {
-  margin-bottom: 2rem;
+  margin-bottom: var(--spacing-2xl);
 
   &:last-child {
     margin-bottom: 0;
@@ -71,25 +58,21 @@
 .section-title {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
-  font-size: 1.25rem;
-  font-weight: 500;
-  color: rgba(0, 0, 0, 0.87);
+  gap: var(--spacing-xxs);
+  margin-bottom: var(--spacing-xl);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
 
   mat-icon {
-    color: var(--primary-color, #1976d2);
+    color: var(--app-primary);
   }
 }
 
 .form-row {
   display: grid;
-  gap: 1rem;
+  gap: var(--spacing-md);
   grid-template-columns: 1fr;
-
-  @media (min-width: 600px) {
-    grid-template-columns: 1fr 1fr;
-  }
 }
 
 .form-field {
@@ -97,11 +80,11 @@
 }
 
 .placeholder-text {
-  color: rgba(0, 0, 0, 0.6);
+  color: var(--text-secondary);
   font-style: italic;
   margin: 0;
-  padding: 1rem;
-  background-color: rgba(0, 0, 0, 0.02);
+  padding: var(--spacing-md);
+  background-color: var(--surface-tertiary);
   border-radius: 4px;
 }
 
@@ -109,32 +92,32 @@
 .card-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 1rem;
-  padding: 1rem 1.5rem;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-xl);
 
   button {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--spacing-xxs);
   }
 }
 
 // Stats Card
 .stats-card {
   mat-card-content {
-    padding: 1.5rem;
+    padding: var(--spacing-xl);
   }
 }
 
 .stat-item {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1rem 0;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) 0;
 
   mat-icon {
-    color: var(--primary-color, #1976d2);
-    font-size: 2rem;
+    color: var(--app-primary);
+    font-size: var(--font-size-3xl);
     width: 2rem;
     height: 2rem;
   }
@@ -147,14 +130,14 @@
 }
 
 .stat-label {
-  font-size: 0.875rem;
-  color: rgba(0, 0, 0, 0.6);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
 }
 
 .stat-value {
-  font-size: 1.25rem;
-  font-weight: 500;
-  color: rgba(0, 0, 0, 0.87);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
 }
 
 // Error Card
@@ -163,20 +146,41 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
-    padding: 3rem;
+    gap: var(--spacing-md);
+    padding: var(--spacing-4xl);
     text-align: center;
 
     mat-icon {
-      font-size: 3rem;
+      font-size: var(--font-size-5xl);
       width: 3rem;
       height: 3rem;
-      color: var(--warn-color, #f44336);
+      color: var(--app-error);
     }
 
     p {
       margin: 0;
-      color: rgba(0, 0, 0, 0.6);
+      color: var(--text-secondary);
     }
   }
+}
+
+/* ============================================
+ * Responsive Styles
+ * ============================================ */
+
+/* Tablet & Desktop Styles */
+:host-context(.tablet) .account-page,
+:host-context(.desktop) .account-page {
+  grid-template-columns: 2fr 1fr;
+}
+
+:host-context(.tablet) .stats-card,
+:host-context(.desktop) .stats-card {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+:host-context(.tablet) .form-row,
+:host-context(.desktop) .form-row {
+  grid-template-columns: 1fr 1fr;
 }

@@ -3,7 +3,7 @@
   gap: var(--app-spacing);
   align-items: flex-start;
   padding: var(--app-spacing) 0;
-  border-radius: 8px;
+  border-radius: var(--spacing-sm);
   margin-bottom: var(--app-spacing);
 }
 
@@ -31,15 +31,9 @@
   min-width: 150px;
 }
 
-button[mat-raised-button] {
-  height: 56px;
-  min-width: 100px;
-  margin-top: 0;
-}
-
 :host-context(.mobile) .filters-container {
   flex-direction: column;
-  gap: var(--spacing-sm, 0.75rem);
+  gap: var(--spacing-sm);
 }
 
 :host-context(.mobile) .search-field,

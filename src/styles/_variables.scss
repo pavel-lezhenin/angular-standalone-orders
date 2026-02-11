@@ -1,0 +1,8 @@
+/* Variables Entry Point
+ *
+ * Single source of truth for all design tokens.
+ * All CSS variables are defined in variables/_variables.scss
+ */
+
+@use 'variables/variables';
+

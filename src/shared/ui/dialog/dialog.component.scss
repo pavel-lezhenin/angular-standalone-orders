@@ -23,8 +23,8 @@
     align-items: center;
     margin: 0 !important;
     padding: 0 !important;
-    font-size: 1.25rem;
-    font-weight: 500;
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-medium);
     flex: 1;
     color: var(--text-heading);
   }
@@ -49,24 +49,6 @@
   padding: var(--spacing-lg) var(--spacing-xl) !important;
   margin: 0 !important;
   color: var(--text-secondary);
-  
-  // Custom scrollbar
-  &::-webkit-scrollbar {
-    width: calc(var(--spacing-xs) * 1.5);
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: var(--spacing-xs);
-
-    &:hover {
-      background: rgba(0, 0, 0, 0.3);
-    }
-  }
 }
 
 .dialog-actions {
@@ -77,10 +59,6 @@
   margin: 0 !important;
   border-top: 1px solid rgba(0, 0, 0, 0.12);
   min-height: auto !important;
-
-  @media (max-width: 600px) {
-    grid-template-columns: 1fr;
-  }
 
   button {
     margin: 0 !important;
@@ -97,7 +75,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: var(--spacing-sm);
 
     .button-spinner {
       display: inline-block;
@@ -108,9 +86,18 @@
     }
 
     span.spinner-active {
-      margin-left: calc(var(--spacing-sm) - 4px);
+      margin-left: calc(var(--spacing-sm) - var(--spacing-xs));
     }
   }
+}
+
+/* ============================================
+ * Responsive Styles
+ * ============================================ */
+
+/* Mobile Styles */
+:host-context(.mobile) ::ng-deep .mat-mdc-dialog-actions {
+  grid-template-columns: 1fr !important;
 }
 
 .loading-overlay {
@@ -141,6 +128,6 @@
 
 // Focus styles for accessibility
 button:focus-visible {
-  outline: 2px solid var(--app-primary);
-  outline-offset: 2px;
+  outline: calc(var(--spacing-xs) / 2) solid var(--app-primary);
+  outline-offset: calc(var(--spacing-xs) / 2);
 }

@@ -7,12 +7,12 @@
   width: 100%;
 
   th {
-    font-weight: 500;
-    font-size: 14px;
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-sm);
   }
 
   td {
-    font-size: 14px;
+    font-size: var(--font-size-sm);
   }
 }
 
@@ -34,7 +34,7 @@
 
 .mat-mdc-no-data-row {
   text-align: center;
-  padding: 2rem;
+  padding: var(--spacing-2xl);
   color: var(--text-muted);
 }
 
@@ -43,8 +43,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 3rem;
-  gap: 1rem;
+  padding: var(--spacing-4xl);
+  gap: var(--spacing-md);
   color: var(--text-secondary);
 }
 

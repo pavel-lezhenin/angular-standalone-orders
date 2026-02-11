@@ -1,9 +1,9 @@
 :host {
   display: block;
-  padding: 5rem 0;
+  padding: var(--spacing-6xl) 0;
   background: var(--surface-primary);
 }
 
 :host-context(.mobile) {
-  padding: 3rem 0;
+  padding: var(--spacing-4xl) 0;
 }

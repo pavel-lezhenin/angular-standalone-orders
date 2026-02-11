@@ -59,3 +59,48 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 - Design services around a single responsibility
 - Use the `providedIn: 'root'` option for singleton services
 - Use the `inject()` function instead of constructor injection
+
+## Styling Rules (MANDATORY)
+
+### Design System Compliance
+
+**ALL component styles MUST strictly follow design system rules defined in `src/styles/variables/`**
+
+### CSS Variables
+
+- **STRICT**: All spacing values (`gap`, `margin`, `padding`) MUST use `--spacing-xs` through `--spacing-7xl`
+- **STRICT**: All colors MUST use CSS variables: `--app-primary`, `--text-*`, `--surface-*`, `--color-*`
+- **STRICT**: All font-size MUST use `--font-size-2xs` through `--font-size-6xl`
+- **STRICT**: All font-weight MUST use `--font-weight-light` through `--font-weight-extrabold`
+- **NEVER**: No hardcoded px, rem, colors, or fonts
+- **NEVER**: No inline styles with `[style]` binding - use component SCSS files only
+
+### Responsive Design (STRICT)
+
+- **NEVER**: No `@media` queries - ONLY use `:host-context()` CSS classes
+- **REQUIRED**: Only three responsive classes exist: `.mobile`, `.tablet`, `.desktop`
+- **REQUIRED**: These classes are managed by `app.ts` initBreakpoints() method
+- **PATTERN**: Organize responsive styles by device grouping:
+  ```scss
+  .element {
+    /* Base styles */
+  }
+  
+  /* Tablet & Desktop Styles */
+  :host-context(.tablet) .element,
+  :host-context(.desktop) .element {
+    /* Overrides for larger screens */
+  }
+  
+  /* Mobile Styles */
+  :host-context(.mobile) .element {
+    /* Mobile overrides */
+  }
+  ```
+
+### Adding New Variables
+
+- Before using a new spacing/color/font value, add it to `src/styles/variables/` directory
+- Variables follow naming convention: `--category-name-variant`
+- Document with comments showing pixel/rem equivalents
+- Reference existing variable files for examples

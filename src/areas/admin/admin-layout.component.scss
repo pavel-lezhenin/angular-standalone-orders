@@ -44,7 +44,7 @@ mat-nav-list {
 }
 
 .content-wrapper {
-  padding: 24px;
+  padding: var(--spacing-xl);
   flex: 1;
   overflow: auto;
 }
