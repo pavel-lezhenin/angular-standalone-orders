@@ -19,7 +19,8 @@
     "test:e2e": "playwright test",
     "validate:design-system": "node scripts/validate-design-system.js",
     "lint:styles": "npm run validate:design-system",
-    "serve:ssr": "node dist/angular-standalone-orders/server/server.mjs"
+    "serve:ssr": "node dist/angular-standalone-orders/server/server.mjs",
+    "prepare": "husky install"
   },
   "private": true,
   "packageManager": "pnpm@9.15.0",
@@ -57,6 +58,7 @@
     "@vitest/coverage-v8": "^4.0.17",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.0.0",
+    "husky": "^9.1.7",
     "jsdom": "^27.1.0",
     "msw": "^2.4.0",
     "prettier": "^3.3.0",
