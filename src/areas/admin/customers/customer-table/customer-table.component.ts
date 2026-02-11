@@ -9,7 +9,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { User } from '@core/bff/models';
 import { UserRole } from '@core/types';
-import { formatDate } from '@shared/lib';
+import { formatDate } from '@shared/utils';
 
 /**
  * Customer table component with pagination and loading state

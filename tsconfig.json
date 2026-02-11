@@ -39,8 +39,7 @@
       "@core/*": ["./src/app/core/*"],
       "@shared/*": ["./src/shared/*"],
       "@areas/*": ["./src/areas/*"],
-      "@entities/*": ["./src/app/entities/*"],
-      "@pages/*": ["./src/app/pages/*"]
+      "@entities/*": ["./src/app/entities/*"]
     },
 
     // Other
