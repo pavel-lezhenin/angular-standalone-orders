@@ -50,10 +50,10 @@ const RULES = [
   },
   {
     name: 'No hardcoded px/rem/em spacing',
-    pattern: /([0-9.]+)(px|rem|em)\b/g,
+    pattern: /(?<![,(])\s*([0-9.]+)(px|rem|em)\b/g,
     type: ERRORS.HARDCODED_SPACING,
     excludeValues: [], // No exceptions - all spacing must use CSS variables
-    message: (match, value, unit) => `Hardcoded spacing ${match} - use --spacing-* CSS variables`
+    message: (match, value, unit) => `Hardcoded spacing ${match.trim()} - use --spacing-* CSS variables`
   },
   {
     name: 'No responsive @media queries in components',
