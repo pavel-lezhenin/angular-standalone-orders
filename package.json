@@ -17,6 +17,8 @@
     "test:unit": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
+    "validate:design-system": "node scripts/validate-design-system.js",
+    "lint:styles": "npm run validate:design-system",
     "serve:ssr": "node dist/angular-standalone-orders/server/server.mjs"
   },
   "private": true,
