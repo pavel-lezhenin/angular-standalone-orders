@@ -141,8 +141,6 @@ function validateFile(filePath) {
 }
 
 function main() {
-  console.log('🔍 Validating Design System Compliance...\n');
-  
   const allFiles = [];
   
   // Scan allowed directories
@@ -157,8 +155,6 @@ function main() {
     console.log('❌ No SCSS files found in component directories');
     process.exit(1);
   }
-  
-  console.log(`📋 Found ${allFiles.length} SCSS files to validate\n`);
   
   let totalIssues = 0;
   const issues = [];
@@ -178,7 +174,6 @@ function main() {
   
   // Group issues by severity
   const errors = issues.filter(i => i.severity === 'error');
-  const warnings = issues.filter(i => i.severity === 'warning');
   
   if (errors.length > 0) {
     console.log(`\n❌ ERRORS (${errors.length}):\n`);
@@ -187,18 +182,6 @@ function main() {
       console.log(`    Line ${issue.line}:${issue.column}: ${issue.message}`);
     });
   }
-  
-  if (warnings.length > 0) {
-    console.log(`\n⚠️  WARNINGS (${warnings.length}):\n`);
-    warnings.forEach(issue => {
-      console.log(`  ${issue.file}`);
-      console.log(`    Line ${issue.line}:${issue.column}: ${issue.message}`);
-    });
-  }
-  
-  console.log(`\n📊 Total Issues: ${totalIssues}`);
-  console.log(`   Errors: ${errors.length}`);
-  console.log(`   Warnings: ${warnings.length}\n`);
   
   // Exit with error if there are any issues
   process.exit(errors.length > 0 ? 1 : 0);
