@@ -1,24 +1,4 @@
 /**
- * Cart item in the shopping cart
- */
-export interface CartItem {
-  productId: string;
-  quantity: number;
-  name?: string;
-  price?: number;
-}
-
-/**
- * Navigation item for configurable top bar menu
- */
-export interface NavItem {
-  label: string;
-  route?: string;
-  action?: () => void;
-  icon?: string;
-}
-
-/**
  * Contact channel types for lead capture
  */
 export type ContactChannel = 'email' | 'telegram' | 'whatsapp' | 'phone';

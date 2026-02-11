@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { NavItem } from '@/entities/cart/models';
+import { NavItem } from '@/shared/models';
 
 /**
  * Service for managing layout state (navigation, title)

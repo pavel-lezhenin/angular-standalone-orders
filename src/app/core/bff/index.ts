@@ -24,7 +24,6 @@ export type {
   Order,
   OrderItem,
   Cart,
-  CartItem,
   Permission,
   Category,
   Session,

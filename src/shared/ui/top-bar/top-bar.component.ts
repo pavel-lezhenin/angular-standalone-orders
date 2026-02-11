@@ -5,7 +5,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { NavItem } from '@/entities/cart/models';
+import { NavItem } from '@/shared/models';
 import { UserMenuComponent } from '../user-menu/user-menu.component';
 
 /**

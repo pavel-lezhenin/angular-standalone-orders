@@ -9,7 +9,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { ContactChannel } from '@/entities/cart/models';
+import { ContactChannel } from './models';
 
 /**
  * Lead capture form with multi-channel contact options
