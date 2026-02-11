@@ -58,6 +58,22 @@
   --color-text-light: #e0e0e0;
   --color-text-gray: #b0b0b0;
   --color-separator: #555;
+  
+  /* Semi-transparent colors */
+  --color-black-60: rgba(0, 0, 0, 0.6);
+  --color-black-40: rgba(0, 0, 0, 0.4);
+
+  /* ============================================
+   * Gradient Colors (Dashboard Stats)
+   * ============================================ */
+  --color-gradient-primary-1: #667eea;
+  --color-gradient-primary-2: #764ba2;
+  --color-gradient-success-1: #84fab0;
+  --color-gradient-success-2: #8fd3f4;
+  --color-gradient-warning-1: #fa709a;
+  --color-gradient-warning-2: #fee140;
+  --color-gradient-info-1: #30cfd0;
+  --color-gradient-info-2: #330867;
 
   /* ============================================
    * Spacing Scale (calculated from --app-spacing)

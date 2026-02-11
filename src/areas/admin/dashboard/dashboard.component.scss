@@ -10,7 +10,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: var(--spacing-lg);
-  margin-bottom: 32px;
+  margin-bottom: var(--spacing-2xl);
 }
 
 .stat-card {
@@ -23,7 +23,7 @@
   .stat-icon {
     width: 56px;
     height: 56px;
-    border-radius: 12px;
+    border-radius: var(--border-radius-md);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -48,31 +48,31 @@
 
   .stat-label {
     font-size: var(--font-size-sm);
-    color: rgba(0, 0, 0, 0.6);
-    margin-top: 4px;
+    color: var(--color-black-60);
+    margin-top: var(--spacing-xs);
   }
 
   &.stat-primary .stat-icon {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--color-gradient-primary-1) 0%, var(--color-gradient-primary-2) 100%);
   }
 
   &.stat-success .stat-icon {
-    background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+    background: linear-gradient(135deg, var(--color-gradient-success-1) 0%, var(--color-gradient-success-2) 100%);
   }
 
   &.stat-warning .stat-icon {
-    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    background: linear-gradient(135deg, var(--color-gradient-warning-1) 0%, var(--color-gradient-warning-2) 100%);
   }
 
   &.stat-info .stat-icon {
-    background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+    background: linear-gradient(135deg, var(--color-gradient-info-1) 0%, var(--color-gradient-info-2) 100%);
   }
 }
 
 .recent-section {
   .placeholder {
     text-align: center;
-    color: rgba(0, 0, 0, 0.4);
+    color: var(--color-black-40);
     padding: var(--spacing-3xl);
     font-size: var(--font-size-sm);
   }
