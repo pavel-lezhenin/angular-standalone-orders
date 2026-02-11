@@ -23,7 +23,7 @@ import { FaqSectionComponent } from './components/faq-section/faq-section.compon
     FaqSectionComponent,
   ],
   templateUrl: './landing.component.html',
-  styleUrls: ['./landing.component.scss'],
+  styleUrl: './landing.component.scss',
 })
 export class LandingComponent implements OnInit {
   constructor(

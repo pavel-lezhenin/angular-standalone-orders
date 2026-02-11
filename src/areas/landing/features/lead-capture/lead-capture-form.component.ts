@@ -30,7 +30,7 @@ import { ContactChannel } from '@/entities/cart/models';
     MatSnackBarModule,
   ],
   templateUrl: './lead-capture-form.component.html',
-  styleUrls: ['./lead-capture-form.component.scss'],
+  styleUrl: './lead-capture-form.component.scss',
 })
 export class LeadCaptureFormComponent {
   leadForm: FormGroup;

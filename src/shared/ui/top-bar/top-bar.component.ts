@@ -24,7 +24,7 @@ import { UserMenuComponent } from '../user-menu/user-menu.component';
     UserMenuComponent,
   ],
   templateUrl: './top-bar.component.html',
-  styleUrls: ['./top-bar.component.scss'],
+  styleUrl: './top-bar.component.scss',
 })
 export class TopBarComponent {
   @Input() title = 'Orders Platform';

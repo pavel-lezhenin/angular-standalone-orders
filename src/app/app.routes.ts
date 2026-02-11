@@ -9,25 +9,25 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        loadComponent: () => import('../pages/landing/landing.component').then(m => m.LandingComponent),
+        loadComponent: () => import('../areas/landing/pages/landing.component').then(m => m.LandingComponent),
         title: 'Welcome - Orders Platform',
       },
       {
         path: 'orders',
         canActivate: [authGuard],
-        loadComponent: () => import('../pages/orders/orders.component').then(m => m.OrdersComponent),
+        loadComponent: () => import('../areas/orders/pages/orders.component').then(m => m.OrdersComponent),
         title: 'Orders - Orders Platform',
       },
       {
         path: 'shop',
         canActivate: [authGuard],
-        loadComponent: () => import('../pages/orders/orders.component').then(m => m.OrdersComponent),
+        loadComponent: () => import('../areas/orders/pages/orders.component').then(m => m.OrdersComponent),
         title: 'Shop - Orders Platform',
       },
       {
         path: 'account',
         canActivate: [authGuard],
-        loadComponent: () => import('../pages/account/account.component').then(m => m.AccountComponent),
+        loadComponent: () => import('../areas/account/pages/account.component').then(m => m.AccountComponent),
         title: 'My Account - Orders Platform',
       },
     ],

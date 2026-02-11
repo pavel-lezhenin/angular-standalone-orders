@@ -12,7 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
   standalone: true,
   imports: [CommonModule, RouterLink, MatIconModule, MatButtonModule],
   templateUrl: './footer.component.html',
-  styleUrls: ['./footer.component.scss'],
+  styleUrl: './footer.component.scss',
 })
 export class FooterComponent {
   currentYear = new Date().getFullYear();

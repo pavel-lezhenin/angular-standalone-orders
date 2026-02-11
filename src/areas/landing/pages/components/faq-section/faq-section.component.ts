@@ -10,6 +10,6 @@ import { SectionWrapperComponent } from '../../ui/section-wrapper/section-wrappe
   standalone: true,
   imports: [MatExpansionModule, SectionWrapperComponent],
   templateUrl: './faq-section.component.html',
-  styleUrls: ['./faq-section.component.scss'],
+  styleUrl: './faq-section.component.scss',
 })
 export class FaqSectionComponent {}

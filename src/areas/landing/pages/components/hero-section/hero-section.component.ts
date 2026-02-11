@@ -11,7 +11,7 @@ import { SectionWrapperComponent } from '../../ui/section-wrapper/section-wrappe
   standalone: true,
   imports: [MatButtonModule, MatIconModule, SectionWrapperComponent],
   templateUrl: './hero-section.component.html',
-  styleUrls: ['./hero-section.component.scss'],
+  styleUrl: './hero-section.component.scss',
 })
 export class HeroSectionComponent {
   @Output() ctaClick = new EventEmitter<string>();

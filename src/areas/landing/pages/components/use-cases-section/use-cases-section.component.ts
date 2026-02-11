@@ -10,6 +10,6 @@ import { SectionWrapperComponent } from '../../ui/section-wrapper/section-wrappe
   standalone: true,
   imports: [MatIconModule, SectionWrapperComponent],
   templateUrl: './use-cases-section.component.html',
-  styleUrls: ['./use-cases-section.component.scss'],
+  styleUrl: './use-cases-section.component.scss',
 })
 export class UseCasesSectionComponent {}

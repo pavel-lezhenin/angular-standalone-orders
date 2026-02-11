@@ -28,7 +28,7 @@ import { AuthService } from '@/app/core/services/auth.service';
     MatChipsModule,
   ],
   templateUrl: './account.component.html',
-  styleUrls: ['./account.component.scss'],
+  styleUrl: './account.component.scss',
 })
 export class AccountComponent {
   readonly user = computed(() => this.authService.currentUser());

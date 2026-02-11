@@ -11,6 +11,6 @@ import { SectionWrapperComponent } from '../../ui/section-wrapper/section-wrappe
   standalone: true,
   imports: [MatCardModule, MatIconModule, SectionWrapperComponent],
   templateUrl: './features-section.component.html',
-  styleUrls: ['./features-section.component.scss'],
+  styleUrl: './features-section.component.scss',
 })
 export class FeaturesSectionComponent {}
