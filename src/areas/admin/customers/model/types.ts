@@ -1,4 +1,4 @@
-import { UserRole } from '@core/types';
+import { UserRole, UserProfileDTO, UserDTO } from '@core';
 
 /**
  * Customer permissions
@@ -10,43 +10,20 @@ export interface CustomerPermissions {
 }
 
 /**
- * User profile DTO
- */
-export interface UserProfileDto {
-  firstName: string;
-  lastName: string;
-  phone: string;
-  address: string;
-}
-
-/**
  * Customer form data (UI layer)
  */
-export interface CustomerFormData extends UserProfileDto {
+export interface CustomerFormData extends UserProfileDTO {
   email: string;
   password: string;
   role: UserRole;
 }
 
 /**
- * Base user DTO
+ * Create user DTO - UserDTO without id/createdAt but with password
  */
-export interface BaseUserDto {
-  email: string;
-  role: UserRole;
-  profile: UserProfileDto;
-}
+export type CreateUserDto = Omit<UserDTO, 'id' | 'createdAt'> & { password: string };
 
 /**
- * Create user DTO
+ * Update user DTO - UserDTO without id/createdAt with optional password
  */
-export interface CreateUserDto extends BaseUserDto {
-  password: string;
-}
-
-/**
- * Update user DTO
- */
-export interface UpdateUserDto extends BaseUserDto {
-  password?: string;
-}
+export type UpdateUserDto = Omit<UserDTO, 'id' | 'createdAt'> & { password?: string };

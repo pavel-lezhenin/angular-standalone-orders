@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Permission } from '@bff';
+import type { PermissionDTO } from '../models';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -7,7 +7,7 @@ import { AuthService } from './auth.service';
 })
 export class PermissionService {
   // In-memory cache of permissions
-  private permissionsCache: Map<string, Permission[]> = new Map();
+  private permissionsCache: Map<string, PermissionDTO[]> = new Map();
 
   constructor(private authService: AuthService) {}
 
@@ -26,7 +26,7 @@ export class PermissionService {
     // Get permissions for user's role
     const rolePermissions = this.getPermissions(user.role);
 
-    // Check if permission exists and is granted
+    // Check if PermissionDTO exists and is granted
     return rolePermissions.some(
       (p) => p.section === section && p.action === action && p.granted,
     );
@@ -35,7 +35,7 @@ export class PermissionService {
   /**
    * Get all permissions for a role
    */
-  getPermissions(role: string): Permission[] {
+  getPermissions(role: string): PermissionDTO[] {
     // Cache permissions by role
     const cached = this.permissionsCache.get(role);
     if (cached) return cached;
@@ -49,8 +49,8 @@ export class PermissionService {
   /**
    * Build permissions for a role
    */
-  private buildPermissions(role: string): Permission[] {
-    const permissions: Permission[] = [];
+  private buildPermissions(role: string): PermissionDTO[] {
+    const permissions: PermissionDTO[] = [];
 
     switch (role) {
       case 'user':

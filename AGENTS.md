@@ -15,9 +15,8 @@ Each area has:
 - Lazy-loaded modules with guards
 
 **Core layers:**
-- `core/bff/` — IndexedDB repositories, FakeBFF service
-- `core/guards/` — authGuard, adminGuard, permissionGuard
-- `core/interceptors/` — API interceptor for dev
+- `bff/` — IndexedDB repositories, FakeBFF service, domain models
+- `core/` — DTOs, services, guards, interceptors
 - `shared/` — Reusable UI components, pipes, directives
 
 ## TypeScript Best Practices

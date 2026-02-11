@@ -17,12 +17,13 @@ export {
 // Services (only seed - auth/permission are in core/services)
 export { SeedService } from './services/seed.service';
 
-// Models
+// BFF domain models
 export type {
   User,
   Product,
   Order,
   OrderItem,
+  CartItem,
   Cart,
   Permission,
   Category,

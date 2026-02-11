@@ -6,7 +6,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { PageEvent } from '@angular/material/paginator';
 
-import { User } from '@bff/models';
+import { UserDTO } from '@core';
 import { CustomerService } from './services/customer.service';
 import { CustomerFormDialogComponent } from './customer-form-dialog/customer-form-dialog.component';
 import { CustomerTableComponent } from './customer-table/customer-table.component';
@@ -47,7 +47,7 @@ export class CustomersComponent implements OnInit {
   /**
    * Local state
    */
-  protected readonly users = signal<User[]>([]);
+  protected readonly users = signal<UserDTO[]>([]);
   protected readonly isLoading = signal(false);
   protected readonly canCreate = signal(false);
   protected readonly canEdit = signal(false);
@@ -154,7 +154,7 @@ export class CustomersComponent implements OnInit {
   /**
    * Open edit dialog
    */
-  protected openEditDialog(user: User): void {
+  protected openEditDialog(user: UserDTO): void {
     const dialogRef = this.dialog.open(CustomerFormDialogComponent, {
       width: '500px',
       maxWidth: '90vw',
@@ -182,7 +182,7 @@ export class CustomersComponent implements OnInit {
   /**
    * Delete user with confirmation
    */
-  protected async deleteUser(user: User): Promise<void> {
+  protected async deleteUser(user: UserDTO): Promise<void> {
     if (!confirm(`Are you sure you want to delete user ${user.email}?`)) {
       return;
     }

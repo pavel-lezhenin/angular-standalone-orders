@@ -1,11 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -13,12 +8,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-import { User } from '@bff/models';
+import { UserDTO } from '@core';
 import { UserRole } from '@core/types';
 
 export interface CustomerFormDialogData {
   mode: 'create' | 'edit';
-  user?: User;
+  user?: UserDTO;
 }
 
 /**
@@ -80,15 +75,10 @@ export class CustomerFormDialogComponent implements OnInit {
    */
   private initForm(): void {
     this.form = this.fb.group({
-      email: [
-        this.data.user?.email || '',
-        [Validators.required, Validators.email],
-      ],
+      email: [this.data.user?.email || '', [Validators.required, Validators.email]],
       password: [
         '',
-        this.data.mode === 'create'
-          ? [Validators.required, Validators.minLength(4)]
-          : [],
+        this.data.mode === 'create' ? [Validators.required, Validators.minLength(4)] : [],
       ],
       role: [this.data.user?.role || 'user', [Validators.required]],
       firstName: [this.data.user?.profile?.firstName || '', [Validators.required]],

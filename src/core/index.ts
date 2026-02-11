@@ -1,5 +1,10 @@
-// BFF Layer
-export * from '../bff';
+// Core DTOs (exported with clean names for app layer convenience)
+export type { UserDTO, UserProfileDTO } from './models';
+export type { PermissionDTO } from './models';
+export type { CartItemDTO, CartDTO } from './models';
+
+// Shared types
+export type { UserRole, OrderStatus } from './types/shared-types';
 
 // Services
 export { AuthService } from './services/auth.service';

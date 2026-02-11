@@ -2,14 +2,14 @@ import { Injectable, signal, computed, effect, PLATFORM_ID, inject } from '@angu
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '@core/services/auth.service';
-import { CartItem } from './models';
+import type { CartItemDTO } from '@core/models/cart.dto';
 import { firstValueFrom } from 'rxjs';
 
 const GUEST_CART_KEY = 'guest_cart';
 
 interface CartResponse {
   userId: string;
-  items: CartItem[];
+  items: CartItemDTO[];
   updatedAt: number;
 }
 
@@ -27,7 +27,7 @@ interface CartResponse {
   providedIn: 'root',
 })
 export class CartService {
-  private cartItems = signal<CartItem[]>([]);
+  private cartItems = signal<CartItemDTO[]>([]);
   private platformId = inject(PLATFORM_ID);
   private isBrowser = isPlatformBrowser(this.platformId);
   
@@ -62,13 +62,13 @@ export class CartService {
   /**
    * Adds item to cart or increments quantity if already exists
    */
-  addItem(item: CartItem): void {
+  addItem(item: CartItemDTO): void {
     const currentItems = this.cartItems();
     const existingIndex = currentItems.findIndex(
       i => i.productId === item.productId
     );
 
-    let updatedItems: CartItem[];
+    let updatedItems: CartItemDTO[];
     if (existingIndex >= 0) {
       // Increment quantity
       updatedItems = currentItems.map((i, idx) =>
@@ -123,7 +123,7 @@ export class CartService {
   /**
    * Gets all cart items
    */
-  getItems(): CartItem[] {
+  getItems(): CartItemDTO[] {
     return this.cartItems();
   }
 
@@ -151,7 +151,7 @@ export class CartService {
     try {
       const stored = localStorage.getItem(GUEST_CART_KEY);
       if (stored) {
-        const items = JSON.parse(stored) as CartItem[];
+        const items = JSON.parse(stored) as CartItemDTO[];
         this.cartItems.set(items);
       }
     } catch (error) {
@@ -244,10 +244,10 @@ export class CartService {
         return;
       }
 
-      const guestItems = JSON.parse(guestCartRaw) as CartItem[];
+      const guestItems = JSON.parse(guestCartRaw) as CartItemDTO[];
       
       // Get authenticated cart from backend via HTTP
-      let authItems: CartItem[] = [];
+      let authItems: CartItemDTO[] = [];
       try {
         const authCart = await firstValueFrom(
           this.http.get<CartResponse>(`/api/users/${userId}/cart`)
@@ -259,7 +259,7 @@ export class CartService {
       }
 
       // Merge: combine quantities for duplicate products
-      const mergedMap = new Map<string, CartItem>();
+      const mergedMap = new Map<string, CartItemDTO>();
       
       // Add authenticated items first
       authItems.forEach(item => {

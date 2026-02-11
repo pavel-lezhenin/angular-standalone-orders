@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatBadgeModule } from '@angular/material/badge';
-import { CartService } from '@bff/entities/cart/cart.service';
+import { CartService } from '@shared/services/cart.service';
 
 /**
  * Cart button with badge showing item count

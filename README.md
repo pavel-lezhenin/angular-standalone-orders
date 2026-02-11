@@ -42,15 +42,12 @@ admin@demo / demo       (Admin role)
 
 ## 📚 Documentation
 
-**Start here if you want to:**
-
 | Goal | Read |
 |------|------|
-| Understand the data layer | [docs/FAKEBFF_ARCHITECTURE.md](./docs/FAKEBFF_ARCHITECTURE.md) |
-| Understand overall architecture | [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) |
-| Build Phase 2 features | [docs/IMPLEMENTATION.md](./docs/IMPLEMENTATION.md) |
-| See what you can/can't do | [docs/USE_CASES.md](./docs/USE_CASES.md) |
-| Deep dive into design | [docs/PHASE2_PLAN.md](./docs/PHASE2_PLAN.md) |
+| Understand data layer | [docs/FAKEBFF_ARCHITECTURE.md](./docs/FAKEBFF_ARCHITECTURE.md) |
+| Overall architecture | [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) |
+| Build features | [docs/IMPLEMENTATION.md](./docs/IMPLEMENTATION.md) |
+| Limitations & when to use | [docs/USE_CASES.md](./docs/USE_CASES.md) |
 
 ## 🏗️ Architecture (30 Seconds)
 
@@ -99,106 +96,61 @@ See [FAKEBFF_ARCHITECTURE.md](./docs/FAKEBFF_ARCHITECTURE.md) and [ARCHITECTURE.
 
 ```
 src/
-├── app/
-│   ├── app.component.ts
-│   ├── app.config.ts
-│   ├── app.routes.ts              # Top-level routing to areas
-│   └── core/                      # Core layer (singleton services)
-│       ├── bff/                   # Backend-for-Frontend (IndexedDB)
-│       │   ├── database.service.ts
-│       │   ├── fake-bff.service.ts
-│       │   ├── repositories/
-│       │   ├── services/
-│       │   └── models/
-│       ├── guards/
-│       │   ├── auth.guard.ts
-│       │   ├── admin.guard.ts
-│       │   └── permission.guard.ts
-│       └── interceptors/
-│           └── api.interceptor.ts
-│
-├── areas/                         # User areas (lazy-loaded)
-│   ├── auth/                      # Public: login, register
-│   │   ├── auth.routes.ts
-│   │   └── login/
-│   ├── shop/                      # User: products, cart, checkout
-│   │   ├── shop.routes.ts
-│   │   ├── shop-layout.component.ts
-│   │   ├── products/
-│   │   ├── cart/
-│   │   └── checkout/
-│   └── admin/                     # Manager/Admin: dashboard, orders, etc
-│       ├── admin.routes.ts
-│       ├── admin-layout.component.ts
-│       ├── dashboard/
-│       ├── customers/
-│       ├── orders/
-│       ├── products/
-│       ├── categories/
-│       └── permissions/
-│
-├── shared/                        # Reusable components, utils
-│   ├── ui/
-│   ├── directives/
-│   ├── pipes/
-│   └── utils/
-│
-└── entities/                      # Domain models (optional)
-```
-src/app/
 ├── core/
-│   ├── bff/                           # Data layer (IndexedDB)
-│   │   ├── database.service.ts        # IndexedDB wrapper
-│   │   ├── fake-bff.service.ts        # Mock REST API
-│   │   ├── repositories/              # CRUD operations
-│   │   │   ├── base.repository.ts
-│   │   │   ├── user.repository.ts
-│   │   │   └── ...
-│   │   ├── services/
-│   │   │   ├── seed.service.ts        # Demo data
-│   │   │   └── index.ts
-│   │   ├── models/                    # TypeScript types
+│   ├── models/                        # DTOs
+│   │   ├── user.dto.ts
+│   │   ├── permission.dto.ts
+│   │   ├── cart.dto.ts
 │   │   └── index.ts
+│   │
+│   ├── types/                         # Shared types
+│   │   └── shared-types.ts            # UserRole, OrderStatus
 │   │
 │   ├── services/                      # Application logic
-│   │   ├── auth.service.ts            # Authentication
-│   │   ├── permission.service.ts      # RBAC
-│   │   └── index.ts
+│   │   ├── auth.service.ts
+│   │   └── permission.service.ts
 │   │
 │   ├── guards/                        # Route protection
-│   │   ├── auth.guard.ts              # Require login
-│   │   ├── admin.guard.ts             # Require admin role
-│   │   └── permission.guard.ts        # Custom permissions
+│   │   └── index.ts                   # authGuard, adminGuard
 │   │
 │   └── interceptors/                  # HTTP middleware
 │       └── api.interceptor.ts         # Routes /api/* to FakeBFF
 │
-├── features/                          # Lazy-loaded modules
-│   ├── auth/                          # Login page + forms
+├── bff/                               # Data layer (IndexedDB)
+│   ├── models/                        # Domain models
+│   │   ├── user.ts
+│   │   ├── product.ts
+│   │   └── order.ts
+│   │
+│   ├── database.service.ts            # IndexedDB wrapper
+│   ├── fake-bff.service.ts            # Mock REST API
+│   │
+│   └── repositories/                  # CRUD operations
+│       ├── base.repository.ts
+│       ├── user.repository.ts
+│       └── product.repository.ts
+│
+├── areas/                             # Lazy-loaded modules
+│   ├── auth/                          # Login
 │   ├── shop/                          # Products + Cart
 │   └── admin/                         # Dashboard + Management
 │
 ├── shared/                            # Reusable components & utils
-├── pages/                             # Route container components
-└── app.routes.ts                      # Root routing config
+├── app/                               # App root config
+└── mocks/                             # MSW handlers
 ```
 
 See [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) for full details.
 
-## 🔐 Role-Based Access Control
+## 🔐 RBAC
 
 | Feature | User | Manager | Admin |
 |---------|------|---------|-------|
 | Shop (Products, Cart) | ✅ | ✅ | ✅ |
 | Profile Edit | ✅ | — | ✅ |
 | Orders (Own) | ✅ | — | ✅ |
-| Orders (All, Manage) | — | ✅ | ✅ |
-| Cancelled Orders | — | ✅ | ✅ |
-| Customers | — | — | ✅ |
-| Products | — | ✅ | ✅ |
-| Categories | — | ✅ | ✅ |
-
-See [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md#permissions-matrix) for detailed permissions.
+| Orders (All) | — | ✅ | ✅ |
+| Customers, Products, Categories | — | ✅/— | ✅ |
 
 ## 📋 Phase 2 Includes
 
@@ -214,141 +166,37 @@ See [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md#permissions-matrix) for detail
 
 **Duration:** ~21 hours (14 sequential phases)
 
-## 🛠️ Commands
+## � Commands
 
 ```bash
-# Development
-pnpm dev          # Start dev server
+pnpm dev          # Dev server
 pnpm build        # Production build
-pnpm lint         # ESLint
-pnpm format       # Prettier
-
-# Testing
 pnpm test         # Unit tests
-pnpm test:watch   # Watch mode
-pnpm e2e          # Playwright E2E tests
-pnpm test:cov     # Coverage report
+pnpm e2e          # E2E tests
 ```
 
-## 💡 Key Patterns
+## ⚠️ Limitations
 
-### Signals for State
-```typescript
-users$ = signal<User[]>([]);
-userCount = computed(() => this.users$().length);
-effect(() => console.log(`Users: ${this.userCount()}`));
-```
-
-### Repository Pattern
-```typescript
-async getProducts(): Promise<Product[]> {
-  return this.productRepository.getAll();  // All data ops go here
-}
-```
-
-### Route Guards
-```typescript
-canActivate: [authGuard, adminGuard]  // Protect sensitive routes
-```
-
-### Lazy Loading
-```typescript
-{ path: 'admin', loadComponent: () => import('./admin-layout.component') }
-```
-
-See [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) for more patterns.
-
-## ⚠️ Important Limitations
-
-**This template is NOT suitable for:**
-
-- ❌ High-traffic public sites (scalability limited by IndexedDB)
-- ❌ Multi-device sync (data lives only in browser)
+**NOT suitable for:**
+- ❌ High-traffic public sites (IndexedDB limits)
+- ❌ Multi-device sync (browser-only data)
 - ❌ Real-time collaboration (no WebSockets)
 - ❌ Sensitive financial data (client-side only)
-- ❌ Mobile apps (web app only)
 
-**To use in production:**
-1. Replace IndexedDB with REST/GraphQL API
-2. Implement secure authentication (OAuth/JWT)
-3. Move sensitive data to backend
-4. Add WebSockets for real-time
+**For production:** Add REST/GraphQL backend, OAuth/JWT auth, server-side data storage.
 
-See [docs/USE_CASES.md](./docs/USE_CASES.md) for full analysis + migration guide.
+See [docs/USE_CASES.md](./docs/USE_CASES.md) for migration guide.
 
 ## 🧪 Testing
 
-**Targets:**
-- BFF services: 90%+ coverage
-- Guards: 85%+ coverage
-- Components: 70%+ coverage
-- Overall: 80%+
+**Targets:** 80%+ overall coverage
 
 ```bash
-pnpm test          # Run all tests
+pnpm test          # Run tests
 pnpm test:cov      # Coverage report
-pnpm e2e           # E2E tests (3 user journeys)
+pnpm e2e           # E2E tests
 ```
-
-## 📊 Bundle Size
-
-```
-Core Angular:     ~150KB
-App code:         ~100KB
-Gzipped total:    ~65KB
-```
-
-## 🚨 Current Status
-
-| Component | Status |
-|-----------|--------|
-| Phase 1 setup | ✅ Complete |
-| Phase 2 planning | ✅ Complete |
-| Phase 2 implementation | 🚧 Ready to start |
-
-## 🤝 Contributing
-
-Follow these when adding features:
-
-1. ✅ Keep to the architecture (Core/Shared/Features)
-2. ✅ Write tests (80%+ target)
-3. ✅ Use TypeScript strict mode
-4. ✅ Use signals, not BehaviorSubject
-5. ✅ Keep files < 300 lines
-6. ✅ Use reactive forms
-7. ✅ Make mobile responsive
-
-See [AGENTS.md](./AGENTS.md) for detailed guidelines.
-
-## 📖 Learning Resources
-
-This template teaches:
-
-- Angular 21 standalone components
-- Signals & computed properties
-- Repository pattern
-- RBAC implementation
-- Guards & interceptors
-- Lazy loading
-- Reactive forms
-- Testing strategy
-- Layered architecture
-
-**Great for:** Learning modern Angular patterns.
-
-## 🔗 Links
-
-- **Root docs:** [../../docs/](../../docs/)
-- **Architecture deep dive:** [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)
-- **Implementation roadmap:** [docs/IMPLEMENTATION.md](./docs/IMPLEMENTATION.md)
-- **Use cases & limitations:** [docs/USE_CASES.md](./docs/USE_CASES.md)
-- **Complete plan:** [docs/PHASE2_PLAN.md](./docs/PHASE2_PLAN.md)
-- **AI agents:** [AGENTS.md](./AGENTS.md)
-
-## 📄 License
-
-MIT — See [../../LICENSE](../../LICENSE)
 
 ---
 
-**Ready to build?** Start with [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) to understand the design, then [docs/IMPLEMENTATION.md](./docs/IMPLEMENTATION.md) for Phase 2 features.
+**Ready to build?** Start with [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) → [docs/IMPLEMENTATION.md](./docs/IMPLEMENTATION.md)

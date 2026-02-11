@@ -1,38 +1,17 @@
 # Implementation Plan: Phase 2
 
-> Complete roadmap for building the Orders Management Platform from scratch.
-> See [ARCHITECTURE.md](./ARCHITECTURE.md) for design overview.
+> Complete roadmap for building the Orders Management Platform.  
+> See [ARCHITECTURE.md](./ARCHITECTURE.md) for design details.
 
-**Total Duration:** ~21 hours  
-**14 Sequential Phases**  
-**Current Progress:** ~50% (10.5h / 21h)
+**Duration:** ~21 hours | **14 Phases** | **Progress:** ~50%
 
 ---
 
-## 🎯 Quick Status (Last Updated: Feb 8, 2026)
+## 🎯 Status
 
-**✅ Completed:**
-- Phase 2.1 - BFF Foundation (90% - missing unit tests)
-- Phase 2.2 - Authentication (100%)
-- Phase 2.3 - Landing Page (100%)
-- Phase 2.5 - Shared UI (60%)
-- Phase 2.6 - Admin Layout (100%)
-
-**⚠️ Partially Done (scaffolds created):**
-- Phase 2.7 - Dashboard (40% - needs data integration)
-- Phase 2.8 - Customers (30% - needs CRUD logic)
-- Phase 2.9 - Permissions (30% - needs UI)
-- Phase 2.10 - Orders Board (30% - needs drag-drop)
-- Phase 2.11 - Products (30% - needs CRUD logic)
-- Phase 2.12 - Categories (30% - needs CRUD logic)
-
-**🚧 Next Priority: Phase 2.4 - Shop Module**
-Implement product catalog, cart functionality, and checkout flow.
-
-**⚠️ Critical Missing:**
-- Unit tests (0% coverage - target is 80-90%)
-- E2E tests
-- Shop functionality (Phase 2.4)
+**✅ Completed:** BFF, Auth, Landing, Admin Layout  
+**🚧 In Progress:** Shop, Admin components (scaffolds need data integration)  
+**❌ Missing:** Tests (0% → target 80%), Phase 2.4 Shop, seed data
 
 ---
 
@@ -121,56 +100,23 @@ Implement product catalog, cart functionality, and checkout flow.
 
 ### Deliverables
 
-- [x] `core/bff/database.service.ts` — IndexedDB initialization
-- [x] `core/bff/repositories/base.repository.ts` — Base repository pattern
-- [x] `core/bff/repositories/user.repository.ts` — User CRUD
-- [x] `core/bff/repositories/product.repository.ts` — Product CRUD
-- [x] `core/bff/repositories/order.repository.ts` — Order CRUD + status
-- [x] `core/bff/repositories/category.repository.ts` — Category CRUD
-- [x] `core/bff/repositories/cart.repository.ts` — Cart operations
-- [x] `core/services/permission.service.ts` — RBAC (in core/services/)
-- [x] `core/services/auth.service.ts` — Session management (in core/services/)
-- [x] `core/bff/services/seed.service.ts` — Demo data
-- [x] `core/guards/auth.guard.ts` — Require authentication
-- [x] `core/guards/admin.guard.ts` — Require admin/manager
-- [x] `core/guards/permission.guard.ts` — Custom permissions
-- [ ] Unit tests (database, repositories)
+- [x] `src/bff/database.service.ts` — IndexedDB initialization
+- [x] `src/bff/repositories/base.repository.ts` — Base repository pattern
+- [x] `src/bff/repositories/user.repository.ts` — User CRUD
+- [x] `src/bff/repositories/product.repository.ts` — Product CRUD
+- [x] `src/bff/repositories/order.repository.ts` — Order CRUD + status
+- [x] `src/bff/repositories/category.repository.ts` — Category CRUD
+- [x] `src/bff/repositories/cart.repository.ts` — Cart operations
+- [x] `src/core/models/*.dto.ts` — DTOs for application layer
+- [x] `src/core/services/permission.service.ts` — RBAC
+- [x] `src/core/services/auth.service.ts` — Session management
+- [x] `src/core/guards/` — Auth, admin, permission guards
+- [ ] Unit tests
 
 ### Implementation Details
-
-```typescript
-// DatabaseService: Initialize IndexedDB
-- Open database ('OrdersDB', version 1)
-- Create 7 object stores
-- Create indexes on frequently queried fields
-- Handle version upgrades
-- Run seed on first load (v1.0 → v1.1)
-
-// Repositories follow pattern:
-class UserRepository {
-  constructor(private db: DatabaseService) {}
-  
-  async getAll(): Promise<User[]> { }
-  async getById(id: string): Promise<User | null> { }
-  async create(user: User): Promise<void> { }
-  async update(id: string, user: Partial<User>): Promise<void> { }
-  async delete(id: string): Promise<void> { }
-}
-
-// Services handle business logic
-class PermissionService {
-  async hasAccess(section: string, action: string): Promise<boolean> { }
-  async getPermissions(role: UserRole): Promise<Permission[]> { }
-}
-
-class AuthService {
-  currentUser$ = signal<User | null>(null);
-  
-  async login(email: string, password: string): Promise<void> { }
-  async logout(): Promise<void> { }
-  isAuthenticated(): boolean { }
-}
-```
+- DatabaseService: IndexedDB with 7 object stores, indexes, version upgrades
+- Repositories: Standard CRUD pattern (getAll, getById, create, update, delete)
+- Services: PermissionService (RBAC), AuthService (session management, signals)
 
 ### Patterns Used
 
@@ -214,37 +160,9 @@ class AuthService {
 - **ACCESSIBILITY** — Form labels with aria-describedby, error announcements
 
 ### Implementation Details
-
-```typescript
-// Login Component: Reactive form
-FormGroup {
-  email: ['', [Validators.required, Validators.email]],
-  password: ['', [Validators.required, Validators.minLength(6)]],
-  rememberMe: [false]
-}
-
-// On submit:
-1. Validate form
-2. Call auth.service.login(email, password)
-3. Store session in sessionStorage
-4. Redirect to returnUrl or /shop
-5. Show error if login fails
-
-// Auth Guard: Protect routes
-export const authGuard = (route, state) => {
-  if (auth.isAuthenticated()) return true;
-  router.navigate(['/auth/login'], { 
-    queryParams: { returnUrl: state.url } 
-  });
-  return false;
-}
-
-// Admin Guard: Check role
-export const adminGuard = (route, state) => {
-  const user = auth.currentUser$();
-  return user?.role === 'admin' || user?.role === 'manager';
-}
-```
+- Login Component: Reactive form (email, password, rememberMe) with validation
+- Auth flow: Validate → login() → sessionStorage → redirect
+- Guards: authGuard (redirect to login), adminGuard (check role: admin/manager)
 
 ### Demo Users
 
@@ -289,28 +207,9 @@ admin@demo / demo → Admin role
 - **ROUTING** — Links to auth/shop/admin using routerLink
 
 ### Content
-
-```html
-<div class="landing">
-  <header>
-    <h1>Orders Management Platform</h1>
-    <p>Manage orders, products, and users with ease</p>
-  </header>
-  
-  <div class="cta-buttons">
-    <!-- If not logged in -->
-    <button routerLink="/auth/login">Login</button>
-    
-    <!-- If logged in -->
-    <button routerLink="/shop" *ngIf="isAuthenticated">Shop</button>
-    <button routerLink="/admin" *ngIf="isAdmin">Admin Panel</button>
-  </div>
-  
-  <footer>
-    <p>© 2026 Orders Platform</p>
-  </footer>
-</div>
-```
+- Hero, Features, Use Cases, FAQ, Contact sections
+- CTA buttons: Login (guest) / Shop (user) / Admin Panel (admin)
+- Footer, smooth scrolling navigation
 
 ### Success Criteria
 
@@ -344,55 +243,8 @@ admin@demo / demo → Admin role
 - **ACCESSIBILITY** — Product images with alt text, form labels with aria-describedby
 
 ### Implementation Pattern
-
-```typescript
-// Products List Component
-@Component({...})
-export class ProductsListComponent {
-  products$ = signal<Product[]>([]);
-  selectedCategory = signal<string | null>(null);
-  isLoading = signal(false);
-  
-  filteredProducts = computed(() => {
-    const category = this.selectedCategory();
-    return this.products$().filter(p => 
-      !category || p.categoryId === category
-    );
-  });
-  
-  async loadProducts() {
-    this.isLoading.set(true);
-    this.products$.set(await this.productRepo.getAll());
-    this.isLoading.set(false);
-  }
-  
-  onAddToCart(product: Product) {
-    this.cartService.addItem(product.id, 1);
-  }
-}
-
-// Cart Component
-@Component({...})
-export class CartComponent {
-  cart$ = signal<CartItem[]>([]);
-  total = computed(() => 
-    this.cart$().reduce((sum, item) => sum + item.price * item.quantity, 0)
-  );
-  
-  async checkout() {
-    // Create order from cart
-    const order = await this.orderRepo.create({
-      userId: this.auth.currentUser$().id,
-      items: this.cart$(),
-      status: 'queue'
-    });
-    // Clear cart
-    await this.cartRepo.clear();
-    // Redirect to profile
-    this.router.navigate(['/shop/profile']);
-  }
-}
-```
+- ProductsList: signals for products/category, computed filteredProducts, addToCart()
+- Cart: computed total, checkout() creates order → clears cart → redirects
 
 ### Success Criteria
 
@@ -423,66 +275,10 @@ export class CartComponent {
 - **ACCESSIBILITY** — [ARIA roles, labels, focus management](../../../docs/framework/angular/patterns/ACCESSIBILITY.md) in table & modal
 - **ERROR_HANDLING** — Empty states in table when no data
 
-### Table Component
-
-```typescript
-@Component({
-  selector: 'app-table',
-  template: `
-    <table>
-      <thead>
-        <tr>
-          <th *ngFor="let col of columns()">{{ col.label }}</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let row of data(); trackBy: trackBy">
-          <td *ngFor="let col of columns()">{{ row[col.key] }}</td>
-          <td>
-            <button (click)="onEdit.emit(row)">Edit</button>
-            <button (click)="onDelete.emit(row)">Delete</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  `
-})
-export class TableComponent {
-  data = input<any[]>([]);
-  columns = input<ColumnDef[]>([]);
-  onEdit = output<any>();
-  onDelete = output<any>();
-  
-  trackBy(index: number) { return index; }
-}
-```
-
-### Modal Component
-
-```typescript
-@Component({
-  selector: 'app-modal',
-  template: `
-    <div class="modal-overlay" *ngIf="isOpen()">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2>{{ title() }}</h2>
-          <button (click)="onClose()">×</button>
-        </div>
-        <div class="modal-body">
-          <ng-content></ng-content>
-        </div>
-      </div>
-    </div>
-  `
-})
-export class ModalComponent {
-  isOpen = input(false);
-  title = input('Modal');
-  onClose = output<void>();
-}
-```
+### Components
+- Table: Generic data table with columns input, Edit/Delete outputs
+- Modal: Overlay with title, isOpen input, onClose output
+- Sidebar, FilterPanel, TrelloBoard (CDK drag-drop)
 
 ### Success Criteria
 
@@ -511,42 +307,9 @@ export class ModalComponent {
 - **ACCESSIBILITY** — [Navigation landmarks](../../../docs/framework/angular/patterns/ACCESSIBILITY.md) (nav, main roles)
 
 ### Implementation
-
-```typescript
-@Component({
-  selector: 'app-admin-layout',
-  template: `
-    <div class="admin-container">
-      <app-sidebar [menuItems]="menuItems()"></app-sidebar>
-      <main class="admin-content">
-        <router-outlet></router-outlet>
-      </main>
-    </div>
-  `
-})
-export class AdminLayoutComponent {
-  permission = inject(PermissionService);
-  
-  menuItems = computed(() => [
-    { 
-      label: 'Dashboard', 
-      route: '/admin/dashboard',
-      show: true 
-    },
-    { 
-      label: 'Orders', 
-      route: '/admin/orders',
-      show: this.permission.hasAccess('orders', 'view')
-    },
-    { 
-      label: 'Products', 
-      route: '/admin/products',
-      show: this.permission.hasAccess('products', 'view')
-    },
-    // ... more menu items based on permissions
-  ]);
-}
-```
+- AdminLayout: Sidebar with role-based menu (computed from PermissionService)
+- Menu items: Dashboard, Orders, Products, Categories, Customers, Permissions
+- Each item visibility based on hasAccess(section, 'view')
 
 ### Success Criteria
 
@@ -571,49 +334,9 @@ export class AdminLayoutComponent {
 - [ ] Display latest orders
 
 ### Content
-
-```typescript
-export class DashboardComponent {
-  orderRepo = inject(OrderRepository);
-  
-  latestOrders = signal<Order[]>([]);
-  orderCount = signal(0);
-  customerCount = signal(0);
-  productCount = signal(0);
-  
-  async ngOnInit() {
-    this.latestOrders.set(await this.orderRepo.getLatest(5));
-    this.orderCount.set(await this.orderRepo.count());
-    // ... load other stats
-  }
-}
-```
-
-### Layout
-
-```html
-<div class="dashboard">
-  <div class="stats-row">
-    <div class="stat-card">
-      <h3>Orders</h3>
-      <p class="stat-value">{{ orderCount() }}</p>
-    </div>
-    <div class="stat-card">
-      <h3>Customers</h3>
-      <p class="stat-value">{{ customerCount() }}</p>
-    </div>
-    <div class="stat-card">
-      <h3>Products</h3>
-      <p class="stat-value">{{ productCount() }}</p>
-    </div>
-  </div>
-  
-  <div class="latest-orders">
-    <h2>Latest Orders</h2>
-    <app-table [data]="latestOrders()" [columns]="orderColumns"></app-table>
-  </div>
-</div>
-```
+- Stat cards: Orders count, Customers count, Products count
+- Latest 5 orders table
+- Load stats from repositories in ngOnInit()
 
 ### Success Criteria
 
@@ -644,36 +367,9 @@ export class DashboardComponent {
 - **ACCESSIBILITY** — Modal with proper focus management, form labels
 
 ### Implementation
-
-```typescript
-export class CustomersComponent {
-  users$ = signal<User[]>([]);
-  selectedUser = signal<User | null>(null);
-  showEditModal = signal(false);
-  
-  async loadUsers() {
-    this.users$.set(await this.userRepo.getAll());
-  }
-  
-  onEditUser(user: User) {
-    this.selectedUser.set(user);
-    this.showEditModal.set(true);
-  }
-  
-  async onSaveUser(user: User) {
-    await this.userRepo.update(user.id, { role: user.role });
-    await this.loadUsers();
-    this.showEditModal.set(false);
-  }
-  
-  async onDeleteUser(user: User) {
-    if (confirm(`Delete ${user.email}?`)) {
-      await this.userRepo.delete(user.id);
-      await this.loadUsers();
-    }
-  }
-}
-```
+- Users table with filters, Edit/Delete actions
+- Edit modal for changing roles (Reactive Forms)
+- Delete confirmation dialog
 
 ### Success Criteria
 
@@ -705,86 +401,9 @@ export class CustomersComponent {
 - [ ] Save permission changes
 
 ### Implementation
-
-```typescript
-export class PermissionsComponent {
-  permissions$ = signal<Permission[]>([]);
-  roles: UserRole[] = ['user', 'manager', 'admin'];
-  sections = ['shop', 'dashboard', 'orders', 'products', 'categories', 'customers', 'permissions'];
-  actions = ['view', 'create', 'edit', 'delete'];
-  
-  // Permission matrix definition (in seed data)
-  defaultPermissions = [
-    // User: only shop access
-    { role: 'user', section: 'shop', action: 'view', granted: true },
-    { role: 'user', section: 'dashboard', action: 'view', granted: false },
-    
-    // Manager: dashboard, orders (view+edit), products, categories
-    { role: 'manager', section: 'dashboard', action: 'view', granted: true },
-    { role: 'manager', section: 'orders', action: 'view', granted: true },
-    { role: 'manager', section: 'orders', action: 'edit', granted: true },  // Can change status
-    { role: 'manager', section: 'orders', action: 'delete', granted: false }, // Cannot delete
-    { role: 'manager', section: 'products', action: 'view', granted: true },
-    { role: 'manager', section: 'products', action: 'create', granted: true },
-    { role: 'manager', section: 'products', action: 'edit', granted: true },
-    { role: 'manager', section: 'products', action: 'delete', granted: true },
-    { role: 'manager', section: 'categories', action: 'view', granted: true },
-    { role: 'manager', section: 'categories', action: 'create', granted: true },
-    { role: 'manager', section: 'categories', action: 'edit', granted: true },
-    { role: 'manager', section: 'categories', action: 'delete', granted: true },
-    { role: 'manager', section: 'customers', action: 'view', granted: false },
-    { role: 'manager', section: 'permissions', action: 'view', granted: false },
-    
-    // Admin: all access
-    { role: 'admin', section: '*', action: '*', granted: true },
-  ];
-  
-  async loadPermissions() {
-    this.permissions$.set(await this.permissionRepo.getAll());
-  }
-  
-  async onTogglePermission(role: UserRole, section: string, action: string) {
-    const permission = this.permissions$().find(p => 
-      p.role === role && p.section === section && p.action === action
-    );
-    if (permission) {
-      await this.permissionRepo.update(permission.id, { 
-        granted: !permission.granted 
-      });
-      await this.loadPermissions();
-    }
-  }
-}
-```
-```
-
-### Matrix Layout
-
-```html
-<table class="permissions-matrix">
-  <thead>
-    <tr>
-      <th>Role \ Section \ Action</th>
-      <th *ngFor="let section of sections">
-        <span *ngFor="let action of actions">{{ section }}-{{ action }}</span>
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let role of roles">
-      <td>{{ role }}</td>
-      <td *ngFor="let section of sections; let i = index">
-        <input 
-          type="checkbox" 
-          [checked]="isGranted(role, section, action)"
-          (change)="onTogglePermission(role, section, action)"
-          *ngFor="let action of actions"
-        />
-      </td>
-    </tr>
-  </tbody>
-</table>
-```
+- RBAC Matrix: roles × sections × actions checkboxes
+- User: shop only | Manager: dashboard, orders (view+edit), products, categories | Admin: all
+- onTogglePermission() updates permission in IndexedDB
 
 ### Success Criteria
 
@@ -811,98 +430,9 @@ export class PermissionsComponent {
 - [ ] Add order detail modal
 
 ### Implementation
-
-```typescript
-import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
-
-export class OrdersBoardComponent {
-  queue$ = signal<Order[]>([]);
-  processing$ = signal<Order[]>([]);
-  completed$ = signal<Order[]>([]);
-  
-  async loadOrders() {
-    const orders = await this.orderRepo.getAll();
-    this.queue$.set(orders.filter(o => o.status === 'queue'));
-    this.processing$.set(orders.filter(o => o.status === 'processing'));
-    this.completed$.set(orders.filter(o => o.status === 'completed'));
-  }
-  
-  async drop(event: CdkDragDrop<Order[]>) {
-    const order = event.item.data;
-    const newStatus = this.getStatusFromIndex(event.container.data);
-    
-    await this.orderRepo.updateStatus(order.id, newStatus);
-    await this.loadOrders();
-  }
-  
-  private getStatusFromIndex(list: Order[]): OrderStatus {
-    if (list === this.queue$()) return 'queue';
-    if (list === this.processing$()) return 'processing';
-    return 'completed';
-  }
-}
-```
-
-### Template
-
-```html
-<div class="orders-board" cdkDropListGroup>
-  <div class="column">
-    <h3>Queue</h3>
-    <div 
-      cdkDropList 
-      [cdkDropListData]="queue$()" 
-      class="drop-zone"
-      (cdkDropListDropped)="drop($event)"
-    >
-      <div 
-        *ngFor="let order of queue()"
-        cdkDrag
-        class="order-card"
-        (click)="showDetail(order)"
-      >
-        <h4>Order #{{ order.id }}</h4>
-        <p>{{ order.userId }}</p>
-        <p>${{ order.total }}</p>
-      </div>
-    </div>
-  </div>
-  
-  <div class="column">
-    <h3>Processing</h3>
-    <div 
-      cdkDropList 
-      [cdkDropListData]="processing$()" 
-      class="drop-zone"
-      (cdkDropListDropped)="drop($event)"
-    >
-      <!-- same as queue -->
-    </div>
-  </div>
-  
-  <div class="column">
-    <h3>Completed</h3>
-    <div 
-      cdkDropList 
-      [cdkDropListData]="completed$()" 
-      class="drop-zone"
-      (cdkDropListDropped)="drop($event)"
-    >
-      <!-- same as queue -->
-    </div>
-  </div>
-</div>
-
-<!-- Order Detail Modal -->
-<app-modal [isOpen]="showModal()" [title]="'Order Details'">
-  <div *ngIf="selectedOrder() as order">
-    <p>Order ID: {{ order.id }}</p>
-    <p>User: {{ order.userId }}</p>
-    <p>Status: {{ order.status }}</p>
-    <p>Total: ${{ order.total }}</p>
-  </div>
-</app-modal>
-```
+- Kanban board: 3 columns (Queue, Processing, Completed)
+- Angular CDK drag-drop: drop() event updates order status
+- Detail modal on order click
 
 ### Success Criteria
 
@@ -936,53 +466,9 @@ export class OrdersBoardComponent {
 - **ACCESSIBILITY** — Form labels, image alt attributes, proper focus management in modal
 
 ### Product Edit Component
-
-```typescript
-export class ProductEditComponent {
-  productForm: FormGroup;
-  categories$ = signal<Category[]>([]);
-  
-  constructor() {
-    this.productForm = new FormGroup({
-      name: new FormControl('', [Validators.required]),
-      description: new FormControl(''),
-      price: new FormControl('', [Validators.required, Validators.min(0)]),
-      categoryId: new FormControl('', [Validators.required]),
-      image: new FormControl('')
-    });
-  }
-  
-  async onImageSelected(event: Event) {
-    const input = event.target as HTMLInputElement;
-    const file = input.files?.[0];
-    if (file) {
-      const base64 = await this.fileToBase64(file);
-      this.productForm.patchValue({ image: base64 });
-    }
-  }
-  
-  async onSubmit() {
-    if (this.productForm.valid) {
-      const product = this.productForm.value;
-      if (this.isEdit) {
-        await this.productRepo.update(this.productId, product);
-      } else {
-        await this.productRepo.create(product);
-      }
-      this.onClose();
-    }
-  }
-  
-  private fileToBase64(file: File): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-  }
-}
-```
+- Reactive Form: name, description, price, categoryId, image
+- Image upload: FileReader → base64 → productForm.patchValue()
+- CRUD: create() or update() based on isEdit flag
 
 ### Success Criteria
 
@@ -1014,29 +500,9 @@ export class ProductEditComponent {
 - **ERROR_HANDLING** — Prevent delete if category has products, show validation errors
 
 ### Implementation
-
-```typescript
-export class CategoriesComponent {
-  categories$ = signal<Category[]>([]);
-  
-  async loadCategories() {
-    this.categories$.set(await this.categoryRepo.getAll());
-  }
-  
-  async onDeleteCategory(category: Category) {
-    // Check if category has products
-    const products = await this.productRepo.getByCategory(category.id);
-    if (products.length > 0) {
-      alert('Cannot delete category with products');
-      return;
-    }
-    if (confirm(`Delete ${category.name}?`)) {
-      await this.categoryRepo.delete(category.id);
-      await this.loadCategories();
-    }
-  }
-}
-```
+- Categories table, Add/Edit/Delete actions
+- Delete validation: prevent if category has products
+- Edit modal with Reactive Forms
 
 ### Success Criteria
 
@@ -1057,40 +523,9 @@ export class CategoriesComponent {
 - [ ] Run seed on first load
 
 ### Demo Data
-
-```typescript
-const demoUsers = [
-  { 
-    id: uuid(), 
-    email: 'user@demo', 
-    password: 'demo', 
-    role: 'user' 
-  },
-  { 
-    id: uuid(), 
-    email: 'manager@demo', 
-    password: 'demo', 
-    role: 'manager' 
-  },
-  { 
-    id: uuid(), 
-    email: 'admin@demo', 
-    password: 'demo', 
-    role: 'admin' 
-  }
-];
-
-const demoCategories = [
-  { id: uuid(), name: 'Electronics', description: 'Electronic devices' },
-  { id: uuid(), name: 'Clothing', description: 'Apparel and accessories' },
-  { id: uuid(), name: 'Books', description: 'Books and reading materials' },
-  { id: uuid(), name: 'Home', description: 'Home and garden' }
-];
-
-const demoProducts = [
-  // 10-15 products across categories
-];
-```
+- 3 demo users: user@demo, manager@demo, admin@demo (password: demo)
+- 4 categories: Electronics, Clothing, Books, Home & Garden
+- 10-15 products across categories
 
 ### Success Criteria
 
@@ -1122,10 +557,9 @@ const demoProducts = [
 
 ```bash
 # BFF Services
-src/app/core/bff/database.service.spec.ts
-src/app/core/bff/repositories/*.spec.ts
-src/app/core/bff/services/*.spec.ts
-src/app/core/guards/*.spec.ts
+src/bff/database.service.spec.ts
+src/bff/repositories/*.spec.ts
+src/core/guards/*.spec.ts
 
 # Target: 90%+ coverage
 ```
@@ -1281,7 +715,7 @@ To begin:
    ```
 
 2. Start Phase 2.1: BFF Foundation
-   - Create `app/core/bff/database.service.ts`
+   - Create `src/bff/database.service.ts`
    - Implement repositories
    - Write unit tests
 

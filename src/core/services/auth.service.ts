@@ -1,18 +1,18 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { User } from '@bff';
+import type { UserDTO } from '../models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  currentUser = signal<User | null>(null);
+  currentUser = signal<UserDTO | null>(null);
 
   constructor(private http: HttpClient) {}
 
-  async login(email: string, password: string): Promise<User> {
+  async login(email: string, password: string): Promise<UserDTO> {
     const response = await this.http
-      .post<{ user: User; token: string }>('/api/auth/login', { email, password })
+      .post<{ user: UserDTO; token: string }>('/api/auth/login', { email, password })
       .toPromise();
 
     if (!response?.user) {
@@ -38,7 +38,7 @@ export class AuthService {
     return this.currentUser() !== null;
   }
 
-  getCurrentUser(): User | null {
+  getCurrentUser(): UserDTO | null {
     if (!this.currentUser()) {
       const userId = sessionStorage.getItem('currentUserId');
       if (userId) {
@@ -53,46 +53,46 @@ export class AuthService {
     const userId = sessionStorage.getItem('currentUserId');
     if (userId) {
       // In real app, would verify JWT token here
-      // For now, we just restore the user from session
-      const response = await this.http.get<{ user: User }>('/api/auth/me').toPromise();
-      if (response?.user) {
-        this.currentUser.set(response.user);
+      // For now, we just restore the UserDTO from session
+      const response = await this.http.get<{ UserDTO: UserDTO }>('/api/auth/me').toPromise();
+      if (response?.UserDTO) {
+        this.currentUser.set(response.UserDTO);
       }
     }
   }
 
   /**
-   * Get redirect path based on user role
+   * Get redirect path based on UserDTO role
    * @returns Path to redirect after login
    */
   getRedirectPath(): string {
-    const user = this.currentUser();
-    if (!user) {
+    const UserDTO = this.currentUser();
+    if (!UserDTO) {
       return '/auth/login';
     }
 
     // Admin and Manager → Admin panel
-    if (user.role === 'admin' || user.role === 'manager') {
+    if (UserDTO.role === 'admin' || UserDTO.role === 'manager') {
       return '/admin';
     }
 
-    // Regular User → Shop
+    // Regular UserDTO → Shop
     return '/shop';
   }
 
   /**
-   * Check if current user has admin or manager role
+   * Check if current UserDTO has admin or manager role
    */
   isAdminOrManager(): boolean {
-    const user = this.currentUser();
-    return user?.role === 'admin' || user?.role === 'manager';
+    const UserDTO = this.currentUser();
+    return UserDTO?.role === 'admin' || UserDTO?.role === 'manager';
   }
 
   /**
-   * Check if current user has admin role
+   * Check if current UserDTO has admin role
    */
   isAdmin(): boolean {
-    const user = this.currentUser();
-    return user?.role === 'admin';
+    const UserDTO = this.currentUser();
+    return UserDTO?.role === 'admin';
   }
 }

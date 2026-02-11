@@ -9,7 +9,7 @@ import { OrderRepository } from './repositories/order.repository';
 import { CategoryRepository } from './repositories/category.repository';
 import { CartRepository } from './repositories/cart.repository';
 import { SeedService } from './services/seed.service';
-import { User, Product, Order, Category, Cart } from './models';
+import type { User, Product, Order, Category, Cart } from './models';
 
 /**
  * FakeBFF Service

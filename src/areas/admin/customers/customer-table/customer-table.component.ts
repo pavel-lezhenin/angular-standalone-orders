@@ -7,7 +7,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { User } from '@bff/models';
+import { UserDTO } from '@core';
 import { UserRole } from '@core/types';
 import { formatDate } from '@shared/utils';
 
@@ -34,7 +34,7 @@ import { formatDate } from '@shared/utils';
   styleUrl: './customer-table.component.scss',
 })
 export class CustomerTableComponent {
-  readonly users = input.required<User[]>();
+  readonly users = input.required<UserDTO[]>();
   readonly isLoading = input(false);
   readonly totalUsers = input(0);
   readonly currentPage = input(1);
@@ -44,8 +44,8 @@ export class CustomerTableComponent {
   readonly canDelete = input(false);
 
   readonly pageChange = output<PageEvent>();
-  readonly editClick = output<User>();
-  readonly deleteClick = output<User>();
+  readonly editClick = output<UserDTO>();
+  readonly deleteClick = output<UserDTO>();
 
   protected readonly displayedColumns = ['email', 'role', 'profile', 'createdAt', 'actions'];
 
