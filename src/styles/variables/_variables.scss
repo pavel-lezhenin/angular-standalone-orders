@@ -20,49 +20,169 @@
   --top-bar-height: #{config.$top-bar-height};
 
   /* ============================================
-   * Theme Colors (Material 3)
+   * Theme Colors (Material 3 - Light Mode)
+   * Using Material token names (--md-sys-color-*)
    * ============================================ */
-  --app-primary: #{config.$color-primary};
-  --app-secondary: #{config.$color-secondary};
-  --app-tertiary: #{config.$color-tertiary};
-  --app-error: #{config.$color-error};
-  --app-background: #{config.$color-background};
+  --md-sys-color-primary: #{config.$color-primary};
+  --md-sys-color-on-primary: #{config.$color-on-primary};
+  --md-sys-color-primary-container: #{config.$color-primary-container};
+  --md-sys-color-on-primary-container: #{config.$color-on-primary-container};
+
+  --md-sys-color-secondary: #{config.$color-secondary};
+  --md-sys-color-on-secondary: #{config.$color-on-secondary};
+  --md-sys-color-secondary-container: #{config.$color-secondary-container};
+  --md-sys-color-on-secondary-container: #{config.$color-on-secondary-container};
+
+  --md-sys-color-tertiary: #{config.$color-tertiary};
+  --md-sys-color-on-tertiary: #{config.$color-on-tertiary};
+  --md-sys-color-tertiary-container: #{config.$color-tertiary-container};
+  --md-sys-color-on-tertiary-container: #{config.$color-on-tertiary-container};
+
+  --md-sys-color-error: #{config.$color-error};
+  --md-sys-color-on-error: #{config.$color-on-error};
+  --md-sys-color-error-container: #{config.$color-error-container};
+  --md-sys-color-on-error-container: #{config.$color-on-error-container};
+
+  --md-sys-color-background: #{config.$color-background};
+  --md-sys-color-on-background: #{config.$color-on-background};
+
+  --md-sys-color-surface: #{config.$color-surface};
+  --md-sys-color-on-surface: #{config.$color-on-surface};
+  --md-sys-color-surface-variant: #{config.$color-surface-variant};
+  --md-sys-color-on-surface-variant: #{config.$color-on-surface-variant};
+
+  --md-sys-color-surface-dim: #{config.$color-surface-dim};
+  --md-sys-color-surface-bright: #{config.$color-surface-bright};
+  --md-sys-color-surface-container-lowest: #{config.$color-surface-container-lowest};
+  --md-sys-color-surface-container-low: #{config.$color-surface-container-low};
+  --md-sys-color-surface-container: #{config.$color-surface-container};
+  --md-sys-color-surface-container-high: #{config.$color-surface-container-high};
+  --md-sys-color-surface-container-highest: #{config.$color-surface-container-highest};
+
+  --md-sys-color-outline: #{config.$color-outline};
+  --md-sys-color-outline-variant: #{config.$color-outline-variant};
+
+  --md-sys-color-inverse-surface: #{config.$color-inverse-surface};
+  --md-sys-color-inverse-on-surface: #{config.$color-inverse-on-surface};
+  --md-sys-color-inverse-primary: #{config.$color-inverse-primary};
+
+  --md-sys-color-shadow: #{config.$color-shadow};
+  --md-sys-color-scrim: #{config.$color-scrim};
+
+  /* Material Angular aliases (--mat-sys-color-* for Material components) */
+  --mat-sys-color-primary: var(--md-sys-color-primary);
+  --mat-sys-color-on-primary: var(--md-sys-color-on-primary);
+  --mat-sys-color-primary-container: var(--md-sys-color-primary-container);
+  --mat-sys-color-on-primary-container: var(--md-sys-color-on-primary-container);
+
+  --mat-sys-color-secondary: var(--md-sys-color-secondary);
+  --mat-sys-color-on-secondary: var(--md-sys-color-on-secondary);
+  --mat-sys-color-secondary-container: var(--md-sys-color-secondary-container);
+  --mat-sys-color-on-secondary-container: var(--md-sys-color-on-secondary-container);
+
+  --mat-sys-color-tertiary: var(--md-sys-color-tertiary);
+  --mat-sys-color-on-tertiary: var(--md-sys-color-on-tertiary);
+  --mat-sys-color-tertiary-container: var(--md-sys-color-tertiary-container);
+  --mat-sys-color-on-tertiary-container: var(--md-sys-color-on-tertiary-container);
+
+  --mat-sys-color-error: var(--md-sys-color-error);
+  --mat-sys-color-on-error: var(--md-sys-color-on-error);
+  --mat-sys-color-error-container: var(--md-sys-color-error-container);
+  --mat-sys-color-on-error-container: var(--md-sys-color-on-error-container);
+
+  --mat-sys-color-background: var(--md-sys-color-background);
+  --mat-sys-color-on-background: var(--md-sys-color-on-background);
+
+  --mat-sys-color-surface: var(--md-sys-color-surface);
+  --mat-sys-color-on-surface: var(--md-sys-color-on-surface);
+  --mat-sys-color-surface-variant: var(--md-sys-color-surface-variant);
+  --mat-sys-color-on-surface-variant: var(--md-sys-color-on-surface-variant);
+
+  --mat-sys-color-surface-dim: var(--md-sys-color-surface-dim);
+  --mat-sys-color-surface-bright: var(--md-sys-color-surface-bright);
+  --mat-sys-color-surface-container-lowest: var(--md-sys-color-surface-container-lowest);
+  --mat-sys-color-surface-container-low: var(--md-sys-color-surface-container-low);
+  --mat-sys-color-surface-container: var(--md-sys-color-surface-container);
+  --mat-sys-color-surface-container-high: var(--md-sys-color-surface-container-high);
+  --mat-sys-color-surface-container-highest: var(--md-sys-color-surface-container-highest);
+
+  --mat-sys-color-outline: var(--md-sys-color-outline);
+  --mat-sys-color-outline-variant: var(--md-sys-color-outline-variant);
+
+  --mat-sys-color-inverse-surface: var(--md-sys-color-inverse-surface);
+  --mat-sys-color-inverse-on-surface: var(--md-sys-color-inverse-on-surface);
+  --mat-sys-color-inverse-primary: var(--md-sys-color-inverse-primary);
+
+  --mat-sys-color-shadow: var(--md-sys-color-shadow);
+  --mat-sys-color-scrim: var(--md-sys-color-scrim);
 
   /* ============================================
-   * Surface Colors
+   * Material Component Colors
    * ============================================ */
-  --surface-primary: #ffffff;
-  --surface-secondary: #f7fafc;
-  --surface-tertiary: #f5f7fa;
-  --surface-gradient-start: #f5f7fa;
-  --surface-gradient-end: #c3cfe2;
+  /* Menu */
+  --mat-menu-container-color: var(--md-sys-color-surface-container);
+  --mat-menu-item-label-text-color: var(--md-sys-color-on-surface);
+
+  /* Button */
+  --mat-filled-button-container-color: var(--md-sys-color-primary);
+  --mat-filled-button-label-text-color: var(--md-sys-color-on-primary);
+  --mat-outlined-button-outline-color: var(--md-sys-color-outline);
+  --mat-outlined-button-label-text-color: var(--md-sys-color-primary);
+  --mat-text-button-label-text-color: var(--md-sys-color-primary);
+
+  /* Form Fields */
+  --mat-form-field-focus-overlay-color: rgba(79, 102, 41, 0.04);
+  --mat-form-field-container-fill-color: var(--md-sys-color-surface-container-highest);
+  --mat-form-field-label-text-color: var(--md-sys-color-on-surface-variant);
+  --mat-form-field-input-text-color: var(--md-sys-color-on-surface);
+
+  /* Select */
+  --mat-select-panel-background-color: var(--md-sys-color-surface-container);
+  --mat-select-panel-enabled-trigger-text-color: var(--md-sys-color-on-surface);
+
+  /* ============================================
+  /* App Legacy Aliases (for backward compatibility) */
+  --app-primary: var(--md-sys-color-primary);
+  --app-secondary: var(--md-sys-color-secondary);
+  --app-tertiary: var(--md-sys-color-tertiary);
+  --app-error: var(--md-sys-color-error);
+  --app-background: var(--md-sys-color-background);
+  --app-surface: var(--md-sys-color-surface);
+  --app-surface-variant: var(--md-sys-color-surface-variant);
+
+  /* Legacy Surface Colors (kept for compatibility) */
+  --surface-primary: var(--md-sys-color-surface);
+  --surface-secondary: var(--md-sys-color-surface-container-low);
+  --surface-tertiary: var(--md-sys-color-surface-container);
+  --surface-gradient-start: var(--md-sys-color-surface-container);
+  --surface-gradient-end: var(--md-sys-color-outline-variant);
 
   /* ============================================
    * Error State Colors
    * ============================================ */
-  --error-container: #ffebee;
-  --on-error-container: #c62828;
-  --error-light: #ffcdd2;
+  --error-container: #{config.$color-error-container};
+  --on-error-container: #{config.$color-on-error-container};
+  --error-light: rgba(186, 26, 26, 0.1);
 
   /* ============================================
-   * Text Colors
+   * Text Colors (Material 3)
    * ============================================ */
-  --text-primary: #2d3748;
-  --text-secondary: #4a5568;
-  --text-tertiary: #718096;
-  --text-muted: #666;
-  --text-heading: #333;
+  --text-primary: #{config.$color-on-surface};
+  --text-secondary: #{config.$color-on-surface-variant};
+  --text-tertiary: #{config.$color-on-surface-variant};
+  --text-muted: #{config.$color-outline-variant};
+  --text-heading: #{config.$color-on-background};
 
   /* ============================================
-   * Additional Colors
+   * Additional Colors (Material 3)
    * ============================================ */
-  --color-border: #d4d4d4;
-  --color-border-dark: #444;
+  --color-border: #{config.$color-outline-variant};
+  --color-border-dark: #{config.$color-outline};
   --color-overlay-dark: rgba(0, 0, 0, 0.6);
   --color-overlay-light: rgba(255, 255, 255, 0.1);
-  --color-text-light: #e0e0e0;
-  --color-text-gray: #b0b0b0;
-  --color-separator: #555;
+  --color-text-light: #{config.$color-surface-bright};
+  --color-text-gray: #{config.$color-outline};
+  --color-separator: #{config.$color-outline-variant};
   
   /* Semi-transparent colors */
   --color-white: #ffffff;
@@ -185,18 +305,124 @@
  * ============================================ */
 @media (prefers-color-scheme: dark) {
   :root {
-    /* Surface Colors - Dark Mode */
-    --surface-primary: #1a202c;
-    --surface-secondary: #2d3748;
-    --surface-tertiary: #374151;
-    --surface-gradient-start: #2d3748;
-    --surface-gradient-end: #1a202c;
+    /* ============================================
+     * Material 3 Dark Mode Colors
+     * ============================================ */
+    --md-sys-color-primary: #b5d087;
+    --md-sys-color-on-primary: #223600;
+    --md-sys-color-primary-container: #384d13;
+    --md-sys-color-on-primary-container: #d0eda0;
 
-    /* Text Colors - Dark Mode */
-    --text-primary: #f7fafc;
-    --text-secondary: #cbd5e0;
-    --text-tertiary: #a0aec0;
-    --text-muted: #a0aec0;
-    --text-heading: #e2e8f0;
+    --md-sys-color-secondary: #c1caab;
+    --md-sys-color-on-secondary: #2b331d;
+    --md-sys-color-secondary-container: #414a32;
+    --md-sys-color-on-secondary-container: #dde6c6;
+
+    --md-sys-color-tertiary: #a0d0ca;
+    --md-sys-color-on-tertiary: #013733;
+    --md-sys-color-tertiary-container: #1f4e4a;
+    --md-sys-color-on-tertiary-container: #bcece6;
+
+    --md-sys-color-error: #ffb4ab;
+    --md-sys-color-on-error: #690005;
+    --md-sys-color-error-container: #93000a;
+    --md-sys-color-on-error-container: #ffdad6;
+
+    --md-sys-color-background: #12140e;
+    --md-sys-color-on-background: #e3e3d8;
+
+    --md-sys-color-surface: #12140e;
+    --md-sys-color-on-surface: #e3e3d8;
+    --md-sys-color-surface-variant: #45483d;
+    --md-sys-color-on-surface-variant: #c5c8b9;
+
+    --md-sys-color-surface-dim: #12140e;
+    --md-sys-color-surface-bright: #383a32;
+    --md-sys-color-surface-container-lowest: #0d0f09;
+    --md-sys-color-surface-container-low: #1a1c15;
+    --md-sys-color-surface-container: #1e2019;
+    --md-sys-color-surface-container-high: #292b23;
+    --md-sys-color-surface-container-highest: #33362e;
+
+    --md-sys-color-outline: #8f9285;
+    --md-sys-color-outline-variant: #45483d;
+
+    --md-sys-color-inverse-surface: #e3e3d8;
+    --md-sys-color-inverse-on-surface: #2f312a;
+    --md-sys-color-inverse-primary: #4f6629;
+
+    --md-sys-color-shadow: #000000;
+    --md-sys-color-scrim: #000000;
+
+    /* Material aliases for dark mode */
+    --mat-sys-color-primary: var(--md-sys-color-primary);
+    --mat-sys-color-on-primary: var(--md-sys-color-on-primary);
+    --mat-sys-color-primary-container: var(--md-sys-color-primary-container);
+    --mat-sys-color-on-primary-container: var(--md-sys-color-on-primary-container);
+
+    --mat-sys-color-secondary: var(--md-sys-color-secondary);
+    --mat-sys-color-on-secondary: var(--md-sys-color-on-secondary);
+    --mat-sys-color-secondary-container: var(--md-sys-color-secondary-container);
+    --mat-sys-color-on-secondary-container: var(--md-sys-color-on-secondary-container);
+
+    --mat-sys-color-tertiary: var(--md-sys-color-tertiary);
+    --mat-sys-color-on-tertiary: var(--md-sys-color-on-tertiary);
+    --mat-sys-color-tertiary-container: var(--md-sys-color-tertiary-container);
+    --mat-sys-color-on-tertiary-container: var(--md-sys-color-on-tertiary-container);
+
+    --mat-sys-color-error: var(--md-sys-color-error);
+    --mat-sys-color-on-error: var(--md-sys-color-on-error);
+    --mat-sys-color-error-container: var(--md-sys-color-error-container);
+    --mat-sys-color-on-error-container: var(--md-sys-color-on-error-container);
+
+    --mat-sys-color-background: var(--md-sys-color-background);
+    --mat-sys-color-on-background: var(--md-sys-color-on-background);
+
+    --mat-sys-color-surface: var(--md-sys-color-surface);
+    --mat-sys-color-on-surface: var(--md-sys-color-on-surface);
+    --mat-sys-color-surface-variant: var(--md-sys-color-surface-variant);
+    --mat-sys-color-on-surface-variant: var(--md-sys-color-on-surface-variant);
+
+    --mat-sys-color-surface-dim: var(--md-sys-color-surface-dim);
+    --mat-sys-color-surface-bright: var(--md-sys-color-surface-bright);
+    --mat-sys-color-surface-container-lowest: var(--md-sys-color-surface-container-lowest);
+    --mat-sys-color-surface-container-low: var(--md-sys-color-surface-container-low);
+    --mat-sys-color-surface-container: var(--md-sys-color-surface-container);
+    --mat-sys-color-surface-container-high: var(--md-sys-color-surface-container-high);
+    --mat-sys-color-surface-container-highest: var(--md-sys-color-surface-container-highest);
+
+    --mat-sys-color-outline: var(--md-sys-color-outline);
+    --mat-sys-color-outline-variant: var(--md-sys-color-outline-variant);
+
+    --mat-sys-color-inverse-surface: var(--md-sys-color-inverse-surface);
+    --mat-sys-color-inverse-on-surface: var(--md-sys-color-inverse-on-surface);
+    --mat-sys-color-inverse-primary: var(--md-sys-color-inverse-primary);
+
+    --mat-sys-color-shadow: var(--md-sys-color-shadow);
+    --mat-sys-color-scrim: var(--md-sys-color-scrim);
+
+    /* ============================================
+     * Material Component Colors - Dark Mode
+     * ============================================ */
+    /* Menu */
+    --mat-menu-container-color: var(--md-sys-color-surface-container);
+    --mat-menu-item-label-text-color: var(--md-sys-color-on-surface);
+
+    /* Button */
+    --mat-filled-button-container-color: var(--md-sys-color-primary);
+    --mat-filled-button-label-text-color: var(--md-sys-color-on-primary);
+    --mat-outlined-button-outline-color: var(--md-sys-color-outline);
+    --mat-outlined-button-label-text-color: var(--md-sys-color-primary);
+    --mat-text-button-label-text-color: var(--md-sys-color-primary);
+
+    /* Form Fields */
+    --mat-form-field-focus-overlay-color: rgba(181, 208, 135, 0.04);
+    --mat-form-field-container-fill-color: var(--md-sys-color-surface-container-highest);
+    --mat-form-field-label-text-color: var(--md-sys-color-on-surface-variant);
+    --mat-form-field-input-text-color: var(--md-sys-color-on-surface);
+
+    /* Select */
+    --mat-select-panel-background-color: var(--md-sys-color-surface-container);
+    --mat-select-panel-enabled-trigger-text-color: var(--md-sys-color-on-surface);
   }
 }

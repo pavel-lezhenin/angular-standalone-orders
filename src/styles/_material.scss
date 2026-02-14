@@ -4,13 +4,20 @@
 
 @include mat.core();
 
-/* M3 Theme Definition */
+/* ============================================
+ * Material 3 Custom Theme from Theme Builder
+ * Seed: #4B6F00 | Font: Raleway
+ * https://material-foundation.github.io/material-theme-builder/
+ * 
+ * All colors from Material Theme Builder are applied
+ * directly via CSS variables - Material uses them automatically
+ * ============================================ */
+
 $light-theme: mat.define-theme(
   (
     color: (
       theme-type: light,
-      primary: mat.$yellow-palette,
-      tertiary: mat.$green-palette,
+      use-system-variables: true,
     ),
     typography: (
       brand-family: config.$base-font-family,
@@ -21,7 +28,23 @@ $light-theme: mat.define-theme(
 
 @include mat.all-component-themes($light-theme);
 
-/* Component-specific token overrides */
+/* Dark Mode Theme */
+@media (prefers-color-scheme: dark) {
+  @include mat.all-component-colors(
+    mat.define-theme(
+      (
+        color: (
+          theme-type: dark,
+          use-system-variables: true,
+        ),
+      )
+    )
+  );
+}
+
+/* ============================================
+ * Component-specific token overrides
+ * ============================================ */
 
 :root {
   /* Form Fields - sizing */
