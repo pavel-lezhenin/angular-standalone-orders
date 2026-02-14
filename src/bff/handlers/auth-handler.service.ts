@@ -45,10 +45,28 @@ export class AuthHandlerService {
 
   /**
    * Handle get current user request
+   * Restores user from localStorage userId (simulating JWT token validation)
    */
   async handleGetMe(req: HttpRequest<unknown>): Promise<HttpResponse<unknown>> {
-    // In real implementation, would extract user from JWT token
-    // For now, return empty since we handle this in AuthService
-    return new OkResponse({ user: null });
+    try {
+      // In real implementation, would extract user ID from JWT token
+      // For demo, get userId from localStorage
+      const userId = localStorage.getItem('currentUserId');
+      
+      if (!userId) {
+        return new UnauthorizedResponse('No session found');
+      }
+
+      const user = await this.userRepo.getById(userId);
+      
+      if (!user) {
+        return new UnauthorizedResponse('User not found');
+      }
+
+      return new OkResponse({ user });
+    } catch (err) {
+      console.error('Get me error:', err);
+      return new ServerErrorResponse('Internal server error');
+    }
   }
 }

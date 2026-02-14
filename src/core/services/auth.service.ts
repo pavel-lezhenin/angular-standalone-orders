@@ -1,4 +1,5 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import type { UserDTO } from '../models';
 
@@ -7,6 +8,8 @@ import type { UserDTO } from '../models';
 })
 export class AuthService {
   currentUser = signal<UserDTO | null>(null);
+  private platformId = inject(PLATFORM_ID);
+  private isBrowser = isPlatformBrowser(this.platformId);
 
   constructor(private http: HttpClient) {}
 
@@ -19,9 +22,11 @@ export class AuthService {
       throw new Error('Login failed');
     }
 
-    // Store token and user
-    sessionStorage.setItem('authToken', response.token);
-    sessionStorage.setItem('currentUserId', response.user.id);
+    // Store token and user in localStorage for persistence across browser sessions
+    if (this.isBrowser) {
+      localStorage.setItem('authToken', response.token);
+      localStorage.setItem('currentUserId', response.user.id);
+    }
     this.currentUser.set(response.user);
 
     return response.user;
@@ -29,8 +34,10 @@ export class AuthService {
 
   async logout(): Promise<void> {
     await this.http.post('/api/auth/logout', {}).toPromise();
-    sessionStorage.removeItem('authToken');
-    sessionStorage.removeItem('currentUserId');
+    if (this.isBrowser) {
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('currentUserId');
+    }
     this.currentUser.set(null);
   }
 
@@ -39,25 +46,45 @@ export class AuthService {
   }
 
   getCurrentUser(): UserDTO | null {
-    if (!this.currentUser()) {
-      const userId = sessionStorage.getItem('currentUserId');
-      if (userId) {
-        return this.currentUser();
-      }
-      return null;
-    }
     return this.currentUser();
   }
 
+  /**
+   * Restores user session from storage.
+   * Called on app initialization before route guards are checked.
+   * 
+   * If user was previously authenticated:
+   * - Fetches fresh user data from /api/auth/me
+   * - Restores currentUser signal
+   * - CartService will auto-restore cart via effect
+   * 
+   * If no user in storage, does nothing (user stays null)
+   */
   async restoreSession(): Promise<void> {
-    const userId = sessionStorage.getItem('currentUserId');
-    if (userId) {
-      // In real app, would verify JWT token here
-      // For now, we just restore the UserDTO from session
-      const response = await this.http.get<{ UserDTO: UserDTO }>('/api/auth/me').toPromise();
-      if (response?.UserDTO) {
-        this.currentUser.set(response.UserDTO);
+    if (!this.isBrowser) {
+      return;
+    }
+
+    const userId = localStorage.getItem('currentUserId');
+    if (!userId) {
+      console.log('⏭️ No userId in localStorage, skipping session restore');
+      return;
+    }
+
+    console.log('🔍 Found userId in storage:', userId, '- fetching user data...');
+
+    try {
+      const response = await this.http.get<{ user: UserDTO }>('/api/auth/me').toPromise();
+      if (response?.user) {
+        this.currentUser.set(response.user);
+        console.log('✅ User session restored:', response.user.email);
+      } else {
+        console.warn('⚠️ /api/auth/me returned empty response');
       }
+    } catch (error) {
+      console.warn('⚠️ Failed to restore session, clearing auth data', error);
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('currentUserId');
     }
   }
 

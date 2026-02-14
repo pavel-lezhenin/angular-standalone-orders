@@ -9,8 +9,49 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { FakeBFFService } from '@bff';
+import { AuthService } from '@core';
 import { from, switchMap, Observable } from 'rxjs';
 import { HttpRequest, HttpHandlerFn, HttpEvent } from '@angular/common/http';
+
+/**
+ * Restore authentication session on app startup
+ * Called AFTER BFF is initialized (required for HTTP requests to work)
+ * 
+ * If user was previously authenticated:
+ * - Fetches fresh user data from /api/auth/me
+ * - Restores currentUser signal
+ * - CartService will auto-restore cart via effect
+ * 
+ * Runs only in browser, not during SSR
+ */
+function restoreAuthSession(authService: AuthService, fakeBFF: FakeBFFService, platformId: Object): () => Promise<void> {
+  return async () => {
+    console.log('🔐 Auth session initializer executed');
+    
+    if (!isPlatformBrowser(platformId)) {
+      console.log('⏭️ Skipping auth session restore (SSR)');
+      return Promise.resolve();
+    }
+
+    // Ensure BFF is initialized first
+    console.log('⏳ Waiting for BFF initialization before restoring session...');
+    try {
+      // BFF should already be initializing, but make sure it's ready
+      // If it hasn't started, this will be very fast
+      if (!fakeBFF.isInitialized()) {
+        await fakeBFF.initialize();
+      }
+    } catch (error) {
+      console.warn('⚠️ BFF initialization blocking session restore:', error);
+    }
+    
+    console.log('🔄 Attempting to restore user session...');
+    return authService.restoreSession().catch((error) => {
+      console.warn('⚠️ Auth session restore failed:', error);
+      // Don't throw - allow app to continue even if restore fails
+    });
+  };
+}
 
 /**
  * API Interceptor (functional style for Angular 21+)
@@ -71,11 +112,18 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(withEventReplay()),
     provideHttpClient(withInterceptors([apiInterceptor])),
     provideAnimations(), // Required for Material Dialog, Snackbar, etc.
-    // Initialize BFF before app starts - using direct APP_INITIALIZER token for SSR compatibility
+    // Initialize BFF FIRST - required by restoreAuthSession
     {
       provide: APP_INITIALIZER,
       useFactory: initializeBFF,
       deps: [FakeBFFService, PLATFORM_ID],
+      multi: true,
+    },
+    // Restore user session AFTER BFF is initialized - so HTTP requests work
+    {
+      provide: APP_INITIALIZER,
+      useFactory: restoreAuthSession,
+      deps: [AuthService, FakeBFFService, PLATFORM_ID],
       multi: true,
     },
   ],

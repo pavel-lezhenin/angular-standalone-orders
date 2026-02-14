@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import {
@@ -39,11 +39,22 @@ import { BaseComponent } from '@core';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
-export class LoginComponent extends BaseComponent {
+export class LoginComponent extends BaseComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+
+  /**
+   * If user is already authenticated (e.g. session restored after SSR),
+   * redirect them away from login page.
+   */
+  ngOnInit(): void {
+    if (this.authService.isAuthenticated()) {
+      const returnUrl = this.route.snapshot.queryParams['returnUrl'] || this.authService.getRedirectPath();
+      this.router.navigateByUrl(returnUrl);
+    }
+  }
 
   /** Form group with email, password, and rememberMe fields */
   readonly loginForm: FormGroup = this.fb.group({

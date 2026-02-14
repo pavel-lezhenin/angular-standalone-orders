@@ -66,6 +66,14 @@ export class FakeBFFService {
   }
 
   /**
+   * Check if BFF has been initialized
+   * Used by app startup to ensure BFF is ready before other operations
+   */
+  isInitialized(): boolean {
+    return this.initialized;
+  }
+
+  /**
    * Main handler for intercepted API requests
    * Routes to appropriate handler based on URL and method
    */
