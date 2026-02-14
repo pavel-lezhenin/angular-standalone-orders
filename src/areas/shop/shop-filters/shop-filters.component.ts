@@ -50,7 +50,13 @@ export class ShopFiltersComponent {
       id: 'reset',
       icon: 'restart_alt',
       ariaLabel: 'Reset filters',
-      tooltip: 'Reset all filters to default',
+      tooltip: 'Reset filters to default',
+    },
+    {
+      id: 'refresh',
+      icon: 'refresh',
+      ariaLabel: 'Refresh results',
+      tooltip: 'Refresh with current filters',
     },
   ]);
 
@@ -76,11 +82,13 @@ export class ShopFiltersComponent {
   }
 
   /**
-   * Handle filter action (reset, export, etc)
+   * Handle filter action (reset, refresh, etc)
    */
   onFilterAction(actionId: string): void {
     if (actionId === 'reset') {
       this.clearFilters();
+    } else if (actionId === 'refresh') {
+      this.emitFilters();
     }
   }
 
