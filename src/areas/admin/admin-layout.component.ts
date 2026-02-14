@@ -1,6 +1,6 @@
-import { Component, computed } from '@angular/core';
+import { Component, OnDestroy, OnInit, PLATFORM_ID, computed, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
@@ -30,7 +30,11 @@ interface MenuItem {
   templateUrl: './admin-layout.component.html',
   styleUrl: './admin-layout.component.scss',
 })
-export class AdminLayoutComponent {
+export class AdminLayoutComponent implements OnInit, OnDestroy {
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly isBrowser = isPlatformBrowser(this.platformId);
+  private mobileMediaQuery: MediaQueryList | null = null;
+
   private menuItems: MenuItem[] = [
     { label: 'Dashboard', icon: 'dashboard', route: '/admin', roles: ['admin', 'manager'] },
     { label: 'Orders Board', icon: 'view_kanban', route: '/admin/orders', roles: ['admin', 'manager'] },
@@ -41,6 +45,9 @@ export class AdminLayoutComponent {
   ];
 
   currentUser = this.authService.currentUser;
+  protected readonly isMobile = signal(false);
+  protected readonly isSidenavOpened = signal(true);
+  protected readonly toggleSidenavBound = (): void => this.toggleSidenav();
 
   visibleMenuItems = computed(() => {
     const user = this.currentUser();
@@ -50,4 +57,37 @@ export class AdminLayoutComponent {
   });
 
   constructor(private authService: AuthService) {}
+
+  ngOnInit(): void {
+    if (!this.isBrowser) {
+      return;
+    }
+
+    this.mobileMediaQuery = window.matchMedia('(max-width: 600px)');
+    this.mobileMediaQuery.addEventListener('change', this.handleMobileChange);
+    this.syncSidenavWithViewport(this.mobileMediaQuery.matches);
+  }
+
+  ngOnDestroy(): void {
+    this.mobileMediaQuery?.removeEventListener('change', this.handleMobileChange);
+  }
+
+  protected toggleSidenav(): void {
+    this.isSidenavOpened.update(opened => !opened);
+  }
+
+  protected closeSidenavOnMobile(): void {
+    if (this.isMobile()) {
+      this.isSidenavOpened.set(false);
+    }
+  }
+
+  private readonly handleMobileChange = (event: MediaQueryListEvent): void => {
+    this.syncSidenavWithViewport(event.matches);
+  };
+
+  private syncSidenavWithViewport(isMobileViewport: boolean): void {
+    this.isMobile.set(isMobileViewport);
+    this.isSidenavOpened.set(!isMobileViewport);
+  }
 }

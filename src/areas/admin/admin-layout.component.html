@@ -1,8 +1,18 @@
 <div class="admin-layout">
-  <app-top-bar title="Orders Management Platform" [navItems]="[]" />
+  <app-top-bar
+    title="Orders Management Platform"
+    [navItems]="[]"
+    [showSidenavToggle]="true"
+    [sidenavOpened]="isSidenavOpened()"
+    [onToggleSidenav]="toggleSidenavBound"
+  />
   <mat-sidenav-container class="admin-container">
     <!-- Sidebar -->
-    <mat-sidenav mode="side" opened class="admin-sidenav">
+    <mat-sidenav
+      [mode]="isMobile() ? 'over' : 'side'"
+      [opened]="isSidenavOpened()"
+      class="admin-sidenav"
+    >
       <mat-nav-list>
         @for (item of visibleMenuItems(); track item.route) {
           <a
@@ -10,6 +20,7 @@
             [routerLink]="item.route"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: item.route === '/admin' }"
+            (click)="closeSidenavOnMobile()"
           >
             <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
             <span matListItemTitle>{{ item.label }}</span>

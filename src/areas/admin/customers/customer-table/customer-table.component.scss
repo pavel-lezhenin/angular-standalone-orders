@@ -3,13 +3,19 @@
   flex-direction: column;
 }
 
+.customers-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
 .customers-table {
   width: 100%;
-  table-layout: fixed;
+  min-width: calc(var(--app-spacing) * 44);
 
   th {
     font-weight: var(--font-weight-medium);
     font-size: var(--font-size-sm);
+    white-space: nowrap;
   }
 
   td {
@@ -25,7 +31,19 @@
   }
 
   .mat-column-role {
-    width: 12%;
+    width: 14%;
+    min-width: calc(var(--app-spacing) * 6);
+  }
+
+  td.mat-column-role {
+    overflow: visible;
+    text-overflow: clip;
+
+    mat-chip {
+      min-width: calc(var(--app-spacing) * 4.5);
+      justify-content: center;
+      white-space: nowrap;
+    }
   }
 
   .mat-column-profile {

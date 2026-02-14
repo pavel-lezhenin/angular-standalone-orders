@@ -2,6 +2,18 @@
   <div class="top-bar-content">
     <!-- Left: Logo + Title + Navigation -->
     <div class="left-section">
+      @if (showSidenavToggle) {
+        <button
+          mat-icon-button
+          type="button"
+          class="sidenav-toggle-button"
+          (click)="handleSidenavToggle()"
+          [attr.aria-label]="sidenavOpened ? 'Close navigation menu' : 'Open navigation menu'"
+        >
+          <mat-icon>{{ sidenavOpened ? 'menu_open' : 'menu' }}</mat-icon>
+        </button>
+      }
+
       <a routerLink="/" class="logo-section">
         <mat-icon class="logo-icon">shopping_bag</mat-icon>
         <span class="title">{{ title }}</span>

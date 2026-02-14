@@ -29,6 +29,9 @@ import { UserMenuComponent } from '../user-menu/user-menu.component';
 export class TopBarComponent {
   @Input() title = 'Orders Platform';
   @Input() navItems: NavItem[] = [];
+  @Input() showSidenavToggle = false;
+  @Input() sidenavOpened = true;
+  @Input() onToggleSidenav?: () => void;
 
   constructor(private router: Router) {}
 
@@ -56,5 +59,9 @@ export class TopBarComponent {
     } else if (item.route) {
       this.router.navigate([item.route]);
     }
+  }
+
+  handleSidenavToggle(): void {
+    this.onToggleSidenav?.();
   }
 }

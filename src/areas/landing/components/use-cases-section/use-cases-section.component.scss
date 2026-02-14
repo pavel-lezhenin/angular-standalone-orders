@@ -21,7 +21,7 @@
 
 .use-cases-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(var(--spacing-3xl), 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--spacing-2xl);
 }
 
@@ -55,6 +55,13 @@
   p {
     color: var(--text-secondary);
     font-size: var(--font-size-base);
+  }
+}
+
+:host-context(.tablet) {
+  .use-cases-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--spacing-xl);
   }
 }
 

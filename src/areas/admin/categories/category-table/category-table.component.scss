@@ -13,4 +13,21 @@
       color: var(--text-secondary);
     }
   }
+
+  .mat-column-actions {
+    white-space: nowrap;
+    width: calc(var(--app-spacing) * 6);
+  }
+
+  td.mat-column-actions {
+    overflow: visible;
+    text-overflow: clip;
+  }
+}
+
+.actions-inline {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: var(--spacing-xxs);
 }
