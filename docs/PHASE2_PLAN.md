@@ -2,7 +2,7 @@
 
 > Orders management with RBAC, IndexedDB BFF, admin dashboard, public shop.
 
-**Status:** In Progress (~82% complete)  
+**Status:** In Progress (~90% complete)  
 **See detailed status:** [PROJECT_STATUS.md](./PROJECT_STATUS.md)
 
 ---
@@ -84,7 +84,7 @@ For detailed implementation steps, deliverables, and code examples, see **[IMPLE
 | 2.1 | BFF Foundation | 2h | ✅ Done | 100% |
 | 2.2 | Authentication | 1.5h | ✅ Done | 100% |
 | 2.3 | Landing Page | 0.5h | ✅ Done | 100% |
-| 2.4 | Shop Module | 3h | ⏸️ Partial | 70% (missing cart/checkout) |
+| 2.4 | Shop Module | 3h | ✅ Mostly done | 95% (cart/checkout/payment implemented) |
 | 2.5 | Shared UI | 2h | ✅ Done | 100% |
 | 2.6 | Admin Layout | 1h | ✅ Done | 100% |
 | 2.7 | Dashboard | 1h | ⏸️ Partial | 30% (needs widgets) |
@@ -94,7 +94,7 @@ For detailed implementation steps, deliverables, and code examples, see **[IMPLE
 | 2.11 | Products | 1.5h | ✅ Done | 100% |
 | 2.12 | Categories | 1h | ✅ Done | 100% |
 | 2.13 | Seed Data | 1h | ✅ Done | 100% |
-| 2.14 | Tests & Polish | 2h | ⏸️ Partial | 20% |
+| 2.14 | Tests & Polish | 2h | ⏸️ Partial | 25% |
 
 **See [PROJECT_STATUS.md](./PROJECT_STATUS.md) for remaining tasks and priorities.**
 

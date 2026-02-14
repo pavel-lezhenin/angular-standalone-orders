@@ -91,20 +91,6 @@
         }
       </mat-form-field>
 
-      <!-- Address -->
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Address</mat-label>
-        <textarea
-          matInput
-          formControlName="address"
-          placeholder="123 Main St, City, Country"
-          rows="2"
-          required
-        ></textarea>
-        @if (form.get('address')?.touched && form.get('address')?.invalid) {
-          <mat-error>{{ getErrorMessage('address') }}</mat-error>
-        }
-      </mat-form-field>
     </div>
   </form>
 </app-dialog>

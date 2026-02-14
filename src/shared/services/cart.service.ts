@@ -31,6 +31,7 @@ export class CartService {
   private platformId = inject(PLATFORM_ID);
   private isBrowser = isPlatformBrowser(this.platformId);
   private previousUserId: string | null = null;
+  private restorePromise: Promise<void> = Promise.resolve();
   
   /**
    * Computed signal for total item count
@@ -44,7 +45,7 @@ export class CartService {
     private authService: AuthService
   ) {
     // Restore cart on service initialization
-    this.restoreCart();
+    this.restorePromise = this.restoreCart();
     
     // Initialize previousUserId to track actual auth changes
     const initialUser = this.authService.currentUser();
@@ -142,14 +143,22 @@ export class CartService {
   }
 
   /**
+   * Wait until initial cart restore is finished.
+   * Required to avoid race condition on page reload for authenticated users.
+   */
+  async waitForRestore(): Promise<void> {
+    await this.restorePromise;
+  }
+
+  /**
    * Restores cart from localStorage (guest) or IndexedDB (authenticated)
    */
-  private restoreCart(): void {
+  private async restoreCart(): Promise<void> {
     const user = this.authService.currentUser();
     
     if (user) {
       // Restore from IndexedDB for authenticated user
-      this.restoreAuthenticatedCart(user.id);
+      await this.restoreAuthenticatedCart(user.id);
     } else {
       // Restore from localStorage for guest
       this.restoreGuestCart();

@@ -4,7 +4,7 @@
 
     <app-page-loader [isLoading]="loading()" />
 
-    @if (isEmpty()) {
+    @if (hasLoaded() && isEmpty()) {
       <div class="empty-state">
         <mat-icon class="empty-icon">shopping_cart</mat-icon>
         <h2>Your cart is empty</h2>
@@ -13,7 +13,7 @@
           Go to Shop
         </button>
       </div>
-    } @else {
+    } @else if (hasLoaded()) {
       <div class="checkout-content">
         <!-- Left Column: Delivery Form -->
         <div class="delivery-section">
@@ -87,7 +87,39 @@
             <div class="address-section">
               <h2>Delivery Information</h2>
 
-              @if (!isGuest()) {
+              @if (!isGuest() && hasSavedAddresses()) {
+                <div class="saved-address-controls">
+                  <mat-form-field appearance="outline" class="form-field">
+                    <mat-label>Delivery Address</mat-label>
+                    <mat-select
+                      formControlName="selectedAddressId"
+                      (selectionChange)="onSavedAddressChange($event.value)">
+                      @for (address of savedAddresses(); track address.id) {
+                        <mat-option [value]="address.id">
+                          {{ address.label }} — {{ address.addressLine1 }}, {{ address.city }}
+                          @if (address.isDefault) {
+                            (Default)
+                          }
+                        </mat-option>
+                      }
+                    </mat-select>
+                    <mat-icon matPrefix>bookmark</mat-icon>
+                  </mat-form-field>
+
+                  <button
+                    mat-stroked-button
+                    type="button"
+                    (click)="toggleAddressForm()">
+                    @if (showAddressForm()) {
+                      Use Saved Address
+                    } @else {
+                      Add New Address
+                    }
+                  </button>
+                </div>
+              }
+
+              @if (!isGuest() && shouldShowAddressForm()) {
                 <!-- Full Name (authenticated users only) -->
                 <mat-form-field appearance="outline" class="form-field">
                   <mat-label>Full Name</mat-label>
@@ -102,68 +134,75 @@
                 </mat-form-field>
               }
 
-              <!-- Address Line 1 -->
-              <mat-form-field appearance="outline" class="form-field">
-                <mat-label>Address Line 1</mat-label>
-                <input matInput formControlName="addressLine1" placeholder="123 Main Street">
-                <mat-icon matPrefix>home</mat-icon>
-                @if (checkoutForm.get('addressLine1')?.hasError('required')) {
-                  <mat-error>Address is required</mat-error>
-                }
-                @if (checkoutForm.get('addressLine1')?.hasError('minlength')) {
-                  <mat-error>Address must be at least 5 characters</mat-error>
-                }
-              </mat-form-field>
+              @if (shouldShowAddressForm()) {
+                <!-- Address Line 1 -->
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Address Line 1</mat-label>
+                  <input matInput formControlName="addressLine1" placeholder="123 Main Street">
+                  <mat-icon matPrefix>home</mat-icon>
+                  @if (checkoutForm.get('addressLine1')?.hasError('required')) {
+                    <mat-error>Address is required</mat-error>
+                  }
+                  @if (checkoutForm.get('addressLine1')?.hasError('minlength')) {
+                    <mat-error>Address must be at least 5 characters</mat-error>
+                  }
+                </mat-form-field>
 
-              <!-- Address Line 2 -->
-              <mat-form-field appearance="outline" class="form-field">
-                <mat-label>Address Line 2 (Optional)</mat-label>
-                <input matInput formControlName="addressLine2" placeholder="Apt, Suite, etc.">
-                <mat-icon matPrefix>apartment</mat-icon>
-              </mat-form-field>
+                <!-- Address Line 2 -->
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Address Line 2 (Optional)</mat-label>
+                  <input matInput formControlName="addressLine2" placeholder="Apt, Suite, etc.">
+                  <mat-icon matPrefix>apartment</mat-icon>
+                </mat-form-field>
 
-              <!-- City -->
-              <mat-form-field appearance="outline" class="form-field">
-                <mat-label>City</mat-label>
-                <input matInput formControlName="city" placeholder="New York">
-                <mat-icon matPrefix>location_city</mat-icon>
-                @if (checkoutForm.get('city')?.hasError('required')) {
-                  <mat-error>City is required</mat-error>
-                }
-              </mat-form-field>
+                <!-- City -->
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>City</mat-label>
+                  <input matInput formControlName="city" placeholder="New York">
+                  <mat-icon matPrefix>location_city</mat-icon>
+                  @if (checkoutForm.get('city')?.hasError('required')) {
+                    <mat-error>City is required</mat-error>
+                  }
+                </mat-form-field>
 
-              <!-- Postal Code -->
-              <mat-form-field appearance="outline" class="form-field">
-                <mat-label>Postal Code</mat-label>
-                <input matInput formControlName="postalCode" placeholder="12345">
-                <mat-icon matPrefix>markunread_mailbox</mat-icon>
-                @if (checkoutForm.get('postalCode')?.hasError('required')) {
-                  <mat-error>Postal code is required</mat-error>
-                }
-                @if (checkoutForm.get('postalCode')?.hasError('postalCode')) {
-                  <mat-error>{{ checkoutForm.get('postalCode')?.errors?.['postalCode']?.message }}</mat-error>
-                }
-              </mat-form-field>
+                <!-- Postal Code -->
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Postal Code</mat-label>
+                  <input matInput formControlName="postalCode" placeholder="12345">
+                  <mat-icon matPrefix>markunread_mailbox</mat-icon>
+                  @if (checkoutForm.get('postalCode')?.hasError('required')) {
+                    <mat-error>Postal code is required</mat-error>
+                  }
+                  @if (checkoutForm.get('postalCode')?.hasError('postalCode')) {
+                    <mat-error>{{ checkoutForm.get('postalCode')?.errors?.['postalCode']?.message }}</mat-error>
+                  }
+                </mat-form-field>
 
-              <!-- Phone -->
-              <mat-form-field appearance="outline" class="form-field">
-                <mat-label>Phone Number</mat-label>
-                <input matInput formControlName="phone" placeholder="+1 (555) 123-4567">
-                <mat-icon matPrefix>phone</mat-icon>
-                @if (checkoutForm.get('phone')?.hasError('required')) {
-                  <mat-error>Phone number is required</mat-error>
-                }
-                @if (checkoutForm.get('phone')?.hasError('phone')) {
-                  <mat-error>{{ checkoutForm.get('phone')?.errors?.['phone']?.message }}</mat-error>
-                }
-              </mat-form-field>
+                <!-- Phone -->
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Phone Number</mat-label>
+                  <input matInput formControlName="phone" placeholder="+1 (555) 123-4567">
+                  <mat-icon matPrefix>phone</mat-icon>
+                  @if (checkoutForm.get('phone')?.hasError('required')) {
+                    <mat-error>Phone number is required</mat-error>
+                  }
+                  @if (checkoutForm.get('phone')?.hasError('phone')) {
+                    <mat-error>{{ checkoutForm.get('phone')?.errors?.['phone']?.message }}</mat-error>
+                  }
+                </mat-form-field>
 
-              <!-- Save Address Checkbox (authenticated users only) -->
-              @if (!isGuest()) {
-                <div class="save-address-container">
-                  <mat-checkbox formControlName="saveAddress">
-                    Save this delivery address to my profile
-                  </mat-checkbox>
+                <!-- Save Address Checkbox (authenticated users only) -->
+                @if (!isGuest()) {
+                  <div class="save-address-container">
+                    <mat-checkbox formControlName="saveAddress">
+                      Save this delivery address to my profile
+                    </mat-checkbox>
+                  </div>
+                }
+              } @else {
+                <div class="using-saved-address-note">
+                  <mat-icon>local_shipping</mat-icon>
+                  <span>Using selected saved address for this order</span>
                 </div>
               }
             </div>

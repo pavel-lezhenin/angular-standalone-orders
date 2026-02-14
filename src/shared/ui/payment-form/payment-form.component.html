@@ -1,0 +1,126 @@
+<div class="payment-form">
+  <form [formGroup]="paymentForm">
+    <!-- Payment Method Selection -->
+    <div class="form-section">
+      <h3>Payment Method</h3>
+      <mat-radio-group formControlName="method" class="payment-methods">
+        @for (method of paymentMethods; track method.value) {
+          <mat-radio-button [value]="method.value">
+            {{ method.label }}
+          </mat-radio-button>
+        }
+      </mat-radio-group>
+    </div>
+
+    <!-- Card Payment Fields -->
+    @if (paymentForm.get('method')?.value === 'card') {
+      <div class="form-section card-details">
+        <h3>Card Details</h3>
+
+        <!-- Card Number -->
+        <mat-form-field class="full-width">
+          <mat-label>Card Number</mat-label>
+          <input 
+            matInput 
+            formControlName="cardNumber"
+            placeholder="1234 5678 9012 3456"
+            (input)="formatCardNumber($event)"
+            maxlength="19">
+          <mat-icon matPrefix>credit_card</mat-icon>
+          @if (paymentForm.get('cardNumber')?.hasError('required') && paymentForm.get('cardNumber')?.touched) {
+            <mat-error>Card number is required</mat-error>
+          }
+          @if (paymentForm.get('cardNumber')?.hasError('invalidCard')) {
+            <mat-error>{{ paymentForm.get('cardNumber')?.errors?.['invalidCard'] }}</mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Cardholder Name -->
+        <mat-form-field class="full-width">
+          <mat-label>Cardholder Name</mat-label>
+          <input 
+            matInput 
+            formControlName="cardholderName"
+            placeholder="JOHN DOE">
+          <mat-icon matPrefix>person</mat-icon>
+          @if (paymentForm.get('cardholderName')?.hasError('required') && paymentForm.get('cardholderName')?.touched) {
+            <mat-error>Cardholder name is required</mat-error>
+          }
+          @if (paymentForm.get('cardholderName')?.hasError('minlength')) {
+            <mat-error>Name must be at least 3 characters</mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Expiry Date & CVV -->
+        <div class="card-extra-fields">
+          <div class="expiry-fields">
+            <mat-form-field class="expiry-month">
+              <mat-label>Month</mat-label>
+              <mat-select formControlName="expiryMonth">
+                @for (month of months; track month.value) {
+                  <mat-option [value]="month.value">{{ month.label }}</mat-option>
+                }
+              </mat-select>
+              @if (paymentForm.get('expiryMonth')?.hasError('required') && paymentForm.get('expiryMonth')?.touched) {
+                <mat-error>Required</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field class="expiry-year">
+              <mat-label>Year</mat-label>
+              <mat-select formControlName="expiryYear">
+                @for (year of years; track year.value) {
+                  <mat-option [value]="year.value">{{ year.label }}</mat-option>
+                }
+              </mat-select>
+              @if (paymentForm.get('expiryYear')?.hasError('required') && paymentForm.get('expiryYear')?.touched) {
+                <mat-error>Required</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          <mat-form-field class="cvv-field">
+            <mat-label>CVV</mat-label>
+            <input 
+              matInput 
+              formControlName="cvv"
+              type="password"
+              placeholder="123"
+              maxlength="4">
+            <mat-icon matPrefix>lock</mat-icon>
+            @if (paymentForm.get('cvv')?.hasError('required') && paymentForm.get('cvv')?.touched) {
+              <mat-error>CVV required</mat-error>
+            }
+            @if (paymentForm.get('cvv')?.hasError('pattern')) {
+              <mat-error>Must be 3-4 digits</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <!-- Save Method Checkbox -->
+        <div class="save-method-option">
+          <mat-checkbox formControlName="shouldSaveMethod">
+            <span class="save-label">Save this payment method for future orders</span>
+          </mat-checkbox>
+        </div>
+      </div>
+    }
+
+
+    <!-- PayPal Message -->
+    @if (paymentForm.get('method')?.value === 'paypal') {
+      <div class="payment-info-message">
+        <mat-icon>info</mat-icon>
+        <p>You will be redirected to PayPal to complete your payment.</p>
+      </div>
+    }
+
+    <!-- Cash on Delivery Message -->
+    @if (paymentForm.get('method')?.value === 'cash_on_delivery') {
+      <div class="payment-info-message">
+        <mat-icon>info</mat-icon>
+        <p>Pay with cash when your order is delivered.</p>
+      </div>
+    }
+  </form>
+</div>

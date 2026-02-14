@@ -89,9 +89,103 @@
               <mat-icon>payment</mat-icon>
               Payment Information
             </h3>
-            <p class="placeholder-text">
-              Payment methods and billing information will be available in a future update.
-            </p>
+
+            @if (savedPaymentMethods().length > 0 && !showPaymentMethodForm()) {
+              <div class="selection-controls">
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Saved Payment Method</mat-label>
+                  <mat-select
+                    [value]="selectedPaymentMethodId()"
+                    (selectionChange)="onPaymentMethodSelectionChange($event.value)">
+                    @for (method of savedPaymentMethods(); track method.id) {
+                      <mat-option [value]="method.id">
+                        {{ getPaymentMethodLabel(method) }} @if (method.isDefault) {(Default)}
+                      </mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+
+                <button mat-stroked-button type="button" (click)="togglePaymentMethodForm()">
+                  Add Payment Method
+                </button>
+
+                <button
+                  mat-stroked-button
+                  type="button"
+                  [disabled]="!canSetSelectedPaymentMethodAsDefault()"
+                  (click)="setSelectedPaymentMethodAsDefault()">
+                  Set as Default
+                </button>
+
+                <button
+                  mat-stroked-button
+                  color="warn"
+                  type="button"
+                  [disabled]="!canDeleteSelectedPaymentMethod()"
+                  (click)="deleteSelectedPaymentMethod()">
+                  Delete Selected
+                </button>
+              </div>
+
+              @if (selectedPaymentMethod(); as paymentMethod) {
+                <div class="shipping-address-text">
+                  <p><strong>{{ getPaymentMethodLabel(paymentMethod) }}</strong></p>
+                  @if (paymentMethod.isDefault) {
+                    <p>Default payment method</p>
+                  }
+                </div>
+              }
+            } @else if (showPaymentMethodForm()) {
+              <form [formGroup]="paymentMethodForm" class="preference-form">
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Type</mat-label>
+                  <mat-select formControlName="type">
+                    <mat-option value="card">Card</mat-option>
+                    <mat-option value="paypal">PayPal</mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+                @if (paymentMethodForm.get('type')?.value === 'card') {
+                  <mat-form-field appearance="outline" class="form-field">
+                    <mat-label>Cardholder Name</mat-label>
+                    <input matInput formControlName="cardholderName" />
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="form-field">
+                    <mat-label>Card Number</mat-label>
+                    <input matInput formControlName="cardNumber" />
+                  </mat-form-field>
+
+                  <div class="form-row">
+                    <mat-form-field appearance="outline" class="form-field">
+                      <mat-label>Expiry Month</mat-label>
+                      <input matInput formControlName="expiryMonth" placeholder="MM" />
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="form-field">
+                      <mat-label>Expiry Year</mat-label>
+                      <input matInput formControlName="expiryYear" placeholder="YYYY" />
+                    </mat-form-field>
+                  </div>
+                } @else {
+                  <mat-form-field appearance="outline" class="form-field">
+                    <mat-label>PayPal Email</mat-label>
+                    <input matInput formControlName="paypalEmail" />
+                  </mat-form-field>
+                }
+
+                <div class="inline-actions">
+                  @if (savedPaymentMethods().length > 0) {
+                    <button mat-button type="button" (click)="togglePaymentMethodForm()">Cancel</button>
+                  }
+                  <button mat-raised-button color="primary" type="button" (click)="savePaymentMethod()">
+                    Save Payment Method
+                  </button>
+                </div>
+              </form>
+            } @else {
+              <p class="placeholder-text">No saved payment methods yet.</p>
+            }
           </section>
 
           <!-- Shipping Address Section (Placeholder) -->
@@ -100,9 +194,116 @@
               <mat-icon>local_shipping</mat-icon>
               Shipping Address
             </h3>
-            <p class="placeholder-text">
-              Shipping address management will be available in a future update.
-            </p>
+
+            @if (savedAddresses().length > 0 && !showAddressForm()) {
+              <div class="selection-controls">
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Saved Address</mat-label>
+                  <mat-select
+                    [value]="selectedAddressId()"
+                    (selectionChange)="onAddressSelectionChange($event.value)">
+                    @for (address of savedAddresses(); track address.id) {
+                      <mat-option [value]="address.id">
+                        {{ address.label }} — {{ address.addressLine1 }}, {{ address.city }}
+                        @if (address.isDefault) {(Default)}
+                      </mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+
+                <button mat-stroked-button type="button" (click)="toggleAddressForm()">
+                  Add Address
+                </button>
+
+                <button
+                  mat-stroked-button
+                  type="button"
+                  [disabled]="!canSetSelectedAddressAsDefault()"
+                  (click)="setSelectedAddressAsDefault()">
+                  Set as Default
+                </button>
+
+                <button
+                  mat-stroked-button
+                  color="warn"
+                  type="button"
+                  [disabled]="!canDeleteSelectedAddress()"
+                  (click)="deleteSelectedAddress()">
+                  Delete Selected
+                </button>
+              </div>
+            }
+
+            @if (selectedAddress() && !showAddressForm()) {
+              @if (selectedAddress(); as address) {
+              <div class="shipping-address-text">
+                <p><strong>{{ address.recipientName }}</strong></p>
+                <p>{{ address.addressLine1 }}</p>
+                @if (address.addressLine2) {
+                  <p>{{ address.addressLine2 }}</p>
+                }
+                <p>{{ address.city }}, {{ address.postalCode }}</p>
+                <p>{{ address.phone }}</p>
+                @if (address.isDefault) {
+                  <p><strong>Default address</strong></p>
+                }
+              </div>
+              }
+            }
+
+            @if (showAddressForm()) {
+              <form [formGroup]="addressForm" class="preference-form">
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Label</mat-label>
+                  <input matInput formControlName="label" placeholder="Home" />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Recipient Name</mat-label>
+                  <input matInput formControlName="recipientName" />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Address Line 1</mat-label>
+                  <input matInput formControlName="addressLine1" />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Address Line 2</mat-label>
+                  <input matInput formControlName="addressLine2" />
+                </mat-form-field>
+
+                <div class="form-row">
+                  <mat-form-field appearance="outline" class="form-field">
+                    <mat-label>City</mat-label>
+                    <input matInput formControlName="city" />
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="form-field">
+                    <mat-label>Postal Code</mat-label>
+                    <input matInput formControlName="postalCode" />
+                  </mat-form-field>
+                </div>
+
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Phone</mat-label>
+                  <input matInput formControlName="phone" />
+                </mat-form-field>
+
+                <div class="inline-actions">
+                  @if (savedAddresses().length > 0) {
+                    <button mat-button type="button" (click)="toggleAddressForm()">Cancel</button>
+                  }
+                  <button mat-raised-button color="primary" type="button" (click)="saveAddress()">
+                    Save Address
+                  </button>
+                </div>
+              </form>
+            }
+
+            @if (!selectedAddress() && !showAddressForm()) {
+              <p class="placeholder-text">No saved shipping address yet.</p>
+            }
           </section>
         </form>
       </mat-card-content>

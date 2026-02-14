@@ -16,6 +16,9 @@
 /* Neutral tones extracted from palette for surface-container overrides */
 $neutral: map.get(palette.$primary-palette, neutral);
 
+/* Material core styles (includes CDK overlay structural styles) */
+@include mat.core();
+
 /* ============================================
  * Light Theme (default)
  * ============================================ */

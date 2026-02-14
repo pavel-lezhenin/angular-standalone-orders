@@ -80,7 +80,6 @@ export class CustomerService {
         firstName: formValue.firstName,
         lastName: formValue.lastName,
         phone: formValue.phone,
-        address: formValue.address,
       },
     };
 
@@ -104,7 +103,6 @@ export class CustomerService {
         firstName: formValue.firstName,
         lastName: formValue.lastName,
         phone: formValue.phone,
-        address: formValue.address,
       },
     };
 

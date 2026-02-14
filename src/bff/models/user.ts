@@ -4,9 +4,8 @@ import { UserRole } from '@core/types';
  * User entity
  * 
  * DESIGN NOTES:
- * - All profile fields (firstName, lastName, phone, address) are required
- * - Address stored in profile is user's default/primary address
- * - Future: Can extend to UserDetails with multiple addresses, payment methods, preferences
+ * - Profile contains only identity/contact fields
+ * - Addresses and payment methods are normalized into dedicated stores
  */
 export interface User {
   id: string;
@@ -17,8 +16,8 @@ export interface User {
     firstName: string;
     lastName: string;
     phone: string;
-    address: string;
   };
   createdAt: number;
   updatedAt: number;
 }
+

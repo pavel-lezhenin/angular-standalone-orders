@@ -2,7 +2,7 @@
 
 **Angular Orders Management Platform** — Enterprise-grade template
 
-**Overall Progress:** ~82% Complete
+**Overall Progress:** ~90% Complete
 
 **Last Updated:** 2026-02-14
 
@@ -19,12 +19,16 @@
 - ✅ Error handling & interceptors
 - ✅ Design system (Material + custom theme)
 
-### Public Areas (95%)
+### Public Areas (98%)
 - ✅ Landing page (hero, features, FAQ, contact)
 - ✅ Shop products list with filters
 - ✅ Product detail page with image gallery
 - ✅ Search functionality
 - ✅ Responsive design (mobile/tablet/desktop)
+- ✅ Cart page with selection and restore-safe loading
+- ✅ Checkout flow (guest + authenticated)
+- ✅ Payment page and processing simulation
+- ✅ Order confirmation integration after successful payment
 
 ### Admin Areas (85%)
 - ✅ Admin layout with sidebar navigation
@@ -43,33 +47,19 @@
 - ✅ DialogComponent, ConfirmDialog
 - ✅ CartButton (UI only)
 
+### Account & Preferences (95%)
+- ✅ Address management (select/add/delete/set default)
+- ✅ Payment method management (select/add/delete/set default)
+- ✅ Safety constraints for deleting default address/payment method
+- ✅ Deduplication of saved payment methods
+
 ---
 
-## 🚧 Remaining Tasks (18%)
+## 🚧 Remaining Tasks (10%)
 
 ### Critical (Must Have)
 
-#### 1. Cart & Checkout Flow (~4h)
-**Status:** Not started  
-**Priority:** HIGH
-
-- [ ] Create cart page component
-- [ ] Cart items list with quantity controls
-- [ ] Cart summary (subtotal, tax, total)
-- [ ] Checkout page with shipping form
-- [ ] Order confirmation flow
-- [ ] Integration with CartService
-- [ ] Route: `/shop/cart`, `/shop/checkout`
-
-**Acceptance:**
-- User can view cart items
-- User can update quantities or remove items
-- User can proceed to checkout
-- Order is created after checkout
-
----
-
-#### 2. Orders Board (Admin) (~3h)
+#### 1. Orders Board (Admin) (~3h)
 **Status:** Stub only  
 **Priority:** HIGH
 
@@ -91,7 +81,7 @@
 
 ---
 
-#### 3. Dashboard Widgets (~2h)
+#### 2. Dashboard Widgets (~2h)
 **Status:** Empty shell  
 **Priority:** MEDIUM
 
@@ -112,7 +102,7 @@
 
 ---
 
-#### 4. User Orders History (~2h)
+#### 3. User Orders History (~2h)
 **Status:** Mock data  
 **Priority:** MEDIUM
 
@@ -134,7 +124,7 @@
 
 ---
 
-#### 5. Account Profile Editing (~1h)
+#### 4. Account Profile Editing (~1h)
 **Status:** TODO comment  
 **Priority:** LOW
 
@@ -156,7 +146,7 @@
 
 ### Testing & Quality (~4h)
 
-#### 6. Unit Tests
+#### 5. Unit Tests
 **Status:** Minimal coverage  
 **Target:** 80%+ coverage
 
@@ -168,7 +158,7 @@
 
 ---
 
-#### 7. E2E Tests
+#### 6. E2E Tests
 **Status:** 2 basic tests  
 **Target:** Complete user flows
 
@@ -180,7 +170,7 @@
 
 ---
 
-#### 8. Permission Persistence
+#### 7. Permission Persistence
 **Status:** TODO comment  
 **Priority:** LOW
 
@@ -200,7 +190,7 @@
 | 2.1 | BFF Foundation | ✅ Done | 100% |
 | 2.2 | Authentication | ✅ Done | 100% |
 | 2.3 | Landing Page | ✅ Done | 100% |
-| 2.4 | Shop Module | ⏸️ Partial | 70% (missing cart/checkout) |
+| 2.4 | Shop Module | ✅ Done | 95% (minor polish left) |
 | 2.5 | Shared UI | ✅ Done | 100% |
 | 2.6 | Admin Layout | ✅ Done | 100% |
 | 2.7 | Dashboard | ⏸️ Partial | 30% (needs widgets) |
@@ -216,14 +206,13 @@
 
 ## 🎯 Priority Order (Top → Bottom)
 
-1. **Cart & Checkout** (critical user flow)
-2. **Orders Board** (admin core feature)
+1. **Orders Board** (admin core feature)
+2. **Dashboard Widgets** (admin overview)
 3. **User Orders History** (essential for users)
-4. **Dashboard Widgets** (admin overview)
-5. **Unit Tests** (quality & stability)
-6. **E2E Tests** (integration coverage)
-7. **Account Profile Save** (minor enhancement)
-8. **Permission Persistence** (minor enhancement)
+4. **Unit Tests** (quality & stability)
+5. **E2E Tests** (integration coverage)
+6. **Account Profile Save** (minor enhancement)
+7. **Permission Persistence** (minor enhancement)
 
 ---
 
@@ -248,4 +237,4 @@ Easy tasks that add value:
 
 ---
 
-**Next recommended task:** Cart & Checkout (highest business value)
+**Next recommended task:** Orders Board Kanban (highest remaining business value)

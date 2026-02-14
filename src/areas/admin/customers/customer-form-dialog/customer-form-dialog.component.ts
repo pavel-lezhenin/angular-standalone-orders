@@ -72,7 +72,6 @@ export class CustomerFormDialogComponent implements OnInit {
       firstName: [this.data.user?.profile?.firstName || '', [Validators.required]],
       lastName: [this.data.user?.profile?.lastName || '', [Validators.required]],
       phone: [this.data.user?.profile?.phone || '', [Validators.required]],
-      address: [this.data.user?.profile?.address || '', [Validators.required]],
     });
   }
 

@@ -12,6 +12,8 @@ export {
   OrderRepository,
   CategoryRepository,
   CartRepository,
+  AddressRepository,
+  PaymentMethodRepository,
 } from './repositories';
 
 // Services (only seed - auth/permission are in core/services)
@@ -28,4 +30,6 @@ export type {
   Permission,
   Category,
   Session,
+  Address,
+  PaymentMethod,
 } from './models';

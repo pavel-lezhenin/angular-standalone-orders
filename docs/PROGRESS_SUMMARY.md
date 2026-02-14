@@ -4,10 +4,10 @@
 
 ---
 
-## 🎯 Overall: 82% Complete
+## 🎯 Overall: 90% Complete
 
 ```
-████████████████████░░░░ 82%
+██████████████████████░░ 90%
 ```
 
 ---
@@ -25,11 +25,11 @@
 - **Design System** — Material theme + custom styling
 - **SEO** — SSR, meta tags, sitemap
 
-### ⏸️ Partially Complete (50-70%)
+### ⏸️ Partially Complete (60-80%)
 
-- **Shop Module** (70%) — ✅ List, Detail, Filters | ❌ Cart, Checkout
 - **Dashboard** (30%) — ✅ Structure | ❌ Real widgets
-- **User Orders** (60%) — ✅ UI | ❌ BFF integration
+- **User Orders/Board** (60%) — ✅ Core pages | ❌ Full Kanban + analytics
+- **Tests** (25%) — ✅ Base setup | ❌ Coverage target 80%+
 
 ### ❌ Not Started (0-10%)
 
@@ -40,9 +40,9 @@
 
 ## 🔥 Top 3 Priorities
 
-1. **Cart & Checkout** (~4h) — Critical user flow missing
-2. **Orders Board** (~3h) — Admin drag-drop Kanban
-3. **Dashboard Widgets** (~2h) — Real stats from BFF
+1. **Orders Board** (~3h) — Admin drag-drop Kanban
+2. **Dashboard Widgets** (~2h) — Real stats from BFF
+3. **Tests** (~4h) — Expand unit/E2E coverage for new flows
 
 **Total to MVP:** ~9 hours remaining
 
@@ -54,16 +54,16 @@
 |--------|----------|----------|---------|
 | **BFF** | 7 stores, repositories | 100% | - |
 | **Auth** | Login, guards, session | 100% | - |
-| **Shop** | Browse, search, detail | 70% | Cart, checkout |
+| **Shop** | Browse, search, cart, checkout, payment | 95% | UI polish |
 | **Admin** | Layout, navigation | 100% | - |
 | **Products** | Full CRUD | 100% | - |
 | **Categories** | Full CRUD | 100% | - |
 | **Customers** | Full CRUD | 100% | - |
 | **Permissions** | Matrix UI | 95% | Persistence |
-| **Orders** | User list UI | 60% | BFF integration |
+| **Orders** | User flow + confirmation | 80% | Board integration |
 | **Orders Board** | - | 10% | Full Kanban |
 | **Dashboard** | Layout | 30% | Widgets |
-| **Tests** | 2 E2E tests | 20% | Unit + E2E |
+| **Tests** | Base tests | 25% | Unit + E2E |
 
 ---
 
@@ -73,9 +73,10 @@
 - ✅ Material theme customization
 - ✅ Shop filters component
 - ✅ Product detail image gallery
-- ✅ Responsive design improvements
+- ✅ Cart/checkout/payment flow with normalized addresses/payment methods
+- ✅ Address & payment method management in account (select/add/delete/default)
 
 ---
 
 **Last Updated:** 2026-02-14  
-**Next Task:** Implement Cart & Checkout flow
+**Next Task:** Implement Orders Board Kanban + tests for payment/preferences

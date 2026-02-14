@@ -8,6 +8,8 @@ export { CategoryHandlerService } from './category-handler.service';
 export { UserHandlerService } from './user-handler.service';
 export { OrderHandlerService } from './order-handler.service';
 export { CartHandlerService } from './cart-handler.service';
+export { AddressHandlerService } from './address-handler.service';
+export { PaymentMethodHandlerService } from './payment-method-handler.service';
 
 /**
  * HTTP Response Classes

@@ -34,6 +34,12 @@ export const routes: Routes = [
             title: 'Checkout',
           },
           {
+            path: 'payment',
+            // No authGuard - guests can pay for their order
+            loadComponent: () => import('../areas/orders/payment/payment.component').then(m => m.default),
+            title: 'Payment',
+          },
+          {
             path: 'confirmation/:id',
             // Requires authentication to view order confirmation
             canActivate: [authGuard],

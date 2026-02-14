@@ -6,7 +6,7 @@ import { isPlatformBrowser } from '@angular/common';
 })
 export class DatabaseService {
   private readonly DB_NAME = 'OrdersDB';
-  private readonly DB_VERSION = 2; // Updated for files store
+  private readonly DB_VERSION = 3; // Updated for addresses and payment methods stores
   private db: IDBDatabase | null = null;
   private initPromise: Promise<void> | null = null;
   private platformId = inject(PLATFORM_ID);
@@ -106,6 +106,22 @@ export class DatabaseService {
         if (!db.objectStoreNames.contains('cart')) {
           db.createObjectStore('cart', { keyPath: 'userId' });
           console.log('Cart store created');
+        }
+
+        // Addresses store
+        if (!db.objectStoreNames.contains('addresses')) {
+          const addressesStore = db.createObjectStore('addresses', { keyPath: 'id' });
+          addressesStore.createIndex('userId', 'userId');
+          addressesStore.createIndex('isDefault', 'isDefault');
+          console.log('Addresses store created');
+        }
+
+        // Payment methods store
+        if (!db.objectStoreNames.contains('payment_methods')) {
+          const paymentMethodsStore = db.createObjectStore('payment_methods', { keyPath: 'id' });
+          paymentMethodsStore.createIndex('userId', 'userId');
+          paymentMethodsStore.createIndex('isDefault', 'isDefault');
+          console.log('Payment methods store created');
         }
 
         // Permissions store

@@ -1,15 +1,24 @@
-# Cart & Checkout Flow - Complete CRM Implementation Plan
+# Cart & Checkout Flow - CRM Plan (Updated Status)
 
-**Goal:** Full-featured e-commerce order processing system with payment simulation, order tracking, and admin management.
+**Goal:** Full-featured e-commerce order processing with payment simulation, order tracking, and admin management.
 
-**Duration:** ~12-15 hours  
+**Original Duration:** ~12-15 hours  
 **Priority:** HIGH
+
+---
+
+## ✅ Current Status (2026-02-14)
+
+- **Phase 1 (Enhanced Cart):** DONE
+- **Phase 2 (Payment Information Collection):** DONE
+- **Phase 3 (Payment Processing Simulation):** DONE
+- **Phase 4-7:** PARTIAL / PENDING
 
 ---
 
 ## 📋 Overview
 
-Transform current basic cart/checkout into comprehensive order management system:
+Transform basic cart/checkout into comprehensive order management system:
 
 - ✅ Cart with item selection (checkboxes)
 - ✅ Payment information collection (Card, PayPal, COD)
@@ -20,14 +29,14 @@ Transform current basic cart/checkout into comprehensive order management system
 
 ---
 
-## 🎯 Phase 1: Enhanced Cart Component (~2h)
+## 🎯 Phase 1: Enhanced Cart Component (~2h) — ✅ DONE
 
 ### 1.1 Add Item Selection
-- [ ] Add checkbox column to cart table
-- [ ] "Select All" checkbox in header
-- [ ] Track selected items in signal
-- [ ] Calculate totals only for selected items
-- [ ] Disable checkout if no items selected
+- [x] Add checkbox column to cart table
+- [x] "Select All" checkbox in header
+- [x] Track selected items in signal
+- [x] Calculate totals only for selected items
+- [x] Disable checkout if no items selected
 
 ### 1.2 Update Cart Interface
 ```typescript
@@ -48,7 +57,7 @@ interface CartItemWithSelection extends CartItemWithDetails {
 
 ---
 
-## 🎯 Phase 2: Payment Information Collection (~3h)
+## 🎯 Phase 2: Payment Information Collection (~3h) — ✅ DONE
 
 ### 2.1 Create Payment Form Component
 Create `src/shared/ui/payment-form/payment-form.component.ts`
@@ -62,10 +71,10 @@ Create `src/shared/ui/payment-form/payment-form.component.ts`
 - Form validation (Luhn algorithm for card, expiry date validation)
 
 ### 2.2 Update Checkout Component
-- [ ] Add payment form section
-- [ ] Integrate PaymentFormComponent
-- [ ] Collect payment data in checkout
-- [ ] Validate before order submission
+- [x] Add payment step integration (separate `/orders/payment` page)
+- [x] Integrate PaymentFormComponent
+- [x] Collect payment data and pending order payload
+- [x] Validate before payment processing
 
 **Validation Rules:**
 - Card: Luhn algorithm check
@@ -81,7 +90,7 @@ Create `src/shared/ui/payment-form/payment-form.component.ts`
 
 ---
 
-## 🎯 Phase 3: Payment Processing Simulation (~2h)
+## 🎯 Phase 3: Payment Processing Simulation (~2h) — ✅ DONE
 
 ### 3.1 Create Payment Service
 Create `src/shared/services/payment.service.ts`
@@ -104,14 +113,14 @@ async processPayment(request: PaymentRequestDTO): Promise<PaymentResult>
 - Error messages on failure ("Insufficient funds", "Card declined", etc.)
 
 ### 3.2 Payment UI States
-- [ ] Show loading spinner during payment
-- [ ] Show processing message
-- [ ] Handle approval (green checkmark, success message)
-- [ ] Handle decline (red X, error message, retry button)
+- [x] Show loading spinner during payment
+- [x] Show processing message
+- [x] Handle approval (success state + confirmation redirect)
+- [x] Handle decline (error state + retry)
 
-### 3.3 Update Checkout Flow
+### 3.3 Updated Flow (Implemented)
 ```
-1. Fill address → 2. Fill payment → 3. Click "Place Order"
+1. Fill address in checkout → 2. Navigate to payment → 3. Submit payment
    ↓
 4. Validate forms → 5. Process payment (simulated)
    ↓
@@ -127,7 +136,7 @@ async processPayment(request: PaymentRequestDTO): Promise<PaymentResult>
 
 ---
 
-## 🎯 Phase 4: Extended Order Statuses (~1.5h)
+## 🎯 Phase 4: Extended Order Statuses (~1.5h) — ⏳ PARTIAL
 
 ### 4.1 Update Order Status Workflow
 
@@ -162,7 +171,7 @@ async processPayment(request: PaymentRequestDTO): Promise<PaymentResult>
 
 ---
 
-## 🎯 Phase 5: Supplier Management (~2.5h)
+## 🎯 Phase 5: Supplier Management (~2.5h) — ⏳ PENDING
 
 ### 5.1 Create Supplier Model (Already Done ✅)
 - BFF Model: `src/bff/models/supplier.ts`
@@ -214,7 +223,7 @@ Update `src/bff/services/seed.service.ts`
 
 ---
 
-## 🎯 Phase 6: Admin Orders Board - Kanban (~4h)
+## 🎯 Phase 6: Admin Orders Board - Kanban (~4h) — ⏳ PENDING
 
 ### 6.1 Install Dependencies
 ```bash
@@ -280,7 +289,7 @@ drop(event: CdkDragDrop<OrderDTO[]>, newStatus: OrderStatus) {
 
 ---
 
-## 🎯 Phase 7: Integration & Testing (~2h)
+## 🎯 Phase 7: Integration & Testing (~2h) — ⏳ PARTIAL
 
 ### 7.1 End-to-End Flow Testing
 **User Flow:**

@@ -7,16 +7,18 @@ import { firstValueFrom } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { PageLoaderComponent } from '@shared/ui/page-loader/page-loader.component';
 import { CartService } from '@shared/services/cart.service';
-import { OrderService } from '@shared/services/order.service';
+import { PaymentStateService } from '@shared/services/payment-state.service';
+import { UserPreferencesService } from '@shared/services/user-preferences.service';
 import { NotificationService } from '@shared/services/notification.service';
 import { AuthService } from '@core/services/auth.service';
 import { FormValidators } from '@shared/validators/form-validators';
-import type { CartItemDTO, ProductDTO, CreateOrderDTO, OrderItemDTO } from '@core/models';
+import type { CartItemDTO, ProductDTO, CreateOrderDTO, OrderItemDTO, AddressDTO } from '@core/models';
 
 interface CartItemWithProduct {
   cartItem: CartItemDTO;
@@ -45,6 +47,7 @@ interface CartItemWithProduct {
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectModule,
     MatProgressSpinnerModule,
     MatIconModule,
     MatCheckboxModule,
@@ -58,7 +61,8 @@ export default class CheckoutComponent implements OnInit {
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private cartService = inject(CartService);
-  private orderService = inject(OrderService);
+  private paymentStateService = inject(PaymentStateService);
+  private userPreferencesService = inject(UserPreferencesService);
   private notification = inject(NotificationService);
   private authService = inject(AuthService);
   private platformId = inject(PLATFORM_ID);
@@ -66,7 +70,10 @@ export default class CheckoutComponent implements OnInit {
 
   protected checkoutForm!: FormGroup;
   protected cartItems = signal<CartItemWithProduct[]>([]);
-  protected loading = signal(false);
+  protected savedAddresses = signal<AddressDTO[]>([]);
+  protected showAddressForm = signal(false);
+  protected loading = signal(true);
+  protected hasLoaded = signal(false);
   protected submitting = signal(false);
   protected error = signal<string | null>(null);
   protected emailChecking = signal(false);
@@ -81,6 +88,14 @@ export default class CheckoutComponent implements OnInit {
    * Check if user is a guest
    */
   protected isGuest = computed(() => !this.authService.currentUser());
+  protected hasSavedAddresses = computed(() => !this.isGuest() && this.savedAddresses().length > 0);
+  protected shouldShowAddressForm = computed(() => {
+    if (this.isGuest()) {
+      return true;
+    }
+
+    return !this.hasSavedAddresses() || this.showAddressForm();
+  });
 
   /**
    * Computed subtotal
@@ -113,7 +128,27 @@ export default class CheckoutComponent implements OnInit {
     }
 
     this.initializeForm();
+    this.initializeSavedAddresses();
     this.loadCartItems();
+  }
+
+  private async initializeSavedAddresses(): Promise<void> {
+    if (this.isGuest()) {
+      return;
+    }
+
+    const savedAddresses = await this.userPreferencesService.getSavedAddresses();
+
+    this.savedAddresses.set(savedAddresses);
+
+    const defaultAddress = savedAddresses.find((address: AddressDTO) => address.isDefault) ?? savedAddresses[0];
+    if (defaultAddress) {
+      this.applySavedAddress(defaultAddress);
+      this.checkoutForm.patchValue({ selectedAddressId: defaultAddress.id });
+      this.showAddressForm.set(false);
+    } else {
+      this.showAddressForm.set(true);
+    }
   }
 
   /**
@@ -159,6 +194,7 @@ export default class CheckoutComponent implements OnInit {
 
       this.checkoutForm = this.fb.group({
         fullName: [fullName, [Validators.required, Validators.minLength(2)]],
+        selectedAddressId: [''],
         addressLine1: ['', [Validators.required, Validators.minLength(5)]],
         addressLine2: [''],
         city: ['', [Validators.required, Validators.minLength(2)]],
@@ -202,6 +238,7 @@ export default class CheckoutComponent implements OnInit {
     this.error.set(null);
 
     try {
+      await this.cartService.waitForRestore();
       const items = this.cartService.getItems();
 
       if (items.length === 0) {
@@ -233,6 +270,7 @@ export default class CheckoutComponent implements OnInit {
       this.error.set('Failed to load cart items. Please try again.');
       console.error('Failed to load cart items:', err);
     } finally {
+      this.hasLoaded.set(true);
       this.loading.set(false);
     }
   }
@@ -240,7 +278,7 @@ export default class CheckoutComponent implements OnInit {
   /**
    * Places order
    * For guests: creates user account atomically with order
-   * For authenticated users: creates order directly
+   * For authenticated users: prepares payment data
    */
   protected async placeOrder(): Promise<void> {
     if (this.checkoutForm.invalid) {
@@ -278,22 +316,22 @@ export default class CheckoutComponent implements OnInit {
           throw new Error('Authentication required');
         }
         userId = user.id;
+
+        // Save newly added address for authenticated users (if requested)
+        if (this.shouldShowAddressForm() && formValue.saveAddress) {
+          await this.updateUserAddress(userId, formValue);
+        }
       }
 
-      // Step 2: Create order
-      await this.createOrder(userId, formValue);
-
-      // Step 3: Save address to profile for authenticated users (if requested)
-      if (!this.isGuest() && formValue.saveAddress) {
-        await this.updateUserAddress(userId, formValue);
-      }
+      // Step 2: Prepare payment data and navigate to payment page
+      await this.preparePayment(userId, formValue);
 
     } catch (err) {
-      console.error('Failed to place order:', err);
+      console.error('Failed to prepare order:', err);
       this.error.set(
-        err instanceof Error ? err.message : 'Failed to place order. Please try again.'
+        err instanceof Error ? err.message : 'Failed to prepare order. Please try again.'
       );
-      this.notification.error('Failed to place order. Please try again.');
+      this.notification.error('Failed to prepare order. Please try again.');
     } finally {
       this.submitting.set(false);
     }
@@ -319,7 +357,6 @@ export default class CheckoutComponent implements OnInit {
         firstName: formValue.firstName,
         lastName: formValue.lastName,
         phone: formValue.phone,
-        address: fullAddress,
       },
     };
 
@@ -334,14 +371,29 @@ export default class CheckoutComponent implements OnInit {
       throw new Error('Failed to create user account');
     }
 
+    await this.http.post(`/api/users/${response.id}/addresses`, {
+      label: 'Home',
+      recipientName: `${formValue.firstName} ${formValue.lastName}`.trim(),
+      addressLine1: formValue.addressLine1,
+      addressLine2: formValue.addressLine2 || '',
+      city: formValue.city,
+      postalCode: formValue.postalCode,
+      phone: formValue.phone,
+      isDefault: true,
+    }).toPromise();
+
     return response;
   }
 
   /**
-   * Creates order with cart items
+   * Prepares payment data and navigates to payment page
+   * Order will be created after successful payment
    */
-  private async createOrder(userId: string, formValue: any): Promise<void> {
+  private async preparePayment(userId: string, formValue: any): Promise<void> {
     const isGuest = !this.authService.currentUser();
+    const selectedAddress = !isGuest && !this.shouldShowAddressForm()
+      ? this.savedAddresses().find(address => address.id === formValue.selectedAddressId)
+      : null;
 
     // Build delivery address from form fields
     const deliveryAddress = isGuest
@@ -355,11 +407,11 @@ export default class CheckoutComponent implements OnInit {
           .filter(Boolean)
           .join(', ')
       : [
-          formValue.fullName,
-          formValue.addressLine1,
-          formValue.addressLine2,
-          `${formValue.city}, ${formValue.postalCode}`,
-          formValue.phone,
+          selectedAddress?.recipientName ?? formValue.fullName,
+          selectedAddress?.addressLine1 ?? formValue.addressLine1,
+          selectedAddress?.addressLine2 ?? formValue.addressLine2,
+          `${selectedAddress?.city ?? formValue.city}, ${selectedAddress?.postalCode ?? formValue.postalCode}`,
+          selectedAddress?.phone ?? formValue.phone,
         ]
           .filter(Boolean)
           .join(', ');
@@ -371,7 +423,7 @@ export default class CheckoutComponent implements OnInit {
       price: item.product.price,
     }));
 
-    // Create order DTO
+    // Create order DTO (will be used after payment)
     const createOrderData: CreateOrderDTO = {
       userId,
       items: orderItems,
@@ -379,16 +431,15 @@ export default class CheckoutComponent implements OnInit {
       deliveryAddress,
     };
 
-    // Create order via OrderService
-    const order = await this.orderService.createOrder(createOrderData);
+    // Save pending payment data
+    this.paymentStateService.setPendingPayment({
+      orderData: createOrderData,
+      total: this.total(),
+      itemCount: this.cartItems().length,
+    });
 
-    // Clear cart after successful order
-    this.cartService.clear();
-
-    this.notification.success('Order placed successfully!');
-
-    // Navigate to order confirmation
-    this.router.navigate(['/orders/confirmation', order.id]);
+    // Navigate to payment page
+    this.router.navigate(['/orders/payment']);
   }
 
   /**
@@ -396,34 +447,71 @@ export default class CheckoutComponent implements OnInit {
    */
   private async updateUserAddress(userId: string, formValue: any): Promise<void> {
     try {
-      const currentUser = this.authService.currentUser();
-      if (!currentUser) {
-        return;
-      }
+      await this.userPreferencesService.addAddress({
+        label: 'Home',
+        recipientName: formValue.fullName,
+        addressLine1: formValue.addressLine1,
+        addressLine2: formValue.addressLine2 || '',
+        city: formValue.city,
+        postalCode: formValue.postalCode,
+        phone: formValue.phone,
+        setAsDefault: this.savedAddresses().length === 0,
+      });
 
-      // Build full address string from form fields
-      const addressParts = [
-        formValue.addressLine1,
-        formValue.addressLine2,
-        `${formValue.city}, ${formValue.postalCode}`,
-      ].filter(Boolean);
-      const fullAddress = addressParts.join(', ');
-
-      // Merge with existing profile to preserve other fields
-      const updatedProfile = {
-        ...currentUser.profile,
-        address: fullAddress,
-      };
-
-      await firstValueFrom(
-        this.http.patch(`/api/users/${userId}`, {
-          profile: updatedProfile,
-        })
-      );
+      this.savedAddresses.set(await this.userPreferencesService.getSavedAddresses());
+      this.showAddressForm.set(false);
     } catch (error) {
       console.error('Failed to update user address:', error);
       // Don't fail the order if address update fails
     }
+  }
+
+  protected onSavedAddressChange(addressId: string): void {
+    const selectedAddress = this.savedAddresses().find(address => address.id === addressId);
+    if (!selectedAddress) {
+      return;
+    }
+
+    this.showAddressForm.set(false);
+    this.applySavedAddress(selectedAddress);
+  }
+
+  protected toggleAddressForm(): void {
+    const nextValue = !this.showAddressForm();
+    this.showAddressForm.set(nextValue);
+
+    if (nextValue) {
+      this.checkoutForm.patchValue({
+        selectedAddressId: '',
+        addressLine1: '',
+        addressLine2: '',
+        city: '',
+        postalCode: '',
+      });
+
+      return;
+    }
+
+    const selectedAddressId = this.checkoutForm.get('selectedAddressId')?.value as string | undefined;
+    const selectedAddress = selectedAddressId
+      ? this.savedAddresses().find(address => address.id === selectedAddressId)
+      : this.savedAddresses().find(address => address.isDefault) ?? this.savedAddresses()[0];
+
+    if (selectedAddress) {
+      this.checkoutForm.patchValue({ selectedAddressId: selectedAddress.id });
+      this.applySavedAddress(selectedAddress);
+    }
+  }
+
+  private applySavedAddress(address: AddressDTO): void {
+    this.checkoutForm.patchValue({
+      fullName: address.recipientName,
+      addressLine1: address.addressLine1,
+      addressLine2: address.addressLine2 ?? '',
+      city: address.city,
+      postalCode: address.postalCode,
+      phone: address.phone,
+    });
   }
 
   /**

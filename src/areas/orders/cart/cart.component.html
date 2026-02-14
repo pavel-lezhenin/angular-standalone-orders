@@ -4,7 +4,7 @@
 
     <app-page-loader [isLoading]="loading()" />
 
-    @if (isEmpty()) {
+    @if (hasLoaded() && isEmpty()) {
       <div class="empty-state">
         <mat-icon class="empty-icon">shopping_cart</mat-icon>
         <h2>Your cart is empty</h2>
@@ -13,7 +13,7 @@
           Continue Shopping
         </button>
       </div>
-    } @else {
+    } @else if (hasLoaded()) {
       <div class="cart-content">
         <!-- Cart Items Table -->
         <div class="cart-items">

@@ -11,6 +11,8 @@ import { CategoryHandlerService } from './handlers/category-handler.service';
 import { UserHandlerService } from './handlers/user-handler.service';
 import { OrderHandlerService } from './handlers/order-handler.service';
 import { CartHandlerService } from './handlers/cart-handler.service';
+import { AddressHandlerService } from './handlers/address-handler.service';
+import { PaymentMethodHandlerService } from './handlers/payment-method-handler.service';
 import { NotFoundResponse } from './handlers/http-responses';
 
 /**
@@ -38,6 +40,8 @@ export class FakeBFFService {
     private userHandler: UserHandlerService,
     private orderHandler: OrderHandlerService,
     private cartHandler: CartHandlerService,
+    private addressHandler: AddressHandlerService,
+    private paymentMethodHandler: PaymentMethodHandlerService,
   ) {}
 
   async initialize(): Promise<void> {
@@ -140,7 +144,13 @@ export class FakeBFFService {
     if (req.method === 'GET' && req.url.includes('/api/users/check-email')) {
       return this.userHandler.handleCheckEmail(req);
     }
-    if (req.method === 'GET' && req.url.includes('/api/users') && !req.url.includes('/cart')) {
+    if (
+      req.method === 'GET' &&
+      req.url.includes('/api/users') &&
+      !req.url.includes('/cart') &&
+      !req.url.includes('/addresses') &&
+      !req.url.includes('/payment-methods')
+    ) {
       const userIdMatch = req.url.match(/\/api\/users\/([\w-]+)$/);
       if (userIdMatch) {
         return this.userHandler.handleGetUser(req);
@@ -155,6 +165,34 @@ export class FakeBFFService {
     }
     if (req.method === 'DELETE' && req.url.match(/\/api\/users\/[\w-]+$/) && !req.url.includes('/cart')) {
       return this.userHandler.handleDeleteUser(req);
+    }
+
+    // Address endpoints
+    if (req.method === 'GET' && req.url.match(/\/api\/users\/[\w-]+\/addresses$/)) {
+      return this.addressHandler.handleGetAddresses(req);
+    }
+    if (req.method === 'POST' && req.url.match(/\/api\/users\/[\w-]+\/addresses$/)) {
+      return this.addressHandler.handleCreateAddress(req);
+    }
+    if (req.method === 'PATCH' && req.url.match(/\/api\/users\/[\w-]+\/addresses\/[\w-]+$/)) {
+      return this.addressHandler.handleUpdateAddress(req);
+    }
+    if (req.method === 'DELETE' && req.url.match(/\/api\/users\/[\w-]+\/addresses\/[\w-]+$/)) {
+      return this.addressHandler.handleDeleteAddress(req);
+    }
+
+    // Payment method endpoints
+    if (req.method === 'GET' && req.url.match(/\/api\/users\/[\w-]+\/payment-methods$/)) {
+      return this.paymentMethodHandler.handleGetPaymentMethods(req);
+    }
+    if (req.method === 'POST' && req.url.match(/\/api\/users\/[\w-]+\/payment-methods$/)) {
+      return this.paymentMethodHandler.handleCreatePaymentMethod(req);
+    }
+    if (req.method === 'PATCH' && req.url.match(/\/api\/users\/[\w-]+\/payment-methods\/[\w-]+$/)) {
+      return this.paymentMethodHandler.handleUpdatePaymentMethod(req);
+    }
+    if (req.method === 'DELETE' && req.url.match(/\/api\/users\/[\w-]+\/payment-methods\/[\w-]+$/)) {
+      return this.paymentMethodHandler.handleDeletePaymentMethod(req);
     }
 
     // Cart endpoints

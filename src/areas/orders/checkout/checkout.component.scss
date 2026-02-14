@@ -91,6 +91,28 @@
   }
 }
 
+.saved-address-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.using-saved-address-note {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius-sm);
+  background: var(--surface-secondary);
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+
+  mat-icon {
+    color: var(--app-primary);
+  }
+}
+
 /* Account & Address Sections */
 .account-section,
 .address-section {

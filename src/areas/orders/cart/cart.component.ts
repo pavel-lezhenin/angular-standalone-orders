@@ -51,7 +51,8 @@ export default class CartComponent implements OnInit {
   private isBrowser = isPlatformBrowser(this.platformId);
 
   protected cartItems = signal<CartItemWithDetails[]>([]);
-  protected loading = signal(false);
+  protected loading = signal(true);
+  protected hasLoaded = signal(false);
   protected selectedItems = signal<Set<string>>(new Set());
 
   /**
@@ -164,6 +165,7 @@ export default class CartComponent implements OnInit {
     this.loading.set(true);
 
     try {
+      await this.cartService.waitForRestore();
       const items = this.cartService.getItems();
 
       if (items.length === 0) {
@@ -225,6 +227,7 @@ export default class CartComponent implements OnInit {
       console.error('Failed to load cart items:', error);
       this.notification.error('Failed to load cart items');
     } finally {
+      this.hasLoaded.set(true);
       this.loading.set(false);
     }
   }
