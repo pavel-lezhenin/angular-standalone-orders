@@ -48,9 +48,9 @@ export class ProductFiltersComponent {
   readonly filterActions = signal<FilterAction[]>([
     {
       id: 'reset',
-      icon: 'restart_alt',
-      ariaLabel: 'Reset filters',
-      tooltip: 'Reset filters to default',
+      icon: 'close',
+      ariaLabel: 'Clear filters',
+      tooltip: 'Clear all filters',
     },
     {
       id: 'refresh',
