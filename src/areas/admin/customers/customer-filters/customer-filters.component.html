@@ -1,4 +1,8 @@
-<div class="filters-container">
+<app-filter-container
+  [isLoading]="isLoading()"
+  [actions]="filterActions()"
+  (action)="onFilterAction($event)"
+>
   <app-search-input
     [label]="'Search users'"
     [placeholder]="'Email or name...'"
@@ -16,12 +20,4 @@
       <mat-option value="admin">Admin</mat-option>
     </mat-select>
   </mat-form-field>
-
-  <button 
-    mat-raised-button 
-    (click)="resetFilters()"
-    type="button"
-  >
-    Reset
-  </button>
-</div>
+</app-filter-container>

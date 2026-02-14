@@ -1,12 +1,12 @@
-import { Component, output } from '@angular/core';
+import { Component, input, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { UserRole } from '@core/types';
 import { SearchInputComponent } from '@shared/ui/search-input';
+import { FilterContainerComponent, FilterAction } from '@shared/ui/filter-container';
 
 export interface CustomerFilters {
   search: string;
@@ -18,6 +18,7 @@ export interface CustomerFilters {
  * 
  * Handles search and role filtering
  * Uses reusable SearchInputComponent with 300ms debounce
+ * Uses FilterContainerComponent for responsive layout
  * Emits filter changes to parent
  */
 @Component({
@@ -27,19 +28,30 @@ export interface CustomerFilters {
     CommonModule,
     ReactiveFormsModule,
     SearchInputComponent,
+    FilterContainerComponent,
     MatFormFieldModule,
     MatSelectModule,
-    MatButtonModule,
     MatIconModule,
   ],
   templateUrl: './customer-filters.component.html',
   styleUrl: './customer-filters.component.scss',
 })
 export class CustomerFiltersComponent {
+  readonly isLoading = input<boolean>(false);
+
   readonly searchControl = new FormControl<string>('');
   readonly roleControl = new FormControl<UserRole | undefined>(undefined);
 
   readonly filtersChange = output<CustomerFilters>();
+
+  readonly filterActions = signal<FilterAction[]>([
+    {
+      id: 'reset',
+      icon: 'refresh',
+      ariaLabel: 'Reset filters',
+      tooltip: 'Reset all filters to default',
+    },
+  ]);
 
   constructor() {
     // Immediate role filter
@@ -62,9 +74,22 @@ export class CustomerFiltersComponent {
     this.emitFilters();
   }
 
+  /**
+   * Handle filter action (reset, export, etc)
+   */
+  onFilterAction(actionId: string): void {
+    if (actionId === 'reset') {
+      this.resetFilters();
+    }
+  }
+
   resetFilters(): void {
     this.searchControl.setValue('', { emitEvent: false });
     this.roleControl.setValue(undefined, { emitEvent: false });
+    this.filtersChange.emit({
+      search: '',
+      role: undefined,
+    });
   }
 
   private emitFilters(): void {

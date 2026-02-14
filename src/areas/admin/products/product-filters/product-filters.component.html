@@ -1,30 +1,23 @@
-<div class="product-filters">
-  <div class="filters-row">
-    <app-search-input
-      [label]="'Search products'"
-      [placeholder]="'Search by name...'"
-      [searchControl]="searchControl"
-      (search)="onSearch($event)"
-      (clear)="onSearchClear()"
-    />
+<app-filter-container
+  [isLoading]="isLoading()"
+  [actions]="filterActions()"
+  (action)="onFilterAction($event)"
+>
+  <app-search-input
+    [label]="'Search products'"
+    [placeholder]="'Search by name...'"
+    [searchControl]="searchControl"
+    (search)="onSearch($event)"
+    (clear)="onSearchClear()"
+  />
 
-    <mat-form-field appearance="outline" class="category-field">
-      <mat-label>Category</mat-label>
-      <mat-select [formControl]="categoryControl">
-        <mat-option [value]="undefined">All Categories</mat-option>
-        <mat-option *ngFor="let category of categories()" [value]="category.id">
-          {{ category.name }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <button
-      mat-stroked-button
-      (click)="resetFilters()"
-      class="reset-button"
-    >
-      <mat-icon>refresh</mat-icon>
-      Reset
-    </button>
-  </div>
-</div>
+  <mat-form-field appearance="outline" class="category-field">
+    <mat-label>Category</mat-label>
+    <mat-select [formControl]="categoryControl">
+      <mat-option [value]="undefined">All Categories</mat-option>
+      <mat-option *ngFor="let category of categories()" [value]="category.id">
+        {{ category.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</app-filter-container>

@@ -1,12 +1,12 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CategoryDTO } from '@core';
 import { SearchInputComponent } from '@shared/ui/search-input';
+import { FilterContainerComponent, FilterAction } from '@shared/ui/filter-container';
 
 export interface ShopFilters {
   search: string;
@@ -18,6 +18,7 @@ export interface ShopFilters {
  *
  * Handles search and category filtering for public catalog
  * Uses reusable SearchInputComponent with 300ms debounce
+ * Uses FilterContainerComponent for responsive layout
  * Emits filter changes to parent orchestrator
  */
 @Component({
@@ -27,9 +28,9 @@ export interface ShopFilters {
     CommonModule,
     ReactiveFormsModule,
     SearchInputComponent,
+    FilterContainerComponent,
     MatFormFieldModule,
     MatSelectModule,
-    MatButtonModule,
     MatIconModule,
   ],
   templateUrl: './shop-filters.component.html',
@@ -37,11 +38,21 @@ export interface ShopFilters {
 })
 export class ShopFiltersComponent {
   readonly categories = input.required<CategoryDTO[]>();
+  readonly isLoading = input<boolean>(false);
 
   readonly searchControl = new FormControl<string>('');
   readonly categoryControl = new FormControl<string | undefined>(undefined);
 
   readonly filtersChange = output<ShopFilters>();
+
+  readonly filterActions = signal<FilterAction[]>([
+    {
+      id: 'reset',
+      icon: 'refresh',
+      ariaLabel: 'Reset filters',
+      tooltip: 'Reset all filters to default',
+    },
+  ]);
 
   constructor() {
     // Category filter changes emit immediately
@@ -62,6 +73,15 @@ export class ShopFiltersComponent {
    */
   onSearchClear(): void {
     this.emitFilters();
+  }
+
+  /**
+   * Handle filter action (reset, export, etc)
+   */
+  onFilterAction(actionId: string): void {
+    if (actionId === 'reset') {
+      this.clearFilters();
+    }
   }
 
   /**

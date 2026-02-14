@@ -5,3 +5,5 @@
  */
 
 export { SearchInputComponent } from './search-input';
+export { FilterContainerComponent, type FilterAction } from './filter-container';
+
