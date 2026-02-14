@@ -1,11 +1,11 @@
 .filter-container {
   display: flex;
-  flex-direction: column;
   gap: var(--spacing-md);
   padding: var(--spacing-md);
   background: var(--surface-secondary);
   border-radius: var(--border-radius-md);
   margin-bottom: var(--spacing-lg);
+  align-items: flex-start;
 }
 
 .filter-fields {
@@ -13,13 +13,13 @@
   grid-template-columns: repeat(4, 1fr);
   gap: var(--spacing-md);
   align-items: flex-end;
+  flex: 1;
 }
 
 .filter-actions {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xs);
-  justify-content: flex-end;
   align-items: flex-end;
 }
 
@@ -57,12 +57,4 @@
 /* Mobile: 1 column */
 :host-context(.mobile) .filter-fields {
   grid-template-columns: 1fr;
-}
-
-:host-context(.mobile) .filter-actions {
-  justify-content: stretch;
-
-  .action-button {
-    flex: 1;
-  }
 }
