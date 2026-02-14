@@ -35,7 +35,15 @@
   } @else {
     <div class="board-columns">
       @for (column of columns; track column.status) {
-        <section class="board-column" [class]="'status-' + column.status">
+        <section
+          class="board-column"
+          [class]="'status-' + column.status"
+          cdkDropList
+          [id]="getDropListId(column.status)"
+          [cdkDropListData]="getOrdersForStatus(column.status)"
+          [cdkDropListConnectedTo]="connectedDropListIds()"
+          (cdkDropListDropped)="onDropOrder($event, column.status)"
+        >
           <div class="column-header">
             <h2>{{ column.title }}</h2>
             <span class="count">{{ getOrdersForStatus(column.status).length }}</span>
@@ -47,7 +55,15 @@
               <div class="empty-column">No orders</div>
             } @else {
               @for (order of getOrdersForStatus(column.status); track order.id) {
-                <mat-card class="order-card">
+                <mat-card
+                  class="order-card"
+                  cdkDrag
+                  [cdkDragData]="order"
+                  [class.is-moving]="isMoving(order.id)"
+                  (cdkDragStarted)="onDragStarted()"
+                  (cdkDragEnded)="onDragEnded()"
+                  (click)="openOrderDetails(order)"
+                >
                   <mat-card-content>
                     <div class="order-top">
                       <strong>#{{ order.id.slice(0, 8) }}</strong>

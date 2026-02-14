@@ -1,0 +1,82 @@
+<h2 mat-dialog-title>Order #{{ order().id.slice(0, 8) }}</h2>
+
+<mat-dialog-content>
+  <div class="summary">
+    <span>Status: {{ order().status }}</span>
+    <span>Total: {{ order().total | currency }}</span>
+    <span>Payment: {{ order().paymentStatus }}</span>
+  </div>
+
+  <div class="products">
+    <h3>Order Items</h3>
+
+    @if (loadingProducts()) {
+      <p class="empty">Loading product details...</p>
+    } @else if (productsError()) {
+      <p class="empty">{{ productsError() }}</p>
+    } @else if (productLines().length === 0) {
+      <p class="empty">No items in order</p>
+    } @else {
+      <div class="products-list">
+        @for (line of productLines(); track line.productId) {
+          <article class="product-item">
+            <div class="product-header">
+              <strong>{{ line.product?.name ?? 'Unknown product' }}</strong>
+              <span>{{ line.quantity }} × {{ line.orderPrice | currency }}</span>
+            </div>
+            <p>ID: {{ line.productId }}</p>
+            @if (line.product) {
+              <p>Category: {{ line.product.categoryId }}</p>
+              <p>Current stock: {{ line.product.stock }}</p>
+            }
+          </article>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="comment-box">
+    <mat-form-field appearance="outline" class="comment-field">
+      <mat-label>Add manager comment</mat-label>
+      <textarea
+        matInput
+        rows="3"
+        [formControl]="commentControl"
+        placeholder="Example: Item unavailable in warehouse, initiate refund"
+      ></textarea>
+      @if (commentControl.invalid && commentControl.touched) {
+        <mat-error>Comment must be at least 3 characters</mat-error>
+      }
+    </mat-form-field>
+
+    <button mat-flat-button type="button" (click)="addComment()" [disabled]="isSavingComment()">
+      <mat-icon>note_add</mat-icon>
+      Add Comment
+    </button>
+  </div>
+
+  <div class="history">
+    <h3>Order History</h3>
+
+    @if (timeline().length === 0) {
+      <p class="empty">No history events</p>
+    } @else {
+      <div class="timeline-list">
+        @for (item of timeline(); track item.id) {
+          <article class="timeline-item" [class]="'type-' + item.type">
+            <div class="timeline-header">
+              <strong>{{ item.title }}</strong>
+              <span>{{ item.createdAt | date: 'short' }}</span>
+            </div>
+            <p>{{ item.description }}</p>
+            <small>By: {{ item.actor }}</small>
+          </article>
+        }
+      </div>
+    }
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button type="button" (click)="close()">Close</button>
+</mat-dialog-actions>

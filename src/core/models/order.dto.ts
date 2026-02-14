@@ -1,4 +1,4 @@
-import type { OrderStatus, PaymentStatus } from '@core/types';
+import type { OrderStatus, PaymentStatus, UserRole } from '@core/types';
 
 /**
  * Order item in the order
@@ -20,6 +20,27 @@ export interface PaymentInfoDTO {
   paymentMethod: 'card' | 'paypal' | 'cash_on_delivery';
 }
 
+export interface OrderStatusChangeActorDTO {
+  id: string;
+  role: UserRole;
+  email?: string;
+}
+
+export interface OrderStatusChangeDTO {
+  fromStatus: OrderStatus;
+  toStatus: OrderStatus;
+  changedAt: number;
+  actor: OrderStatusChangeActorDTO;
+}
+
+export interface OrderCommentDTO {
+  id: string;
+  text: string;
+  createdAt: number;
+  actor: OrderStatusChangeActorDTO;
+  isSystem?: boolean;
+}
+
 /**
  * Order DTO for application layer
  */
@@ -34,8 +55,21 @@ export interface OrderDTO {
   paymentInfo?: PaymentInfoDTO;
   supplierId?: string;
   estimatedDeliveryDate?: number;
+  statusHistory?: readonly OrderStatusChangeDTO[];
+  comments?: readonly OrderCommentDTO[];
   createdAt: number;
   updatedAt: number;
+}
+
+export interface UpdateOrderStatusDTO {
+  status: OrderStatus;
+  actor?: OrderStatusChangeActorDTO;
+}
+
+export interface AddOrderCommentDTO {
+  text: string;
+  actor?: OrderStatusChangeActorDTO;
+  isSystem?: boolean;
 }
 
 /**
@@ -48,6 +82,8 @@ export interface CreateOrderDTO {
   deliveryAddress: string;
   paymentInfo?: PaymentInfoDTO;
   supplierId?: string;
+  status?: OrderStatus;
+  paymentStatus?: PaymentStatus;
 }
 
 /**

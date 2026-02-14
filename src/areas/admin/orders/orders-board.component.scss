@@ -2,6 +2,8 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xl);
+  height: 100%;
+  min-height: 0;
 }
 
 .board-header {
@@ -82,20 +84,27 @@
 }
 
 .board-columns {
-  display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  align-items: stretch;
   gap: var(--spacing-md);
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: var(--spacing-xs);
 }
 
 .board-column {
   display: flex;
   flex-direction: column;
+  flex: 0 0 auto;
   gap: var(--spacing-sm);
+  width: 250px;
   padding: var(--spacing-md);
   background: var(--surface-primary);
   border-radius: var(--border-radius-sm);
   border: var(--spacing-1px) solid var(--color-border);
-  min-height: var(--spacing-6xl);
+  min-height: 100%;
 
   .column-header {
     display: flex;
@@ -128,8 +137,19 @@
   .column-content {
     display: flex;
     flex-direction: column;
+    flex: 1;
     gap: var(--spacing-sm);
+    min-height: var(--spacing-5xl);
   }
+}
+
+.board-column.cdk-drop-list-dragging {
+  background: var(--surface-secondary);
+}
+
+.board-column.cdk-drop-list-receiving {
+  border-color: var(--app-primary);
+  border-top: var(--spacing-2px) solid var(--app-primary);
 }
 
 .empty-column {
@@ -144,6 +164,15 @@
 .order-card {
   border: var(--spacing-1px) solid var(--color-border);
   box-shadow: none;
+  cursor: pointer;
+
+  &.is-moving {
+    opacity: 0.7;
+  }
+
+  &.cdk-drag-dragging {
+    cursor: grabbing;
+  }
 
   mat-card-content {
     display: flex;
@@ -185,6 +214,22 @@
   }
 }
 
+.cdk-drag-preview {
+  box-shadow: none;
+  border: var(--spacing-1px) solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  cursor: grabbing;
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-dragging {
+  cursor: grabbing;
+}
+
+
 .status-pending_payment {
   border-top: var(--spacing-2px) solid var(--app-warning);
 }
@@ -212,12 +257,6 @@
 .status-cancelled {
   border-top: var(--spacing-2px) solid var(--app-error);
 }
-
-:host-context(.tablet) .board-columns,
-:host-context(.desktop) .board-columns {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
 :host-context(.mobile) {
   .board-header {
     flex-direction: column;
@@ -226,9 +265,5 @@
     .header-actions {
       justify-content: space-between;
     }
-  }
-
-  .board-columns {
-    grid-template-columns: 1fr;
   }
 }

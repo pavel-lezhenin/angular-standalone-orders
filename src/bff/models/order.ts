@@ -1,4 +1,4 @@
-import { OrderStatus, PaymentStatus } from '@core/types';
+import { OrderStatus, PaymentStatus, UserRole } from '@core/types';
 
 /**
  * Order item line
@@ -18,6 +18,27 @@ export interface PaymentInfo {
   expiryMonth: number;
   expiryYear: number;
   paymentMethod: 'card' | 'paypal' | 'cash_on_delivery';
+}
+
+export interface OrderStatusChangeActor {
+  id: string;
+  role: UserRole;
+  email?: string;
+}
+
+export interface OrderStatusChange {
+  fromStatus: OrderStatus;
+  toStatus: OrderStatus;
+  changedAt: number;
+  actor: OrderStatusChangeActor;
+}
+
+export interface OrderComment {
+  id: string;
+  text: string;
+  createdAt: number;
+  actor: OrderStatusChangeActor;
+  isSystem?: boolean;
 }
 
 /**
@@ -41,6 +62,8 @@ export interface Order {
   paymentInfo?: PaymentInfo;     // Optional - payment details (sanitized)
   supplierId?: string;            // Optional - assigned supplier
   estimatedDeliveryDate?: number; // Optional - timestamp
+  statusHistory?: readonly OrderStatusChange[];
+  comments?: readonly OrderComment[];
   createdAt: number;
   updatedAt: number;
 }

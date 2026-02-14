@@ -139,6 +139,12 @@ export class FakeBFFService {
     if (req.method === 'GET' && req.url.match(/\/api\/orders\/[\w-]+$/)) {
       return this.orderHandler.handleGetOrder(req);
     }
+    if (req.method === 'PATCH' && req.url.match(/\/api\/orders\/[\w-]+\/status$/)) {
+      return this.orderHandler.handleUpdateOrderStatus(req);
+    }
+    if (req.method === 'POST' && req.url.match(/\/api\/orders\/[\w-]+\/comments$/)) {
+      return this.orderHandler.handleAddOrderComment(req);
+    }
 
     // User endpoints
     if (req.method === 'GET' && req.url.includes('/api/users/check-email')) {

@@ -35,6 +35,11 @@
 - ✅ Normalized stores for `addresses` and `payment_methods`
 - ✅ New handlers + repositories + routes in FakeBFF
 - ✅ Legacy profile address/payment fields removed from DTO/domain profile
+- ✅ Baseline order status audit trail (`statusHistory`: who + when + from/to)
+
+### Status Workflow Note
+- `pending_payment` is preserved as a reserved stage for asynchronous/custom payment processing flows.
+- Manager board may hide this column in daily operations while the domain status remains available for integrations.
 
 ---
 

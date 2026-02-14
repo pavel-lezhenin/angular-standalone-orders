@@ -320,8 +320,8 @@ export default class PaymentComponent implements OnInit {
       // Create order with payment info
       const orderToCreate = {
         ...orderData,
-        paymentMethod,
-        paymentStatus: 'paid',
+        status: 'paid' as const,
+        paymentStatus: 'approved' as const,
         transactionId,
       };
 

@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
-import type { OrderDTO, CreateOrderDTO } from '@core/models';
+import type { AddOrderCommentDTO, OrderDTO, CreateOrderDTO, UpdateOrderStatusDTO } from '@core/models';
 
 /**
  * Order Service
@@ -86,6 +86,30 @@ export class OrderService {
     } catch (error) {
       console.error('Failed to fetch user orders:', error);
       throw new Error('Failed to fetch orders. Please try again.');
+    }
+  }
+
+  async updateOrderStatus(orderId: string, payload: UpdateOrderStatusDTO): Promise<OrderDTO> {
+    try {
+      const response = await firstValueFrom(
+        this.http.patch<{ order: OrderDTO }>(`${this.apiUrl}/${orderId}/status`, payload)
+      );
+      return response.order;
+    } catch (error) {
+      console.error('Failed to update order status:', error);
+      throw new Error('Failed to update order status. Please try again.');
+    }
+  }
+
+  async addOrderComment(orderId: string, payload: AddOrderCommentDTO): Promise<OrderDTO> {
+    try {
+      const response = await firstValueFrom(
+        this.http.post<{ order: OrderDTO }>(`${this.apiUrl}/${orderId}/comments`, payload)
+      );
+      return response.order;
+    } catch (error) {
+      console.error('Failed to add order comment:', error);
+      throw new Error('Failed to add order comment. Please try again.');
     }
   }
 }
