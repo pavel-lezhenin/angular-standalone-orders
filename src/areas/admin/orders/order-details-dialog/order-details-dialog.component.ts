@@ -1,8 +1,7 @@
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, Input, OnChanges, computed, inject, signal } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -26,12 +25,6 @@ interface ProductLineItem {
   product?: ProductDTO;
 }
 
-export interface OrderDetailsDialogData {
-  order: OrderDTO;
-  actor: OrderStatusChangeActorDTO;
-  onAddComment: (orderId: string, payload: AddOrderCommentDTO) => Promise<OrderDTO>;
-}
-
 @Component({
   selector: 'app-order-details-dialog',
   standalone: true,
@@ -39,7 +32,6 @@ export interface OrderDetailsDialogData {
     CommonModule,
     DatePipe,
     ReactiveFormsModule,
-    MatDialogModule,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
@@ -48,24 +40,35 @@ export interface OrderDetailsDialogData {
   templateUrl: './order-details-dialog.component.html',
   styleUrl: './order-details-dialog.component.scss',
 })
-export class OrderDetailsDialogComponent implements OnInit {
-  private readonly dialogRef = inject(MatDialogRef<OrderDetailsDialogComponent>);
+export class OrderDetailsDialogComponent implements OnChanges {
   private readonly http = inject(HttpClient);
-  protected readonly data = inject<OrderDetailsDialogData>(MAT_DIALOG_DATA);
 
-  protected readonly order = signal<OrderDTO>(this.data.order);
+  @Input({ required: true }) orderInput!: OrderDTO;
+  @Input({ required: true }) actor!: OrderStatusChangeActorDTO;
+  @Input({ required: true }) onAddComment!: (orderId: string, payload: AddOrderCommentDTO) => Promise<OrderDTO>;
+  @Input() onOrderUpdated?: (order: OrderDTO) => void;
+
+  protected readonly order = signal<OrderDTO | null>(null);
   protected readonly isSavingComment = signal(false);
   protected readonly loadingProducts = signal(false);
   protected readonly productsError = signal<string | null>(null);
   protected readonly productLines = signal<readonly ProductLineItem[]>([]);
   protected readonly commentControl = new FormControl('', [Validators.required, Validators.minLength(3)]);
 
-  ngOnInit(): void {
+  ngOnChanges(): void {
+    if (!this.orderInput) {
+      return;
+    }
+
+    this.order.set(this.orderInput);
     this.loadOrderProducts();
   }
 
   protected readonly timeline = computed<OrderTimelineItem[]>(() => {
     const currentOrder = this.order();
+    if (!currentOrder) {
+      return [];
+    }
 
     const createdEvent: OrderTimelineItem = {
       id: `created-${currentOrder.id}`,
@@ -112,11 +115,17 @@ export class OrderDetailsDialogComponent implements OnInit {
     this.isSavingComment.set(true);
 
     try {
-      const updatedOrder = await this.data.onAddComment(this.order().id, {
+      const currentOrder = this.order();
+      if (!currentOrder) {
+        return;
+      }
+
+      const updatedOrder = await this.onAddComment(currentOrder.id, {
         text: commentText,
-        actor: this.data.actor,
+        actor: this.actor,
       });
       this.order.set(updatedOrder);
+      this.onOrderUpdated?.(updatedOrder);
       this.commentControl.setValue('');
       this.commentControl.markAsPristine();
       this.commentControl.markAsUntouched();
@@ -126,12 +135,18 @@ export class OrderDetailsDialogComponent implements OnInit {
   }
 
   private async loadOrderProducts(): Promise<void> {
+    const currentOrder = this.order();
+    if (!currentOrder) {
+      this.productLines.set([]);
+      return;
+    }
+
     this.loadingProducts.set(true);
     this.productsError.set(null);
 
     try {
       const lines = await Promise.all(
-        this.order().items.map(async item => {
+        currentOrder.items.map(async item => {
           try {
             const response = await firstValueFrom(
               this.http.get<{ product: ProductDTO }>(`/api/products/${item.productId}`)
@@ -159,9 +174,5 @@ export class OrderDetailsDialogComponent implements OnInit {
     } finally {
       this.loadingProducts.set(false);
     }
-  }
-
-  protected close(): void {
-    this.dialogRef.close(this.order());
   }
 }

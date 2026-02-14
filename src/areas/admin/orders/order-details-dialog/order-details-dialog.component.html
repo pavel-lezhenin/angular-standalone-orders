@@ -1,10 +1,8 @@
-<h2 mat-dialog-title>Order #{{ order().id.slice(0, 8) }}</h2>
-
-<mat-dialog-content>
+@if (order(); as currentOrder) {
   <div class="summary">
-    <span>Status: {{ order().status }}</span>
-    <span>Total: {{ order().total | currency }}</span>
-    <span>Payment: {{ order().paymentStatus }}</span>
+    <span>Status: {{ currentOrder.status }}</span>
+    <span>Total: {{ currentOrder.total | currency }}</span>
+    <span>Payment: {{ currentOrder.paymentStatus }}</span>
   </div>
 
   <div class="products">
@@ -75,8 +73,4 @@
       </div>
     }
   </div>
-</mat-dialog-content>
-
-<mat-dialog-actions align="end">
-  <button mat-stroked-button type="button" (click)="close()">Close</button>
-</mat-dialog-actions>
+}

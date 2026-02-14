@@ -21,6 +21,8 @@
       <div class="dialog-message">
         {{ config.message }}
       </div>
+    } @else if (config.contentComponent) {
+      <ng-container *ngComponentOutlet="config.contentComponent; inputs: config.contentInputs"></ng-container>
     } @else {
       <ng-content></ng-content>
     }

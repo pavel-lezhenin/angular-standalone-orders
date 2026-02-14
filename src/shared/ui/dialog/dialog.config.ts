@@ -1,4 +1,5 @@
 import { MatDialogConfig } from '@angular/material/dialog';
+import { Type } from '@angular/core';
 
 /**
  * Dialog configuration interface
@@ -22,6 +23,16 @@ export interface DialogConfig {
    * Dialog message (optional, for simple message dialogs)
    */
   message?: string;
+
+  /**
+   * Optional custom content component rendered inside dialog body.
+   */
+  contentComponent?: Type<unknown>;
+
+  /**
+   * Inputs passed to contentComponent when rendered.
+   */
+  contentInputs?: Record<string, unknown>;
 
   /**
    * Submit button label

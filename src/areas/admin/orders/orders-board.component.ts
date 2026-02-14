@@ -8,6 +8,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { NotificationService } from '@shared/services/notification.service';
 import { OrderService } from '@shared/services/order.service';
+import { DialogComponent } from '@shared/ui/dialog';
 import type { AddOrderCommentDTO, OrderDTO, OrderStatusChangeActorDTO } from '@core/models';
 import type { OrderStatus } from '@core/types';
 import { AuthService } from '@core/services/auth.service';
@@ -190,26 +191,26 @@ export class OrdersBoardComponent implements OnInit, OnDestroy {
   }
 
   protected openOrderDetails(order: OrderDTO): void {
-    const dialogRef = this.dialog.open(OrderDetailsDialogComponent, {
+    this.dialog.open(DialogComponent, {
       width: '960px',
       maxWidth: '96vw',
       data: {
-        order,
-        actor: this.getCurrentActor(),
-        onAddComment: (orderId: string, payload: AddOrderCommentDTO) =>
-          this.orderService.addOrderComment(orderId, payload),
+        title: `Order #${order.id.slice(0, 8)}`,
+        type: 'notification',
+        contentComponent: OrderDetailsDialogComponent,
+        contentInputs: {
+          orderInput: order,
+          actor: this.getCurrentActor(),
+          onAddComment: (orderId: string, payload: AddOrderCommentDTO) =>
+            this.orderService.addOrderComment(orderId, payload),
+          onOrderUpdated: (updatedOrder: OrderDTO) => {
+            this.orders.update(currentOrders =>
+              currentOrders.map(item => (item.id === updatedOrder.id ? updatedOrder : item))
+            );
+            this.lastUpdatedAt.set(Date.now());
+          },
+        },
       },
-    });
-
-    dialogRef.afterClosed().subscribe((updatedOrder?: OrderDTO) => {
-      if (!updatedOrder) {
-        return;
-      }
-
-      this.orders.update(currentOrders =>
-        currentOrders.map(item => (item.id === updatedOrder.id ? updatedOrder : item))
-      );
-      this.lastUpdatedAt.set(Date.now());
     });
   }
 
