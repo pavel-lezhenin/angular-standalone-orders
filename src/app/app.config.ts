@@ -2,7 +2,7 @@ import { ApplicationConfig, APP_INITIALIZER, PLATFORM_ID, inject } from '@angula
 import { provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { HttpInterceptorFn } from '@angular/common/http';
+import { HttpInterceptorFn, HttpResponse } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
 import { provideAnimations } from '@angular/platform-browser/animations';
 
@@ -60,8 +60,14 @@ function restoreAuthSession(authService: AuthService, fakeBFF: FakeBFFService, p
 const apiInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> => {
   const platformId = inject(PLATFORM_ID);
   
-  // Skip interception on server - let requests go through
+  // During SSR: return empty responses for /api/ — no real backend exists
   if (!isPlatformBrowser(platformId)) {
+    if (req.url.startsWith('/api/')) {
+      return new Observable<HttpEvent<unknown>>((observer) => {
+        observer.next(new HttpResponse({ status: 200, body: { data: [], total: 0, page: 1, limit: 20 } }));
+        observer.complete();
+      });
+    }
     return next(req);
   }
   
