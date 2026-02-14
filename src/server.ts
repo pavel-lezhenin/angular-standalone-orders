@@ -50,6 +50,12 @@ app.use(
       if (path.match(/\.(js|css|woff2?|ttf|eot|svg|png|jpg|jpeg|gif|webp|ico)$/)) {
         res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
       }
+      
+      // SEO files should not be cached aggressively
+      if (path.match(/\/(robots\.txt|sitemap\.xml)$/)) {
+        res.setHeader('Cache-Control', 'public, max-age=3600'); // Cache for 1 hour
+        res.setHeader('Content-Type', path.endsWith('.xml') ? 'application/xml' : 'text/plain');
+      }
     },
   })
 );
