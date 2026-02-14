@@ -65,7 +65,7 @@ mat-form-field {
   }
 
   .consent-error {
-    color: #d32f2f;
+    color: var(--app-error);
     font-size: var(--font-size-xxs);
     margin-top: var(--spacing-xs);
   }

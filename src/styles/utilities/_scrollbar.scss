@@ -9,11 +9,11 @@
   }
 
   &::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.2);
+    background: var(--color-border);
     border-radius: var(--spacing-xs);
 
     &:hover {
-      background: rgba(0, 0, 0, 0.3);
+      background: var(--color-border-dark);
     }
   }
 }
