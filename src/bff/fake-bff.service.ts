@@ -102,6 +102,15 @@ export class FakeBFFService {
     if (req.method === 'GET' && req.url.endsWith('/api/categories')) {
       return this.handleGetCategories(req);
     }
+    if (req.method === 'POST' && req.url.endsWith('/api/categories')) {
+      return this.handleCreateCategory(req);
+    }
+    if (req.method === 'PUT' && req.url.match(/\/api\/categories\/[\w-]+$/)) {
+      return this.handleUpdateCategory(req);
+    }
+    if (req.method === 'DELETE' && req.url.match(/\/api\/categories\/[\w-]+$/)) {
+      return this.handleDeleteCategory(req);
+    }
 
     // Order endpoints
     if (req.method === 'GET' && req.url.endsWith('/api/orders')) {
@@ -232,13 +241,172 @@ export class FakeBFFService {
 
   // Category handlers
   private async handleGetCategories(req: HttpRequest<unknown>): Promise<HttpResponse<unknown>> {
+    await randomDelay();
     try {
-      const categories = await this.categoryRepo.getAll();
-      return new HttpResponse({ status: 200, body: { categories } });
+      // Parse query parameters
+      const page = parseInt(req.params.get('page') || '1');
+      const limit = parseInt(req.params.get('limit') || '20');
+      const search = req.params.get('search') || '';
+
+      // Get all categories
+      let categories = await this.categoryRepo.getAll();
+
+      // Apply search filter
+      if (search) {
+        const searchLower = search.toLowerCase();
+        categories = categories.filter(category => 
+          category.name.toLowerCase().includes(searchLower) ||
+          category.description.toLowerCase().includes(searchLower)
+        );
+      }
+
+      // Apply pagination
+      const total = categories.length;
+      const startIndex = (page - 1) * limit;
+      const endIndex = startIndex + limit;
+      const paginatedCategories = categories.slice(startIndex, endIndex);
+
+      return new HttpResponse({ 
+        status: 200, 
+        body: { 
+          data: paginatedCategories,
+          total,
+          page,
+          limit,
+        } 
+      });
     } catch (err) {
+      console.error('Failed to fetch categories:', err);
       return new HttpResponse({
         status: 500,
         body: { error: 'Failed to fetch categories' },
+      });
+    }
+  }
+
+  private async handleCreateCategory(req: HttpRequest<unknown>): Promise<HttpResponse<unknown>> {
+    await randomDelay();
+    try {
+      const body = req.body as Partial<Category>;
+      
+      // Validate required fields
+      if (!body.name || !body.description) {
+        return new HttpResponse({
+          status: 400,
+          body: { error: 'Name and description are required' },
+        });
+      }
+
+      // Validate max lengths
+      if (body.name.length > 32) {
+        return new HttpResponse({
+          status: 400,
+          body: { error: 'Name must not exceed 32 characters' },
+        });
+      }
+
+      if (body.description.length > 128) {
+        return new HttpResponse({
+          status: 400,
+          body: { error: 'Description must not exceed 128 characters' },
+        });
+      }
+      
+      const categoryData: Category = {
+        id: crypto.randomUUID(),
+        name: body.name.trim(),
+        description: body.description.trim(),
+      };
+
+      await this.categoryRepo.create(categoryData);
+      
+      return new HttpResponse({ status: 201, body: categoryData });
+    } catch (err) {
+      console.error('Failed to create category:', err);
+      return new HttpResponse({
+        status: 500,
+        body: { error: 'Failed to create category' },
+      });
+    }
+  }
+
+  private async handleUpdateCategory(req: HttpRequest<unknown>): Promise<HttpResponse<unknown>> {
+    await randomDelay();
+    try {
+      const id = req.url.split('/').pop()!;
+      const updates = req.body as Partial<Category>;
+
+      // Validate max lengths if fields are provided
+      if (updates.name !== undefined) {
+        if (!updates.name) {
+          return new HttpResponse({
+            status: 400,
+            body: { error: 'Name cannot be empty' },
+          });
+        }
+        if (updates.name.length > 32) {
+          return new HttpResponse({
+            status: 400,
+            body: { error: 'Name must not exceed 32 characters' },
+          });
+        }
+        updates.name = updates.name.trim();
+      }
+
+      if (updates.description !== undefined) {
+        if (!updates.description) {
+          return new HttpResponse({
+            status: 400,
+            body: { error: 'Description cannot be empty' },
+          });
+        }
+        if (updates.description.length > 128) {
+          return new HttpResponse({
+            status: 400,
+            body: { error: 'Description must not exceed 128 characters' },
+          });
+        }
+        updates.description = updates.description.trim();
+      }
+
+      await this.categoryRepo.update(id, updates);
+      
+      const updatedCategory = await this.categoryRepo.getById(id);
+      if (!updatedCategory) {
+        return new HttpResponse({ status: 404, body: { error: 'Category not found' } });
+      }
+
+      return new HttpResponse({ status: 200, body: updatedCategory });
+    } catch (err) {
+      console.error('Failed to update category:', err);
+      return new HttpResponse({
+        status: 500,
+        body: { error: 'Failed to update category' },
+      });
+    }
+  }
+
+  private async handleDeleteCategory(req: HttpRequest<unknown>): Promise<HttpResponse<unknown>> {
+    await randomDelay();
+    try {
+      const id = req.url.split('/').pop()!;
+
+      // Check if category has products
+      const products = await this.productRepo.getByCategoryId(id);
+      if (products.length > 0) {
+        return new HttpResponse({
+          status: 400,
+          body: { error: 'Cannot delete category with existing products' },
+        });
+      }
+
+      await this.categoryRepo.delete(id);
+      return new HttpResponse({ status: 204, body: null });
+    } catch (err) {
+      console.error('Failed to delete category:', err);
+      return new HttpResponse({
+        status: 500,
+        body: { error: 'Failed to delete category' },
       });
     }
   }

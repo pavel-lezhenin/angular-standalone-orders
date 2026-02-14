@@ -3,14 +3,14 @@
 > Complete roadmap for building the Orders Management Platform.  
 > See [ARCHITECTURE.md](./ARCHITECTURE.md) for design details.
 
-**Duration:** ~21 hours | **14 Phases** | **Progress:** ~50%
+**Duration:** ~21 hours | **14 Phases** | **Progress:** ~58%
 
 ---
 
 ## 🎯 Status
 
-**✅ Completed:** BFF, Auth, Landing, Admin Layout  
-**🚧 In Progress:** Shop, Admin components (scaffolds need data integration)  
+**✅ Completed:** BFF, Auth, Landing, Admin Layout, Customers (CRUD), Categories (CRUD)  
+**🚧 In Progress:** Shop, Dashboard, Orders Board, Products, Permissions  
 **❌ Missing:** Tests (0% → target 80%), Phase 2.4 Shop, seed data
 
 ---
@@ -26,15 +26,15 @@
 | 2.5 | Shared UI | 2h | ✅ 60% | Reusable components |
 | 2.6 | Admin Layout | 1h | ✅ 100% | Sidebar, routing |
 | 2.7 | Dashboard | 1h | ⚠️ 40% | Stats, widgets |
-| 2.8 | Customers | 1h | ⚠️ 30% | User management |
+| 2.8 | Customers | 1h | ✅ 100% | User management |
 | 2.9 | Permissions | 1.5h | ⚠️ 30% | RBAC matrix |
 | 2.10 | Orders Board | 2.5h | ⚠️ 30% | Trello drag-drop |
 | 2.11 | Products | 1.5h | ⚠️ 30% | CRUD, image upload |
-| 2.12 | Categories | 1h | ⚠️ 30% | Category management |
+| 2.12 | Categories | 1h | ✅ 100% | Category management |
 | 2.13 | Seed Data | 1h | ❌ 0% | Demo data |
 | 2.14 | Tests & Polish | 2h | ❌ 0% | Coverage, E2E, build |
 
-**Overall Progress:** ~50% (10.5h / 21h estimated)
+**Overall Progress:** ~58% (12h / 21h estimated)
 
 ---
 
@@ -71,15 +71,15 @@
 **Admin Area:**
 - ✅ AdminLayoutComponent with sidebar (Phase 2.6 ✅)
 - ✅ Admin routes fully configured
+- ✅ CustomersComponent (Phase 2.8 ✅) - CRUD with pagination, filters, dialogs
+- ✅ CategoriesComponent (Phase 2.12 ✅) - CRUD with validation, delete protection
 - ⚠️ DashboardComponent (scaffold created)
 - ⚠️ OrdersBoardComponent (scaffold created)
 - ⚠️ ProductsComponent (scaffold created)
-- ⚠️ CategoriesComponent (scaffold created)
-- ⚠️ CustomersComponent (scaffold created)
 - ⚠️ PermissionsComponent (scaffold created)
 
 ### ⚠️ In Progress (Scaffolds Created, Need Implementation)
-- Admin components need data integration and CRUD logic
+- Admin components: Dashboard, Orders Board, Products, Permissions
 - Shop module needs implementation
 
 ### ❌ Not Started
@@ -87,8 +87,7 @@
 - E2E tests  
 - Phase 2.4 - Shop Module (product catalog, cart, checkout)
 - Phase 2.13 - Seed Data (demo data generation)
-- Data integration for admin components
-- CRUD operations for Products, Categories, Customers
+- Data integration for Dashboard, Orders Board, Products, Permissions
 - Drag-drop functionality for Orders Board
 - Permission matrix UI
 
@@ -480,36 +479,62 @@ admin@demo / demo → Admin role
 
 ---
 
-## 📂 Phase 2.12: Categories Manager (1 hour) ⚠️ SCAFFOLD CREATED
+## 📂 Phase 2.12: Categories Manager (1 hour) ✅ COMPLETED
 
-**Goal:** Category CRUD
+**Goal:** Build category CRUD with data validation
 
 ### Deliverables
 
-- [x] `areas/admin/categories/categories.component.ts` — Scaffold created
-- [x] `areas/admin/categories/categories.component.html` — Basic template
-- [x] `areas/admin/categories/categories.component.scss` — Styling
-- [ ] Load categories from CategoryRepository
-- [ ] Add/Edit/Delete category functionality
-- [ ] Display category hierarchy
-- [ ] Category edit modal with Reactive Forms
+- [x] `areas/admin/categories/model/types.ts` — DTOs and types
+- [x] `areas/admin/categories/services/category.service.ts` — HTTP service with CRUD
+- [x] `areas/admin/categories/category-table/` — Table component with pagination
+- [x] `areas/admin/categories/category-form-dialog/` — Create/Edit dialog
+- [x] `areas/admin/categories/categories.component.ts` — Orchestrator component
+- [x] `core/models/category.dto.ts` — CategoryDTO in @core (not @bff!)
+- [x] BFF endpoints: GET, POST, PUT, DELETE /api/categories
+- [x] Data validation: name max 32 chars, description max 128 chars
+- [x] Delete protection: Cannot delete category with products
+- [x] Character count hints on form fields
+- [ ] Unit tests
 
 ### Patterns Used
 
-- **FORMS** — [Simple Reactive Forms validation](../../../docs/framework/angular/patterns/FORMS.md) in category-edit
-- **ERROR_HANDLING** — Prevent delete if category has products, show validation errors
+- **FORMS** — [Reactive Forms with validators](../../../docs/framework/angular/patterns/FORMS.md): `Validators.maxLength(32)`, `Validators.required`
+- **PERFORMANCE** — Signals for state, OnPush components
+- **ERROR_HANDLING** — BFF validation (400 errors), UI error messages
+- **ARCHITECTURE** — @core DTOs (not @bff imports in areas!)
 
-### Implementation
-- Categories table, Add/Edit/Delete actions
-- Delete validation: prevent if category has products
-- Edit modal with Reactive Forms
+### Implementation Details
+
+**Frontend:**
+- CategoryService: HTTP CRUD with pagination support
+- CategoryFormDialog: Reactive form with maxLength validators + character hints
+- CategoryTable: ID, Name, Description columns with actions
+- Validation: required + maxLength on client side
+
+**BFF Layer:**
+- GET /api/categories?page=1&limit=20&search=text — Paginated list
+- POST /api/categories — Create with validation (trim, maxLength check)
+- PUT /api/categories/:id — Update with partial validation
+- DELETE /api/categories/:id — Delete with product check (400 if has products)
+- Validation: name ≤ 32, description ≤ 128, trim values
+
+**Data Layer:**
+- CategoryRepository: Standard CRUD, extends BaseRepository
+- ProductRepository.getByCategoryId() — Check for dependent products
+- Delete protection: Cannot remove category if products exist
 
 ### Success Criteria
 
-- ✅ Categories load and display
-- ✅ Add/Edit modal works
-- ✅ Cannot delete if has products
-- ✅ Persist to IndexedDB
+- ✅ Categories load and display with ID column
+- ✅ Create/Edit dialog with validation hints
+- ✅ Character counter shows: "5/32", "24/128"
+- ✅ Cannot exceed max lengths (HTML maxlength + validators)
+- ✅ BFF validates and returns 400 on validation errors
+- ✅ Cannot delete category with products (400 error)
+- ✅ Trim whitespace on save
+- ✅ No @bff imports in areas (uses CategoryDTO from @core)
+- ✅ Generic generateDeleteMessage() helper
 
 ---
 

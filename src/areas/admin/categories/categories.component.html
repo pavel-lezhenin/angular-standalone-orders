@@ -1,16 +1,31 @@
-<div class="categories">
-  <div class="header">
+<div class="categories-container">
+  <div class="page-header">
     <h1>Categories Management</h1>
-    <button mat-raised-button color="primary">
-      <mat-icon>add</mat-icon>
-      Add Category
-    </button>
+    @if (canCreate()) {
+      <button 
+        mat-raised-button 
+        color="primary"
+        (click)="openCreateDialog()"
+        [disabled]="isLoading()"
+      >
+        <mat-icon>add</mat-icon>
+        Add Category
+      </button>
+    }
   </div>
-  
-  <mat-card>
-    <mat-card-content>
-      <p class="placeholder">Categories CRUD will be implemented here</p>
-      <p class="info">Features: Create, Edit, Delete categories</p>
-    </mat-card-content>
-  </mat-card>
+
+  <app-category-table
+    [categories]="categories()"
+    [totalCategories]="totalCategories()"
+    [currentPage]="currentPage()"
+    [pageSize]="pageSize()"
+    [pageSizeOptions]="pageSizeOptions"
+    [canEdit]="canEdit()"
+    [canDelete]="canDelete()"
+    (pageChange)="onPageChange($event)"
+    (editClick)="openEditDialog($event)"
+    (deleteClick)="deleteCategory($event)"
+  />
+
+  <app-page-loader [isLoading]="isLoading()" />
 </div>

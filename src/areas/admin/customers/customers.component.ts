@@ -188,7 +188,8 @@ export class CustomersComponent extends BaseComponent implements OnInit {
    * Delete user with confirmation dialog
    */
   protected deleteUser(user: UserDTO): void {
-    const message = generateDeleteMessage(user, user.id);
+    const fullName = `${user.profile.firstName} ${user.profile.lastName}`;
+    const message = generateDeleteMessage(fullName, user.email);
     
     this.confirmDialogService.openDeleteConfirm(
       message,

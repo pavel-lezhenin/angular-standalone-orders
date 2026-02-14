@@ -1,0 +1,11 @@
+.category-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) 0;
+  min-width: 400px;
+
+  mat-form-field {
+    width: 100%;
+  }
+}
