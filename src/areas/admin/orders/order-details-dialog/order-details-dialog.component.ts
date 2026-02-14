@@ -54,6 +54,11 @@ export class OrderDetailsDialogComponent implements OnChanges {
   protected readonly productsError = signal<string | null>(null);
   protected readonly productLines = signal<readonly ProductLineItem[]>([]);
   protected readonly commentControl = new FormControl('', [Validators.required, Validators.minLength(3)]);
+  protected readonly quickActionNotes = [
+    'Out of stock: initiate customer refund',
+    'Address requires clarification from customer',
+    'Courier assignment delayed due to capacity',
+  ] as const;
 
   ngOnChanges(): void {
     if (!this.orderInput) {
@@ -112,26 +117,11 @@ export class OrderDetailsDialogComponent implements OnChanges {
       return;
     }
 
-    this.isSavingComment.set(true);
+    await this.submitComment(commentText, false);
+  }
 
-    try {
-      const currentOrder = this.order();
-      if (!currentOrder) {
-        return;
-      }
-
-      const updatedOrder = await this.onAddComment(currentOrder.id, {
-        text: commentText,
-        actor: this.actor,
-      });
-      this.order.set(updatedOrder);
-      this.onOrderUpdated?.(updatedOrder);
-      this.commentControl.setValue('');
-      this.commentControl.markAsPristine();
-      this.commentControl.markAsUntouched();
-    } finally {
-      this.isSavingComment.set(false);
-    }
+  protected async addQuickActionNote(note: string): Promise<void> {
+    await this.submitComment(note, true);
   }
 
   private async loadOrderProducts(): Promise<void> {
@@ -173,6 +163,30 @@ export class OrderDetailsDialogComponent implements OnChanges {
       this.productsError.set('Unable to load product details');
     } finally {
       this.loadingProducts.set(false);
+    }
+  }
+
+  private async submitComment(text: string, isSystem: boolean): Promise<void> {
+    this.isSavingComment.set(true);
+
+    try {
+      const currentOrder = this.order();
+      if (!currentOrder) {
+        return;
+      }
+
+      const updatedOrder = await this.onAddComment(currentOrder.id, {
+        text,
+        actor: this.actor,
+        isSystem,
+      });
+      this.order.set(updatedOrder);
+      this.onOrderUpdated?.(updatedOrder);
+      this.commentControl.setValue('');
+      this.commentControl.markAsPristine();
+      this.commentControl.markAsUntouched();
+    } finally {
+      this.isSavingComment.set(false);
     }
   }
 }

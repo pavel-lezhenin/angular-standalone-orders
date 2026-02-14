@@ -78,7 +78,7 @@
                     </div>
 
                     <div class="order-extra">
-                      <span>User: {{ order.userId.slice(0, 8) }}</span>
+                      <span>{{ getCustomerLabel(order.userId) }}</span>
                       <span>{{ order.createdAt | date: 'short' }}</span>
                     </div>
                   </mat-card-content>

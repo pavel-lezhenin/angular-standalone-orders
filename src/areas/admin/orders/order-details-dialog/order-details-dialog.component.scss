@@ -81,6 +81,12 @@
   gap: var(--spacing-sm);
   margin-bottom: var(--spacing-md);
 
+  .quick-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+  }
+
   .comment-field {
     width: 100%;
   }

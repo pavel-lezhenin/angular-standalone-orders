@@ -78,11 +78,10 @@ export class OrderService {
   async getUserOrders(userId: string): Promise<OrderDTO[]> {
     try {
       const response = await firstValueFrom(
-        this.http.get<{ orders: OrderDTO[] }>(`${this.apiUrl}`)
+        this.http.get<{ orders: OrderDTO[] }>(`/api/users/${userId}/orders`)
       );
-      
-      // Filter orders for the specific user
-      return response.orders.filter(order => order.userId === userId);
+
+      return response.orders;
     } catch (error) {
       console.error('Failed to fetch user orders:', error);
       throw new Error('Failed to fetch orders. Please try again.');

@@ -1,140 +1,21 @@
-import { Component, OnInit, inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, computed, inject, PLATFORM_ID, signal } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
-import { signal } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { LayoutService } from '@/shared/services/layout.service';
+import { PaginationComponent } from '@shared/ui/pagination/pagination.component';
 import { OrderService } from '@shared/services/order.service';
 import { AuthService } from '@core/services/auth.service';
 import type { OrderDTO } from '@core/models';
+import type { OrderStatus } from '@core/types';
 
 @Component({
   selector: 'app-order-history',
   standalone: true,
-  imports: [CommonModule],
-  template: `
-    <div class="order-history-page">
-      <h1>Your Orders</h1>
-      
-      @if (loading()) {
-        <p class="loading">Loading orders...</p>
-      } @else if (error()) {
-        <p class="error">{{ error() }}</p>
-      } @else {
-        @if (orders().length === 0) {
-          <p class="empty">No orders found</p>
-        } @else {
-          <table class="orders-table">
-            <thead>
-              <tr>
-                <th>Order ID</th>
-                <th>Total</th>
-                <th>Status</th>
-                <th>Delivery Address</th>
-                <th>Created</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (order of orders(); track order.id) {
-                <tr class="clickable-row" (click)="viewOrderDetails(order.id)">
-                  <td>#{{ order.id }}</td>
-                  <td>{{ order.total | currency }}</td>
-                  <td><span [class]="'status-' + order.status">{{ order.status }}</span></td>
-                  <td class="address-cell">{{ order.deliveryAddress }}</td>
-                  <td>{{ order.createdAt | date:'short' }}</td>
-                </tr>
-              }
-            </tbody>
-          </table>
-        }
-      }
-    </div>
-  `,
-  styles: [`
-    .order-history-page {
-      padding: 2rem;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    
-    h1 {
-      color: #333;
-      margin-bottom: 2rem;
-    }
-    
-    .orders-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 1rem;
-    }
-    
-    .orders-table th {
-      background: #f5f5f5;
-      padding: 1rem;
-      text-align: left;
-      border-bottom: 2px solid #ddd;
-      font-weight: 600;
-    }
-    
-    .orders-table td {
-      padding: 1rem;
-      border-bottom: 1px solid #eee;
-    }
-    
-    .clickable-row {
-      cursor: pointer;
-      transition: background-color 0.2s ease;
-    }
-    
-    .clickable-row:hover {
-      background-color: #f5f5f5;
-    }
-    
-    .address-cell {
-      max-width: 250px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    
-    .status-queue {
-      background: #fff3cd;
-      color: #856404;
-      padding: 0.25rem 0.75rem;
-      border-radius: 4px;
-      font-size: 0.875rem;
-      text-transform: uppercase;
-    }
-    
-    .status-processing {
-      background: #cfe2ff;
-      color: #084298;
-      padding: 0.25rem 0.75rem;
-      border-radius: 4px;
-      font-size: 0.875rem;
-      text-transform: uppercase;
-    }
-    
-    .status-completed {
-      background: #d4edda;
-      color: #155724;
-      padding: 0.25rem 0.75rem;
-      border-radius: 4px;
-      font-size: 0.875rem;
-      text-transform: uppercase;
-    }
-    
-    .empty,
-    .loading,
-    .error {
-      text-align: center;
-      padding: 2rem;
-      color: #666;
-    }
-    
-    .error {
-      color: #d32f2f;
-    }
-  `],
+  imports: [CommonModule, MatButtonModule, MatIconModule, PaginationComponent],
+  templateUrl: './order-history.component.html',
+  styleUrl: './order-history.component.scss',
 })
 export class OrderHistoryComponent implements OnInit {
   private layoutService = inject(LayoutService);
@@ -144,9 +25,23 @@ export class OrderHistoryComponent implements OnInit {
   private platformId = inject(PLATFORM_ID);
   private isBrowser = isPlatformBrowser(this.platformId);
 
-  orders = signal<OrderDTO[]>([]);
-  loading = signal(false);
-  error = signal<string | null>(null);
+  protected readonly orders = signal<OrderDTO[]>([]);
+  protected readonly loading = signal(false);
+  protected readonly error = signal<string | null>(null);
+  protected readonly currentPage = signal(1);
+  protected readonly pageSize = 10;
+  protected readonly cancelingOrderIds = signal<readonly string[]>([]);
+  protected readonly cancellableStatuses: readonly OrderStatus[] = ['pending_payment', 'paid'];
+
+  protected readonly totalPages = computed(() => {
+    const pages = Math.ceil(this.orders().length / this.pageSize);
+    return Math.max(1, pages);
+  });
+
+  protected readonly paginatedOrders = computed(() => {
+    const startIndex = (this.currentPage() - 1) * this.pageSize;
+    return this.orders().slice(startIndex, startIndex + this.pageSize);
+  });
 
   async ngOnInit(): Promise<void> {
     this.layoutService.setTitle('Orders Platform');
@@ -189,7 +84,56 @@ export class OrderHistoryComponent implements OnInit {
   /**
    * Navigates to order details page
    */
-  viewOrderDetails(orderId: string): void {
-    this.router.navigate(['/orders/confirmation', orderId]);
+  protected viewOrderDetails(orderId: string): void {
+    this.router.navigate(['/orders/details', orderId]);
+  }
+
+  protected canCancel(order: OrderDTO): boolean {
+    return this.cancellableStatuses.includes(order.status);
+  }
+
+  protected isCanceling(orderId: string): boolean {
+    return this.cancelingOrderIds().includes(orderId);
+  }
+
+  protected async cancelOrder(event: Event, order: OrderDTO): Promise<void> {
+    event.stopPropagation();
+
+    if (!this.canCancel(order) || this.isCanceling(order.id)) {
+      return;
+    }
+
+    const actor = this.authService.currentUser();
+    if (!actor) {
+      this.error.set('You must be logged in to cancel an order');
+      return;
+    }
+
+    this.cancelingOrderIds.update(ids => [...ids, order.id]);
+
+    try {
+      const updatedOrder = await this.orderService.updateOrderStatus(order.id, {
+        status: 'cancelled',
+        actor: {
+          id: actor.id,
+          role: actor.role,
+          email: actor.email,
+        },
+      });
+
+      this.orders.update(currentOrders =>
+        currentOrders.map(item => (item.id === updatedOrder.id ? updatedOrder : item))
+      );
+    } catch (err) {
+      console.error('Failed to cancel order:', err);
+      this.error.set('Failed to cancel order. Please try again.');
+    } finally {
+      this.cancelingOrderIds.update(ids => ids.filter(id => id !== order.id));
+    }
+  }
+
+  protected goToPage(page: number): void {
+    const boundedPage = Math.max(1, Math.min(this.totalPages(), page));
+    this.currentPage.set(boundedPage);
   }
 }

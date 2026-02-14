@@ -30,14 +30,14 @@
 - ✅ Payment page and processing simulation
 - ✅ Order confirmation integration after successful payment
 
-### Admin Areas (90%)
+### Admin Areas (96%)
 - ✅ Admin layout with sidebar navigation
 - ✅ **Customers** - Full CRUD (100%)
 - ✅ **Products** - Full CRUD with image upload (100%)
 - ✅ **Categories** - Full CRUD (100%)
 - ✅ **Permissions** - Matrix view with edit dialog (100%)
 - ✅ Dashboard page structure
-- ⏸️ Orders board (Kanban UI + live loading, drag-drop pending)
+- ✅ Orders board (Kanban UI + live loading + drag-drop + transition validation)
 
 ### Shared Components (100%)
 - ✅ TopBar, Footer, UserMenu
@@ -47,37 +47,28 @@
 - ✅ DialogComponent, ConfirmDialog
 - ✅ CartButton (UI only)
 
-### Account & Preferences (95%)
+### Account & Preferences (100%)
 - ✅ Address management (select/add/delete/set default)
 - ✅ Payment method management (select/add/delete/set default)
 - ✅ Safety constraints for deleting default address/payment method
 - ✅ Deduplication of saved payment methods
+- ✅ User order history integration (dedicated endpoint, details route, cancel, pagination)
 
 ---
 
-## 🚧 Remaining Tasks (10%)
+## 🚧 Remaining Tasks (non-scope)
 
 ### Critical (Must Have)
 
-#### 1. Orders Board (Admin) (~3h)
-**Status:** In progress  
-**Priority:** HIGH
+#### 1. Orders Board (Admin)
+**Status:** Completed  
+**Priority:** Delivered
 
-**Current:** Status-based Kanban UI with live loading and auto-refresh  
-**Needed:** Drag-drop status transitions + filters
-
-- [x] Implement Kanban columns by order status
-- [ ] Add @angular/cdk drag-drop functionality
-- [x] Load orders from BFF
-- [ ] Update order status on drag
-- [ ] Filters (date range, customer, status)
-- [ ] Order detail modal
-
-**Acceptance:**
-- Manager can drag orders between columns
-- Status updates persist to IndexedDB
-- Shows order count per column
-- Responsive layout
+- [x] Kanban columns by current order statuses
+- [x] Drag-drop transitions with validation
+- [x] Order status persistence to IndexedDB via BFF
+- [x] Order details with manager operational notes
+- [x] Manager-friendly customer metadata on cards
 
 ---
 
@@ -102,25 +93,15 @@
 
 ---
 
-#### 3. User Orders History (~2h)
-**Status:** Mock data  
-**Priority:** MEDIUM
+#### 3. User Orders History
+**Status:** Completed  
+**Priority:** Delivered
 
-**Current:** Hardcoded orders in template  
-**Needed:** Real BFF integration
-
-- [ ] Connect to orders repository via BFF
-- [ ] Load user's own orders
-- [ ] Order detail modal/page
-- [ ] Cancel order functionality (pending only)
-- [ ] Pagination for large lists
-- [ ] Empty state handling
-
-**Acceptance:**
-- User sees only their orders
-- Can view order details
-- Can cancel pending orders
-- Data persists in IndexedDB
+- [x] Connected to dedicated user orders BFF endpoint
+- [x] Loads only authenticated user's orders
+- [x] Dedicated order details route from history
+- [x] Cancel action for eligible statuses only
+- [x] Pagination and empty state handling
 
 ---
 
@@ -196,7 +177,7 @@
 | 2.7 | Dashboard | ⏸️ Partial | 30% (needs widgets) |
 | 2.8 | Customers | ✅ Done | 100% |
 | 2.9 | Permissions | ✅ Done | 95% (persistence TODO) |
-| 2.10 | Orders Board | ⏸️ Partial | 45% (UI + live loading) |
+| 2.10 | Orders Board | ✅ Done | 100% |
 | 2.11 | Products | ✅ Done | 100% |
 | 2.12 | Categories | ✅ Done | 100% |
 | 2.13 | Seed Data | ✅ Done | 100% |

@@ -1,15 +1,17 @@
 import { Component, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { firstValueFrom } from 'rxjs';
 import { NotificationService } from '@shared/services/notification.service';
 import { OrderService } from '@shared/services/order.service';
 import { DialogComponent } from '@shared/ui/dialog';
-import type { AddOrderCommentDTO, OrderDTO, OrderStatusChangeActorDTO } from '@core/models';
+import type { AddOrderCommentDTO, OrderDTO, OrderStatusChangeActorDTO, UserDTO } from '@core/models';
 import type { OrderStatus } from '@core/types';
 import { AuthService } from '@core/services/auth.service';
 import { OrderDetailsDialogComponent } from './order-details-dialog/order-details-dialog.component';
@@ -75,16 +77,28 @@ const BOARD_COLUMNS: BoardColumnConfig[] = [
 })
 export class OrdersBoardComponent implements OnInit, OnDestroy {
   private readonly document = inject(DOCUMENT);
+  private readonly http = inject(HttpClient);
   private readonly dialog = inject(MatDialog);
   private readonly authService = inject(AuthService);
   private readonly orderService = inject(OrderService);
   private readonly notification = inject(NotificationService);
   private refreshTimerId: ReturnType<typeof setInterval> | null = null;
 
+  private readonly allowedTransitions: Readonly<Record<OrderStatus, readonly OrderStatus[]>> = {
+    pending_payment: ['paid', 'cancelled'],
+    paid: ['warehouse', 'cancelled'],
+    warehouse: ['courier_pickup', 'cancelled'],
+    courier_pickup: ['in_transit', 'cancelled'],
+    in_transit: ['delivered', 'cancelled'],
+    delivered: [],
+    cancelled: [],
+  };
+
   protected readonly columns = BOARD_COLUMNS;
   protected readonly loading = signal(true);
   protected readonly error = signal<string | null>(null);
   protected readonly orders = signal<OrderDTO[]>([]);
+  protected readonly customerLabels = signal<Record<string, string>>({});
   protected readonly movingOrderIds = signal<readonly string[]>([]);
   protected readonly lastUpdatedAt = signal<number | null>(null);
   protected readonly connectedDropListIds = computed(() => this.columns.map(column => this.getDropListId(column.status)));
@@ -144,6 +158,10 @@ export class OrdersBoardComponent implements OnInit, OnDestroy {
     return this.movingOrderIds().includes(orderId);
   }
 
+  protected getCustomerLabel(userId: string): string {
+    return this.customerLabels()[userId] ?? `User: ${userId.slice(0, 8)}`;
+  }
+
   protected onDragStarted(): void {
     this.setDraggingCursor(true);
   }
@@ -155,6 +173,11 @@ export class OrdersBoardComponent implements OnInit, OnDestroy {
   protected async onDropOrder(event: CdkDragDrop<OrderDTO[]>, newStatus: OrderStatus): Promise<void> {
     const movedOrder = event.item.data as OrderDTO | undefined;
     if (!movedOrder || movedOrder.status === newStatus || this.isMoving(movedOrder.id)) {
+      return;
+    }
+
+    if (!this.canTransition(movedOrder.status, newStatus)) {
+      this.notification.error(`Invalid transition: ${movedOrder.status} → ${newStatus}`);
       return;
     }
 
@@ -231,6 +254,11 @@ export class OrdersBoardComponent implements OnInit, OnDestroy {
     };
   }
 
+  private canTransition(fromStatus: OrderStatus, toStatus: OrderStatus): boolean {
+    const allowedStatuses = this.allowedTransitions[fromStatus] ?? [];
+    return allowedStatuses.includes(toStatus);
+  }
+
   private setDraggingCursor(isDragging: boolean): void {
     if (!this.document?.body) {
       return;
@@ -251,6 +279,7 @@ export class OrdersBoardComponent implements OnInit, OnDestroy {
     try {
       const orders = await this.orderService.getAllOrders();
       this.orders.set(orders);
+      await this.loadCustomerLabels(orders);
       this.lastUpdatedAt.set(Date.now());
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Failed to load orders board';
@@ -263,6 +292,27 @@ export class OrdersBoardComponent implements OnInit, OnDestroy {
       if (!silent) {
         this.loading.set(false);
       }
+    }
+  }
+
+  private async loadCustomerLabels(orders: readonly OrderDTO[]): Promise<void> {
+    try {
+      const response = await firstValueFrom(this.http.get<{ users: UserDTO[] }>('/api/users'));
+      const neededUserIds = new Set(orders.map(order => order.userId));
+      const labels: Record<string, string> = {};
+
+      for (const user of response.users) {
+        if (!neededUserIds.has(user.id)) {
+          continue;
+        }
+
+        const fullName = `${user.profile.firstName} ${user.profile.lastName}`.trim();
+        labels[user.id] = fullName.length > 0 ? `${fullName} (${user.email})` : user.email;
+      }
+
+      this.customerLabels.set(labels);
+    } catch {
+      this.customerLabels.set({});
     }
   }
 }

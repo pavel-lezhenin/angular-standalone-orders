@@ -1,0 +1,182 @@
+.order-history-page {
+  min-height: calc(100vh - var(--top-bar-height));
+  background: var(--app-background);
+  padding: var(--spacing-xl) var(--spacing-md);
+}
+
+.order-history-container {
+  max-width: calc(var(--app-spacing) * 75);
+  margin: 0 auto;
+
+  h1 {
+    margin: 0 0 var(--spacing-2xl) 0;
+    color: var(--text-heading);
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-bold);
+  }
+}
+
+.orders-card {
+  background: var(--surface-primary);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-xl);
+  box-shadow: 0 var(--spacing-2px) var(--spacing-xxs) var(--color-black-08);
+}
+
+.orders-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.orders-table {
+  width: 100%;
+  min-width: calc(var(--app-spacing) * 56);
+  border-collapse: collapse;
+
+  th {
+    background: var(--surface-secondary);
+    padding: var(--spacing-md);
+    text-align: left;
+    border-bottom: var(--spacing-2px) solid var(--color-border);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    font-size: var(--font-size-sm);
+    white-space: nowrap;
+  }
+
+  td {
+    padding: var(--spacing-md);
+    border-bottom: var(--spacing-1px) solid var(--color-border);
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+    vertical-align: middle;
+
+    button mat-icon {
+      margin-right: var(--spacing-xs);
+    }
+  }
+}
+
+.clickable-row {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background: var(--surface-secondary);
+  }
+}
+
+.address-cell {
+  max-width: calc(var(--app-spacing) * 18);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.status-pending_payment,
+.status-paid,
+.status-warehouse,
+.status-courier_pickup,
+.status-in_transit,
+.status-delivered,
+.status-cancelled {
+  display: inline-block;
+  padding: var(--spacing-2px) var(--spacing-sm);
+  border-radius: var(--border-radius-xs);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+}
+
+.status-pending_payment {
+  background: var(--surface-secondary);
+  color: var(--app-warning);
+}
+
+.status-paid {
+  background: var(--surface-secondary);
+  color: var(--app-info);
+}
+
+.status-warehouse {
+  background: var(--surface-secondary);
+  color: var(--app-primary);
+}
+
+.status-courier_pickup {
+  background: var(--surface-secondary);
+  color: var(--app-info);
+}
+
+.status-in_transit {
+  background: var(--surface-secondary);
+  color: var(--app-secondary);
+}
+
+.status-delivered {
+  background: var(--surface-secondary);
+  color: var(--app-success);
+}
+
+.status-cancelled {
+  background: var(--surface-secondary);
+  color: var(--app-error);
+}
+
+.empty,
+.loading,
+.error {
+  background: var(--surface-primary);
+  border-radius: var(--border-radius-md);
+  text-align: center;
+  padding: var(--spacing-2xl) var(--spacing-xl);
+  color: var(--text-secondary);
+}
+
+.error {
+  color: var(--app-error);
+}
+
+.pagination-controls {
+  margin-top: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+.pagination-caption {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+:host-context(.tablet) .orders-card,
+:host-context(.mobile) .orders-card {
+  padding: var(--spacing-md);
+}
+
+:host-context(.mobile) {
+  .orders-table {
+    min-width: calc(var(--app-spacing) * 44);
+    font-size: var(--font-size-xs);
+
+    th,
+    td {
+      padding: var(--spacing-sm);
+    }
+  }
+
+  .address-cell {
+    max-width: calc(var(--app-spacing) * 12);
+  }
+
+  .pagination-controls {
+    justify-content: center;
+    gap: var(--spacing-xs);
+  }
+
+  .pagination-caption {
+    font-size: var(--font-size-xs);
+  }
+}

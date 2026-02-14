@@ -4,6 +4,7 @@ import { HttpRequest, HttpResponse } from '@angular/common/http';
 import { DatabaseService } from './database.service';
 import { UserRepository } from './repositories/user.repository';
 import { ProductRepository } from './repositories/product.repository';
+import { OrderRepository } from './repositories/order.repository';
 import { SeedService } from './services/seed.service';
 import { AuthHandlerService } from './handlers/auth-handler.service';
 import { ProductHandlerService } from './handlers/product-handler.service';
@@ -14,6 +15,8 @@ import { CartHandlerService } from './handlers/cart-handler.service';
 import { AddressHandlerService } from './handlers/address-handler.service';
 import { PaymentMethodHandlerService } from './handlers/payment-method-handler.service';
 import { NotFoundResponse } from './handlers/http-responses';
+import type { Order } from './models';
+import type { OrderStatus, PaymentStatus } from '@core/types';
 
 /**
  * FakeBFF Service
@@ -33,6 +36,7 @@ export class FakeBFFService {
     private db: DatabaseService,
     private userRepo: UserRepository,
     private productRepo: ProductRepository,
+    private orderRepo: OrderRepository,
     private seedService: SeedService,
     private authHandler: AuthHandlerService,
     private productHandler: ProductHandlerService,
@@ -66,7 +70,101 @@ export class FakeBFFService {
       await this.seedService.seedAll();
     }
 
+    await this.migrateLegacyOrders();
+
     this.initialized = true;
+  }
+
+  private async migrateLegacyOrders(): Promise<void> {
+    const oldStatusMap: Readonly<Record<string, OrderStatus>> = {
+      queue: 'pending_payment',
+      processing: 'warehouse',
+      completed: 'delivered',
+      canceled: 'cancelled',
+    };
+
+    const now = Date.now();
+    const orders = await this.orderRepo.getAll();
+
+    for (const order of orders) {
+      const currentOrder = order as Order & { status: string; paymentStatus?: string };
+      const rawStatus = String(currentOrder.status);
+
+      let normalizedStatus: OrderStatus = (oldStatusMap[rawStatus] ?? rawStatus) as OrderStatus;
+      let normalizedPaymentStatus: PaymentStatus = (
+        currentOrder.paymentStatus as PaymentStatus | undefined
+      ) ?? (normalizedStatus === 'pending_payment' ? 'pending' : 'approved');
+
+      if (normalizedStatus === 'pending_payment' && normalizedPaymentStatus === 'approved') {
+        normalizedStatus = 'paid';
+      }
+
+      if (
+        normalizedPaymentStatus === 'pending'
+        && normalizedStatus !== 'pending_payment'
+        && normalizedStatus !== 'cancelled'
+      ) {
+        normalizedPaymentStatus = 'approved';
+      }
+
+      const statusChanged = normalizedStatus !== rawStatus;
+      const paymentChanged = normalizedPaymentStatus !== currentOrder.paymentStatus;
+      const hasArrayFixes = !Array.isArray(order.statusHistory) || !Array.isArray(order.comments);
+
+      if (!statusChanged && !paymentChanged && !hasArrayFixes) {
+        continue;
+      }
+
+      const statusHistory = [...(order.statusHistory ?? [])];
+      if (statusChanged) {
+        const hasMigrationTransition = statusHistory.some(
+          entry =>
+            entry.actor.id === 'system-migration'
+            && entry.fromStatus === rawStatus
+            && entry.toStatus === normalizedStatus
+        );
+
+        if (!hasMigrationTransition) {
+          statusHistory.push({
+            fromStatus: rawStatus as OrderStatus,
+            toStatus: normalizedStatus,
+            changedAt: now,
+            actor: {
+              id: 'system-migration',
+              role: 'admin',
+              email: 'migration@local',
+            },
+          });
+        }
+      }
+
+      const comments = [...(order.comments ?? [])];
+      const migrationCommentText = 'Legacy migration applied: order status/payment normalized';
+      const hasMigrationComment = comments.some(comment => comment.text === migrationCommentText);
+
+      if (!hasMigrationComment && (statusChanged || paymentChanged)) {
+        comments.push({
+          id: `migration-${order.id}`,
+          text: migrationCommentText,
+          createdAt: now,
+          actor: {
+            id: 'system-migration',
+            role: 'admin',
+            email: 'migration@local',
+          },
+          isSystem: true,
+        });
+      }
+
+      await this.orderRepo.updateFull({
+        ...order,
+        status: normalizedStatus,
+        paymentStatus: normalizedPaymentStatus,
+        statusHistory,
+        comments,
+        updatedAt: now,
+      });
+    }
   }
 
   /**
@@ -146,6 +244,10 @@ export class FakeBFFService {
       return this.orderHandler.handleAddOrderComment(req);
     }
 
+    if (req.method === 'GET' && req.url.match(/\/api\/users\/[\w-]+\/orders$/)) {
+      return this.orderHandler.handleGetUserOrders(req);
+    }
+
     // User endpoints
     if (req.method === 'GET' && req.url.includes('/api/users/check-email')) {
       return this.userHandler.handleCheckEmail(req);
@@ -154,6 +256,7 @@ export class FakeBFFService {
       req.method === 'GET' &&
       req.url.includes('/api/users') &&
       !req.url.includes('/cart') &&
+      !req.url.includes('/orders') &&
       !req.url.includes('/addresses') &&
       !req.url.includes('/payment-methods')
     ) {

@@ -40,6 +40,12 @@ export const routes: Routes = [
             title: 'Payment',
           },
           {
+            path: 'details/:id',
+            canActivate: [authGuard],
+            loadComponent: () => import('../areas/orders/order-confirmation/order-confirmation.component').then(m => m.default),
+            title: 'Order Details',
+          },
+          {
             path: 'confirmation/:id',
             // Requires authentication to view order confirmation
             canActivate: [authGuard],

@@ -2,19 +2,18 @@
 **Project:** Angular Orders Management Platform  
 **Pattern:** Layered Architecture (Core/Areas/Shared)  
 **Framework:** Angular 21 + Material Design  
-**Status:** ~82% Complete
+**Status:** ~90% Complete
 
 **Quick Links:**
 - [Project Status & Remaining Tasks](./docs/PROJECT_STATUS.md) ⭐
-- [Progress Summary](./docs/PROGRESS_SUMMARY.md)
 - [Architecture Overview](./docs/ARCHITECTURE.md)
 - [Implementation Guide](./docs/IMPLEMENTATION.md)
 
 ---
 
-## 🎯 Current State (2026-02-14)
+## 🎯 Current State (2026-02-15)
 
-### ✅ What's Working (82%)
+### ✅ What's Working (Scope Complete)
 - Complete BFF layer with IndexedDB
 - Full authentication & RBAC
 - Admin CRUD: Products, Categories, Customers (100%)
@@ -22,13 +21,15 @@
 - Permissions matrix UI
 - 15+ shared components
 - SSR/SEO optimization
+- Cart + checkout flows (guest and authenticated)
+- Orders board (drag-drop + transition validation)
+- User order history (details route, cancel action, pagination)
 
-### 🚧 What's Missing (18%)
-1. **Cart & Checkout** — Critical user flow
-2. **Orders Board** — Admin Kanban drag-drop
-3. **Dashboard widgets** — Real stats from BFF
-4. **User orders integration** — Connect to BFF
-5. **Tests** — Need 80%+ coverage
+### 🚧 What's Open (Non-scope)
+1. **Dashboard widgets** — Real stats from BFF
+2. **Tests** — Need 80%+ coverage
+3. **Account profile save** — Persist profile changes
+4. **Permission persistence** — Save/load permission matrix state
 
 **See [PROJECT_STATUS.md](./docs/PROJECT_STATUS.md) for full details.**
 

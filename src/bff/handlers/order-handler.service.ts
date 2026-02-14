@@ -17,6 +17,16 @@ import { OkResponse, CreatedResponse, NotFoundResponse, ServerErrorResponse, Bad
 export class OrderHandlerService {
   constructor(private orderRepo: OrderRepository) {}
 
+  private readonly allowedTransitions: Readonly<Record<OrderStatus, readonly OrderStatus[]>> = {
+    pending_payment: ['paid', 'cancelled'],
+    paid: ['warehouse', 'cancelled'],
+    warehouse: ['courier_pickup', 'cancelled'],
+    courier_pickup: ['in_transit', 'cancelled'],
+    in_transit: ['delivered', 'cancelled'],
+    delivered: [],
+    cancelled: [],
+  };
+
   /**
    * Handle get all orders request
    */
@@ -26,6 +36,20 @@ export class OrderHandlerService {
       return new OkResponse({ orders });
     } catch (err) {
       return new ServerErrorResponse('Failed to fetch orders');
+    }
+  }
+
+  async handleGetUserOrders(req: HttpRequest<unknown>): Promise<HttpResponse<unknown>> {
+    try {
+      const userId = req.url.split('/').at(-2);
+      if (!userId) {
+        return new BadRequestResponse('User ID is required');
+      }
+
+      const orders = await this.orderRepo.getByUserId(userId);
+      return new OkResponse({ orders });
+    } catch (err) {
+      return new ServerErrorResponse('Failed to fetch user orders');
     }
   }
 
@@ -103,6 +127,13 @@ export class OrderHandlerService {
 
       if (existingOrder.status === payload.status) {
         return new OkResponse({ order: existingOrder });
+      }
+
+      const allowedNextStatuses = this.allowedTransitions[existingOrder.status] ?? [];
+      if (!allowedNextStatuses.includes(payload.status)) {
+        return new BadRequestResponse(
+          `Invalid transition: ${existingOrder.status} -> ${payload.status}`
+        );
       }
 
       const actor: OrderStatusChangeActor = payload.actor

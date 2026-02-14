@@ -34,6 +34,14 @@
   </div>
 
   <div class="comment-box">
+    <div class="quick-actions">
+      @for (note of quickActionNotes; track note) {
+        <button mat-stroked-button type="button" (click)="addQuickActionNote(note)" [disabled]="isSavingComment()">
+          {{ note }}
+        </button>
+      }
+    </div>
+
     <mat-form-field appearance="outline" class="comment-field">
       <mat-label>Add manager comment</mat-label>
       <textarea
