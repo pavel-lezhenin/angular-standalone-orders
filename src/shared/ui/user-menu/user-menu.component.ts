@@ -4,11 +4,14 @@ import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatDividerModule } from '@angular/material/divider';
 import { AuthService } from '@core/services/auth.service';
-import { CartButtonComponent } from '../cart-button/cart-button.component';
 
 /**
- * User menu component with authentication-aware rendering
+ * User menu component with authentication-aware navigation.
+ * Serves as the primary app-wide navigation dropdown.
+ * Guest: Shop, Orders, Login
+ * Authenticated: Shop, Orders, Account, [Admin], Logout
  */
 @Component({
   selector: 'app-user-menu',
@@ -18,7 +21,7 @@ import { CartButtonComponent } from '../cart-button/cart-button.component';
     MatButtonModule,
     MatIconModule,
     MatMenuModule,
-    CartButtonComponent,
+    MatDividerModule,
   ],
   templateUrl: './user-menu.component.html',
   styleUrl: './user-menu.component.scss',
@@ -45,20 +48,11 @@ export class UserMenuComponent {
     }
   }
 
-  navigateToLogin(): void {
-    this.router.navigate(['/auth/login']);
-  }
-
-  navigateToAdmin(): void {
-    this.router.navigate(['/admin']);
-  }
-
-  navigateToAccount(): void {
-    this.router.navigate(['/account']);
-  }
-
-  navigateToCart(): void {
-    this.router.navigate(['/shop/cart']);
+  /**
+   * Universal navigation handler
+   */
+  navigateTo(route: string): void {
+    this.router.navigate([route]);
   }
 
   logout(): void {

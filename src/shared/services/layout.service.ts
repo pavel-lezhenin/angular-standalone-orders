@@ -3,7 +3,9 @@ import { NavItem } from '@/shared/models';
 
 /**
  * Service for managing layout state (navigation, title)
- * Used by pages to configure the top bar dynamically
+ * Used by pages to configure the top bar dynamically.
+ * Nav items are used only for page-specific links (e.g. Landing scroll sections).
+ * App-wide navigation (Shop, Orders, Account) lives in UserMenuComponent dropdown.
  */
 @Injectable({
   providedIn: 'root',
@@ -15,7 +17,9 @@ export class LayoutService {
   title = signal<string>('Orders Platform');
 
   /**
-   * Navigation items for top bar menu
+   * Navigation items for top bar menu.
+   * Empty by default — only Landing sets custom scroll links here.
+   * App-wide nav links live in UserMenuComponent dropdown.
    */
   navItems = signal<NavItem[]>([]);
 

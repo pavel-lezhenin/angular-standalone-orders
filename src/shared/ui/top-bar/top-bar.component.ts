@@ -32,6 +32,24 @@ export class TopBarComponent {
 
   constructor(private router: Router) {}
 
+  /**
+   * Checks if a nav item corresponds to the current active route
+   */
+  isActive(item: NavItem): boolean {
+    if (!item.route) {
+      return false;
+    }
+
+    const currentUrl = this.router.url.split('?')[0] ?? '';
+
+    // Exact match for home route to avoid matching everything
+    if (item.route === '/') {
+      return currentUrl === '/';
+    }
+
+    return currentUrl.startsWith(item.route);
+  }
+
   handleNavClick(item: NavItem): void {
     if (item.action) {
       item.action();

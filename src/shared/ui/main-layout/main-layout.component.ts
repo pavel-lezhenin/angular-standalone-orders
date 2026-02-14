@@ -33,6 +33,7 @@ import { TopBarComponent } from '../top-bar/top-bar.component';
       flex: 1;
       display: flex;
       flex-direction: column;
+      background-color: var(--mat-sys-surface-container);
     }
   `],
 })

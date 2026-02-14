@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatChipsModule } from '@angular/material/chips';
 import { AuthService } from '@core/services/auth.service';
+import { LayoutService } from '@/shared/services/layout.service';
 
 /**
  * Account/Profile page for managing user information
@@ -38,8 +39,12 @@ export class AccountComponent {
   
   constructor(
     private authService: AuthService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private layoutService: LayoutService
   ) {
+    this.layoutService.setTitle('My Account - Orders Platform');
+    this.layoutService.setNavItems([]);
+
     const currentUser = this.user();
     this.profileForm = this.fb.group({
       firstName: [currentUser?.profile.firstName ?? '', [Validators.required]],

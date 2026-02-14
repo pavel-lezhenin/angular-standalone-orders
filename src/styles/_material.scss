@@ -9,8 +9,12 @@
  * are properly themed automatically.
  * ============================================ */
 @use '@angular/material' as mat;
+@use 'sass:map';
 @use 'variables/config' as config;
 @use 'variables/palette' as palette;
+
+/* Neutral tones extracted from palette for surface-container overrides */
+$neutral: map.get(palette.$primary-palette, neutral);
 
 /* ============================================
  * Light Theme (default)
@@ -45,6 +49,32 @@ html {
     tonal-container-height: config.$component-height,
     protected-container-height: config.$component-height,
   ));
+
+  /* Menu panel - sizing */
+  @include mat.menu-overrides((
+    container-shape: 12px,
+  ));
+
+  /* ============================================
+   * Surface container overrides
+   *
+   * mat.theme() generates surface-container tokens via
+   * the CSS color() function which can resolve to transparent
+   * in some rendering contexts (CDK overlays, SSR hydration).
+   * Override with solid values from neutral palette tones.
+   *
+   * M3 light mapping (closest available neutral tones):
+   *   surface-container-lowest  = neutral[100]
+   *   surface-container-low     = neutral[99]
+   *   surface-container         = neutral[98]
+   *   surface-container-high    = neutral[95]
+   *   surface-container-highest = neutral[90]
+   * ============================================ */
+  --mat-sys-surface-container-lowest: #{map.get($neutral, 100)};
+  --mat-sys-surface-container-low: #{map.get($neutral, 99)};
+  --mat-sys-surface-container: #{map.get($neutral, 98)};
+  --mat-sys-surface-container-high: #{map.get($neutral, 95)};
+  --mat-sys-surface-container-highest: #{map.get($neutral, 90)};
 }
 
 /* ============================================
@@ -59,5 +89,12 @@ html {
         tertiary: palette.$tertiary-palette,
       ),
     ));
+
+    /* Dark surface containers (from neutral palette tones) */
+    --mat-sys-surface-container-lowest: #{map.get($neutral, 0)};
+    --mat-sys-surface-container-low: #{map.get($neutral, 10)};
+    --mat-sys-surface-container: #{map.get($neutral, 20)};
+    --mat-sys-surface-container-high: #{map.get($neutral, 25)};
+    --mat-sys-surface-container-highest: #{map.get($neutral, 30)};
   }
 }

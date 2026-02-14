@@ -159,9 +159,6 @@ export class OrdersComponent implements OnInit {
 
   ngOnInit(): void {
     this.layoutService.setTitle('Orders Platform');
-    this.layoutService.setNavItems([
-      { label: 'All Orders', route: '/orders' },
-      { label: 'Shop', route: '/shop' },
-    ]);
+    this.layoutService.setNavItems([]);
   }
 }

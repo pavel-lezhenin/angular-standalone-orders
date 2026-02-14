@@ -12,6 +12,7 @@
         @for (item of navItems; track item.label) {
           <button 
             mat-button 
+            [class.nav-active]="isActive(item)"
             (click)="handleNavClick(item)">
             @if (item.icon) {
               <mat-icon>{{ item.icon }}</mat-icon>
@@ -42,7 +43,10 @@
 <!-- Mobile navigation menu -->
 <mat-menu #mobileMenu="matMenu">
   @for (item of navItems; track item.label) {
-    <button mat-menu-item (click)="handleNavClick(item)">
+    <button 
+      mat-menu-item 
+      [class.nav-active]="isActive(item)"
+      (click)="handleNavClick(item)">
       @if (item.icon) {
         <mat-icon>{{ item.icon }}</mat-icon>
       }

@@ -54,6 +54,37 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-xxs);
+
+  .nav-active {
+    color: var(--app-primary);
+    font-weight: var(--font-weight-semibold);
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: var(--spacing-xs);
+      right: var(--spacing-xs);
+      height: 2px;
+      background: var(--app-primary);
+      border-radius: var(--spacing-1px);
+    }
+
+    mat-icon {
+      color: var(--app-primary);
+    }
+  }
+}
+
+/* Mobile active state */
+.nav-active.mat-mdc-menu-item {
+  color: var(--app-primary);
+  font-weight: var(--font-weight-semibold);
+
+  mat-icon {
+    color: var(--app-primary);
+  }
 }
 
 .mobile-menu-button {

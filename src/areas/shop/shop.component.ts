@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { ProductService } from '../admin/products/services/product.service';
 import { CategoryService } from '../admin/categories/services/category.service';
 import { CartService } from '@shared/services/cart.service';
+import { LayoutService } from '@/shared/services/layout.service';
 import { PageLoaderComponent } from '@shared/ui/page-loader';
 import { ProductWithCategoryDTO, CategoryDTO } from '@core';
 import { NotificationService } from '@shared/services/notification.service';
@@ -50,6 +51,7 @@ export default class ShopComponent {
   private readonly productService = inject(ProductService);
   private readonly categoryService = inject(CategoryService);
   private readonly cartService = inject(CartService);
+  private readonly layoutService = inject(LayoutService);
   private readonly notificationService = inject(NotificationService);
   private readonly router = inject(Router);
 
@@ -64,6 +66,9 @@ export default class ShopComponent {
   private currentFilters: ShopFilters = { search: '' };
 
   constructor() {
+    this.layoutService.setTitle('Shop - Orders Platform');
+    this.layoutService.setNavItems([]);
+
     // Load data only in browser (after SSR hydration)
     // This prevents HTTP errors during server-side rendering
     afterNextRender(() => {
