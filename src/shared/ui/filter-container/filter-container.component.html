@@ -1,8 +1,4 @@
 <div class="filter-container">
-  <div class="filter-fields">
-    <ng-content></ng-content>
-  </div>
-
   <div class="filter-actions">
     <button
       *ngFor="let filterAction of actions()"
@@ -17,5 +13,9 @@
         {{ filterAction.icon }}
       </mat-icon>
     </button>
+  </div>
+
+  <div class="filter-fields">
+    <ng-content></ng-content>
   </div>
 </div>

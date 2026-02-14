@@ -47,7 +47,7 @@ export class CustomerFiltersComponent {
   readonly filterActions = signal<FilterAction[]>([
     {
       id: 'reset',
-      icon: 'refresh',
+      icon: 'restart_alt',
       ariaLabel: 'Reset filters',
       tooltip: 'Reset all filters to default',
     },
