@@ -2,7 +2,8 @@
 
 > Orders management with RBAC, IndexedDB BFF, admin dashboard, public shop.
 
-**Status:** In Progress (~58% complete)
+**Status:** In Progress (~82% complete)  
+**See detailed status:** [PROJECT_STATUS.md](./PROJECT_STATUS.md)
 
 ---
 
@@ -78,22 +79,24 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for complete details.
 
 For detailed implementation steps, deliverables, and code examples, see **[IMPLEMENTATION.md](./IMPLEMENTATION.md)**.
 
-| # | Phase | Duration | Key Focus |
-|---|-------|----------|-----------|
-| 2.1 | BFF Foundation | 2h | IndexedDB, repositories, services |
-| 2.2 | Authentication | 1.5h | Login, guards, session |
-| 2.3 | Landing Page | 0.5h | Home page |
-| 2.4 | Shop Module | 3h | Products, cart, checkout |
-| 2.5 | Shared UI | 2h | Reusable components |
-| 2.6 | Admin Layout | 1h | Sidebar, routing |
-| 2.7 | Dashboard | 1h | Stats widgets |
-| 2.8 | Customers | 1h | ✅ 100% | User management |
-| 2.9 | Permissions | 1.5h | RBAC matrix |
-| 2.10 | Orders Board | 2.5h | Trello drag-drop |
-| 2.11 | Products | 1.5h | CRUD, image upload |
-| 2.12 | Categories | 1h | ✅ 100% | Category management |
-| 2.13 | Seed Data | 1h | Demo data |
-| 2.14 | Tests & Polish | 2h | Coverage, E2E, build |
+| # | Phase | Duration | Status | Progress |
+|---|-------|----------|--------|----------|
+| 2.1 | BFF Foundation | 2h | ✅ Done | 100% |
+| 2.2 | Authentication | 1.5h | ✅ Done | 100% |
+| 2.3 | Landing Page | 0.5h | ✅ Done | 100% |
+| 2.4 | Shop Module | 3h | ⏸️ Partial | 70% (missing cart/checkout) |
+| 2.5 | Shared UI | 2h | ✅ Done | 100% |
+| 2.6 | Admin Layout | 1h | ✅ Done | 100% |
+| 2.7 | Dashboard | 1h | ⏸️ Partial | 30% (needs widgets) |
+| 2.8 | Customers | 1h | ✅ Done | 100% |
+| 2.9 | Permissions | 1.5h | ✅ Done | 95% |
+| 2.10 | Orders Board | 2.5h | ❌ Pending | 10% (stub only) |
+| 2.11 | Products | 1.5h | ✅ Done | 100% |
+| 2.12 | Categories | 1h | ✅ Done | 100% |
+| 2.13 | Seed Data | 1h | ✅ Done | 100% |
+| 2.14 | Tests & Polish | 2h | ⏸️ Partial | 20% |
+
+**See [PROJECT_STATUS.md](./PROJECT_STATUS.md) for remaining tasks and priorities.**
 
 ---
 

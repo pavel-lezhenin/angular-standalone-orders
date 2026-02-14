@@ -1,4 +1,39 @@
 
+**Project:** Angular Orders Management Platform  
+**Pattern:** Layered Architecture (Core/Areas/Shared)  
+**Framework:** Angular 21 + Material Design  
+**Status:** ~82% Complete
+
+**Quick Links:**
+- [Project Status & Remaining Tasks](./docs/PROJECT_STATUS.md) ⭐
+- [Progress Summary](./docs/PROGRESS_SUMMARY.md)
+- [Architecture Overview](./docs/ARCHITECTURE.md)
+- [Implementation Guide](./docs/IMPLEMENTATION.md)
+
+---
+
+## 🎯 Current State (2026-02-14)
+
+### ✅ What's Working (82%)
+- Complete BFF layer with IndexedDB
+- Full authentication & RBAC
+- Admin CRUD: Products, Categories, Customers (100%)
+- Shop: Browse, search, product details  
+- Permissions matrix UI
+- 15+ shared components
+- SSR/SEO optimization
+
+### 🚧 What's Missing (18%)
+1. **Cart & Checkout** — Critical user flow
+2. **Orders Board** — Admin Kanban drag-drop
+3. **Dashboard widgets** — Real stats from BFF
+4. **User orders integration** — Connect to BFF
+5. **Tests** — Need 80%+ coverage
+
+**See [PROJECT_STATUS.md](./docs/PROJECT_STATUS.md) for full details.**
+
+---
+
 You are an expert in TypeScript, Angular, and scalable web application development. You write functional, maintainable, performant, and accessible code following Angular and TypeScript best practices.
 
 ## Project-Specific Structure

@@ -44,6 +44,7 @@ admin@demo / demo       (Admin role)
 
 | Goal | Read |
 |------|------|
+| **Project status & progress** | [docs/PROJECT_STATUS.md](./docs/PROJECT_STATUS.md) ⭐ |
 | Understand data layer | [docs/FAKEBFF_ARCHITECTURE.md](./docs/FAKEBFF_ARCHITECTURE.md) |
 | Overall architecture | [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) |
 | Build features | [docs/IMPLEMENTATION.md](./docs/IMPLEMENTATION.md) |
