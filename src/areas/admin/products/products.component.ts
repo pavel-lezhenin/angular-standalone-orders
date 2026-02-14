@@ -86,10 +86,15 @@ export class ProductsComponent extends BaseComponent implements OnInit {
   private readonly selectedProductId = signal<string | null>(null);
 
   async ngOnInit(): Promise<void> {
-    this.initPermissions();
-    // Load categories only for filter dropdown
-    await this.loadCategories();
-    await this.loadProducts();
+    this.startLoading();
+    try {
+      this.initPermissions();
+      // Load categories only for filter dropdown
+      await this.loadCategories();
+      await this.loadProducts();
+    } finally {
+      this.stopLoading();
+    }
   }
 
   /**
@@ -120,7 +125,6 @@ export class ProductsComponent extends BaseComponent implements OnInit {
    * BFF returns ProductWithCategoryDTO[] with categoryName already populated
    */
   private async loadProducts(): Promise<void> {
-    this.startLoading();
     try {
       const filters = this.currentFilters();
       const response = await this.productService.loadProducts({
@@ -136,27 +140,35 @@ export class ProductsComponent extends BaseComponent implements OnInit {
     } catch (err: unknown) {
       console.error('Failed to load products:', err);
       this.notificationService.error('Failed to load products');
-    } finally {
-      this.stopLoading();
     }
   }
 
   /**
    * Handle filters change from child component
    */
-  protected onFiltersChange(filters: ProductFilters): void {
+  protected async onFiltersChange(filters: ProductFilters): Promise<void> {
     this.currentFilters.set(filters);
     this.currentPage.set(1);
-    this.loadProducts();
+    this.startLoading();
+    try {
+      await this.loadProducts();
+    } finally {
+      this.stopLoading();
+    }
   }
 
   /**
    * Handle pagination change from Material paginator
    */
-  protected onPageChange(event: PageEvent): void {
+  protected async onPageChange(event: PageEvent): Promise<void> {
     this.currentPage.set(event.pageIndex + 1);
     this.pageSize.set(event.pageSize);
-    this.loadProducts();
+    this.startLoading();
+    try {
+      await this.loadProducts();
+    } finally {
+      this.stopLoading();
+    }
   }
 
   /**
