@@ -1,82 +1,47 @@
-# Progress Summary
+# Progress Summary — Remaining Scope
 
-**Angular Orders Management Platform** — Quick Overview
+**Angular Orders Management Platform** — Active backlog only
 
----
-
-## 🎯 Overall: 92% Complete
-
-```
-███████████████████████░ 92%
-```
+**Last Updated:** 2026-02-14
 
 ---
 
-## 📦 Feature Breakdown
+## Current Focus
 
-### ✅ Fully Complete (100%)
-
-- **BFF Infrastructure** — IndexedDB, repositories, handlers
-- **Authentication** — Login, guards, RBAC
-- **Landing Page** — Full marketing site
-- **Admin CRUD** — Products, Categories, Customers (all complete)
-- **Permissions UI** — Matrix view with edit
-- **Shared Components** — 15+ reusable UI components
-- **Design System** — Material theme + custom styling
-- **SEO** — SSR, meta tags, sitemap
-
-### ⏸️ Partially Complete (60-80%)
-
-- **Dashboard** (30%) — ✅ Structure | ❌ Real widgets
-- **User Orders/Board** (72%) — ✅ Core pages + manager board UI | ❌ Drag-drop + analytics
-- **Tests** (25%) — ✅ Base setup | ❌ Coverage target 80%+
-
-### ❌ Not Started (0-10%)
-
-- **Orders Board (Admin)** (45%) — Kanban UI + live loading, needs drag-drop/filtering
-- **Tests** (20%) — Minimal coverage, need 80%+
+1. **Orders Board Finalization**
+2. **User Orders History Completion**
+3. **Data Consistency and Migration**
 
 ---
 
-## 🔥 Top 3 Priorities
+## Remaining Work Snapshot
 
-1. **Orders Board** (~3h) — Admin drag-drop Kanban
-2. **Dashboard Widgets** (~2h) — Real stats from BFF
-3. **Tests** (~4h) — Expand unit/E2E coverage for new flows
+### 1) Orders Board Finalization (In Progress)
+- [ ] Transition rules for status moves (block invalid jumps)
+- [ ] Quick manager actions in order details (template notes)
+- [ ] Better customer metadata on board cards
 
-**Total to MVP:** ~9 hours remaining
+### 2) User Orders History Completion (In Progress)
+- [ ] Align history statuses with current domain workflow
+- [ ] Dedicated order details entrypoint from history list
+- [ ] Cancel action for eligible statuses only
+- [ ] Pagination for larger histories
 
----
-
-## 📊 Breakdown by Module
-
-| Module | Features | Complete | Pending |
-|--------|----------|----------|---------|
-| **BFF** | 7 stores, repositories | 100% | - |
-| **Auth** | Login, guards, session | 100% | - |
-| **Shop** | Browse, search, cart, checkout, payment | 95% | UI polish |
-| **Admin** | Layout, navigation | 100% | - |
-| **Products** | Full CRUD | 100% | - |
-| **Categories** | Full CRUD | 100% | - |
-| **Customers** | Full CRUD | 100% | - |
-| **Permissions** | Matrix UI | 95% | Persistence |
-| **Orders** | User flow + confirmation | 80% | Board integration |
-| **Orders Board** | Kanban UI + live load | 45% | Drag-drop + filters |
-| **Dashboard** | Layout | 30% | Widgets |
-| **Tests** | Base tests | 25% | Unit + E2E |
+### 3) Data Consistency and Migration (In Progress)
+- [ ] One-time migration for legacy status/payment mismatches
+- [ ] Preserve consistency of `statusHistory` and `comments`
 
 ---
 
-## ✨ Recent Fixes
+## Scope Decisions
 
-- ✅ Fixed products admin loading state (blinking template)
-- ✅ Material theme customization
-- ✅ Shop filters component
-- ✅ Product detail image gallery
-- ✅ Cart/checkout/payment flow with normalized addresses/payment methods
-- ✅ Address & payment method management in account (select/add/delete/default)
+- Supplier management is intentionally excluded.
+- Testing and quality tracking is handled in a separate workstream/document.
 
 ---
 
-**Last Updated:** 2026-02-14  
-**Next Task:** Add drag-drop status transitions and filters to Orders Board
+## Related Docs
+
+- [Implementation Backlog](./IMPLEMENTATION.md)
+- [Cart Checkout CRM Plan](./CART_CHECKOUT_CRM_PLAN.md)
+- [Project Status](./PROJECT_STATUS.md)
