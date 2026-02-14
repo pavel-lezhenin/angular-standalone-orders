@@ -20,40 +20,48 @@ $neutral: map.get(palette.$primary-palette, neutral);
  * Light Theme (default)
  * ============================================ */
 html {
-  @include mat.theme((
-    color: (
-      theme-type: light,
-      primary: palette.$primary-palette,
-      tertiary: palette.$tertiary-palette,
-    ),
-    typography: (
-      brand-family: config.$base-font-family,
-      plain-family: config.$base-font-family,
-    ),
-    density: (
-      scale: 0,
-    ),
-  ));
+  @include mat.theme(
+    (
+      color: (
+        theme-type: light,
+        primary: palette.$primary-palette,
+        tertiary: palette.$tertiary-palette,
+      ),
+      typography: (
+        brand-family: config.$base-font-family,
+        plain-family: config.$base-font-family,
+      ),
+      density: (
+        scale: 0,
+      ),
+    )
+  );
 
   /* Form Fields - sizing */
-  @include mat.form-field-overrides((
-    container-height: config.$component-height,
-    container-vertical-padding: config.$component-vertical-padding,
-  ));
+  @include mat.form-field-overrides(
+    (
+      container-height: config.$component-height,
+      container-vertical-padding: config.$component-vertical-padding,
+    )
+  );
 
   /* Buttons - all variants use same height */
-  @include mat.button-overrides((
-    filled-container-height: config.$component-height,
-    outlined-container-height: config.$component-height,
-    text-container-height: config.$component-height,
-    tonal-container-height: config.$component-height,
-    protected-container-height: config.$component-height,
-  ));
+  @include mat.button-overrides(
+    (
+      filled-container-height: config.$component-height,
+      outlined-container-height: config.$component-height,
+      text-container-height: config.$component-height,
+      tonal-container-height: config.$component-height,
+      protected-container-height: config.$component-height,
+    )
+  );
 
   /* Menu panel - sizing */
-  @include mat.menu-overrides((
-    container-shape: 12px,
-  ));
+  @include mat.menu-overrides(
+    (
+      container-shape: 12px,
+    )
+  );
 
   /* ============================================
    * Surface container overrides
@@ -82,13 +90,15 @@ html {
  * ============================================ */
 @media (prefers-color-scheme: dark) {
   html {
-    @include mat.theme((
-      color: (
-        theme-type: dark,
-        primary: palette.$primary-palette,
-        tertiary: palette.$tertiary-palette,
-      ),
-    ));
+    @include mat.theme(
+      (
+        color: (
+          theme-type: dark,
+          primary: palette.$primary-palette,
+          tertiary: palette.$tertiary-palette,
+        ),
+      )
+    );
 
     /* Dark surface containers (from neutral palette tones) */
     --mat-sys-surface-container-lowest: #{map.get($neutral, 0)};

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpResponse } from '@angular/common/http';
+import { v4 as uuidv4 } from 'uuid';
 import { CategoryRepository } from '../repositories/category.repository';
 import { ProductRepository } from '../repositories/product.repository';
 import { randomDelay } from '../utils';
@@ -75,7 +76,7 @@ export class CategoryHandlerService {
       }
       
       const categoryData: Category = {
-        id: crypto.randomUUID(),
+        id: uuidv4(),
         name: body.name.trim(),
         description: body.description.trim(),
       };

@@ -141,6 +141,7 @@ export default class ShopComponent {
     this.cartService.addItem({
       productId: product.id,
       quantity: 1,
+      name: product.name,
       price: product.price,
     });
     this.notificationService.success(`${product.name} added to cart`);

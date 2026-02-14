@@ -14,9 +14,33 @@ export const routes: Routes = [
       },
       {
         path: 'orders',
-        canActivate: [authGuard],
-        loadComponent: () => import('../areas/orders/components/orders.component').then(m => m.OrdersComponent),
-        title: 'Orders - Orders Platform',
+        children: [
+          {
+            path: '',
+            canActivate: [authGuard],
+            loadComponent: () => import('../areas/orders/order-history/order-history.component').then(m => m.OrderHistoryComponent),
+            title: 'Order History - Orders Platform',
+          },
+          {
+            path: 'cart',
+            // Public access - guests can view cart
+            loadComponent: () => import('../areas/orders/cart/cart.component').then(m => m.default),
+            title: 'Shopping Cart',
+          },
+          {
+            path: 'checkout',
+            // No authGuard - guests can checkout and create account during checkout
+            loadComponent: () => import('../areas/orders/checkout/checkout.component').then(m => m.default),
+            title: 'Checkout',
+          },
+          {
+            path: 'confirmation/:id',
+            // Requires authentication to view order confirmation
+            canActivate: [authGuard],
+            loadComponent: () => import('../areas/orders/order-confirmation/order-confirmation.component').then(m => m.default),
+            title: 'Order Confirmed',
+          },
+        ],
       },
       {
         path: 'shop',

@@ -1,0 +1,178 @@
+<div class="cart-page">
+  <div class="cart-container">
+    <h1>Shopping Cart</h1>
+
+    <app-page-loader [isLoading]="loading()" />
+
+    @if (isEmpty()) {
+      <div class="empty-state">
+        <mat-icon class="empty-icon">shopping_cart</mat-icon>
+        <h2>Your cart is empty</h2>
+        <p>Add some products to get started!</p>
+        <button mat-raised-button color="primary" (click)="continueShopping()">
+          Continue Shopping
+        </button>
+      </div>
+    } @else {
+      <div class="cart-content">
+        <!-- Cart Items Table -->
+        <div class="cart-items">
+          <table class="items-table">
+            <thead>
+              <tr>
+                <th class="checkbox-cell">
+                  <mat-checkbox
+                    [checked]="allSelected()"
+                    [indeterminate]="someSelected()"
+                    (change)="toggleAllSelection()"
+                    aria-label="Select all items">
+                  </mat-checkbox>
+                </th>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (item of cartItems(); track item.productId) {
+                <tr class="cart-item" [class.selected]="isItemSelected(item.productId)">
+                  @if (item.loading) {
+                    <td colspan="6">
+                      <div class="item-loading">
+                        <mat-spinner diameter="30"></mat-spinner>
+                        <span>Loading product details...</span>
+                      </div>
+                    </td>
+                  } @else if (item.error) {
+                    <td colspan="6">
+                      <div class="item-error">
+                        <mat-icon>error</mat-icon>
+                        <span>{{ item.error }}</span>
+                      </div>
+                    </td>
+                  } @else if (item.product) {
+                    <!-- Checkbox -->
+                    <td class="checkbox-cell">
+                      <mat-checkbox
+                        [checked]="isItemSelected(item.productId)"
+                        (change)="toggleItemSelection(item.productId)"
+                        [attr.aria-label]="'Select ' + item.product.name">
+                      </mat-checkbox>
+                    </td>
+
+                    <!-- Product Info -->
+                    <td class="product-cell">
+                      <div class="product-info">
+                        @if (item.product.imageUrls && item.product.imageUrls.length > 0) {
+                          <img 
+                            [src]="item.product.imageUrls[0]" 
+                            [alt]="item.product.name"
+                            class="product-image">
+                        }
+                        <div class="product-details">
+                          <h3>{{ item.product.name }}</h3>
+                          <p class="product-description">{{ item.product.description }}</p>
+                        </div>
+                      </div>
+                    </td>
+
+                    <!-- Price -->
+                    <td class="price-cell">
+                      {{ item.product.price | currency }}
+                    </td>
+
+                    <!-- Quantity Controls -->
+                    <td class="quantity-cell">
+                      <div class="quantity-controls">
+                        <button 
+                          mat-icon-button 
+                          (click)="decreaseQuantity(item.productId, item.quantity)"
+                          [disabled]="item.quantity <= 1">
+                          <mat-icon>remove</mat-icon>
+                        </button>
+                        <span class="quantity">{{ item.quantity }}</span>
+                        <button 
+                          mat-icon-button 
+                          (click)="increaseQuantity(item.productId, item.quantity)">
+                          <mat-icon>add</mat-icon>
+                        </button>
+                      </div>
+                    </td>
+
+                    <!-- Subtotal -->
+                    <td class="subtotal-cell">
+                      {{ item.product.price * item.quantity | currency }}
+                    </td>
+
+                    <!-- Remove Button -->
+                    <td class="actions-cell">
+                      <button 
+                        mat-icon-button 
+                        color="warn"
+                        (click)="removeItem(item.productId)"
+                        aria-label="Remove item">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </td>
+                  }
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Cart Summary -->
+        <div class="cart-summary">
+          <h2>Order Summary</h2>
+
+          @if (hasSelectedItems()) {
+            <div class="summary-info">
+              <span class="selected-count">{{ selectedItems().size }} item(s) selected</span>
+            </div>
+          } @else {
+            <div class="summary-info warning">
+              <mat-icon>info</mat-icon>
+              <span>Select items to proceed</span>
+            </div>
+          }
+          
+          <div class="summary-row">
+            <span>Subtotal:</span>
+            <span class="amount">{{ subtotal() | currency }}</span>
+          </div>
+          
+          <div class="summary-row">
+            <span>Tax (10%):</span>
+            <span class="amount">{{ tax() | currency }}</span>
+          </div>
+          
+          <div class="summary-divider"></div>
+          
+          <div class="summary-row total">
+            <span>Total:</span>
+            <span class="amount">{{ total() | currency }}</span>
+          </div>
+
+          <div class="summary-actions">
+            <button 
+              mat-stroked-button 
+              (click)="continueShopping()"
+              class="continue-btn">
+              Continue Shopping
+            </button>
+            <button 
+              mat-raised-button 
+              color="primary"
+              (click)="proceedToCheckout()"
+              [disabled]="!hasSelectedItems()"
+              class="checkout-btn">
+              Proceed to Checkout
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>

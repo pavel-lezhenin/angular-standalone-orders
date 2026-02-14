@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpResponse } from '@angular/common/http';
+import { v4 as uuidv4 } from 'uuid';
 import { UserRepository } from '../repositories/user.repository';
 import { randomDelay } from '../utils';
 import type { User } from '../models';
@@ -79,6 +80,31 @@ export class UserHandlerService {
   }
 
   /**
+   * Handle check email existence request
+   * GET /api/users/check-email?email=...
+   * Returns: { exists: boolean, userId?: string }
+   */
+  async handleCheckEmail(req: HttpRequest<unknown>): Promise<HttpResponse<unknown>> {
+    try {
+      const email = req.params.get('email');
+      
+      if (!email) {
+        return new OkResponse({ exists: false });
+      }
+
+      const user = await this.userRepo.getByEmail(email);
+      
+      return new OkResponse({
+        exists: !!user,
+        userId: user?.id,
+      });
+    } catch (err) {
+      console.error('Failed to check email:', err);
+      return new ServerErrorResponse('Failed to check email');
+    }
+  }
+
+  /**
    * Handle create user request
    */
   async handleCreateUser(req: HttpRequest<unknown>): Promise<HttpResponse<unknown>> {
@@ -88,7 +114,7 @@ export class UserHandlerService {
       
       const userData: User = {
         ...(body as User),
-        id: body.id || crypto.randomUUID(),
+        id: body.id || uuidv4(),
         createdAt: Date.now(),
         updatedAt: Date.now(),
       };

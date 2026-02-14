@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpResponse } from '@angular/common/http';
+import { v4 as uuidv4 } from 'uuid';
 import { OrderRepository } from '../repositories/order.repository';
 import type { Order } from '../models';
+import type { CreateOrderDTO } from '@core/models';
+import type { OrderStatus, PaymentStatus } from '@core/types';
 import { OkResponse, CreatedResponse, NotFoundResponse, ServerErrorResponse } from './http-responses';
 
 /**
@@ -31,10 +34,26 @@ export class OrderHandlerService {
    */
   async handleCreateOrder(req: HttpRequest<unknown>): Promise<HttpResponse<unknown>> {
     try {
-      const order = req.body as Order;
+      const createOrderData = req.body as CreateOrderDTO;
+      
+      // Build complete Order entity with all required fields
+      const order: Order = {
+        id: uuidv4(),
+        userId: createOrderData.userId,
+        status: 'pending_payment' as OrderStatus,
+        paymentStatus: 'pending' as PaymentStatus,
+        items: createOrderData.items,
+        total: createOrderData.total,
+        deliveryAddress: createOrderData.deliveryAddress,
+        paymentInfo: createOrderData.paymentInfo,
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+      };
+
       await this.orderRepo.create(order);
       return new CreatedResponse({ order });
     } catch (err) {
+      console.error('Failed to create order:', err);
       return new ServerErrorResponse('Failed to create order');
     }
   }

@@ -138,6 +138,52 @@ export class ProductHandlerService {
   }
 
   /**
+   * Handle batch get products by IDs request
+   * POST /api/products/batch
+   * Body: { productIds: string[] }
+   * Returns: { products: ProductResponse[] }
+   */
+  async handleGetProductsByIds(req: HttpRequest<unknown>): Promise<HttpResponse<unknown>> {
+    try {
+      const body = req.body as { productIds: string[] };
+      
+      if (!body?.productIds || !Array.isArray(body.productIds)) {
+        return new BadRequestResponse('productIds array is required');
+      }
+
+      // Fetch all products in parallel
+      const productPromises = body.productIds.map(id => this.productRepo.getById(id));
+      const products = await Promise.all(productPromises);
+
+      // Filter out null results and resolve image URLs
+      const productsWithImagesPromises = products
+        .filter((p): p is Product => p !== null)
+        .map(async (product) => {
+          const imageUrls = await this.resolveImageUrls(product.imageIds);
+          
+          return {
+            id: product.id,
+            name: product.name,
+            description: product.description,
+            price: product.price,
+            categoryId: product.categoryId,
+            stock: product.stock,
+            imageUrls,
+            specifications: product.specifications,
+            imageUrl: imageUrls[0] || product.imageUrl, // Legacy support
+          };
+        });
+
+      const productsWithImages = await Promise.all(productsWithImagesPromises);
+
+      return new OkResponse({ products: productsWithImages });
+    } catch (err) {
+      console.error('Batch get products error:', err);
+      return new ServerErrorResponse('Failed to fetch products');
+    }
+  }
+
+  /**
    * Handle create product request
    */
   async handleCreateProduct(req: HttpRequest<unknown>): Promise<HttpResponse<unknown>> {

@@ -10,12 +10,16 @@
     <mat-menu #userMenu="matMenu">
       <!-- Mandatory nav links -->
       <button mat-menu-item (click)="navigateTo('/shop')">
-        <mat-icon>shopping_cart</mat-icon>
+        <mat-icon>storefront</mat-icon>
         <span>Shop</span>
       </button>
+      <button mat-menu-item (click)="navigateTo('/orders/cart')">
+        <mat-icon>shopping_cart</mat-icon>
+        <span>Cart</span>
+      </button>
       <button mat-menu-item (click)="navigateTo('/orders')">
-        <mat-icon>list_alt</mat-icon>
-        <span>Orders</span>
+        <mat-icon>receipt_long</mat-icon>
+        <span>Order History</span>
       </button>
       <button mat-menu-item (click)="navigateTo('/account')">
         <mat-icon>person</mat-icon>
@@ -45,12 +49,16 @@
 
     <mat-menu #guestMenu="matMenu">
       <button mat-menu-item (click)="navigateTo('/shop')">
-        <mat-icon>shopping_cart</mat-icon>
+        <mat-icon>storefront</mat-icon>
         <span>Shop</span>
       </button>
+      <button mat-menu-item (click)="navigateTo('/orders/cart')">
+        <mat-icon>shopping_cart</mat-icon>
+        <span>Cart</span>
+      </button>
       <button mat-menu-item (click)="navigateTo('/orders')">
-        <mat-icon>list_alt</mat-icon>
-        <span>Orders</span>
+        <mat-icon>receipt_long</mat-icon>
+        <span>Order History</span>
       </button>
 
       <mat-divider />

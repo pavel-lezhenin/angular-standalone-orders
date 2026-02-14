@@ -30,6 +30,7 @@ export class CartService {
   private cartItems = signal<CartItemDTO[]>([]);
   private platformId = inject(PLATFORM_ID);
   private isBrowser = isPlatformBrowser(this.platformId);
+  private previousUserId: string | null = null;
   
   /**
    * Computed signal for total item count
@@ -45,17 +46,30 @@ export class CartService {
     // Restore cart on service initialization
     this.restoreCart();
     
-    // Watch for authentication changes
+    // Initialize previousUserId to track actual auth changes
+    const initialUser = this.authService.currentUser();
+    this.previousUserId = initialUser?.id ?? null;
+    
+    // Watch for authentication changes (login/logout)
     effect(() => {
       const user = this.authService.currentUser();
+      const currentUserId = user?.id ?? null;
       
-      if (user) {
+      // Skip if this is the first run (no actual change)
+      if (this.previousUserId === currentUserId) {
+        return;
+      }
+      
+      if (currentUserId && !this.previousUserId) {
         // User logged in - merge guest cart to authenticated
-        this.mergeGuestCartOnLogin(user.id);
-      } else {
+        this.mergeGuestCartOnLogin(currentUserId);
+      } else if (!currentUserId && this.previousUserId) {
         // User logged out - migrate to guest cart
         this.migrateToGuestOnLogout();
       }
+      
+      // Update previous user ID
+      this.previousUserId = currentUserId;
     });
   }
 

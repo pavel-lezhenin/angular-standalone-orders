@@ -38,7 +38,6 @@ export class CartButtonComponent {
   ) {}
 
   navigateToCart(): void {
-    // TODO: Navigate to cart page when implemented
     this.router.navigate(['/shop/cart']);
   }
 }

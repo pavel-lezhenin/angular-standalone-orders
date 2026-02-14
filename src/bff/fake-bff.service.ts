@@ -95,6 +95,9 @@ export class FakeBFFService {
     if (req.method === 'GET' && req.url.endsWith('/api/products')) {
       return this.productHandler.handleGetProducts(req);
     }
+    if (req.method === 'POST' && req.url.endsWith('/api/products/batch')) {
+      return this.productHandler.handleGetProductsByIds(req);
+    }
     if (req.method === 'GET' && req.url.match(/\/api\/products\/[\w-]+$/)) {
       return this.productHandler.handleGetProduct(req);
     }
@@ -134,6 +137,9 @@ export class FakeBFFService {
     }
 
     // User endpoints
+    if (req.method === 'GET' && req.url.includes('/api/users/check-email')) {
+      return this.userHandler.handleCheckEmail(req);
+    }
     if (req.method === 'GET' && req.url.includes('/api/users') && !req.url.includes('/cart')) {
       const userIdMatch = req.url.match(/\/api\/users\/([\w-]+)$/);
       if (userIdMatch) {
