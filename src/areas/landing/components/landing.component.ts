@@ -34,6 +34,7 @@ export class LandingComponent implements OnInit {
   ngOnInit(): void {
     this.layoutService.setTitle('Orders Platform');
     this.layoutService.setNavItems([
+      { label: 'Shop', route: '/shop', icon: 'shopping_cart' },
       { label: 'Features', action: () => this.handleScroll('features') },
       { label: 'Use Cases', action: () => this.handleScroll('use-cases') },
       { label: 'FAQ', action: () => this.handleScroll('faq') },

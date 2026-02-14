@@ -4,6 +4,7 @@ import { UserRepository } from '../repositories/user.repository';
 import { randomDelay } from '../utils';
 import type { User } from '../models';
 import { OkResponse, CreatedResponse, NoContentResponse, NotFoundResponse, ServerErrorResponse } from './http-responses';
+import { parsePaginationParams, applyPagination, createPaginatedResponse } from '../../core/types/pagination';
 
 /**
  * User Handler Service
@@ -21,10 +22,7 @@ export class UserHandlerService {
   async handleGetUsers(req: HttpRequest<unknown>): Promise<HttpResponse<unknown>> {
     await randomDelay();
     try {
-      const page = parseInt(req.params.get('page') || '1');
-      const limit = parseInt(req.params.get('limit') || '20');
-      const search = req.params.get('search') || '';
-      const role = req.params.get('role') || undefined;
+      const { page, limit, search, role } = parsePaginationParams(req.params);
 
       let users = await this.userRepo.getAll();
 
@@ -46,19 +44,14 @@ export class UserHandlerService {
 
       // Apply pagination
       const total = users.length;
-      const startIndex = (page - 1) * limit;
-      const endIndex = startIndex + limit;
-      const paginatedUsers = users.slice(startIndex, endIndex);
+      const paginatedUsers = applyPagination(users, page, limit);
 
       // Map to DTO (exclude password)
       const data = paginatedUsers.map(({ password, ...user }) => user);
 
-      return new OkResponse({ 
-        data,
-        total,
-        page,
-        limit,
-      });
+      return new OkResponse(
+        createPaginatedResponse(data, total, page, limit)
+      );
     } catch (err) {
       console.error('Failed to fetch users:', err);
       return new ServerErrorResponse('Failed to fetch users');

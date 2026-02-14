@@ -3,7 +3,7 @@
  * Used by repositories and BFF service
  */
 export type { User } from './user';
-export type { Product } from './product';
+export type { Product, ProductWithCategoryResponse } from './product';
 export type { Category } from './category';
 export type { Order, OrderItem } from './order';
 export type { Permission } from './permission';

@@ -20,8 +20,10 @@ export const routes: Routes = [
       },
       {
         path: 'shop',
-        canActivate: [authGuard],
-        loadComponent: () => import('../areas/orders/components/orders.component').then(m => m.OrdersComponent),
+        // Public access - no authGuard for SEO and better UX
+        // Users can browse products and add to cart (localStorage for guests)
+        // Authentication required only at checkout
+        loadComponent: () => import('../areas/shop/shop.component').then(m => m.default),
         title: 'Shop - Orders Platform',
       },
       {

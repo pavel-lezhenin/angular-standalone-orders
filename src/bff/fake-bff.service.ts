@@ -3,6 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { HttpRequest, HttpResponse } from '@angular/common/http';
 import { DatabaseService } from './database.service';
 import { UserRepository } from './repositories/user.repository';
+import { ProductRepository } from './repositories/product.repository';
 import { SeedService } from './services/seed.service';
 import { AuthHandlerService } from './handlers/auth-handler.service';
 import { ProductHandlerService } from './handlers/product-handler.service';
@@ -29,6 +30,7 @@ export class FakeBFFService {
   constructor(
     private db: DatabaseService,
     private userRepo: UserRepository,
+    private productRepo: ProductRepository,
     private seedService: SeedService,
     private authHandler: AuthHandlerService,
     private productHandler: ProductHandlerService,
@@ -52,9 +54,11 @@ export class FakeBFFService {
     // Initialize database first
     await this.db.initialize();
     
-    // Check if admin user exists and seed if needed
-    const adminUser = await this.userRepo.getByEmail('admin@demo');
-    if (!adminUser) {
+    // Always reseed in development to ensure latest data
+    // Check if data exists, if not or if incomplete - reseed
+    const productCount = await this.productRepo.count();
+    if (productCount < 40) {
+      console.log(`⚠️  Found ${productCount} products, expected 40. Reseeding...`);
       await this.seedService.seedAll();
     }
 

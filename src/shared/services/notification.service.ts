@@ -17,9 +17,12 @@ export class NotificationService {
    * Show success notification
    *
    * @param message - Success message
-   * @param duration - Display duration in ms (default: 5000)
+   * @param duration - Display duration in ms (default: 3000)
    */
-  success(message: string, duration: number = 5000): void {
+  success(message: string, duration: number = 3000): void {
+    // Dismiss any existing snackbars first
+    this.snackBar.dismiss();
+    
     this.snackBar.open(message, 'Close', {
       duration,
       panelClass: ['snackbar-success'],
@@ -32,9 +35,12 @@ export class NotificationService {
    * Show error notification
    *
    * @param message - Error message
-   * @param duration - Display duration in ms (default: 5000)
+   * @param duration - Display duration in ms (default: 3000)
    */
-  error(message: string, duration: number = 5000): void {
+  error(message: string, duration: number = 3000): void {
+    // Dismiss any existing snackbars first
+    this.snackBar.dismiss();
+    
     this.snackBar.open(message, 'Close', {
       duration,
       panelClass: ['snackbar-error'],

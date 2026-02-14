@@ -1,0 +1,31 @@
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--product-card-min-width), 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+.empty-state {
+  text-align: center;
+  padding: var(--spacing-3xl);
+  color: var(--text-secondary);
+
+  p {
+    font-size: var(--font-size-lg);
+  }
+}
+
+/* ============================================
+ * Responsive Styles
+ * ============================================ */
+
+/* Mobile Styles */
+:host-context(.mobile) .products-grid {
+  grid-template-columns: 1fr;
+  gap: var(--spacing-md);
+}
+
+/* Tablet Styles */
+:host-context(.tablet) .products-grid {
+  grid-template-columns: repeat(auto-fill, minmax(var(--product-card-min-width-tablet), 1fr));
+}

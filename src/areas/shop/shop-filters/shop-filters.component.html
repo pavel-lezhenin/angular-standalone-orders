@@ -1,0 +1,23 @@
+<div class="filters">
+  <div class="filter-group">
+    <label for="search">Search products</label>
+    <input
+      id="search"
+      type="text"
+      [formControl]="searchControl"
+      placeholder="Search by name..."
+    />
+  </div>
+
+  <div class="filter-group">
+    <label for="category">Category</label>
+    <select id="category" [formControl]="categoryControl">
+      <option value="">All Categories</option>
+      @for (category of categories(); track category.id) {
+        <option [value]="category.id">{{ category.name }}</option>
+      }
+    </select>
+  </div>
+
+  <button type="button" (click)="clearFilters()">Clear Filters</button>
+</div>

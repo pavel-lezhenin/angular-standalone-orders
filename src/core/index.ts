@@ -3,6 +3,7 @@ export type { UserDTO, UserProfileDTO } from './models';
 export type { PermissionDTO } from './models';
 export type { CartItemDTO, CartDTO } from './models';
 export type { CategoryDTO } from './models';
+export type { ProductDTO, ProductWithCategoryDTO } from './models';
 
 // Shared types
 export type { UserRole, OrderStatus } from './types/shared-types';

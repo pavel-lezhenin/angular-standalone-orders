@@ -1,4 +1,4 @@
-import { ApplicationConfig, provideAppInitializer, PLATFORM_ID } from '@angular/core';
+import { ApplicationConfig, APP_INITIALIZER, PLATFORM_ID, inject } from '@angular/core';
 import { provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
@@ -9,7 +9,6 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { FakeBFFService } from '@bff';
-import { inject } from '@angular/core';
 import { from, switchMap, Observable } from 'rxjs';
 import { HttpRequest, HttpHandlerFn, HttpEvent } from '@angular/common/http';
 
@@ -44,26 +43,25 @@ const apiInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, next: Http
 /**
  * Initialize FakeBFF on app startup
  * This is the ONLY place where BFF initialization should happen
- * Only runs in browser (not in SSR)
+ * IMPORTANT: Must run in browser even after SSR hydration
  */
-function initializeBFF(): Promise<void> {
-  console.log('🎯 initializeBFF called');
-  const platformId = inject(PLATFORM_ID);
-  
-  // Skip initialization on server
-  if (!isPlatformBrowser(platformId)) {
-    console.log('⏭️ Skipping BFF init (SSR)');
-    return Promise.resolve();
-  }
-  
-  console.log('🚀 Starting BFF initialization (browser)');
-  const fakeBFF = inject(FakeBFFService);
-  return fakeBFF.initialize().then(() => {
-    console.log('✅ BFF initialization complete from app.config');
-  }).catch((error) => {
-    console.error('❌ BFF initialization failed:', error);
-    throw error;
-  });
+function initializeBFF(fakeBFF: FakeBFFService, platformId: Object): () => Promise<void> {
+  return () => {
+    console.log('🎯 BFF initializer factory executed');
+    
+    if (!isPlatformBrowser(platformId)) {
+      console.log('⏭️ Skipping BFF init (SSR)');
+      return Promise.resolve();
+    }
+    
+    console.log('🚀 Starting BFF initialization (browser)');
+    return fakeBFF.initialize().then(() => {
+      console.log('✅ BFF initialization complete');
+    }).catch((error) => {
+      console.error('❌ BFF initialization failed:', error);
+      throw error;
+    });
+  };
 }
 
 export const appConfig: ApplicationConfig = {
@@ -73,7 +71,12 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(withEventReplay()),
     provideHttpClient(withInterceptors([apiInterceptor])),
     provideAnimations(), // Required for Material Dialog, Snackbar, etc.
-    // Initialize BFF before app starts (Angular 21+ style)
-    provideAppInitializer(initializeBFF),
+    // Initialize BFF before app starts - using direct APP_INITIALIZER token for SSR compatibility
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeBFF,
+      deps: [FakeBFFService, PLATFORM_ID],
+      multi: true,
+    },
   ],
 };

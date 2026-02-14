@@ -1,0 +1,22 @@
+<div class="shop-container">
+  <div class="page-header">
+    <h1>Product Catalog</h1>
+    <p>Discover our amazing products</p>
+  </div>
+
+  <app-shop-filters
+    [categories]="categories()"
+    (filtersChange)="onFiltersChange($event)"
+  />
+
+  <app-shop-product-list
+    [products]="products()"
+    [currentPage]="currentPage()"
+    [totalPages]="totalPages()"
+    (productClick)="onProductClick($event)"
+    (addToCart)="onAddToCart($event)"
+    (pageChange)="onPageChange($event)"
+  />
+
+  <app-page-loader [isLoading]="isLoading()" />
+</div>

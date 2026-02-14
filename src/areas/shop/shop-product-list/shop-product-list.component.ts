@@ -1,0 +1,27 @@
+import { Component, input, output } from '@angular/core';
+import { ProductWithCategoryDTO } from '@core';
+import { ProductCardComponent } from '@shared/ui/product-card/product-card.component';
+import { PaginationComponent } from '@shared/ui/pagination/pagination.component';
+
+/**
+ * Shop product list component (presentational)
+ *
+ * Displays products grid with pagination
+ * Emits events to parent for navigation and cart actions
+ */
+@Component({
+  selector: 'app-shop-product-list',
+  standalone: true,
+  imports: [ProductCardComponent, PaginationComponent],
+  templateUrl: './shop-product-list.component.html',
+  styleUrl: './shop-product-list.component.scss',
+})
+export class ShopProductListComponent {
+  readonly products = input.required<ProductWithCategoryDTO[]>();
+  readonly currentPage = input.required<number>();
+  readonly totalPages = input.required<number>();
+
+  readonly productClick = output<string>();
+  readonly addToCart = output<ProductWithCategoryDTO>();
+  readonly pageChange = output<number>();
+}
