@@ -30,14 +30,14 @@
 - ✅ Payment page and processing simulation
 - ✅ Order confirmation integration after successful payment
 
-### Admin Areas (85%)
+### Admin Areas (90%)
 - ✅ Admin layout with sidebar navigation
 - ✅ **Customers** - Full CRUD (100%)
 - ✅ **Products** - Full CRUD with image upload (100%)
 - ✅ **Categories** - Full CRUD (100%)
 - ✅ **Permissions** - Matrix view with edit dialog (100%)
 - ✅ Dashboard page structure
-- ⏸️ Orders board (structure only, no Kanban)
+- ⏸️ Orders board (Kanban UI + live loading, drag-drop pending)
 
 ### Shared Components (100%)
 - ✅ TopBar, Footer, UserMenu
@@ -60,15 +60,15 @@
 ### Critical (Must Have)
 
 #### 1. Orders Board (Admin) (~3h)
-**Status:** Stub only  
+**Status:** In progress  
 **Priority:** HIGH
 
-**Current:** Empty component  
-**Needed:** Kanban board with drag-drop
+**Current:** Status-based Kanban UI with live loading and auto-refresh  
+**Needed:** Drag-drop status transitions + filters
 
-- [ ] Implement Kanban columns (Queue, Processing, Completed, Cancelled)
+- [x] Implement Kanban columns by order status
 - [ ] Add @angular/cdk drag-drop functionality
-- [ ] Load orders from BFF
+- [x] Load orders from BFF
 - [ ] Update order status on drag
 - [ ] Filters (date range, customer, status)
 - [ ] Order detail modal
@@ -196,7 +196,7 @@
 | 2.7 | Dashboard | ⏸️ Partial | 30% (needs widgets) |
 | 2.8 | Customers | ✅ Done | 100% |
 | 2.9 | Permissions | ✅ Done | 95% (persistence TODO) |
-| 2.10 | Orders Board | ❌ Not Started | 10% (stub only) |
+| 2.10 | Orders Board | ⏸️ Partial | 45% (UI + live loading) |
 | 2.11 | Products | ✅ Done | 100% |
 | 2.12 | Categories | ✅ Done | 100% |
 | 2.13 | Seed Data | ✅ Done | 100% |

@@ -90,7 +90,7 @@ For detailed implementation steps, deliverables, and code examples, see **[IMPLE
 | 2.7 | Dashboard | 1h | ⏸️ Partial | 30% (needs widgets) |
 | 2.8 | Customers | 1h | ✅ Done | 100% |
 | 2.9 | Permissions | 1.5h | ✅ Done | 95% |
-| 2.10 | Orders Board | 2.5h | ❌ Pending | 10% (stub only) |
+| 2.10 | Orders Board | 2.5h | ⏸️ Partial | 45% (UI + live loading, no drag-drop yet) |
 | 2.11 | Products | 1.5h | ✅ Done | 100% |
 | 2.12 | Categories | 1h | ✅ Done | 100% |
 | 2.13 | Seed Data | 1h | ✅ Done | 100% |

@@ -1,10 +1,77 @@
 <div class="orders-board">
-  <h1>Orders Board</h1>
-  
-  <mat-card>
-    <mat-card-content>
-      <p class="placeholder">Trello-style orders board will be implemented here</p>
-      <p class="info">Drag & drop orders between: Queue → Processing → Completed</p>
-    </mat-card-content>
-  </mat-card>
+  <div class="board-header">
+    <div class="header-content">
+      <h1>Orders Board</h1>
+      <p>CRM view for new and active orders by status column</p>
+    </div>
+
+    <div class="header-actions">
+      @if (lastUpdatedAt(); as updatedAt) {
+        <span class="last-updated">Updated: {{ updatedAt | date: 'shortTime' }}</span>
+      }
+
+      <button mat-stroked-button type="button" (click)="refresh()" [disabled]="loading()">
+        <mat-icon>refresh</mat-icon>
+        Refresh
+      </button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-state">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Loading orders board...</p>
+    </div>
+  } @else if (error()) {
+    <mat-card class="error-card">
+      <mat-card-content>
+        <mat-icon>error</mat-icon>
+        <div>
+          <p class="error-title">Unable to load orders</p>
+          <p>{{ error() }}</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  } @else {
+    <div class="board-columns">
+      @for (column of columns; track column.status) {
+        <section class="board-column" [class]="'status-' + column.status">
+          <div class="column-header">
+            <h2>{{ column.title }}</h2>
+            <span class="count">{{ getOrdersForStatus(column.status).length }}</span>
+          </div>
+          <p class="column-description">{{ column.description }}</p>
+
+          <div class="column-content">
+            @if (getOrdersForStatus(column.status).length === 0) {
+              <div class="empty-column">No orders</div>
+            } @else {
+              @for (order of getOrdersForStatus(column.status); track order.id) {
+                <mat-card class="order-card">
+                  <mat-card-content>
+                    <div class="order-top">
+                      <strong>#{{ order.id.slice(0, 8) }}</strong>
+                      @if (isRecentlyCreated(order)) {
+                        <span class="new-badge">New</span>
+                      }
+                    </div>
+
+                    <div class="order-meta">
+                      <span>{{ order.total | currency }}</span>
+                      <span>{{ order.items.length }} items</span>
+                    </div>
+
+                    <div class="order-extra">
+                      <span>User: {{ order.userId.slice(0, 8) }}</span>
+                      <span>{{ order.createdAt | date: 'short' }}</span>
+                    </div>
+                  </mat-card-content>
+                </mat-card>
+              }
+            }
+          </div>
+        </section>
+      }
+    </div>
+  }
 </div>

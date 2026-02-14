@@ -3,14 +3,14 @@
 > Complete roadmap for building the Orders Management Platform.  
 > **Current progress and remaining tasks:** See [PROJECT_STATUS.md](./PROJECT_STATUS.md) ⭐
 
-**Duration:** ~21 hours | **14 Phases** | **Progress:** ~82% complete
+**Duration:** ~21 hours | **14 Phases** | **Progress:** ~92% complete
 
 ---
 
 ## 🎯 Quick Status
 
-**✅ Completed (82%):** BFF, Auth, Landing, Shop (browse/detail), Admin CRUD (Products/Categories/Customers/Permissions), Shared UI, Seed Data  
-**🚧 Remaining (18%):** Cart/Checkout, Orders Board (Kanban), Dashboard widgets, User orders integration, Tests
+**✅ Completed (92%):** BFF, Auth, Landing, Shop (browse/detail/cart/checkout/payment), Admin CRUD (Products/Categories/Customers/Permissions), Shared UI, Seed Data  
+**🚧 Remaining (8%):** Orders Board drag-drop + filters, Dashboard widgets, tests
 
 **For detailed remaining tasks and priorities, see [PROJECT_STATUS.md](./PROJECT_STATUS.md)**
 
@@ -29,7 +29,7 @@
 | 2.7 | Dashboard | 1h | ⏸️ Partial | 30% |
 | 2.8 | Customers | 1h | ✅ Done | 100% |
 | 2.9 | Permissions | 1.5h | ✅ Done | 95% |
-| 2.10 | Orders Board | 2.5h | ❌ Pending | 10% |
+| 2.10 | Orders Board | 2.5h | ⏸️ Partial | 45% |
 | 2.11 | Products | 1.5h | ✅ Done | 100% |
 | 2.12 | Categories | 1h | ✅ Done | 100% |
 | 2.13 | Seed Data | 1h | ✅ Done | 100% |

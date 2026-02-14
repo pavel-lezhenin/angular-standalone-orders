@@ -35,6 +35,23 @@ export class OrderService {
   }
 
   /**
+   * Gets all orders
+   *
+   * @returns Array of all orders
+   */
+  async getAllOrders(): Promise<OrderDTO[]> {
+    try {
+      const response = await firstValueFrom(
+        this.http.get<{ orders: OrderDTO[] }>(`${this.apiUrl}`)
+      );
+      return response.orders;
+    } catch (error) {
+      console.error('Failed to fetch orders:', error);
+      throw new Error('Failed to fetch orders. Please try again.');
+    }
+  }
+
+  /**
    * Gets order by ID
    *
    * @param id - Order ID

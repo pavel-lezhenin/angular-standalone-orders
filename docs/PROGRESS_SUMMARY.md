@@ -4,10 +4,10 @@
 
 ---
 
-## 🎯 Overall: 90% Complete
+## 🎯 Overall: 92% Complete
 
 ```
-██████████████████████░░ 90%
+███████████████████████░ 92%
 ```
 
 ---
@@ -28,12 +28,12 @@
 ### ⏸️ Partially Complete (60-80%)
 
 - **Dashboard** (30%) — ✅ Structure | ❌ Real widgets
-- **User Orders/Board** (60%) — ✅ Core pages | ❌ Full Kanban + analytics
+- **User Orders/Board** (72%) — ✅ Core pages + manager board UI | ❌ Drag-drop + analytics
 - **Tests** (25%) — ✅ Base setup | ❌ Coverage target 80%+
 
 ### ❌ Not Started (0-10%)
 
-- **Orders Board (Admin)** (10%) — Empty stub, needs Kanban drag-drop
+- **Orders Board (Admin)** (45%) — Kanban UI + live loading, needs drag-drop/filtering
 - **Tests** (20%) — Minimal coverage, need 80%+
 
 ---
@@ -61,7 +61,7 @@
 | **Customers** | Full CRUD | 100% | - |
 | **Permissions** | Matrix UI | 95% | Persistence |
 | **Orders** | User flow + confirmation | 80% | Board integration |
-| **Orders Board** | - | 10% | Full Kanban |
+| **Orders Board** | Kanban UI + live load | 45% | Drag-drop + filters |
 | **Dashboard** | Layout | 30% | Widgets |
 | **Tests** | Base tests | 25% | Unit + E2E |
 
@@ -79,4 +79,4 @@
 ---
 
 **Last Updated:** 2026-02-14  
-**Next Task:** Implement Orders Board Kanban + tests for payment/preferences
+**Next Task:** Add drag-drop status transitions and filters to Orders Board
