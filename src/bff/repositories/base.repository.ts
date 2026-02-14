@@ -20,7 +20,14 @@ export abstract class BaseRepository<T extends { id: string }> {
 
   async create(item: T): Promise<void> {
     try {
+      console.log(`📝 BaseRepository: Creating item in ${this.storeName}`, item.id);
+      
+      // Ensure DB is initialized
+      await this.db.initialize();
+      
       await this.db.write(this.storeName, item, 'add');
+      
+      console.log(`✅ BaseRepository: Item created in ${this.storeName}`, item.id);
     } catch (error: any) {
       // If item already exists, log and skip (don't throw)
       if (error.name === 'ConstraintError') {
@@ -39,6 +46,13 @@ export abstract class BaseRepository<T extends { id: string }> {
     }
     const updated = { ...item, ...updates };
     await this.db.write(this.storeName, updated, 'put');
+  }
+
+  /**
+   * Update full entity (replaces entire record)
+   */
+  async updateFull(item: T): Promise<void> {
+    await this.db.write(this.storeName, item, 'put');
   }
 
   async delete(id: string): Promise<void> {

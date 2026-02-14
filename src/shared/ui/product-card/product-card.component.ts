@@ -8,6 +8,7 @@ import { DecimalPipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ProductWithCategoryDTO } from '@core';
+import { DEFAULT_PRODUCT_IMAGE } from '@shared/constants/product.constants';
 
 /**
  * Product Card Component
@@ -35,7 +36,7 @@ export class ProductCardComponent {
   addToCart = output<ProductWithCategoryDTO>();
 
   get productImage(): string {
-    return this.product().imageUrl || '/product-placeholder.svg';
+    return this.product().imageUrl || DEFAULT_PRODUCT_IMAGE;
   }
 
   get isLowStock(): boolean {

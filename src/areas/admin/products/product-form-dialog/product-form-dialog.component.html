@@ -1,0 +1,198 @@
+<h2 mat-dialog-title>{{ dialogTitle }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="productForm" class="product-form">
+    <!-- Product name -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Product Name</mat-label>
+      <input
+        matInput
+        formControlName="name"
+        placeholder="Enter product name"
+        required
+      />
+      @if (productForm.get('name')?.hasError('required')) {
+        <mat-error>Product name is required</mat-error>
+      }
+      @if (productForm.get('name')?.hasError('maxlength')) {
+        <mat-error>Maximum 200 characters allowed</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Category selection -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Category</mat-label>
+      <mat-select formControlName="categoryId" required>
+        @for (category of data.categories; track category.id) {
+          <mat-option [value]="category.id">
+            {{ category.name }}
+          </mat-option>
+        }
+      </mat-select>
+      @if (productForm.get('categoryId')?.hasError('required')) {
+        <mat-error>Category is required</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Price and stock -->
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Price</mat-label>
+        <input
+          matInput
+          type="number"
+          formControlName="price"
+          placeholder="0.00"
+          step="0.01"
+          min="0"
+          required
+        />
+        <span matTextPrefix>$&nbsp;</span>
+        @if (productForm.get('price')?.hasError('required')) {
+          <mat-error>Price is required</mat-error>
+        }
+        @if (productForm.get('price')?.hasError('min')) {
+          <mat-error>Price must be greater than 0</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Stock</mat-label>
+        <input
+          matInput
+          type="number"
+          formControlName="stock"
+          placeholder="0"
+          min="0"
+          required
+        />
+        @if (productForm.get('stock')?.hasError('required')) {
+          <mat-error>Stock is required</mat-error>
+        }
+        @if (productForm.get('stock')?.hasError('min')) {
+          <mat-error>Stock cannot be negative</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <!-- Description -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Description</mat-label>
+      <textarea
+        matInput
+        formControlName="description"
+        placeholder="Enter detailed product description"
+        rows="6"
+        required
+      ></textarea>
+      <mat-hint>Provide a detailed description of the product</mat-hint>
+      @if (productForm.get('description')?.hasError('required')) {
+        <mat-error>Description is required</mat-error>
+      }
+      @if (productForm.get('description')?.hasError('maxlength')) {
+        <mat-error>Maximum 5000 characters allowed</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Image gallery -->
+    <div class="section">
+      <h3>Product Images</h3>
+      <p class="hint">First image will be used as primary. Leave empty to use default placeholder.</p>
+      
+      @if (isUploadingImage()) {
+        <div class="upload-progress">
+          <mat-spinner diameter="24"></mat-spinner>
+          <span>Uploading image...</span>
+        </div>
+      }
+      
+      <app-image-gallery
+        [images]="images()"
+        [maxImages]="10"
+        [isUploading]="isUploadingImage()"
+        [disabled]="isSubmitting()"
+        (fileUpload)="onFileUpload($event)"
+        (fileDelete)="onImageDelete($event)"
+        (orderChange)="onImageReorder($event)"
+        (setPrimary)="onSetPrimary($event)"
+      />
+    </div>
+
+    <!-- Technical specifications -->
+    <div class="section">
+      <div class="section-header">
+        <h3>Technical Specifications</h3>
+        <button
+          mat-stroked-button
+          type="button"
+          (click)="addSpecification()"
+          [disabled]="isSubmitting()"
+        >
+          <mat-icon>add</mat-icon>
+          Add Specification
+        </button>
+      </div>
+
+      @if (specifications.length > 0) {
+        <div class="specifications-list" formArrayName="specifications">
+          @for (spec of specifications.controls; track $index; let i = $index) {
+            <div [formGroupName]="i" class="specification-item">
+              <mat-form-field appearance="outline">
+                <mat-label>Name</mat-label>
+                <input
+                  matInput
+                  formControlName="name"
+                  placeholder="e.g., Screen Size"
+                />
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Value</mat-label>
+                <input
+                  matInput
+                  formControlName="value"
+                  placeholder="e.g., 15.6 inches"
+                />
+              </mat-form-field>
+
+              <button
+                mat-icon-button
+                type="button"
+                color="warn"
+                (click)="removeSpecification(i)"
+                [disabled]="isSubmitting()"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          }
+        </div>
+      } @else {
+        <p class="empty-state">No specifications added yet</p>
+      }
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button
+    mat-button
+    (click)="onCancel()"
+    [disabled]="isSubmitting()"
+  >
+    Cancel
+  </button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="onSubmit()"
+    [disabled]="isSubmitting() || productForm.invalid"
+  >
+    @if (isSubmitting()) {
+      <mat-spinner diameter="20"></mat-spinner>
+      <span>Saving...</span>
+    } @else {
+      <span>{{ isEditMode ? 'Update' : 'Create' }}</span>
+    }
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,57 @@
+<div class="image-zoom-dialog">
+  <div class="dialog-header">
+    <div class="image-counter">
+      {{ currentIndex + 1 }} / {{ data.images.length }}
+    </div>
+    <button mat-icon-button (click)="close()" class="close-button">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="dialog-content">
+    <!-- Previous button -->
+    @if (canGoPrevious) {
+      <button 
+        mat-icon-button 
+        class="nav-button nav-previous"
+        (click)="previous()"
+      >
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+    }
+
+    <!-- Main image -->
+    <div class="image-container">
+      <img 
+        [src]="currentImage" 
+        [alt]="data.productName"
+        class="zoom-image"
+      />
+    </div>
+
+    <!-- Next button -->
+    @if (canGoNext) {
+      <button 
+        mat-icon-button 
+        class="nav-button nav-next"
+        (click)="next()"
+      >
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    }
+  </div>
+
+  <!-- Thumbnails -->
+  @if (data.images.length > 1) {
+    <div class="thumbnails">
+      @for (image of data.images; track $index) {
+        <img
+          [src]="image"
+          [alt]="data.productName + ' - ' + ($index + 1)"
+          [class.active]="currentIndex === $index"
+          (click)="currentIndex = $index"
+        />
+      }
+    </div>
+  }
+</div>

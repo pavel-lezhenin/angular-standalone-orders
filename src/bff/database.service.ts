@@ -6,7 +6,7 @@ import { isPlatformBrowser } from '@angular/common';
 })
 export class DatabaseService {
   private readonly DB_NAME = 'OrdersDB';
-  private readonly DB_VERSION = 1;
+  private readonly DB_VERSION = 2; // Updated for files store
   private db: IDBDatabase | null = null;
   private initPromise: Promise<void> | null = null;
   private platformId = inject(PLATFORM_ID);
@@ -116,6 +116,14 @@ export class DatabaseService {
           permissionsStore.createIndex('role', 'role');
           console.log('Permissions store created');
         }
+
+        // Files store (S3 emulation)
+        if (!db.objectStoreNames.contains('files')) {
+          const filesStore = db.createObjectStore('files', { keyPath: 'id' });
+          filesStore.createIndex('uploadedBy', 'uploadedBy');
+          filesStore.createIndex('uploadedAt', 'uploadedAt');
+          console.log('Files store created');
+        }
       };
     });
 
@@ -153,10 +161,17 @@ export class DatabaseService {
    * Perform write transaction
    */
   async write<T>(storeName: string, data: T, mode: 'add' | 'put' = 'put'): Promise<void> {
-    if (!this.isBrowser || !this.db) {
-      console.warn(`⚠️ write: Not in browser or DB not initialized`);
+    if (!this.isBrowser) {
+      console.warn(`⚠️ write: Not in browser, skipping database operation`);
       return Promise.resolve();
     }
+    
+    if (!this.db) {
+      const error = new Error('Database not initialized. Call initialize() first.');
+      console.error('❌ write error:', error.message);
+      throw error;
+    }
+    
     return new Promise((resolve, reject) => {
       const transaction = this.db!.transaction([storeName], 'readwrite');
       const store = transaction.objectStore(storeName);
@@ -166,7 +181,10 @@ export class DatabaseService {
         console.error(`❌ write error in ${storeName} (${mode}):`, request.error);
         reject(request.error);
       };
-      request.onsuccess = () => resolve();
+      request.onsuccess = () => {
+        console.log(`✅ write success in ${storeName} (${mode})`);
+        resolve();
+      };
     });
   }
 

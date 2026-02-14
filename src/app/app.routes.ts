@@ -27,6 +27,11 @@ export const routes: Routes = [
         title: 'Shop - Orders Platform',
       },
       {
+        path: 'shop/product/:id',
+        loadComponent: () => import('../areas/shop/shop-product-detail/shop-product-detail.component').then(m => m.default),
+        title: 'Product Details - Shop',
+      },
+      {
         path: 'account',
         canActivate: [authGuard],
         loadComponent: () => import('../areas/account/components/account.component').then(m => m.AccountComponent),

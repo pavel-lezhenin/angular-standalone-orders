@@ -134,7 +134,7 @@ export default class ShopComponent {
   }
 
   protected onProductClick(productId: string): void {
-    this.router.navigate(['/shop', productId]);
+    void this.router.navigate(['/shop/product', productId]);
   }
 
   protected onAddToCart(product: ProductWithCategoryDTO): void {

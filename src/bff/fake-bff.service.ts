@@ -98,6 +98,15 @@ export class FakeBFFService {
     if (req.method === 'GET' && req.url.match(/\/api\/products\/[\w-]+$/)) {
       return this.productHandler.handleGetProduct(req);
     }
+    if (req.method === 'POST' && req.url.endsWith('/api/products')) {
+      return this.productHandler.handleCreateProduct(req);
+    }
+    if (req.method === 'PUT' && req.url.match(/\/api\/products\/[\w-]+$/)) {
+      return this.productHandler.handleUpdateProduct(req);
+    }
+    if (req.method === 'DELETE' && req.url.match(/\/api\/products\/[\w-]+$/)) {
+      return this.productHandler.handleDeleteProduct(req);
+    }
 
     // Category endpoints
     if (req.method === 'GET' && req.url.endsWith('/api/categories')) {

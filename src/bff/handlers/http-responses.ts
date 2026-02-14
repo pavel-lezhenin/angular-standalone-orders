@@ -60,6 +60,15 @@ export class NotFoundResponse extends HttpResponse<{ error: string }> {
 }
 
 /**
+ * 409 Conflict Response
+ */
+export class ConflictResponse extends HttpResponse<{ error: string }> {
+  constructor(error = 'Conflict') {
+    super({ status: 409, body: { error } });
+  }
+}
+
+/**
  * 500 Internal Server Error Response
  */
 export class ServerErrorResponse extends HttpResponse<{ error: string }> {

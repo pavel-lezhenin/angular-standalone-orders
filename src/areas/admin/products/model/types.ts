@@ -1,4 +1,4 @@
-import { ProductDTO } from '@core';
+import { ProductDTO, ProductSpecificationDTO } from '@core';
 
 /**
  * Product permissions
@@ -14,9 +14,12 @@ export interface ProductPermissions {
  */
 export interface ProductFormData {
   name: string;
+  description: string;
   price: number;
   categoryId: string;
   stock: number;
+  imageIds: string[];
+  specifications: ProductSpecificationDTO[];
 }
 
 /**

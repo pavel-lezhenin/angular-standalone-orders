@@ -40,8 +40,8 @@ export class ProductTableComponent {
   readonly canDelete = input(false);
 
   readonly pageChange = output<PageEvent>();
-  readonly editClick = output<ProductDTO>();
-  readonly deleteClick = output<ProductDTO>();
+  readonly editClick = output<string>(); // productId
+  readonly deleteClick = output<string>(); // productId
 
   protected readonly displayedColumns = ['image', 'name', 'category', 'price', 'stock', 'actions'];
 

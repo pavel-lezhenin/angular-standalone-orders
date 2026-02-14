@@ -1,0 +1,89 @@
+<div class="image-gallery">
+  <!-- Upload zone -->
+  @if (canUploadMore) {
+    <div
+      class="upload-zone"
+      [class.dragging]="isDragging()"
+      [class.disabled]="disabled()"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave($event)"
+      (drop)="onDrop($event)"
+    >
+      @if (isUploading()) {
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Uploading...</p>
+      } @else {
+        <mat-icon>cloud_upload</mat-icon>
+        <p>Drag & drop images here</p>
+        <p class="hint">or click to browse</p>
+        <p class="limit">Max {{ maxImages() }} images, {{ maxFileSizeText }} each</p>
+        <input
+          type="file"
+          [accept]="acceptedFormats"
+          [disabled]="disabled()"
+          (change)="onFileSelected($event)"
+          class="file-input"
+        />
+      }
+    </div>
+  }
+
+  <!-- Image grid -->
+  @if (images().length > 0) {
+    <div class="images-grid">
+      @for (image of images(); track image.fileId; let idx = $index) {
+        <div
+          class="image-item"
+          [class.dragging]="draggedIndex() === idx"
+          draggable="true"
+          (dragstart)="onDragStart(idx, $event)"
+          (dragover)="onDragOverImage($event)"
+          (drop)="onDropImage(idx, $event)"
+          (dragend)="onDragEnd()"
+        >
+          <img [src]="image.url" [alt]="image.filename" />
+          
+          <div class="image-overlay">
+            <div class="overlay-actions">
+              @if (idx !== 0) {
+                <button
+                  mat-icon-button
+                  color="primary"
+                  (click)="setAsPrimary(image.fileId, $event)"
+                  [disabled]="disabled()"
+                  class="primary-btn"
+                  title="Set as primary image"
+                >
+                  <mat-icon>star</mat-icon>
+                </button>
+              }
+              <button
+                mat-icon-button
+                color="warn"
+                (click)="deleteImage(image.fileId, $event)"
+                [disabled]="disabled()"
+                class="delete-btn"
+                title="Delete image"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+
+          @if (idx === 0) {
+            <div class="primary-badge">
+              <mat-icon>star</mat-icon>
+              Primary
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+
+  @if (images().length === 0 && !canUploadMore) {
+    <div class="empty-state">
+      <p>No images</p>
+    </div>
+  }
+</div>

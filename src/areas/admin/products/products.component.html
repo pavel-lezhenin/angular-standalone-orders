@@ -28,8 +28,8 @@
     [canEdit]="canEdit()"
     [canDelete]="canDelete()"
     (pageChange)="onPageChange($event)"
-    (editClick)="openEditDialog()"
-    (deleteClick)="deleteProduct()"
+    (editClick)="openEditDialog($event)"
+    (deleteClick)="deleteProduct($event)"
   />
 
   <app-page-loader [isLoading]="isLoading()" />

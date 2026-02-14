@@ -4,6 +4,7 @@ import { firstValueFrom } from 'rxjs';
 import { PermissionService } from '@core/services/permission.service';
 import { PaginationParams, PaginatedResponse } from '@core/types';
 import { ProductDTO, CategoryDTO } from '@core';
+import { CreateProductDTO, UpdateProductDTO } from '../model/types';
 
 export interface ProductPermissions {
   canCreate: boolean;
@@ -64,13 +65,6 @@ export class ProductService {
   }
 
   /**
-   * Delete product by ID
-   */
-  async deleteProduct(productId: string): Promise<void> {
-    return firstValueFrom(this.http.delete<void>(`${this.apiUrl}/${productId}`));
-  }
-
-  /**
    * Get single product by ID
    */
   async getProduct(productId: string): Promise<ProductDTO> {
@@ -78,5 +72,36 @@ export class ProductService {
       this.http.get<{ product: ProductDTO }>(`${this.apiUrl}/${productId}`)
     );
     return response.product;
+  }
+
+  /**
+   * Create new product
+   */
+  async createProduct(product: CreateProductDTO): Promise<ProductDTO> {
+    const response = await firstValueFrom(
+      this.http.post<{ product: ProductDTO }>(this.apiUrl, product)
+    );
+    return response.product;
+  }
+
+  /**
+   * Update existing product
+   */
+  async updateProduct(
+    productId: string,
+    product: UpdateProductDTO
+  ): Promise<ProductDTO> {
+    const response = await firstValueFrom(
+      this.http.put<{ product: ProductDTO }>(`${this.apiUrl}/${productId}`, product)
+    );
+    return response.product;
+  }
+
+  /**
+   * Delete product by ID
+   * Returns error message if product has associated orders
+   */
+  async deleteProduct(productId: string): Promise<void> {
+    return firstValueFrom(this.http.delete<void>(`${this.apiUrl}/${productId}`));
   }
 }

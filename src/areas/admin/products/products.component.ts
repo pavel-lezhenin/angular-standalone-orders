@@ -17,6 +17,12 @@ import {
   ProductFiltersComponent,
   ProductFilters,
 } from './product-filters/product-filters.component';
+import {
+  ProductFormDialogComponent,
+  ProductFormDialogData,
+  ProductFormResult,
+} from './product-form-dialog/product-form-dialog.component';
+import { CreateProductDTO, UpdateProductDTO } from './model/types';
 
 /**
  * Products management page (Admin only)
@@ -73,6 +79,11 @@ export class ProductsComponent extends BaseComponent implements OnInit {
     search: '',
     categoryId: undefined,
   });
+
+  /**
+   * Selected product for edit/delete
+   */
+  private readonly selectedProductId = signal<string | null>(null);
 
   async ngOnInit(): Promise<void> {
     this.initPermissions();
@@ -152,20 +163,157 @@ export class ProductsComponent extends BaseComponent implements OnInit {
    * Open create dialog
    */
   protected openCreateDialog(): void {
-    this.notificationService.success('Create product dialog - coming soon');
+    const dialogRef = this.dialog.open<
+      ProductFormDialogComponent,
+      ProductFormDialogData,
+      ProductFormResult
+    >(ProductFormDialogComponent, {
+      data: {
+        categories: this.categories(),
+      },
+      disableClose: true,
+    });
+
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (result) {
+        await this.createProduct(result);
+      }
+    });
   }
 
   /**
    * Open edit dialog
    */
-  protected openEditDialog(): void {
-    this.notificationService.success('Edit product dialog - coming soon');
+  protected async openEditDialog(productId: string): Promise<void> {
+    try {
+      // Load full product data
+      const product = await this.productService.getProduct(productId);
+
+      const dialogRef = this.dialog.open<
+        ProductFormDialogComponent,
+        ProductFormDialogData,
+        ProductFormResult
+      >(ProductFormDialogComponent, {
+        data: {
+          product,
+          categories: this.categories(),
+        },
+        disableClose: true,
+      });
+
+      dialogRef.afterClosed().subscribe(async (result) => {
+        if (result) {
+          await this.updateProduct(productId, result);
+        }
+      });
+    } catch (err: unknown) {
+      console.error('Failed to load product:', err);
+      this.notificationService.error('Failed to load product data');
+    }
+  }
+
+  /**
+   * Create product
+   */
+  private async createProduct(formData: ProductFormResult): Promise<void> {
+    this.startLoading();
+    try {
+      const productDTO: CreateProductDTO = {
+        name: formData.name,
+        description: formData.description,
+        price: formData.price,
+        categoryId: formData.categoryId,
+        stock: formData.stock,
+        imageUrls: [], // Will be resolved from imageIds by BFF
+        specifications: formData.specifications,
+        imageUrl: '', // Legacy field
+      };
+
+      // Note: imageIds will be sent in request body but converted by BFF
+      await this.productService.createProduct({
+        ...productDTO,
+        imageIds: formData.imageIds,
+      } as CreateProductDTO & { imageIds: string[] });
+
+      this.notificationService.success('Product created successfully');
+      await this.loadProducts();
+    } catch (err: unknown) {
+      console.error('Failed to create product:', err);
+      this.notificationService.error('Failed to create product');
+    } finally {
+      this.stopLoading();
+    }
+  }
+
+  /**
+   * Update product
+   */
+  private async updateProduct(
+    productId: string,
+    formData: ProductFormResult
+  ): Promise<void> {
+    this.startLoading();
+    try {
+      const productDTO: UpdateProductDTO = {
+        name: formData.name,
+        description: formData.description,
+        price: formData.price,
+        categoryId: formData.categoryId,
+        stock: formData.stock,
+        imageUrls: [], // Will be resolved from imageIds by BFF
+        specifications: formData.specifications,
+        imageUrl: '', // Legacy field
+      };
+
+      await this.productService.updateProduct(productId, {
+        ...productDTO,
+        imageIds: formData.imageIds,
+      } as UpdateProductDTO & { imageIds: string[] });
+
+      this.notificationService.success('Product updated successfully');
+      await this.loadProducts();
+    } catch (err: unknown) {
+      console.error('Failed to update product:', err);
+      this.notificationService.error('Failed to update product');
+    } finally {
+      this.stopLoading();
+    }
   }
 
   /**
    * Delete product with confirmation dialog
+   * Prevents deletion if product has associated orders
    */
-  protected deleteProduct(): void {
-    this.notificationService.success('Delete product - coming soon');
+  protected async deleteProduct(productId: string): Promise<void> {
+    const confirmed = confirm(
+      'Are you sure you want to delete this product? This action cannot be undone.'
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.startLoading();
+    try {
+      await this.productService.deleteProduct(productId);
+      this.notificationService.success('Product deleted successfully');
+      await this.loadProducts();
+    } catch (err: unknown) {
+      console.error('Failed to delete product:', err);
+      
+      // Check if error is due to existing orders
+      const errorMessage =
+        err instanceof Error ? err.message : 'Failed to delete product';
+      
+      if (errorMessage.includes('order') || errorMessage.includes('Order')) {
+        this.notificationService.error(
+          'Cannot delete product: It has associated orders'
+        );
+      } else {
+        this.notificationService.error('Failed to delete product');
+      }
+    } finally {
+      this.stopLoading();
+    }
   }
 }

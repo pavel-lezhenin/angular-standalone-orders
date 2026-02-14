@@ -267,8 +267,11 @@ export class SeedService {
       price: template.price,
       stock: template.stock,
       categoryId,
-      imageUrl,
+      imageIds: [], // Empty for seed data - will be populated via UI
+      specifications: [], // Empty for seed data - will be populated via UI
+      imageUrl, // Legacy field for backward compatibility
       createdAt,
+      updatedAt: createdAt,
     };
   }
 }

@@ -57,7 +57,7 @@
           mat-icon-button
           *ngIf="canEdit()"
           matTooltip="Edit product"
-          (click)="editClick.emit(product)"
+          (click)="editClick.emit(product.id)"
         >
           <mat-icon>edit</mat-icon>
         </button>
@@ -65,7 +65,7 @@
           mat-icon-button
           *ngIf="canDelete()"
           matTooltip="Delete product"
-          (click)="deleteClick.emit(product)"
+          (click)="deleteClick.emit(product.id)"
           color="warn"
         >
           <mat-icon>delete</mat-icon>
