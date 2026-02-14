@@ -9,6 +9,9 @@ export class PermissionService {
   // In-memory cache of permissions
   private permissionsCache: Map<string, PermissionDTO[]> = new Map();
 
+  // Custom permissions storage (in-memory, would be IndexedDB in real app)
+  private customPermissions: PermissionDTO[] = [];
+
   constructor(private authService: AuthService) {}
 
   /**
@@ -27,9 +30,7 @@ export class PermissionService {
     const rolePermissions = this.getPermissions(user.role);
 
     // Check if PermissionDTO exists and is granted
-    return rolePermissions.some(
-      (p) => p.section === section && p.action === action && p.granted,
-    );
+    return rolePermissions.some((p) => p.section === section && p.action === action && p.granted);
   }
 
   /**
@@ -41,7 +42,12 @@ export class PermissionService {
     if (cached) return cached;
 
     // Build permissions based on role
-    const permissions = this.buildPermissions(role);
+    const builtInPermissions = this.buildPermissions(role);
+
+    // Add custom permissions for this role
+    const roleCustomPermissions = this.customPermissions.filter((p) => p.role === role);
+
+    const permissions = [...builtInPermissions, ...roleCustomPermissions];
     this.permissionsCache.set(role, permissions);
     return permissions;
   }
@@ -86,7 +92,7 @@ export class PermissionService {
             section: 'orders_own',
             action: 'cancel',
             granted: true,
-          },
+          }
         );
         break;
 
@@ -131,7 +137,7 @@ export class PermissionService {
             section: 'categories',
             action: 'crud',
             granted: true,
-          },
+          }
         );
         break;
 
@@ -143,6 +149,61 @@ export class PermissionService {
     return permissions;
   }
 
+  /**
+
+  /**
+   * Add a custom permission
+   */
+  addPermission(permission: Omit<PermissionDTO, 'id'>): PermissionDTO {
+    const newPermission: PermissionDTO = {
+      ...permission,
+      id: `custom-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+    };
+
+    this.customPermissions.push(newPermission);
+    this.clearCache(); // Clear cache to rebuild with new permission
+
+    return newPermission;
+  }
+
+  /**
+   * Delete a custom permission by ID
+   */
+  deletePermission(permissionId: string): boolean {
+    const index = this.customPermissions.findIndex((p) => p.id === permissionId);
+
+    if (index === -1) {
+      return false;
+    }
+
+    this.customPermissions.splice(index, 1);
+    this.clearCache(); // Clear cache to rebuild without deleted permission
+
+    return true;
+  }
+
+  /**
+   * Update a permission's granted status
+   */
+  updatePermissionStatus(permissionId: string, granted: boolean): boolean {
+    const permission = this.customPermissions.find((p) => p.id === permissionId);
+
+    if (!permission) {
+      return false;
+    }
+
+    permission.granted = granted;
+    this.clearCache(); // Clear cache to apply changes
+
+    return true;
+  }
+
+  /**
+   * Get all custom permissions
+   */
+  getCustomPermissions(): PermissionDTO[] {
+    return [...this.customPermissions];
+  }
   /**
    * Clear permissions cache
    */

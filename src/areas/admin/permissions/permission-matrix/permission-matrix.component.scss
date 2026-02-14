@@ -1,0 +1,109 @@
+@use '@angular/material' as mat;
+
+.permission-matrix-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.role-card {
+  mat-card-header {
+    margin-bottom: var(--spacing-md);
+  }
+
+  .role-title {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    font-size: var(--font-size-lg);
+  }
+
+  .role-badge {
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: var(--border-radius-sm);
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-sm);
+    color: var(--text-on-primary);
+
+    &.badge-admin {
+      background-color: var(--app-error);
+    }
+
+    &.badge-manager {
+      background-color: var(--app-warning);
+    }
+
+    &.badge-user {
+      background-color: var(--app-info);
+    }
+  }
+
+  .permissions-count {
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+  }
+}
+
+.permissions-table {
+  width: 100%;
+  
+  th {
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-secondary);
+  }
+
+  .action-chip {
+    font-size: var(--font-size-xs);
+    height: var(--spacing-lg);
+    min-height: var(--spacing-lg);
+  }
+
+  mat-checkbox {
+    ::ng-deep .mat-mdc-checkbox-label {
+      font-size: var(--font-size-sm);
+    }
+  }
+}
+
+.admin-notice {
+  color: var(--text-secondary);
+  font-style: italic;
+  text-align: center;
+  padding: var(--spacing-lg);
+  background-color: var(--surface-secondary);
+  border-radius: var(--border-radius-md);
+}
+
+.empty-state {
+  color: var(--text-secondary);
+  text-align: center;
+  padding: var(--spacing-xl);
+}
+
+/* ============================================
+ * Responsive Styles
+ * ============================================ */
+
+/* Mobile Styles */
+:host-context(.mobile) {
+  .permission-matrix-container {
+    padding: var(--spacing-sm);
+    gap: var(--spacing-md);
+  }
+
+  .role-card {
+    .role-title {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--spacing-sm);
+    }
+  }
+
+  .permissions-table {
+    font-size: var(--font-size-sm);
+    
+    th, td {
+      padding: var(--spacing-xs);
+    }
+  }
+}

@@ -1,0 +1,81 @@
+<div class="permission-matrix-container">
+  @for (roleGroup of permissionsByRole(); track roleGroup.role) {
+    <mat-card class="role-card">
+      <mat-card-header>
+        <mat-card-title class="role-title">
+          <span class="role-badge" [ngClass]="getRoleBadgeClass(roleGroup.role)">
+            {{ roleGroup.role.toUpperCase() }}
+          </span>
+          <span class="permissions-count">
+            {{ getGrantedCount(roleGroup.permissions) }} / {{ roleGroup.permissions.length }} permissions
+          </span>
+        </mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        @if (roleGroup.role === 'admin') {
+          <p class="admin-notice">Admin role has full access to all sections</p>
+        } @else if (roleGroup.permissions.length === 0) {
+          <p class="empty-state">No permissions defined for this role</p>
+        } @else {
+          <table mat-table [dataSource]="roleGroup.permissions" class="permissions-table">
+            <!-- Section Column -->
+            <ng-container matColumnDef="section">
+              <th mat-header-cell *matHeaderCellDef>Section</th>
+              <td mat-cell *matCellDef="let permission">
+                {{ formatSectionName(permission.section) }}
+              </td>
+            </ng-container>
+
+            <!-- Action Column -->
+            <ng-container matColumnDef="action">
+              <th mat-header-cell *matHeaderCellDef>Action</th>
+              <td mat-cell *matCellDef="let permission">
+                <mat-chip class="action-chip">
+                  {{ formatActionName(permission.action) }}
+                </mat-chip>
+              </td>
+            </ng-container>
+
+            <!-- Granted Column -->
+            <ng-container matColumnDef="granted">
+              <th mat-header-cell *matHeaderCellDef>Access</th>
+              <td mat-cell *matCellDef="let permission">
+                <mat-checkbox
+                  [checked]="permission.granted"
+                  [disabled]="!canEdit()"
+                  (change)="onToggle(roleGroup.role, permission.section, permission.action, $event.checked)"
+                  [matTooltip]="canEdit() ? 'Toggle permission' : 'No edit permission'"
+                >
+                  {{ permission.granted ? 'Granted' : 'Denied' }}
+                </mat-checkbox>
+              </td>
+            </ng-container>
+
+            <!-- Actions Column (for custom permissions only) -->
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let permission">
+                @if (isCustomPermission(permission.id) && canEdit()) {
+                  <button
+                    mat-icon-button
+                    color="warn"
+                    (click)="onDelete(permission.id, roleGroup.role)"
+                    matTooltip="Delete custom permission"
+                  >
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                }
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="['section', 'action', 'granted', 'actions']"></tr>
+            <tr mat-row *matRowDef="let row; columns: ['section', 'action', 'granted', 'actions']"></tr>
+          </table>
+        }
+      </mat-card-content>
+    </mat-card>
+  } @empty {
+    <p class="empty-state">No roles found</p>
+  }
+</div>

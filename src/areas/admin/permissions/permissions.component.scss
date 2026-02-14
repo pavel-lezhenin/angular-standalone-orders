@@ -1,23 +1,91 @@
-.permissions {
-  h1 {
-    margin: 0 0 var(--spacing-xl) 0;
-    font-size: var(--font-size-3xl);
-    font-weight: var(--font-weight-light);
+.permissions-container {
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-xl);
+
+    h1 {
+      margin: 0;
+      font-size: var(--font-size-3xl);
+      font-weight: var(--font-weight-light);
+    }
+
+    .header-actions {
+      display: flex;
+      gap: var(--spacing-sm);
+      align-items: center;
+
+      button {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-xs);
+      }
+    }
   }
 
-  .placeholder {
-    text-align: center;
-    color: var(--color-black-60);
-    padding: var(--spacing-3xl) var(--spacing-lg) var(--spacing-lg);
-    font-size: var(--font-size-md);
-    margin: 0;
-  }
+  .permissions-info {
+    margin-bottom: var(--spacing-lg);
 
-  .info {
-    text-align: center;
-    color: var(--color-black-40);
-    padding: 0 var(--spacing-lg) var(--spacing-3xl);
-    font-size: var(--font-size-sm);
-    margin: 0;
+    mat-card {
+      background-color: var(--surface-secondary);
+      border-left: var(--spacing-xs) solid var(--app-info);
+    }
+
+    .info-text {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: var(--font-size-sm);
+
+      mat-icon {
+        color: var(--app-info);
+        font-size: var(--font-size-lg);
+        width: var(--spacing-lg);
+        height: var(--spacing-lg);
+      }
+    }
   }
 }
+
+/* ============================================
+ * Responsive Styles
+ * ============================================ */
+
+/* Mobile Styles */
+:host-context(.mobile) {
+  .permissions-container {
+    padding: var(--spacing-md);
+
+    .page-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--spacing-md);
+
+      h1 {
+        font-size: var(--font-size-2xl);
+      }
+
+      .header-actions {
+        width: 100%;
+        flex-direction: column;
+
+        button {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+    }
+
+    .permissions-info {
+      .info-text {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+      }
+    }
+  }
+}
+
