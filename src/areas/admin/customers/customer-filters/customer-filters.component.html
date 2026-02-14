@@ -1,23 +1,11 @@
 <div class="filters-container">
-  <mat-form-field appearance="outline" class="search-field">
-    <mat-label>Search users</mat-label>
-    <input 
-      matInput 
-      [formControl]="searchControl" 
-      placeholder="Email or name..."
-    />
-    <mat-icon matPrefix>search</mat-icon>
-    @if (searchControl.value) {
-      <button 
-        matSuffix 
-        mat-icon-button 
-        (click)="clearSearch()"
-        type="button"
-      >
-        <mat-icon>close</mat-icon>
-      </button>
-    }
-  </mat-form-field>
+  <app-search-input
+    [label]="'Search users'"
+    [placeholder]="'Email or name...'"
+    [searchControl]="searchControl"
+    (search)="onSearch($event)"
+    (clear)="onSearchClear()"
+  />
 
   <mat-form-field appearance="outline" class="role-field">
     <mat-label>Filter by role</mat-label>

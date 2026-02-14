@@ -2,12 +2,11 @@ import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { CategoryDTO } from '@core';
+import { SearchInputComponent } from '@shared/ui/search-input';
 
 export interface ProductFilters {
   search: string;
@@ -18,6 +17,7 @@ export interface ProductFilters {
  * Product filters component
  *
  * Handles search and category filtering
+ * Uses reusable SearchInputComponent with 300ms debounce
  * Emits filter changes to parent
  */
 @Component({
@@ -26,8 +26,8 @@ export interface ProductFilters {
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    SearchInputComponent,
     MatFormFieldModule,
-    MatInputModule,
     MatSelectModule,
     MatButtonModule,
     MatIconModule,
@@ -38,28 +38,35 @@ export interface ProductFilters {
 export class ProductFiltersComponent {
   readonly categories = input.required<CategoryDTO[]>();
 
-  readonly searchControl = new FormControl('');
+  readonly searchControl = new FormControl<string>('');
   readonly categoryControl = new FormControl<string | undefined>(undefined);
 
   readonly filtersChange = output<ProductFilters>();
 
   constructor() {
-    // Debounce search input
-    this.searchControl.valueChanges
-      .pipe(debounceTime(300), distinctUntilChanged())
-      .subscribe(() => this.emitFilters());
-
     // Immediate category filter
     this.categoryControl.valueChanges.subscribe(() => this.emitFilters());
   }
 
-  clearSearch(): void {
-    this.searchControl.setValue('');
+  /**
+   * Handle search input with debounce (300ms)
+   * Called by SearchInputComponent after debounce time
+   */
+  onSearch(searchValue: string): void {
+    this.searchControl.setValue(searchValue, { emitEvent: false });
+    this.emitFilters();
+  }
+
+  /**
+   * Handle search clear button
+   */
+  onSearchClear(): void {
+    this.emitFilters();
   }
 
   resetFilters(): void {
-    this.searchControl.setValue('');
-    this.categoryControl.setValue(undefined);
+    this.searchControl.setValue('', { emitEvent: false });
+    this.categoryControl.setValue(undefined, { emitEvent: false });
   }
 
   private emitFilters(): void {
