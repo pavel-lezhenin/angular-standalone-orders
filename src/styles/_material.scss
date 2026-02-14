@@ -1,68 +1,63 @@
-/* Material Custom Theme */
+/* ============================================
+ * Material 3 Custom Theme
+ *
+ * Seed: #4B6F00 | Font: Raleway
+ * Palette generated via @material/material-color-utilities
+ * 
+ * mat.theme() emits --mat-sys-* CSS variables AND
+ * all component tokens — icons, form fields, buttons, etc.
+ * are properly themed automatically.
+ * ============================================ */
 @use '@angular/material' as mat;
 @use 'variables/config' as config;
-
-@include mat.core();
+@use 'variables/palette' as palette;
 
 /* ============================================
- * Material 3 Custom Theme from Theme Builder
- * Seed: #4B6F00 | Font: Raleway
- * https://material-foundation.github.io/material-theme-builder/
- * 
- * All colors from Material Theme Builder are applied
- * directly via CSS variables - Material uses them automatically
+ * Light Theme (default)
  * ============================================ */
-
-$light-theme: mat.define-theme(
-  (
+html {
+  @include mat.theme((
     color: (
       theme-type: light,
-      use-system-variables: true,
+      primary: palette.$primary-palette,
+      tertiary: palette.$tertiary-palette,
     ),
     typography: (
       brand-family: config.$base-font-family,
       plain-family: config.$base-font-family,
     ),
-  )
-);
+    density: (
+      scale: 0,
+    ),
+  ));
 
-@include mat.all-component-themes($light-theme);
+  /* Form Fields - sizing */
+  @include mat.form-field-overrides((
+    container-height: config.$component-height,
+    container-vertical-padding: config.$component-vertical-padding,
+  ));
 
-/* Dark Mode Theme */
-@media (prefers-color-scheme: dark) {
-  @include mat.all-component-colors(
-    mat.define-theme(
-      (
-        color: (
-          theme-type: dark,
-          use-system-variables: true,
-        ),
-      )
-    )
-  );
+  /* Buttons - all variants use same height */
+  @include mat.button-overrides((
+    filled-container-height: config.$component-height,
+    outlined-container-height: config.$component-height,
+    text-container-height: config.$component-height,
+    tonal-container-height: config.$component-height,
+    protected-container-height: config.$component-height,
+  ));
 }
 
 /* ============================================
- * Component-specific token overrides
+ * Dark Theme (auto via prefers-color-scheme)
  * ============================================ */
-
-:root {
-  /* Form Fields - sizing */
-  @include mat.form-field-overrides(
-    (
-      container-height: config.$component-height,
-      container-vertical-padding: config.$component-vertical-padding,
-    )
-  );
-
-  /* Buttons - all variants use same height */
-  @include mat.button-overrides(
-    (
-      filled-container-height: config.$component-height,
-      outlined-container-height: config.$component-height,
-      text-container-height: config.$component-height,
-      tonal-container-height: config.$component-height,
-      protected-container-height: config.$component-height,
-    )
-  );
+@media (prefers-color-scheme: dark) {
+  html {
+    @include mat.theme((
+      color: (
+        theme-type: dark,
+        primary: palette.$primary-palette,
+        tertiary: palette.$tertiary-palette,
+      ),
+    ));
+  }
 }
