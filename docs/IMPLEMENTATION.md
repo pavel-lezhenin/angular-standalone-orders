@@ -1,749 +1,450 @@
 # Implementation Plan: Phase 2
 
 > Complete roadmap for building the Orders Management Platform.  
-> See [ARCHITECTURE.md](./ARCHITECTURE.md) for design details.
+> **Current progress and remaining tasks:** See [PROJECT_STATUS.md](./PROJECT_STATUS.md) ⭐
 
-**Duration:** ~21 hours | **14 Phases** | **Progress:** ~58%
+**Duration:** ~21 hours | **14 Phases** | **Progress:** ~82% complete
 
 ---
 
-## 🎯 Status
+## 🎯 Quick Status
 
-**✅ Completed:** BFF, Auth, Landing, Admin Layout, Customers (CRUD), Categories (CRUD)  
-**🚧 In Progress:** Shop, Dashboard, Orders Board, Products, Permissions  
-**❌ Missing:** Tests (0% → target 80%), Phase 2.4 Shop, seed data
+**✅ Completed (82%):** BFF, Auth, Landing, Shop (browse/detail), Admin CRUD (Products/Categories/Customers/Permissions), Shared UI, Seed Data  
+**🚧 Remaining (18%):** Cart/Checkout, Orders Board (Kanban), Dashboard widgets, User orders integration, Tests
+
+**For detailed remaining tasks and priorities, see [PROJECT_STATUS.md](./PROJECT_STATUS.md)**
 
 ---
 
 ## 📋 Phase Overview
 
-| # | Phase | Duration | Status | Key Deliverables |
-|---|-------|----------|--------|------------------|
-| 2.1 | BFF Foundation | 2h | ✅ 90% | Database, repositories, services |
-| 2.2 | Authentication | 1.5h | ✅ 100% | Login, guards, session |
-| 2.3 | Landing Page | 0.5h | ✅ 100% | Home page, navigation |
-| 2.4 | Shop Module | 3h | ⚠️ 10% | Products, cart, checkout |
-| 2.5 | Shared UI | 2h | ✅ 60% | Reusable components |
-| 2.6 | Admin Layout | 1h | ✅ 100% | Sidebar, routing |
-| 2.7 | Dashboard | 1h | ⚠️ 40% | Stats, widgets |
-| 2.8 | Customers | 1h | ✅ 100% | User management |
-| 2.9 | Permissions | 1.5h | ⚠️ 30% | RBAC matrix |
-| 2.10 | Orders Board | 2.5h | ⚠️ 30% | Trello drag-drop |
-| 2.11 | Products | 1.5h | ⚠️ 30% | CRUD, image upload |
-| 2.12 | Categories | 1h | ✅ 100% | Category management |
-| 2.13 | Seed Data | 1h | ❌ 0% | Demo data |
-| 2.14 | Tests & Polish | 2h | ❌ 0% | Coverage, E2E, build |
+| # | Phase | Duration | Status | Progress |
+|---|-------|----------|--------|----------|
+| 2.1 | BFF Foundation | 2h | ✅ Done | 100% |
+| 2.2 | Authentication | 1.5h | ✅ Done | 100% |
+| 2.3 | Landing Page | 0.5h | ✅ Done | 100% |
+| 2.4 | Shop Module | 3h | ⏸️ Partial | 70% |
+| 2.5 | Shared UI | 2h | ✅ Done | 100% |
+| 2.6 | Admin Layout | 1h | ✅ Done | 100% |
+| 2.7 | Dashboard | 1h | ⏸️ Partial | 30% |
+| 2.8 | Customers | 1h | ✅ Done | 100% |
+| 2.9 | Permissions | 1.5h | ✅ Done | 95% |
+| 2.10 | Orders Board | 2.5h | ❌ Pending | 10% |
+| 2.11 | Products | 1.5h | ✅ Done | 100% |
+| 2.12 | Categories | 1h | ✅ Done | 100% |
+| 2.13 | Seed Data | 1h | ✅ Done | 100% |
+| 2.14 | Tests & Polish | 2h | ⏸️ Partial | 20% |
 
-**Overall Progress:** ~58% (12h / 21h estimated)
-
----
-
-## 🎯 Current Status Summary
-
-### ✅ Completed Components
-
-**Core Infrastructure:**
-- ✅ DatabaseService (IndexedDB setup)
-- ✅ All repositories (User, Product, Order, Category, Cart)
-- ✅ AuthService & PermissionService
-- ✅ All guards (auth, admin, permission)
-- ✅ SeedService
-
-**Pages:**
-- ✅ Landing page with full sections (Hero, Features, Use Cases, FAQ, Contact)
-- ✅ Orders page (basic scaffold)
-- ✅ Account page (profile management)
-
-**Authentication:**
-- ✅ Login component (areas/auth/login/)
-- ✅ Login form with Material Design
-- ✅ Auth routes configured
-- ✅ Demo users setup (user@demo, manager@demo, admin@demo)
-
-**Shared UI:**
-- ✅ MainLayoutComponent
-- ✅ TopBarComponent
-- ✅ FooterComponent
-- ✅ UserMenuComponent
-- ✅ CartButtonComponent
-- ✅ LayoutService & ScrollService
-
-**Admin Area:**
-- ✅ AdminLayoutComponent with sidebar (Phase 2.6 ✅)
-- ✅ Admin routes fully configured
-- ✅ CustomersComponent (Phase 2.8 ✅) - CRUD with pagination, filters, dialogs
-- ✅ CategoriesComponent (Phase 2.12 ✅) - CRUD with validation, delete protection
-- ⚠️ DashboardComponent (scaffold created)
-- ⚠️ OrdersBoardComponent (scaffold created)
-- ⚠️ ProductsComponent (scaffold created)
-- ⚠️ PermissionsComponent (scaffold created)
-
-### ⚠️ In Progress (Scaffolds Created, Need Implementation)
-- Admin components: Dashboard, Orders Board, Products, Permissions
-- Shop module needs implementation
-
-### ❌ Not Started
-- Unit tests (0% coverage - target 80-90%)
-- E2E tests  
-- Phase 2.4 - Shop Module (product catalog, cart, checkout)
-- Phase 2.13 - Seed Data (demo data generation)
-- Data integration for Dashboard, Orders Board, Products, Permissions
-- Drag-drop functionality for Orders Board
-- Permission matrix UI
+**Overall Progress:** ~82% (17h / 21h estimated) — **~9 hours remaining**
 
 ---
 
-## 🚀 Phase 2.1: BFF Foundation (2 hours)
+## ✅ Completed Phases (Minimized)
 
-**Goal:** Create data layer with IndexedDB and services
+<details>
+<summary><strong>Phase 2.1: BFF Foundation (100%)</strong></summary>
 
-### Deliverables
+- DatabaseService with 7 IndexedDB stores
+- All repositories (User, Product, Order, Category, Cart, OrderItem, Permission)
+- BFF handlers for REST API simulation
+- SeedService with demo data
+- FakeBFFService integration
+- APIInterceptor for dev routing
 
-- [x] `src/bff/database.service.ts` — IndexedDB initialization
-- [x] `src/bff/repositories/base.repository.ts` — Base repository pattern
-- [x] `src/bff/repositories/user.repository.ts` — User CRUD
-- [x] `src/bff/repositories/product.repository.ts` — Product CRUD
-- [x] `src/bff/repositories/order.repository.ts` — Order CRUD + status
-- [x] `src/bff/repositories/category.repository.ts` — Category CRUD
-- [x] `src/bff/repositories/cart.repository.ts` — Cart operations
-- [x] `src/core/models/*.dto.ts` — DTOs for application layer
-- [x] `src/core/services/permission.service.ts` — RBAC
-- [x] `src/core/services/auth.service.ts` — Session management
-- [x] `src/core/guards/` — Auth, admin, permission guards
-- [ ] Unit tests
+**Files:** `src/bff/`, `src/core/services/`, `src/core/guards/`
+</details>
 
-### Implementation Details
-- DatabaseService: IndexedDB with 7 object stores, indexes, version upgrades
-- Repositories: Standard CRUD pattern (getAll, getById, create, update, delete)
-- Services: PermissionService (RBAC), AuthService (session management, signals)
+<details>
+<summary><strong>Phase 2.2: Authentication (100%)</strong></summary>
 
-### Patterns Used
+- Login component with Material forms
+- AuthService with signals
+- Auth guards (authGuard, adminGuard, permissionGuard)
+- Session management via IndexedDB
+- Demo users (user@demo, manager@demo, admin@demo)
 
-- **ROUTING** — No lazy loading yet, simple service structure
-- **FORMS** — Will be used in Phase 2.2 (login)
-- **ERROR_HANDLING** — Service error states, try-catch blocks
-- **AUTHENTICATION** — Session management via AuthService
-- **PERFORMANCE** — Signals for reactive state updates
+**Files:** `src/areas/auth/`, `src/core/services/auth.service.ts`
+</details>
 
-### Testing
+<details>
+<summary><strong>Phase 2.3: Landing Page (100%)</strong></summary>
 
-```bash
-# Unit tests cover:
-✅ Database initialization
-✅ Repository operations
-✅ Service business logic
-```
-
----
-
-## 🔐 Phase 2.2: Authentication (1.5 hours) ✅ COMPLETED
-
-**Goal:** Implement login/logout with session management in areas/auth/
-
-### Deliverables
-
-- [x] `areas/auth/login/login.component.ts` — Login form
-- [x] `areas/auth/login/login.component.html` — Material form template
-- [x] `areas/auth/login/login.component.scss` — Styling with gradient
-- [x] `areas/auth/auth.routes.ts` — Auth routing
-- [x] `app.routes.ts` — Auth routes imported and configured
-- [ ] Unit tests (login component, auth service)
-- [ ] E2E test (login flow)
-
-### Patterns Used
-
-- **ROUTING** — [Functional guards + lazy loading](../../../docs/framework/angular/patterns/ROUTING.md)
-- **FORMS** — [Reactive Forms + validation](../../../docs/framework/angular/patterns/FORMS.md) in login.component
-- **AUTHENTICATION** — [AuthService signals](../../../docs/framework/angular/patterns/AUTHENTICATION.md) + session management
-- **ERROR_HANDLING** — Display invalid credentials error
-- **ACCESSIBILITY** — Form labels with aria-describedby, error announcements
-
-### Implementation Details
-- Login Component: Reactive form (email, password, rememberMe) with validation
-- Auth flow: Validate → login() → sessionStorage → redirect
-- Guards: authGuard (redirect to login), adminGuard (check role: admin/manager)
-
-### Demo Users
-
-```
-user@demo / demo → User role
-manager@demo / demo → Manager role
-admin@demo / demo → Admin role
-```
-
-### Success Criteria
-
-- [x] Login form validates correctly
-- [x] Session stored in sessionStorage
-- [x] Auth guard redirects unauthenticated users (implemented)
-- [x] Admin guard blocks regular users (implemented)
-- [x] Demo users can login via UI
-- [x] areas/auth folder created with login component
-
----
-
-## 🏠 Phase 2.3: Landing Page (0.5 hours) ✅ COMPLETED
-
-**Goal:** Create home page with navigation
-
-### Deliverables
-
-- [x] `pages/landing/landing.component.ts` — Main landing page component
-- [x] `pages/landing/landing.component.html` — Template with semantic HTML
-- [x] `pages/landing/landing.component.scss` — Styling
-- [x] `pages/landing/components/hero-section/` — Hero section with CTA
-- [x] `pages/landing/components/features-section/` — Features showcase
-- [x] `pages/landing/components/use-cases-section/` — Use cases
-- [x] `pages/landing/components/faq-section/` — FAQ section
-- [x] `pages/landing/components/contact-section/` — Contact form
-- [x] `shared/ui/footer/` — Footer component
-- [x] `shared/services/layout.service.ts` — Layout state management
-- [x] `shared/services/scroll.service.ts` — Smooth scrolling
-
-### Patterns Used
-
-- **ACCESSIBILITY** — [Semantic HTML, proper heading hierarchy](../../../docs/framework/angular/patterns/ACCESSIBILITY.md)
-- **ROUTING** — Links to auth/shop/admin using routerLink
-
-### Content
 - Hero, Features, Use Cases, FAQ, Contact sections
-- CTA buttons: Login (guest) / Shop (user) / Admin Panel (admin)
-- Footer, smooth scrolling navigation
+- Lead capture form
+- Responsive design
+- SEO optimization
 
-### Success Criteria
+**Files:** `src/areas/landing/`
+</details>
 
-- ✅ Landing page loads with all sections
-- ✅ Hero, Features, Use Cases, FAQ, Contact sections implemented
-- ✅ Smooth scrolling navigation works
-- ✅ Footer component created
-- ✅ Layout service manages title and nav items
+<details>
+<summary><strong>Phase 2.5: Shared UI (100%)</strong></summary>
 
----
+- 15+ components: MainLayout, TopBar, Footer, UserMenu, CartButton, PageLoader, FilterContainer, ProductCard, ImageGallery, SearchInput, Pagination, Dialog, ConfirmDialog, etc.
+- Services: LayoutService, ScrollService, NotificationService
+- Design system integration
 
-## 🛍️ Phase 2.4: Shop Module (3 hours)
+**Files:** `src/shared/ui/`, `src/shared/services/`
+</details>
 
-**Goal:** Build product catalog, cart, and checkout
+<details>
+<summary><strong>Phase 2.6: Admin Layout (100%)</strong></summary>
 
-### Deliverables
+- AdminLayoutComponent with Material sidebar
+- Routing configuration
+- Role-based menu items
+- Responsive navigation
 
-- [ ] `features/shop/products-list.component` — Grid with filter
-- [ ] `features/shop/category-filter.component` — Category sidebar
-- [ ] `features/shop/product-detail.component` — Modal or page
-- [ ] `features/shop/cart.component` — Shopping cart
-- [ ] `features/shop/checkout.component` — Order creation (Reactive Forms)
-- [ ] `features/shop/user-profile.component` — Orders history
-- [ ] `features/shop/shop.routes.ts`
+**Files:** `src/areas/admin/admin-layout.component.*`
+</details>
 
-### Patterns Used
+<details>
+<summary><strong>Phase 2.8: Customers (100%)</strong></summary>
 
-- **FORMS** — [Reactive Forms in checkout](../../../docs/framework/angular/patterns/FORMS.md) for address/payment
-- **PERFORMANCE** — [OnPush + @for with track](../../../docs/framework/angular/patterns/PERFORMANCE.md) for products grid
-- **ERROR_HANDLING** — Show validation errors in checkout form, handle cart save errors
-- **ACCESSIBILITY** — Product images with alt text, form labels with aria-describedby
+- Full CRUD operations
+- Customer table with pagination
+- Filters (search, role)
+- Form dialogs (create/edit)
+- Delete confirmation
+- RBAC integration
 
-### Implementation Pattern
-- ProductsList: signals for products/category, computed filteredProducts, addToCart()
-- Cart: computed total, checkout() creates order → clears cart → redirects
+**Files:** `src/areas/admin/customers/`
+</details>
 
-### Success Criteria
+<details>
+<summary><strong>Phase 2.9: Permissions (95%)</strong></summary>
 
-- ✅ Products load and display
-- ✅ Filter by category works
-- ✅ Add to cart updates signal
-- ✅ Cart calculations correct
-- ✅ Checkout creates order
-- ✅ Order appears in admin board
+- Permission matrix table
+- Create/edit permission dialog
+- Form validation
+- Role-based display
 
----
+**TODO:** Repository persistence (currently in-memory)
 
-## 🧩 Phase 2.5: Shared UI Components (2 hours)
+**Files:** `src/areas/admin/permissions/`
+</details>
 
-**Goal:** Create reusable components
+<details>
+<summary><strong>Phase 2.11: Products (100%)</strong></summary>
 
-### Deliverables
+- Full CRUD operations
+- Product table with pagination
+- Filters (search, category)
+- Image upload via FileStorageService
+- Multi-image gallery support
+- Category relationships
+- Form validation
 
-- [ ] `shared/ui/table.component.ts` — Generic data table with accessibility
-- [ ] `shared/ui/modal.component.ts` — Modal wrapper (a11y focused)
-- [ ] `shared/ui/sidebar.component.ts` — Navigation sidebar
-- [ ] `shared/ui/filter-panel.component.ts` — Filter controls
-- [ ] `shared/ui/trello-board.component.ts` — Drag-drop board (CDK)
+**Files:** `src/areas/admin/products/`
+</details>
 
-### Patterns Used
+<details>
+<summary><strong>Phase 2.12: Categories (100%)</strong></summary>
 
-- **PERFORMANCE** — [OnPush for all components](../../../docs/framework/angular/patterns/PERFORMANCE.md)
-- **ACCESSIBILITY** — [ARIA roles, labels, focus management](../../../docs/framework/angular/patterns/ACCESSIBILITY.md) in table & modal
-- **ERROR_HANDLING** — Empty states in table when no data
+- Full CRUD operations
+- Category table with pagination
+- Form dialogs
+- Delete protection (cascade check)
+- Validation
 
-### Components
-- Table: Generic data table with columns input, Edit/Delete outputs
-- Modal: Overlay with title, isOpen input, onClose output
-- Sidebar, FilterPanel, TrelloBoard (CDK drag-drop)
+**Files:** `src/areas/admin/categories/`
+</details>
 
-### Success Criteria
+<details>
+<summary><strong>Phase 2.13: Seed Data (100%)</strong></summary>
 
-- ✅ Table component works in products
-- ✅ Modal component works in edit dialogs
-- ✅ Reusable across features
-- ✅ Styling consistent
+- SeedService implementation
+- Demo users, products, categories
+- Product images via FileStorageService
+- Auto-generation on first run
 
----
-
-## 📐 Phase 2.6: Admin Layout (1 hour) ✅ COMPLETED
-
-**Goal:** Create admin container with sidebar
-
-### Deliverables
-
-- [x] `areas/admin/admin-layout.component.ts` — Main layout
-- [x] `areas/admin/admin-layout.component.html` — With role-based menu
-- [x] `areas/admin/admin-layout.component.scss`
-- [x] `areas/admin/admin.routes.ts` — Nested routes with guards
-
-### Patterns Used
-
-- **ROUTING** — [Nested routes in admin.routes.ts](../../../docs/framework/angular/patterns/ROUTING.md) with functional guards
-- **PERFORMANCE** — [OnPush change detection](../../../docs/framework/angular/patterns/PERFORMANCE.md)
-- **ACCESSIBILITY** — [Navigation landmarks](../../../docs/framework/angular/patterns/ACCESSIBILITY.md) (nav, main roles)
-
-### Implementation
-- AdminLayout: Sidebar with role-based menu (computed from PermissionService)
-- Menu items: Dashboard, Orders, Products, Categories, Customers, Permissions
-- Each item visibility based on hasAccess(section, 'view')
-
-### Success Criteria
-
-- ✅ Admin layout renders
-- ✅ Sidebar shows role-based menu
-- ✅ Routes load in outlet
-- ✅ Navigation works
+**Files:** `src/bff/services/seed.service.ts`
+</details>
 
 ---
 
-## 📊 Phase 2.7: Admin Dashboard (1 hour) ⚠️ SCAFFOLD CREATED
-
-**Goal:** Create dashboard with stats
-
-### Deliverables
-
-- [x] `areas/admin/dashboard/dashboard.component.ts` — Scaffold created
-- [x] `areas/admin/dashboard/dashboard.component.html` — Basic template
-- [x] `areas/admin/dashboard/dashboard.component.scss` — Styling
-- [ ] Data integration (connect to repositories)
-- [ ] Load real stats from IndexedDB
-- [ ] Display latest orders
-
-### Content
-- Stat cards: Orders count, Customers count, Products count
-- Latest 5 orders table
-- Load stats from repositories in ngOnInit()
-
-### Success Criteria
-
-- ✅ Stats load and display
-- ✅ Latest orders show
-- ✅ Numbers update correctly
-
----
-
-## 👥 Phase 2.8: Admin Customers (1 hour) ⚠️ SCAFFOLD CREATED
-
-**Goal:** Customer management table
-
-### Deliverables
-
-- [x] `areas/admin/customers/customers.component.ts` — Scaffold created
-- [x] `areas/admin/customers/customers.component.html` — Basic template
-- [x] `areas/admin/customers/customers.component.scss` — Styling
-- [ ] Load users from UserRepository
-- [ ] Display user table with filters
-- [ ] Add/Edit/Delete user functionality
-- [ ] Edit modal for changing roles
-
-### Patterns Used
-
-- **FORMS** — [Reactive Forms in customer-edit](../../../docs/framework/angular/patterns/FORMS.md) for role selection
-- **ERROR_HANDLING** — Show delete confirmation, display save errors
-- **ACCESSIBILITY** — Modal with proper focus management, form labels
-
-### Implementation
-- Users table with filters, Edit/Delete actions
-- Edit modal for changing roles (Reactive Forms)
-- Delete confirmation dialog
-
-### Success Criteria
-
-- ✅ Users table loads
-- ✅ Edit modal works
-- ✅ Role can be changed
-- ✅ Users can be deleted
-- ✅ Admin-only guard works
-
----
-
-## 🔑 Phase 2.9: Permissions Matrix (1.5 hours) ⚠️ SCAFFOLD CREATED
-
-**Goal:** RBAC UI for managing permissions
-
-### Permissions Structure
-
-- **User**: View own cart/profile, view own orders
-- **Manager**: View dashboard, view all orders (can edit status), CRUD products & categories
-- **Admin**: All access to everything
-
-### Deliverables
-
-- [x] `areas/admin/permissions/permissions.component.ts` — Scaffold created
-- [x] `areas/admin/permissions/permissions.component.html` — Basic template
-- [x] `areas/admin/permissions/permissions.component.scss` — Styling
-- [ ] Display permission matrix (role × section × action)
-- [ ] Checkbox toggles for each permission
-- [ ] Save permission changes
-
-### Implementation
-- RBAC Matrix: roles × sections × actions checkboxes
-- User: shop only | Manager: dashboard, orders (view+edit), products, categories | Admin: all
-- onTogglePermission() updates permission in IndexedDB
-
-### Success Criteria
-
-- ✅ Permissions load
-- ✅ Toggles change permissions
-- ✅ Changes persist in IndexedDB
-- ✅ Admin-only guard works
-
----
-
-## 📋 Phase 2.10: Orders Board (2.5 hours) ⚠️ SCAFFOLD CREATED
-
-**Goal:** Trello-like board with drag-drop
-
-### Deliverables
-
-- [x] `areas/admin/orders/orders-board.component.ts` — Scaffold created
-- [x] `areas/admin/orders/orders-board.component.html` — Basic template
-- [x] `areas/admin/orders/orders-board.component.scss` — Styling
-- [ ] Implement Kanban columns (pending, processing, shipped, delivered)
-- [ ] Add drag-drop with Angular CDK
-- [ ] Load orders from OrderRepository
-- [ ] Update order status on drop
-- [ ] Add order detail modal
-
-### Implementation
-- Kanban board: 3 columns (Queue, Processing, Completed)
-- Angular CDK drag-drop: drop() event updates order status
-- Detail modal on order click
-
-### Success Criteria
-
-- ✅ Board displays 3 columns
-- ✅ Orders load correctly
-- ✅ Drag-drop updates status
-- ✅ Status persists in IndexedDB
-- ✅ Detail modal works
-
----
-
-## 🏷️ Phase 2.11: Products Manager (1.5 hours) ⚠️ SCAFFOLD CREATED
-
-**Goal:** Product CRUD
-
-### Deliverables
-
-- [x] `areas/admin/products/products.component.ts` — Scaffold created
-- [x] `areas/admin/products/products.component.html` — Basic template
-- [x] `areas/admin/products/products.component.scss` — Styling
-- [ ] Load products from ProductRepository
-- [ ] Add/Edit/Delete product functionality
-- [ ] Image upload support (base64)
-- [ ] Category assignment
-- [ ] Product edit modal with Reactive Forms
-
-### Patterns Used
-
-- **FORMS** — [Reactive Forms with custom validators](../../../docs/framework/angular/patterns/FORMS.md) for product fields
-- **ERROR_HANDLING** — Display validation errors, image upload errors, API errors
-- **ACCESSIBILITY** — Form labels, image alt attributes, proper focus management in modal
-
-### Product Edit Component
-- Reactive Form: name, description, price, categoryId, image
-- Image upload: FileReader → base64 → productForm.patchValue()
-- CRUD: create() or update() based on isEdit flag
-
-### Success Criteria
-
-- ✅ Products table loads
-- ✅ Add/Edit modal works
-- ✅ Image upload converts to base64
-- ✅ Products persist
-- ✅ Delete confirmation works
-
----
-
-## 📂 Phase 2.12: Categories Manager (1 hour) ✅ COMPLETED
-
-**Goal:** Build category CRUD with data validation
-
-### Deliverables
-
-- [x] `areas/admin/categories/model/types.ts` — DTOs and types
-- [x] `areas/admin/categories/services/category.service.ts` — HTTP service with CRUD
-- [x] `areas/admin/categories/category-table/` — Table component with pagination
-- [x] `areas/admin/categories/category-form-dialog/` — Create/Edit dialog
-- [x] `areas/admin/categories/categories.component.ts` — Orchestrator component
-- [x] `core/models/category.dto.ts` — CategoryDTO in @core (not @bff!)
-- [x] BFF endpoints: GET, POST, PUT, DELETE /api/categories
-- [x] Data validation: name max 32 chars, description max 128 chars
-- [x] Delete protection: Cannot delete category with products
-- [x] Character count hints on form fields
-- [ ] Unit tests
-
-### Patterns Used
-
-- **FORMS** — [Reactive Forms with validators](../../../docs/framework/angular/patterns/FORMS.md): `Validators.maxLength(32)`, `Validators.required`
-- **PERFORMANCE** — Signals for state, OnPush components
-- **ERROR_HANDLING** — BFF validation (400 errors), UI error messages
-- **ARCHITECTURE** — @core DTOs (not @bff imports in areas!)
-
-### Implementation Details
-
-**Frontend:**
-- CategoryService: HTTP CRUD with pagination support
-- CategoryFormDialog: Reactive form with maxLength validators + character hints
-- CategoryTable: ID, Name, Description columns with actions
-- Validation: required + maxLength on client side
-
-**BFF Layer:**
-- GET /api/categories?page=1&limit=20&search=text — Paginated list
-- POST /api/categories — Create with validation (trim, maxLength check)
-- PUT /api/categories/:id — Update with partial validation
-- DELETE /api/categories/:id — Delete with product check (400 if has products)
-- Validation: name ≤ 32, description ≤ 128, trim values
-
-**Data Layer:**
-- CategoryRepository: Standard CRUD, extends BaseRepository
-- ProductRepository.getByCategoryId() — Check for dependent products
-- Delete protection: Cannot remove category if products exist
-
-### Success Criteria
-
-- ✅ Categories load and display with ID column
-- ✅ Create/Edit dialog with validation hints
-- ✅ Character counter shows: "5/32", "24/128"
-- ✅ Cannot exceed max lengths (HTML maxlength + validators)
-- ✅ BFF validates and returns 400 on validation errors
-- ✅ Cannot delete category with products (400 error)
-- ✅ Trim whitespace on save
-- ✅ No @bff imports in areas (uses CategoryDTO from @core)
-- ✅ Generic generateDeleteMessage() helper
-
----
-
-## 🌱 Phase 2.13: Seed Data (1 hour)
-
-**Goal:** Initialize demo data
-
-### Deliverables
-
-- [ ] Update `seed.service.ts` with demo data
-- [ ] Run seed on first load
-
-### Demo Data
-- 3 demo users: user@demo, manager@demo, admin@demo (password: demo)
-- 4 categories: Electronics, Clothing, Books, Home & Garden
-- 10-15 products across categories
-
-### Success Criteria
-
-- ✅ Demo users exist in IndexedDB
-- ✅ Can login with demo accounts
-- ✅ Products and categories seed
-- ✅ Seed runs only once
-
----
-
-## ✅ Phase 2.14: Tests & Integration (2 hours)
-
-**Goal:** Ensure quality and completeness
-
-### Deliverables
-
-- [ ] Unit tests (80%+ coverage on BFF)
-- [ ] E2E tests (3 user journeys)
-- [ ] Performance verification
-- [ ] Build success
-
-### Patterns Used
-
-- **ERROR_HANDLING** — E2E tests verify error states, validation messages
-- **ACCESSIBILITY** — Verify form labels, ARIA attributes in E2E tests
-- **PERFORMANCE** — Verify OnPush works, @for track with no DOM thrashing
-
-### Unit Tests
-
-```bash
-# BFF Services
-src/bff/database.service.spec.ts
-src/bff/repositories/*.spec.ts
-src/core/guards/*.spec.ts
-
-# Target: 90%+ coverage
-```
-
-### E2E Tests (Playwright)
-
+## 🚧 Phases Needing Work
+
+### 🛍️ Phase 2.4: Shop Module (70% → 100%)
+
+**Status:** Browse + Detail ✅ | Cart + Checkout ❌
+
+#### ✅ Completed (70%)
+- Product listing with filters (search, category)
+- Product detail page with image gallery
+- Search functionality
+- Responsive design
+
+#### ❌ Remaining (30% - ~4h)
+
+**1. Cart Page Component**
+- Create `src/areas/shop/cart/cart.component.ts`
+- Cart items list with quantity controls (+/-)
+- Remove item button
+- Cart summary (subtotal, tax, total)
+- Empty cart state
+- Continue shopping button
+- Proceed to checkout button
+
+**2. Checkout Page**
+- Create `src/areas/shop/checkout/checkout.component.ts`
+- Shipping address form (Reactive Forms + validation)
+- Order summary review
+- Place order button
+- Order confirmation page
+
+**3. Integration**
+- Connect to CartService (already exists in shared)
+- Create orders via BFF OrderRepository
+- Clear cart after order placement
+- Redirect to order confirmation
+
+**Routes to add:**
 ```typescript
-// Journey 1: User shops
-test('User login → Browse products → Add to cart → Checkout', async () => {
-  // Login
-  // Browse products
-  // Filter by category
-  // Add to cart
-  // Checkout
-  // Verify order created
-});
-
-// Journey 2: Manager manages orders
-test('Manager login → Dashboard → View orders → Drag-drop status', async () => {
-  // Login as manager
-  // View dashboard stats
-  // View orders board
-  // Drag order from Queue to Processing
-  // Verify status updated
-});
-
-// Journey 3: Admin manages products
-test('Admin login → Products → Edit product → Delete product', async () => {
-  // Login as admin
-  // View products
-  // Edit product (image, price, category)
-  // Create new product
-  // Delete product
-  // Verify changes
-});
+{
+  path: 'shop/cart',
+  component: CartComponent,
+  title: 'Shopping Cart'
+},
+{
+  path: 'shop/checkout',
+  canActivate: [authGuard], // Auth required for checkout
+  component: CheckoutComponent,
+  title: 'Checkout'
+}
 ```
 
-### Performance Check
+**Acceptance Criteria:**
+- User can view cart with all items
+- User can update quantities or remove items
+- User can proceed to checkout (login required)
+- Order is created and saved to IndexedDB
+- Cart is cleared after order placement
+- Order confirmation is shown
 
+---
+
+### 📊 Phase 2.7: Dashboard (30% → 100%)
+
+**Status:** Layout ✅ | Widgets ❌
+
+#### ✅ Completed (30%)
+- Dashboard component structure
+- Route configuration
+
+#### ❌ Remaining (70% - ~2h)
+
+**1. Stats Cards**
+- Total orders count + revenue
+- Pending orders count
+- Completed orders count
+- Total customers count
+- Load data from OrderRepository and UserRepository
+
+**2. Recent Orders Widget**
+- Table showing last 5 orders
+- Columns: Order #, Customer, Total, Status, Date
+- Click to view order details
+
+**3. Orders by Status Chart** (optional)
+- Simple bar/pie chart showing order distribution
+- Use Angular Material or chart library
+
+**4. Top Products Widget** (optional)
+- List of most ordered products
+- Load from order_items + products
+
+**Implementation:**
+```typescript
+// src/areas/admin/dashboard/dashboard.component.ts
+stats = {
+  totalOrders: signal(0),
+  totalRevenue: signal(0),
+  pendingOrders: signal(0),
+  completedOrders: signal(0),
+  totalCustomers: signal(0)
+};
+
+async ngOnInit() {
+  // Load from BFF repositories
+  const orders = await this.orderRepository.getAll();
+  const users = await this.userRepository.getAll();
+  
+  this.stats.totalOrders.set(orders.length);
+  this.stats.totalRevenue.set(orders.reduce((sum, o) => sum + o.total, 0));
+  // ... etc
+}
+```
+
+**Acceptance Criteria:**
+- Dashboard shows real-time stats from IndexedDB
+- Stats update when data changes
+- Recent orders table displays correctly
+- Responsive layout
+
+---
+
+### 📋 Phase 2.10: Orders Board (10% → 100%)
+
+**Status:** Stub component ❌ | Need Kanban implementation
+
+#### ❌ Remaining (90% - ~3h)
+
+**1. Kanban Board Layout**
+- Install `@angular/cdk` if not present: `pnpm add @angular/cdk`
+- Create 4 columns: Queue, Processing, Completed, Cancelled
+- Use CSS Grid or Flexbox for columns
+- Material cards for each order
+
+**2. Drag-Drop Functionality**
+- Import `@angular/cdk/drag-drop`
+- Implement `CdkDragDrop` handlers
+- Update order status on drop
+- Persist to OrderRepository
+- Visual feedback during drag
+
+**3. Order Cards**
+- Display: Order #, Customer name, Total, Date
+- Color-coded by status
+- Click to view order details (modal)
+
+**4. Filters**
+- Date range picker
+- Customer search
+- Status filter
+- Clear filters button
+
+**Implementation:**
+```typescript
+// orders-board.component.ts
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+
+columns = {
+  queue: signal<Order[]>([]),
+  processing: signal<Order[]>([]),
+  completed: signal<Order[]>([]),
+  cancelled: signal<Order[]>([])
+};
+
+async drop(event: CdkDragDrop<Order[]>, newStatus: OrderStatus) {
+  const order = event.item.data;
+  
+  // Update order status
+  await this.orderRepository.updateStatus(order.id, newStatus);
+  
+  // Update UI
+  transferArrayItem(
+    event.previousContainer.data,
+    event.container.data,
+    event.previousIndex,
+    event.currentIndex
+  );
+}
+```
+
+**Template:**
+```html
+<div class="kanban-board">
+  <div class="column" cdkDropList [cdkDropListData]="columns.queue()"
+       (cdkDropListDropped)="drop($event, 'queue')">
+    <h3>Queue ({{ columns.queue().length }})</h3>
+    <div *ngFor="let order of columns.queue()" cdkDrag>
+      <!-- Order card -->
+    </div>
+  </div>
+  <!-- Repeat for other columns -->
+</div>
+```
+
+**Acceptance Criteria:**
+- Manager can drag orders between columns
+- Order status updates in IndexedDB
+- Filters work correctly
+- Shows order count per column
+- Responsive on mobile (stacked columns)
+
+---
+
+### ✅ Phase 2.14: Tests & Polish (20% → 80%)
+
+**Status:** 2 basic E2E tests | Need 80%+ coverage
+
+#### ❌ Remaining (80% - ~4h)
+
+**1. Unit Tests** (Target: 80% coverage)
+
+Priority files:
+- `src/core/services/auth.service.spec.ts`
+- `src/core/services/permission.service.spec.ts`
+- `src/bff/repositories/*.spec.ts`
+- `src/areas/admin/*/services/*.spec.ts`
+- `src/shared/services/*.spec.ts`
+
+**2. Component Tests**
+- Admin CRUD components (customers, products, categories)
+- Form validation tests
+- Dialog components
+- Filter components
+
+**3. E2E Tests** (Playwright)
+
+Critical flows:
+- Shopping flow: Browse → Add to cart → Checkout → Order confirmation
+- Admin flow: Login as admin → CRUD operations (products, categories)
+- Authentication: Login/logout, guard protection
+- Permission-based access
+
+**4. Integration Tests**
+- BFF layer: Repository operations
+- Service layer: Business logic
+- Guards: Route protection
+
+**Run tests:**
 ```bash
-# Build production
-pnpm build
-# Should produce ~65KB gzipped
-# Load time should be <2 seconds
+# Unit tests
+pnpm test
+
+# Coverage report
+pnpm test:coverage
+
+# E2E tests
+pnpm test:e2e
 ```
 
-### Success Criteria
-
-- ✅ All unit tests pass
-- ✅ 80%+ coverage on BFF services
-- ✅ All E2E tests pass
-- ✅ Build succeeds
-- ✅ No console errors
-- ✅ Mobile responsive
-- ✅ Performance acceptable
+**Acceptance Criteria:**
+- 80%+ unit test coverage
+- All critical user flows covered by E2E
+- No console errors
+- Build passes without warnings
 
 ---
 
-## 🎯 Success Criteria Summary
+## 🎯 Recommended Implementation Order
 
-### Phase 2.1 (BFF)
-- ✅ IndexedDB initialized
-- ✅ All CRUD operations work
-- ✅ 90%+ test coverage
+1. **Cart & Checkout** (Phase 2.4) — ~4h — Critical user flow
+2. **Orders Board** (Phase 2.10) — ~3h — Admin core feature
+3. **Dashboard Widgets** (Phase 2.7) — ~2h — Admin overview
+4. **Unit Tests** (Phase 2.14) — ~2h — Quality baseline
+5. **E2E Tests** (Phase 2.14) — ~2h — Integration coverage
 
-### Phase 2.2 (Auth)
-- ✅ Login/logout works
-- ✅ Guards protect routes
-- ✅ Demo users login
-
-### Phases 2.3-2.5
-- ✅ All components render
-- ✅ No errors in console
-- ✅ Responsive on mobile
-
-### Phases 2.6-2.12 (Features)
-- ✅ All features functional
-- ✅ CRUD operations complete
-- ✅ Role-based access works
-- ✅ Drag-drop board functional
-- ✅ Image upload working
-
-### Phase 2.13 (Seed)
-- ✅ Demo data loads
-- ✅ Can login as all 3 roles
-- ✅ Products and categories exist
-
-### Phase 2.14 (Tests)
-- ✅ 80%+ overall coverage
-- ✅ All E2E tests pass
-- ✅ Build succeeds
-- ✅ Performance acceptable
+**Total remaining:** ~13 hours (conservative estimate with testing)
 
 ---
 
-## 📅 Estimated Timeline
+## 📝 Notes
 
-```
-Day 1: Phases 2.1-2.3 (4 hours)
-  2.1: BFF Foundation (2h)
-  2.2: Authentication (1.5h)
-  2.3: Landing Page (0.5h)
-
-Day 2: Phases 2.4-2.5 (5 hours)
-  2.4: Shop Module (3h)
-  2.5: Shared Components (2h)
-
-Day 3: Phases 2.6-2.9 (3.5 hours)
-  2.6: Admin Layout (1h)
-  2.7: Dashboard (1h)
-  2.8: Customers (1h)
-  2.9: Permissions (1.5h)
-
-Day 4: Phases 2.10-2.14 (8 hours)
-  2.10: Orders Board (2.5h)
-  2.11: Products (1.5h)
-  2.12: Categories (1h)
-  2.13: Seed Data (1h)
-  2.14: Tests & Polish (2h)
-
-Total: ~21 hours (4-5 full days)
-```
+- All completed phases are fully functional
+- BFF layer is production-ready for backend migration
+- Design system is consistent throughout
+- SSR/SEO is implemented and working
+- No blockers, all remaining tasks are independent
 
 ---
 
-## � Patterns Used in Phase 2
+## 🔗 Related Documentation
 
-This implementation uses the following Angular framework patterns. Refer to these guides for detailed examples:
-
-| Pattern | Phases | Purpose |
-|---------|--------|---------|
-| [ROUTING](../../../docs/framework/angular/patterns/ROUTING.md) | 2.2, 2.3, 2.6, 2.14 | Lazy-loaded areas, functional guards, nested routes |
-| [FORMS](../../../docs/framework/angular/patterns/FORMS.md) | 2.2, 2.4, 2.8, 2.11, 2.12 | Reactive Forms, validation, error handling |
-| [ERROR_HANDLING](../../../docs/framework/angular/patterns/ERROR_HANDLING.md) | All phases | Service error states, UI error display, try-catch |
-| [AUTHENTICATION](../../../docs/framework/angular/patterns/AUTHENTICATION.md) | 2.1, 2.2 | AuthService signals, session management, guards |
-| [PERFORMANCE](../../../docs/framework/angular/patterns/PERFORMANCE.md) | 2.4, 2.5, 2.6+ | OnPush change detection, @for track, lazy loading |
-| [ACCESSIBILITY](../../../docs/framework/angular/patterns/ACCESSIBILITY.md) | 2.3, 2.5, 2.8, 2.11, 2.14 | Semantic HTML, ARIA roles, form labels |
-
-**Not Used:**
-- **STATE_MANAGEMENT** — Signals are built into services; no separate state management library needed
-- **API_MOCKING** — BFF uses IndexedDB; MSW not needed. Can add for E2E tests if desired
-
----
-
-## �🚀 Starting Phase 2.1
-
-To begin:
-
-1. Install dependencies
-   ```bash
-   cd packages/angular-standalone-orders
-   pnpm add @angular/cdk uuid
-   ```
-
-2. Start Phase 2.1: BFF Foundation
-   - Create `src/bff/database.service.ts`
-   - Implement repositories
-   - Write unit tests
-
-3. Follow phases sequentially
-
-Good luck! 🎉
+- [Architecture Overview](./ARCHITECTURE.md)
+- [Detailed Project Status](./PROJECT_STATUS.md)
+- [Progress Summary](./PROGRESS_SUMMARY.md)
+- [Use Cases & Limitations](./USE_CASES.md)
+- [BFF Architecture](./FAKEBFF_ARCHITECTURE.md)
