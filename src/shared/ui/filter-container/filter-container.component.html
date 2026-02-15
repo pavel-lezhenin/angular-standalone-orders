@@ -4,18 +4,19 @@
   </div>
 
   <div class="filter-actions">
-    <button
-      *ngFor="let filterAction of actions()"
-      mat-icon-button
-      [disabled]="isActionDisabled(filterAction)"
-      (click)="onActionClick(filterAction.id)"
-      [attr.aria-label]="filterAction.ariaLabel"
-      [matTooltip]="filterAction.tooltip || ''"
-      class="action-button"
-    >
-      <mat-icon [class.loading]="isLoading()">
-        {{ filterAction.icon }}
-      </mat-icon>
-    </button>
+    @for (filterAction of actions(); track filterAction.id) {
+      <button
+        mat-icon-button
+        [disabled]="isActionDisabled(filterAction)"
+        (click)="onActionClick(filterAction.id)"
+        [attr.aria-label]="filterAction.ariaLabel"
+        [matTooltip]="filterAction.tooltip || ''"
+        class="action-button"
+      >
+        <mat-icon [class.loading]="isLoading()">
+          {{ filterAction.icon }}
+        </mat-icon>
+      </button>
+    }
   </div>
 </div>

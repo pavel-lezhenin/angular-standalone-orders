@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { PermissionsByRole } from '../model';
 import { UserRole } from '@core/types';
+import { PermissionDTO } from '@core';
 
 /**
  * Permission matrix table component
@@ -94,7 +95,7 @@ export class PermissionMatrixComponent {
   /**
    * Get granted permissions count for a role
    */
-  protected getGrantedCount(permissions: any[]): number {
+  protected getGrantedCount(permissions: PermissionDTO[]): number {
     return permissions.filter(p => p.granted).length;
   }
 

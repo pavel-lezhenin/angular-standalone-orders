@@ -10,8 +10,54 @@ import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { FakeBFFService } from '@bff';
 import { AuthService } from '@core';
-import { from, switchMap, Observable } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { HttpRequest, HttpHandlerFn, HttpEvent } from '@angular/common/http';
+
+function getSsrApiBody(req: HttpRequest<unknown>): unknown {
+  const emptyPaginated = { data: [], total: 0, page: 1, limit: 20, totalPages: 0 };
+
+  if (req.url.endsWith('/api/auth/me')) {
+    return { user: null };
+  }
+
+  if (req.url.endsWith('/api/auth/login')) {
+    return { user: null, token: '' };
+  }
+
+  if (req.url.endsWith('/api/auth/logout')) {
+    return { message: 'Logged out' };
+  }
+
+  if (req.url.includes('/api/users/check-email')) {
+    return { exists: false };
+  }
+
+  if (req.url.endsWith('/api/orders')) {
+    return { orders: [] };
+  }
+
+  if (req.url.match(/\/api\/users\/[\w-]+\/orders$/)) {
+    return { orders: [] };
+  }
+
+  if (req.url.endsWith('/api/products/batch')) {
+    return { products: [] };
+  }
+
+  if (req.url.endsWith('/api/products') || req.url.endsWith('/api/categories') || req.url.endsWith('/api/users')) {
+    return emptyPaginated;
+  }
+
+  if (req.url.match(/\/api\/products\/[\w-]+$/)) {
+    return { product: null };
+  }
+
+  if (req.url.match(/\/api\/orders\/[\w-]+$/)) {
+    return { order: null };
+  }
+
+  return { message: 'SSR stub response' };
+}
 
 /**
  * Restore authentication session on app startup
@@ -63,10 +109,7 @@ const apiInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, next: Http
   // During SSR: return empty responses for /api/ — no real backend exists
   if (!isPlatformBrowser(platformId)) {
     if (req.url.startsWith('/api/')) {
-      return new Observable<HttpEvent<unknown>>((observer) => {
-        observer.next(new HttpResponse({ status: 200, body: { data: [], total: 0, page: 1, limit: 20 } }));
-        observer.complete();
-      });
+      return of(new HttpResponse({ status: 200, body: getSsrApiBody(req) }));
     }
     return next(req);
   }
@@ -74,14 +117,7 @@ const apiInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, next: Http
   const fakeBFF = inject(FakeBFFService);
   
   if (req.url.startsWith('/api/')) {
-    return from(fakeBFF.handleRequest(req)).pipe(
-      switchMap((response) => {
-        return new Observable<HttpEvent<unknown>>((observer) => {
-          observer.next(response);
-          observer.complete();
-        });
-      }),
-    );
+    return from(fakeBFF.handleRequest(req));
   }
   
   return next(req);

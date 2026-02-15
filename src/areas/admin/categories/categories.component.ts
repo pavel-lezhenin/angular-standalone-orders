@@ -149,9 +149,9 @@ export class CategoriesComponent extends BaseComponent implements OnInit {
     this.dialog.open<CategoryFormDialogComponent, CategoryFormDialogData>(
       CategoryFormDialogComponent,
       {
-        ...editFormDialogConfig(category, 'Edit Category'),
+        ...editFormDialogConfig(category, 'Edit Category', 'category'),
         data: {
-          ...editFormDialogConfig(category, 'Edit Category').data,
+          ...editFormDialogConfig(category, 'Edit Category', 'category').data,
           onSave: async (formValue) => {
             this.startLoading();
             try {

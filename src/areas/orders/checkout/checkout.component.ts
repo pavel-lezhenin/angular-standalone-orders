@@ -26,6 +26,31 @@ interface CartItemWithProduct {
   product: ProductDTO;
 }
 
+interface GuestCheckoutFormValue {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  addressLine1: string;
+  addressLine2?: string;
+  city: string;
+  postalCode: string;
+}
+
+interface CheckoutAddressFormValue {
+  fullName?: string;
+  selectedAddressId?: string;
+  addressLine1: string;
+  addressLine2?: string;
+  city: string;
+  postalCode: string;
+  phone: string;
+  saveAddress?: boolean;
+  firstName?: string;
+  lastName?: string;
+}
+
 /**
  * Checkout Component
  *
@@ -344,7 +369,7 @@ export default class CheckoutComponent implements OnInit {
   /**
    * Creates new user account for guest checkout
    */
-  private async createGuestUser(formValue: any): Promise<any> {
+  private async createGuestUser(formValue: GuestCheckoutFormValue): Promise<{ id: string }> {
     // Build full address string from form fields
     const addressParts = [
       formValue.addressLine1,
@@ -365,7 +390,7 @@ export default class CheckoutComponent implements OnInit {
     };
 
     const response = await firstValueFrom(
-      this.http.post<any>('/api/users', userData)
+      this.http.post<{ id: string }>('/api/users', userData)
     );
 
     console.log('User created, response:', response);
@@ -395,7 +420,7 @@ export default class CheckoutComponent implements OnInit {
    * Prepares payment data and navigates to payment page
    * Order will be created after successful payment
    */
-  private async preparePayment(userId: string, formValue: any): Promise<void> {
+  private async preparePayment(userId: string, formValue: CheckoutAddressFormValue): Promise<void> {
     const isGuest = !this.authService.currentUser();
     const selectedAddress = !isGuest && !this.shouldShowAddressForm()
       ? this.savedAddresses().find(address => address.id === formValue.selectedAddressId)
@@ -451,11 +476,11 @@ export default class CheckoutComponent implements OnInit {
   /**
    * Updates user's address in profile
    */
-  private async updateUserAddress(userId: string, formValue: any): Promise<void> {
+  private async updateUserAddress(userId: string, formValue: CheckoutAddressFormValue): Promise<void> {
     try {
       await this.userPreferencesService.addAddress({
         label: 'Home',
-        recipientName: formValue.fullName,
+        recipientName: formValue.fullName ?? '',
         addressLine1: formValue.addressLine1,
         addressLine2: formValue.addressLine2 || '',
         city: formValue.city,

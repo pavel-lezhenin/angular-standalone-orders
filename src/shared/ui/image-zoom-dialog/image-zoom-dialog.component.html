@@ -3,7 +3,7 @@
     <div class="image-counter">
       {{ currentIndex + 1 }} / {{ data.images.length }}
     </div>
-    <button mat-icon-button (click)="close()" class="close-button">
+    <button mat-icon-button (click)="close()" class="close-button" aria-label="Close image preview">
       <mat-icon>close</mat-icon>
     </button>
   </div>
@@ -15,6 +15,7 @@
         mat-icon-button 
         class="nav-button nav-previous"
         (click)="previous()"
+        aria-label="Previous image"
       >
         <mat-icon>chevron_left</mat-icon>
       </button>
@@ -35,6 +36,7 @@
         mat-icon-button 
         class="nav-button nav-next"
         (click)="next()"
+        aria-label="Next image"
       >
         <mat-icon>chevron_right</mat-icon>
       </button>

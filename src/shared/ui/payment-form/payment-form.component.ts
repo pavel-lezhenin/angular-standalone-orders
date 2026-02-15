@@ -1,6 +1,13 @@
 import { Component, OnInit, Input, inject, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+  AbstractControl,
+  ValidationErrors,
+} from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -155,7 +162,7 @@ export class PaymentFormComponent implements OnInit {
    * Card number validator for demo mode
    * Accepts 13-19 digits (common card lengths)
    */
-  private cardNumberValidator(control: any) {
+  private cardNumberValidator(control: AbstractControl): ValidationErrors | null {
     if (!control.value) {
       return null;
     }

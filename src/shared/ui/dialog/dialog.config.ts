@@ -123,12 +123,16 @@ export function createFormDialogConfig(title: string, submitLabel: string): MatD
 /**
  * Factory function to create a form dialog config for edit mode
  */
-export function editFormDialogConfig(user: any, title: string): MatDialogConfig {
+export function editFormDialogConfig<T extends object>(
+  entity: T,
+  title: string,
+  entityKey: string = 'user'
+): MatDialogConfig {
   return {
     ...formDialogConfig,
     data: {
       mode: 'edit',
-      user,
+      [entityKey]: entity,
       title,
     },
   };
