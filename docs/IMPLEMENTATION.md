@@ -25,4 +25,4 @@ There is no remaining implementation work in this scope.
 ## Notes
 
 - Supplier scope remains intentionally excluded.
-- Testing scope remains tracked in a separate workstream/document.
+- Testing scope is tracked in a separate document: [TESTING_PRIORITIES.md](./TESTING_PRIORITIES.md).
