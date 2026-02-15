@@ -11,5 +11,5 @@ export type { Session } from './session';
 export type { CartItem, Cart } from './cart';
 export type { Address } from './address';
 export type { PaymentMethod } from './payment-method';
-export type { StoredFile, FileMetadata } from './file';
+export type { StoredFile } from './file';
 export type { Supplier } from './supplier';

@@ -4,6 +4,7 @@ export type { PermissionDTO } from './models';
 export type { CartItemDTO, CartDTO } from './models';
 export type { CategoryDTO } from './models';
 export type { ProductDTO, ProductWithCategoryDTO, ProductSpecificationDTO } from './models';
+export type { FileMetadataDTO, UploadResultDTO } from './models';
 
 // Shared types
 export type { UserRole, OrderStatus } from './types/shared-types';

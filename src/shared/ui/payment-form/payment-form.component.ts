@@ -65,6 +65,7 @@ export interface PaymentFormData {
 export class PaymentFormComponent implements OnInit {
   private fb = inject(FormBuilder);
   private destroyRef = inject(DestroyRef);
+  private readonly cardFieldNames = ['cardNumber', 'cardholderName', 'expiryMonth', 'expiryYear', 'cvv'] as const;
 
   /**
    * List of saved payment methods for current user
@@ -122,20 +123,42 @@ export class PaymentFormComponent implements OnInit {
    * Update validators based on payment method
    */
   private updateValidators(method: PaymentMethod): void {
-    const cardFields = ['cardNumber', 'cardholderName', 'expiryMonth', 'expiryYear', 'cvv'];
-
     if (method === 'card') {
-      cardFields.forEach(field => {
-        this.paymentForm.get(field)?.enable();
+      this.cardFieldNames.forEach((field) => {
+        const control = this.paymentForm.get(field);
+        if (!control) {
+          return;
+        }
+
+        if (field === 'cardNumber') {
+          control.setValidators([Validators.required, this.cardNumberValidator]);
+        } else if (field === 'cardholderName') {
+          control.setValidators([Validators.required, Validators.minLength(3)]);
+        } else if (field === 'cvv') {
+          control.setValidators([Validators.required, Validators.pattern(/^\d{3,4}$/)]);
+        } else {
+          control.setValidators([Validators.required]);
+        }
+
+        control.enable({ emitEvent: false });
+        control.updateValueAndValidity({ emitEvent: false });
       });
     } else {
       // PayPal and COD don't need card details
-      cardFields.forEach(field => {
-        this.paymentForm.get(field)?.clearValidators();
-        this.paymentForm.get(field)?.disable();
-        this.paymentForm.get(field)?.updateValueAndValidity();
+      this.cardFieldNames.forEach((field) => {
+        const control = this.paymentForm.get(field);
+        if (!control) {
+          return;
+        }
+
+        control.clearValidators();
+        control.setErrors(null);
+        control.disable({ emitEvent: false });
+        control.updateValueAndValidity({ emitEvent: false });
       });
     }
+
+    this.paymentForm.updateValueAndValidity({ emitEvent: false });
   }
 
   /**

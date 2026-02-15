@@ -3,7 +3,7 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { firstValueFrom } from 'rxjs';
+import { debounceTime, distinctUntilChanged, firstValueFrom } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -105,6 +105,7 @@ export default class CheckoutComponent implements OnInit {
   protected error = signal<string | null>(null);
   protected emailChecking = signal(false);
   protected emailExists = signal(false);
+  private emailCheckRequestId = 0;
 
   /**
    * Tax rate (10%)
@@ -208,12 +209,22 @@ export default class CheckoutComponent implements OnInit {
 
       // Watch email field for availability check
       this.checkoutForm.get('email')?.valueChanges
-        .pipe(takeUntilDestroyed(this.destroyRef))
+        .pipe(
+          debounceTime(300),
+          distinctUntilChanged(),
+          takeUntilDestroyed(this.destroyRef)
+        )
         .subscribe((email) => {
-          if (email && this.checkoutForm.get('email')?.valid) {
-            this.checkEmailAvailability(email);
+          const emailValue = typeof email === 'string' ? email.trim() : '';
+
+          if (emailValue && this.checkoutForm.get('email')?.valid) {
+            this.emailCheckRequestId += 1;
+            this.checkEmailAvailability(emailValue, this.emailCheckRequestId);
           } else {
+            this.emailCheckRequestId += 1;
+            this.emailChecking.set(false);
             this.emailExists.set(false);
+            this.clearEmailTakenError();
           }
         });
     } else {
@@ -237,7 +248,18 @@ export default class CheckoutComponent implements OnInit {
   /**
    * Checks if email is already registered
    */
-  private async checkEmailAvailability(email: string): Promise<void> {
+  private clearEmailTakenError(): void {
+    const emailControl = this.checkoutForm.get('email');
+    if (!emailControl?.errors?.['emailTaken']) {
+      return;
+    }
+
+    const errors = { ...emailControl.errors };
+    delete errors['emailTaken'];
+    emailControl.setErrors(Object.keys(errors).length > 0 ? errors : null);
+  }
+
+  private async checkEmailAvailability(email: string, requestId: number): Promise<void> {
     this.emailChecking.set(true);
 
     try {
@@ -247,15 +269,33 @@ export default class CheckoutComponent implements OnInit {
         })
       );
 
+      if (requestId !== this.emailCheckRequestId) {
+        return;
+      }
+
       this.emailExists.set(response.exists);
 
       if (response.exists) {
-        this.checkoutForm.get('email')?.setErrors({ emailTaken: true });
+        const emailControl = this.checkoutForm.get('email');
+        emailControl?.setErrors({
+          ...(emailControl.errors ?? {}),
+          emailTaken: true,
+        });
+      } else {
+        this.clearEmailTakenError();
       }
     } catch (error) {
+      if (requestId !== this.emailCheckRequestId) {
+        return;
+      }
+
+      this.emailExists.set(false);
+      this.clearEmailTakenError();
       console.error('Failed to check email:', error);
     } finally {
-      this.emailChecking.set(false);
+      if (requestId === this.emailCheckRequestId) {
+        this.emailChecking.set(false);
+      }
     }
   }
 
@@ -316,6 +356,11 @@ export default class CheckoutComponent implements OnInit {
     }
 
     // Check if email is taken for guests
+    if (this.isGuest() && this.emailChecking()) {
+      this.notification.error('Please wait for email check to complete');
+      return;
+    }
+
     if (this.isGuest() && this.emailExists()) {
       this.notification.error('Email already registered. Please login instead.');
       return;

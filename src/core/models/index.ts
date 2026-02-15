@@ -23,3 +23,4 @@ export type {
   ProductWithCategoryDTO,
   ProductSpecificationDTO,
 } from './product.dto';
+export type { FileMetadataDTO, UploadResultDTO } from './file.dto';

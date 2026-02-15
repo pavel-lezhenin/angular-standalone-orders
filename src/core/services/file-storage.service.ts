@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { v4 as uuidv4 } from 'uuid';
 import { FileRepository } from '../../bff/repositories/file.repository';
-import { StoredFile, FileMetadata, UploadResult } from '../../bff/models/file';
+import type { FileMetadataDTO, UploadResultDTO } from '../models';
 
 /**
  * File Storage Service (S3 Emulation)
@@ -30,7 +30,7 @@ export class FileStorageService {
   async uploadFile(
     file: File,
     uploadedBy?: string
-  ): Promise<UploadResult> {
+  ): Promise<UploadResultDTO> {
     try {
       console.log('📤 FileStorageService: Uploading file:', {
         name: file.name,
@@ -41,7 +41,7 @@ export class FileStorageService {
       const fileId = uuidv4();
       const now = Date.now();
 
-      const storedFile: StoredFile = {
+      const storedFile = {
         id: fileId,
         filename: file.name,
         mimetype: file.type,
@@ -114,7 +114,7 @@ export class FileStorageService {
   /**
    * Get file metadata (without blob)
    */
-  async getFileMetadata(fileId: string): Promise<FileMetadata | null> {
+  async getFileMetadata(fileId: string): Promise<FileMetadataDTO | null> {
     const file = await this.fileRepo.getById(fileId);
     if (!file) {
       return null;
