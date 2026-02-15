@@ -5,7 +5,7 @@
 }
 
 .upload-zone {
-  border: var(--spacing-2px) dashed var(--border-primary);
+  border: var(--spacing-2px) dashed var(--color-border);
   border-radius: var(--border-radius-md);
   padding: var(--spacing-2xl);
   text-align: center;
@@ -16,12 +16,12 @@
 
   &:hover:not(.disabled) {
     border-color: var(--app-primary);
-    background-color: var(--surface-hover);
+    background-color: var(--surface-tertiary);
   }
 
   &.dragging {
     border-color: var(--app-primary);
-    background-color: var(--surface-hover);
+    background-color: var(--surface-tertiary);
     transform: scale(1.02);
   }
 
@@ -48,7 +48,7 @@
 
     &.limit {
       font-size: var(--font-size-xs);
-      color: var(--text-tertiary);
+      color: var(--text-muted);
       margin-top: var(--spacing-sm);
     }
   }
@@ -81,7 +81,7 @@
   background-color: var(--surface-secondary);
   cursor: move;
   transition: transform 0.2s ease;
-  border: var(--spacing-2px) solid var(--border-muted);
+  border: var(--spacing-2px) solid var(--color-border);
 
   &:hover {
     transform: scale(1.05);
@@ -160,7 +160,7 @@
 .empty-state {
   text-align: center;
   padding: var(--spacing-2xl);
-  color: var(--text-tertiary);
+  color: var(--text-muted);
 }
 
 /* ============================================

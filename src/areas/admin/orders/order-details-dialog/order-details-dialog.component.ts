@@ -135,28 +135,18 @@ export class OrderDetailsDialogComponent implements OnChanges {
     this.productsError.set(null);
 
     try {
-      const lines = await Promise.all(
-        currentOrder.items.map(async item => {
-          try {
-            const response = await firstValueFrom(
-              this.http.get<{ product: ProductDTO }>(`/api/products/${item.productId}`)
-            );
-
-            return {
-              productId: item.productId,
-              quantity: item.quantity,
-              orderPrice: item.price,
-              product: response.product,
-            } satisfies ProductLineItem;
-          } catch {
-            return {
-              productId: item.productId,
-              quantity: item.quantity,
-              orderPrice: item.price,
-            } satisfies ProductLineItem;
-          }
-        })
+      const productIds = [...new Set(currentOrder.items.map(item => item.productId))];
+      const response = await firstValueFrom(
+        this.http.post<{ products: ProductDTO[] }>('/api/products/batch', { productIds })
       );
+      const productsById = new Map(response.products.map(product => [product.id, product]));
+
+      const lines = currentOrder.items.map(item => ({
+        productId: item.productId,
+        quantity: item.quantity,
+        orderPrice: item.price,
+        product: productsById.get(item.productId),
+      } satisfies ProductLineItem));
 
       this.productLines.set(lines);
     } catch {

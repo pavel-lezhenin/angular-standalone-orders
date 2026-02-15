@@ -50,7 +50,7 @@
   height: 48px;
   border-radius: var(--border-radius-sm);
   overflow: hidden;
-  border: var(--spacing-2px) solid var(--border-muted);
+  border: var(--spacing-2px) solid var(--color-border);
   cursor: pointer;
   transition: all 0.2s;
   background: var(--surface-primary);
@@ -79,7 +79,7 @@
   height: 400px;
   border-radius: var(--border-radius-md);
   overflow: hidden;
-  border: var(--spacing-1px) solid var(--border-muted);
+  border: var(--spacing-1px) solid var(--color-border);
   background: var(--surface-primary);
   position: relative;
   cursor: zoom-in;
@@ -162,18 +162,18 @@
     font-weight: var(--font-weight-medium);
     
     &.badge-success {
-      background: var(--app-success-background);
+      background: var(--surface-secondary);
       color: var(--app-success);
     }
     
     &.badge-warning {
-      background: var(--app-warning-background);
+      background: var(--surface-secondary);
       color: var(--app-warning);
     }
     
     &.badge-danger {
-      background: var(--app-danger-background);
-      color: var(--app-danger);
+      background: var(--surface-secondary);
+      color: var(--app-error);
     }
   }
 }
