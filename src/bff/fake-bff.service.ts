@@ -14,9 +14,9 @@ import { OrderHandlerService } from './handlers/order-handler.service';
 import { CartHandlerService } from './handlers/cart-handler.service';
 import { AddressHandlerService } from './handlers/address-handler.service';
 import { PaymentMethodHandlerService } from './handlers/payment-method-handler.service';
-import { NotFoundResponse } from './handlers/http-responses';
+import { NotFoundResponse, UnauthorizedResponse } from './handlers/http-responses';
 import type { Order } from './models';
-import type { OrderStatus, PaymentStatus } from '@core/types';
+import type { OrderStatus, PaymentStatus, UserRole } from '@core/types';
 
 /**
  * FakeBFF Service
@@ -182,6 +182,21 @@ export class FakeBFFService {
   async handleRequest(req: HttpRequest<unknown>): Promise<HttpResponse<unknown>> {
     await this.initialize();
 
+    const scopedUserId = this.extractScopedUserId(req.url);
+    if (scopedUserId) {
+      const authError = await this.ensureUserAccess(scopedUserId);
+      if (authError) {
+        return authError;
+      }
+    }
+
+    if (this.isPrivilegedEndpoint(req)) {
+      const authError = await this.ensurePrivilegedAccess();
+      if (authError) {
+        return authError;
+      }
+    }
+
     // Auth endpoints
     if (req.method === 'POST' && req.url.endsWith('/api/auth/login')) {
       return this.authHandler.handleLogin(req);
@@ -319,5 +334,87 @@ export class FakeBFFService {
     }
 
     return new NotFoundResponse();
+  }
+
+  private extractScopedUserId(url: string): string | null {
+    const match = url.match(/\/api\/users\/([\w-]+)(?:\/|$)/);
+    if (!match) {
+      return null;
+    }
+
+    const userId = match[1];
+    if (!userId || userId === 'check-email') {
+      return null;
+    }
+
+    return userId;
+  }
+
+  private isPrivilegedEndpoint(req: HttpRequest<unknown>): boolean {
+    const isUsersList =
+      req.method === 'GET'
+      && req.url.endsWith('/api/users');
+    const isOrdersList =
+      req.method === 'GET'
+      && req.url.endsWith('/api/orders');
+    const isOrderStatusUpdate =
+      req.method === 'PATCH'
+      && req.url.match(/\/api\/orders\/[\w-]+\/status$/) !== null;
+    const isOrderComment =
+      req.method === 'POST'
+      && req.url.match(/\/api\/orders\/[\w-]+\/comments$/) !== null;
+
+    return isUsersList || isOrdersList || isOrderStatusUpdate || isOrderComment;
+  }
+
+  private async ensureUserAccess(targetUserId: string): Promise<HttpResponse<unknown> | null> {
+    const currentUser = await this.getCurrentSessionUser();
+    if (!currentUser) {
+      return new UnauthorizedResponse('Authentication required');
+    }
+
+    if (currentUser.id === targetUserId || this.isPrivilegedRole(currentUser.role)) {
+      return null;
+    }
+
+    return new UnauthorizedResponse('Access denied');
+  }
+
+  private async ensurePrivilegedAccess(): Promise<HttpResponse<unknown> | null> {
+    const currentUser = await this.getCurrentSessionUser();
+    if (!currentUser) {
+      return new UnauthorizedResponse('Authentication required');
+    }
+
+    if (this.isPrivilegedRole(currentUser.role)) {
+      return null;
+    }
+
+    return new UnauthorizedResponse('Admin or manager access required');
+  }
+
+  private async getCurrentSessionUser(): Promise<{ id: string; role: UserRole } | null> {
+    if (!isPlatformBrowser(this.platformId)) {
+      return null;
+    }
+
+    const userId = localStorage.getItem('currentUserId');
+    if (!userId) {
+      return null;
+    }
+
+    const user = await this.userRepo.getById(userId);
+    if (!user) {
+      return null;
+    }
+
+    return {
+      id: user.id,
+      role: user.role,
+    };
+  }
+
+  private isPrivilegedRole(role: UserRole): boolean {
+    return role === 'admin' || role === 'manager';
   }
 }
