@@ -9,10 +9,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { UserDTO } from '@core';
 import { UserRole } from '@core/types';
 import { DialogComponent, DialogConfig } from '@shared/ui/dialog';
+import { CustomerFormData } from '../model';
 
 export interface CustomerFormDialogData extends DialogConfig {
   mode: 'create' | 'edit';
   user?: UserDTO;
+  onSave?: (formValue: CustomerFormData) => Promise<void>;
 }
 
 /**
@@ -84,8 +86,27 @@ export class CustomerFormDialogComponent implements OnInit {
       return;
     }
 
-    // Close dialog with form data
-    this.dialogRef.close({ formValue: this.form.value });
+    const dialogInstance = this.dialog();
+
+    this.form.disable({ emitEvent: false });
+    this.dialogRef.disableClose = true;
+    dialogInstance.setLoading(true);
+
+    try {
+      const formValue = this.form.getRawValue();
+
+      if (this.data.onSave) {
+        await this.data.onSave(formValue);
+        this.dialogRef.close({ success: true });
+        return;
+      }
+
+      this.dialogRef.close({ formValue });
+    } catch {
+      this.form.enable({ emitEvent: false });
+      this.dialogRef.disableClose = false;
+      dialogInstance.setLoading(false);
+    }
   }
 
   /**

@@ -51,7 +51,7 @@ export class SearchInputComponent {
    * Debounce time in milliseconds
    * @default 300
    */
-  readonly debounceMs = input<number>(300);
+  readonly debounceMs = input<number>(600);
 
   /**
    * Form control for the search input (required)

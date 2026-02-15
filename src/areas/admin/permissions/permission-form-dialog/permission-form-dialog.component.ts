@@ -15,6 +15,12 @@ import { PermissionDTO } from '@core';
 export interface PermissionFormDialogData extends DialogConfig {
   mode: 'create' | 'edit';
   permission?: PermissionDTO;
+  onSave?: (formValue: {
+    role: UserRole;
+    section: string;
+    action: string;
+    granted: boolean;
+  }) => Promise<void>;
 }
 
 /**
@@ -104,8 +110,27 @@ export class PermissionFormDialogComponent implements OnInit {
       return;
     }
 
-    // Close dialog with form data
-    this.dialogRef.close({ formValue: this.form.value });
+    const dialogInstance = this.dialog();
+
+    this.form.disable({ emitEvent: false });
+    this.dialogRef.disableClose = true;
+    dialogInstance.setLoading(true);
+
+    try {
+      const formValue = this.form.getRawValue();
+
+      if (this.data.onSave) {
+        await this.data.onSave(formValue);
+        this.dialogRef.close({ success: true });
+        return;
+      }
+
+      this.dialogRef.close({ formValue });
+    } catch {
+      this.form.enable({ emitEvent: false });
+      this.dialogRef.disableClose = false;
+      dialogInstance.setLoading(false);
+    }
   }
 
   /**

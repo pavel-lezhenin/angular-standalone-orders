@@ -33,6 +33,7 @@ import { DEFAULT_PRODUCT_IMAGE } from '@shared/constants/product.constants';
 export interface ProductFormDialogData {
   product?: ProductDTO; // For edit mode
   categories: CategoryDTO[];
+  onSave?: (formValue: ProductFormResult) => Promise<void>;
 }
 
 /**
@@ -278,6 +279,7 @@ export class ProductFormDialogComponent implements OnInit {
     }
 
     this.isSubmitting.set(true);
+    this.dialogRef.disableClose = true;
 
     try {
       const formValue = this.productForm.value;
@@ -291,10 +293,14 @@ export class ProductFormDialogComponent implements OnInit {
         specifications: formValue.specifications || [],
       };
 
+      if (this.data.onSave) {
+        await this.data.onSave(result);
+      }
+
       this.dialogRef.close(result);
     } catch (error) {
       console.error('Failed to submit form:', error);
-      alert('Failed to save product. Please try again.');
+      this.dialogRef.disableClose = false;
       this.isSubmitting.set(false);
     }
   }

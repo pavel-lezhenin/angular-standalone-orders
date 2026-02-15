@@ -16,7 +16,10 @@ import {
   editFormDialogConfig,
 } from '@shared/ui/dialog/dialog.config';
 import { CategoryService } from './services/category.service';
-import { CategoryFormDialogComponent } from './category-form-dialog/category-form-dialog.component';
+import {
+  CategoryFormDialogComponent,
+  CategoryFormDialogData,
+} from './category-form-dialog/category-form-dialog.component';
 import { CategoryTableComponent } from './category-table/category-table.component';
 
 /**
@@ -114,52 +117,58 @@ export class CategoriesComponent extends BaseComponent implements OnInit {
    * Open create dialog
    */
   protected openCreateDialog(): void {
-    const dialogRef = this.dialog.open(
+    this.dialog.open<CategoryFormDialogComponent, CategoryFormDialogData>(
       CategoryFormDialogComponent,
-      createFormDialogConfig('Create Category', 'Create')
-    );
-
-    dialogRef.afterClosed().subscribe(async (result) => {
-      if (result?.formValue) {
-        this.startLoading();
-        try {
-          await this.categoryService.createCategory(result.formValue);
-          await this.loadCategories();
-          this.notificationService.success('Category created successfully');
-        } catch (err: unknown) {
-          console.error('Failed to create category:', err);
-          this.notificationService.error('Failed to create category');
-        } finally {
-          this.stopLoading();
-        }
+      {
+        ...createFormDialogConfig('Create Category', 'Create'),
+        data: {
+          ...createFormDialogConfig('Create Category', 'Create').data,
+          onSave: async (formValue) => {
+            this.startLoading();
+            try {
+              await this.categoryService.createCategory(formValue);
+              await this.loadCategories();
+              this.notificationService.success('Category created successfully');
+            } catch (err: unknown) {
+              console.error('Failed to create category:', err);
+              this.notificationService.error('Failed to create category');
+              throw err;
+            } finally {
+              this.stopLoading();
+            }
+          },
+        },
       }
-    });
+    );
   }
 
   /**
    * Open edit dialog
    */
   protected openEditDialog(category: CategoryDTO): void {
-    const dialogRef = this.dialog.open(
+    this.dialog.open<CategoryFormDialogComponent, CategoryFormDialogData>(
       CategoryFormDialogComponent,
-      editFormDialogConfig(category, 'Edit Category')
-    );
-
-    dialogRef.afterClosed().subscribe(async (result) => {
-      if (result?.formValue) {
-        this.startLoading();
-        try {
-          await this.categoryService.updateCategory(category.id, result.formValue);
-          await this.loadCategories();
-          this.notificationService.success('Category updated successfully');
-        } catch (err: unknown) {
-          console.error('Failed to update category:', err);
-          this.notificationService.error('Failed to update category');
-        } finally {
-          this.stopLoading();
-        }
+      {
+        ...editFormDialogConfig(category, 'Edit Category'),
+        data: {
+          ...editFormDialogConfig(category, 'Edit Category').data,
+          onSave: async (formValue) => {
+            this.startLoading();
+            try {
+              await this.categoryService.updateCategory(category.id, formValue);
+              await this.loadCategories();
+              this.notificationService.success('Category updated successfully');
+            } catch (err: unknown) {
+              console.error('Failed to update category:', err);
+              this.notificationService.error('Failed to update category');
+              throw err;
+            } finally {
+              this.stopLoading();
+            }
+          },
+        },
       }
-    });
+    );
   }
 
   /**

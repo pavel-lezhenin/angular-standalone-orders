@@ -7,14 +7,15 @@
     [placeholder]="placeholder()"
   />
   <mat-icon matPrefix>search</mat-icon>
-  <button
-    mat-icon-button
-    matSuffix
-    type="button"
-    *ngIf="currentValue"
-    (click)="onClear()"
-    aria-label="Clear search"
-  >
-    <mat-icon>close</mat-icon>
-  </button>
+  @if (currentValue) {
+    <button
+      mat-icon-button
+      matSuffix
+      type="button"
+      (click)="onClear()"
+      aria-label="Clear search"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  }
 </mat-form-field>

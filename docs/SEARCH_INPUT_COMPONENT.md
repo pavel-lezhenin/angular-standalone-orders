@@ -2,12 +2,12 @@
 
 ## Overview
 
-`SearchInputComponent` is a reusable, Material Design-based search input field used across the application. It provides consistent search experience with built-in 300ms debounce to prevent excessive API calls.
+`SearchInputComponent` is a reusable, Material Design-based search input field used across the application. It provides consistent search experience with built-in 600ms debounce to prevent excessive API calls.
 
 ## Features
 
 - ✅ Material Design input field with `mat-form-field`
-- ✅ Configurable debounce time (default: 300ms)
+- ✅ Configurable debounce time (default: 600ms)
 - ✅ Clear button that appears when user types
 - ✅ Search icon (Material Icons)
 - ✅ Customizable label and placeholder
@@ -57,7 +57,7 @@ export class MyFilterComponent {
 |-------|------|---------|-------------|
 | `label` | `string` | `'Search'` | Label text displayed in the form field |
 | `placeholder` | `string` | `'Search...'` | Placeholder text in the input |
-| `debounceMs` | `number` | `300` | Debounce time in milliseconds |
+| `debounceMs` | `number` | `600` | Debounce time in milliseconds |
 | `searchControl` | `FormControl<string \| null>` | **required** | Form control for the input |
 
 ## Outputs
@@ -72,7 +72,7 @@ export class MyFilterComponent {
 ### Debounce Mechanism
 
 The component uses RxJS `debounceTime` and `distinctUntilChanged` operators to:
-1. Wait 300ms (configurable) before emitting search events
+1. Wait 600ms (configurable) before emitting search events
 2. Prevent duplicate values from being emitted
 3. Reduce API calls and improve performance
 
@@ -146,15 +146,15 @@ export class ShopFiltersComponent {
 
 1. **ShopFiltersComponent** (`src/areas/shop/shop-filters/`)
    - Search products in shop catalog
-   - Debounce: 300ms (default)
+   - Debounce: 600ms (default)
 
 2. **ProductFiltersComponent** (`src/areas/admin/products/product-filters/`)
    - Search admin products
-   - Debounce: 300ms (default)
+   - Debounce: 600ms (default)
 
 3. **CustomerFiltersComponent** (`src/areas/admin/customers/customer-filters/`)
    - Search customers/users
-   - Debounce: 300ms (default)
+   - Debounce: 600ms (default)
 
 ## Styling
 
@@ -173,7 +173,7 @@ The component uses CSS variables from the design system:
 
 ## Performance
 
-- 300ms debounce prevents excessive API calls
+- 600ms debounce prevents excessive API calls
 - `distinctUntilChanged()` prevents duplicate requests
 - Form control value changes don't emit events during component updates (`emitEvent: false`)
 

@@ -11,6 +11,10 @@ import { DialogComponent, DialogConfig } from '@shared/ui/dialog';
 export interface CategoryFormDialogData extends DialogConfig {
   mode: 'create' | 'edit';
   category?: CategoryDTO;
+  onSave?: (formValue: {
+    name: string;
+    description: string;
+  }) => Promise<void>;
 }
 
 /**
@@ -75,8 +79,27 @@ export class CategoryFormDialogComponent implements OnInit {
       return;
     }
 
-    // Close dialog with form data
-    this.dialogRef.close({ formValue: this.form.value });
+    const dialogInstance = this.dialog();
+
+    this.form.disable({ emitEvent: false });
+    this.dialogRef.disableClose = true;
+    dialogInstance.setLoading(true);
+
+    try {
+      const formValue = this.form.getRawValue();
+
+      if (this.data.onSave) {
+        await this.data.onSave(formValue);
+        this.dialogRef.close({ success: true });
+        return;
+      }
+
+      this.dialogRef.close({ formValue });
+    } catch {
+      this.form.enable({ emitEvent: false });
+      this.dialogRef.disableClose = false;
+      dialogInstance.setLoading(false);
+    }
   }
 
   /**

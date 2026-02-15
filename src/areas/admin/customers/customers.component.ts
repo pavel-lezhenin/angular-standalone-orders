@@ -16,12 +16,16 @@ import {
   editFormDialogConfig,
 } from '@shared/ui/dialog/dialog.config';
 import { CustomerService } from './services/customer.service';
-import { CustomerFormDialogComponent } from './customer-form-dialog/customer-form-dialog.component';
+import {
+  CustomerFormDialogComponent,
+  CustomerFormDialogData,
+} from './customer-form-dialog/customer-form-dialog.component';
 import { CustomerTableComponent } from './customer-table/customer-table.component';
 import {
   CustomerFiltersComponent,
   CustomerFilters,
 } from './customer-filters/customer-filters.component';
+import { CustomerFormData } from './model';
 
 /**
  * Customers management page (Admin only)
@@ -136,52 +140,58 @@ export class CustomersComponent extends BaseComponent implements OnInit {
    * Open create dialog
    */
   protected openCreateDialog(): void {
-    const dialogRef = this.dialog.open(
+    this.dialog.open<CustomerFormDialogComponent, CustomerFormDialogData>(
       CustomerFormDialogComponent,
-      createFormDialogConfig('Create Customer', 'Create')
-    );
-
-    dialogRef.afterClosed().subscribe(async (result) => {
-      if (result?.formValue) {
-        this.startLoading();
-        try {
-          await this.customerService.createUser(result.formValue);
-          await this.loadUsers();
-          this.notificationService.success('User created successfully');
-        } catch (err: unknown) {
-          console.error('Failed to create user:', err);
-          this.notificationService.error('Failed to create user');
-        } finally {
-          this.stopLoading();
-        }
+      {
+        ...createFormDialogConfig('Create Customer', 'Create'),
+        data: {
+          ...createFormDialogConfig('Create Customer', 'Create').data,
+          onSave: async (formValue: CustomerFormData) => {
+            this.startLoading();
+            try {
+              await this.customerService.createUser(formValue);
+              await this.loadUsers();
+              this.notificationService.success('User created successfully');
+            } catch (err: unknown) {
+              console.error('Failed to create user:', err);
+              this.notificationService.error('Failed to create user');
+              throw err;
+            } finally {
+              this.stopLoading();
+            }
+          },
+        },
       }
-    });
+    );
   }
 
   /**
    * Open edit dialog
    */
   protected openEditDialog(user: UserDTO): void {
-    const dialogRef = this.dialog.open(
+    this.dialog.open<CustomerFormDialogComponent, CustomerFormDialogData>(
       CustomerFormDialogComponent,
-      editFormDialogConfig(user, 'Edit Customer')
-    );
-
-    dialogRef.afterClosed().subscribe(async (result) => {
-      if (result?.formValue) {
-        this.startLoading();
-        try {
-          await this.customerService.updateUser(user.id, result.formValue);
-          await this.loadUsers();
-          this.notificationService.success('User updated successfully');
-        } catch (err: unknown) {
-          console.error('Failed to update user:', err);
-          this.notificationService.error('Failed to update user');
-        } finally {
-          this.stopLoading();
-        }
+      {
+        ...editFormDialogConfig(user, 'Edit Customer'),
+        data: {
+          ...editFormDialogConfig(user, 'Edit Customer').data,
+          onSave: async (formValue: CustomerFormData) => {
+            this.startLoading();
+            try {
+              await this.customerService.updateUser(user.id, formValue);
+              await this.loadUsers();
+              this.notificationService.success('User updated successfully');
+            } catch (err: unknown) {
+              console.error('Failed to update user:', err);
+              this.notificationService.error('Failed to update user');
+              throw err;
+            } finally {
+              this.stopLoading();
+            }
+          },
+        },
       }
-    });
+    );
   }
 
   /**

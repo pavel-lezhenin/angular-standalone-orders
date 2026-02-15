@@ -8,6 +8,8 @@ import { PageEvent } from '@angular/material/paginator';
 
 import { BaseComponent } from '@core';
 import { CategoryDTO, ProductWithCategoryDTO } from '@core';
+import { generateDeleteMessage } from '@shared/utils';
+import { ConfirmDialogService } from '@shared/ui/dialog';
 import { PageLoaderComponent } from '@shared/ui/page-loader';
 import { NotificationService } from '@shared/services/notification.service';
 import { ProductService } from './services/product.service';
@@ -53,6 +55,7 @@ export class ProductsComponent extends BaseComponent implements OnInit {
   private readonly productService = inject(ProductService);
   private readonly categoryService = inject(CategoryService);
   private readonly dialog = inject(MatDialog);
+  private readonly confirmDialogService = inject(ConfirmDialogService);
   private readonly notificationService = inject(NotificationService);
 
   /**
@@ -175,21 +178,18 @@ export class ProductsComponent extends BaseComponent implements OnInit {
    * Open create dialog
    */
   protected openCreateDialog(): void {
-    const dialogRef = this.dialog.open<
+    this.dialog.open<
       ProductFormDialogComponent,
       ProductFormDialogData,
       ProductFormResult
     >(ProductFormDialogComponent, {
       data: {
         categories: this.categories(),
+        onSave: async (formValue: ProductFormResult) => {
+          await this.createProduct(formValue);
+        },
       },
       disableClose: true,
-    });
-
-    dialogRef.afterClosed().subscribe(async (result) => {
-      if (result) {
-        await this.createProduct(result);
-      }
     });
   }
 
@@ -201,7 +201,7 @@ export class ProductsComponent extends BaseComponent implements OnInit {
       // Load full product data
       const product = await this.productService.getProduct(productId);
 
-      const dialogRef = this.dialog.open<
+      this.dialog.open<
         ProductFormDialogComponent,
         ProductFormDialogData,
         ProductFormResult
@@ -209,14 +209,11 @@ export class ProductsComponent extends BaseComponent implements OnInit {
         data: {
           product,
           categories: this.categories(),
+          onSave: async (formValue: ProductFormResult) => {
+            await this.updateProduct(productId, formValue);
+          },
         },
         disableClose: true,
-      });
-
-      dialogRef.afterClosed().subscribe(async (result) => {
-        if (result) {
-          await this.updateProduct(productId, result);
-        }
       });
     } catch (err: unknown) {
       console.error('Failed to load product:', err);
@@ -252,6 +249,7 @@ export class ProductsComponent extends BaseComponent implements OnInit {
     } catch (err: unknown) {
       console.error('Failed to create product:', err);
       this.notificationService.error('Failed to create product');
+      throw err;
     } finally {
       this.stopLoading();
     }
@@ -287,6 +285,7 @@ export class ProductsComponent extends BaseComponent implements OnInit {
     } catch (err: unknown) {
       console.error('Failed to update product:', err);
       this.notificationService.error('Failed to update product');
+      throw err;
     } finally {
       this.stopLoading();
     }
@@ -297,35 +296,36 @@ export class ProductsComponent extends BaseComponent implements OnInit {
    * Prevents deletion if product has associated orders
    */
   protected async deleteProduct(productId: string): Promise<void> {
-    const confirmed = confirm(
-      'Are you sure you want to delete this product? This action cannot be undone.'
-    );
+    const product = this.products().find(item => item.id === productId);
+    const message = generateDeleteMessage(product?.name ?? 'Product', productId.slice(0, 8));
 
-    if (!confirmed) {
-      return;
-    }
+    this.confirmDialogService.openDeleteConfirm(
+      message,
+      async () => {
+        this.startLoading();
+        try {
+          await this.productService.deleteProduct(productId);
+          this.notificationService.success('Product deleted successfully');
+          await this.loadProducts();
+        } finally {
+          this.stopLoading();
+        }
+      },
+      (err: unknown) => {
+        console.error('Failed to delete product:', err);
 
-    this.startLoading();
-    try {
-      await this.productService.deleteProduct(productId);
-      this.notificationService.success('Product deleted successfully');
-      await this.loadProducts();
-    } catch (err: unknown) {
-      console.error('Failed to delete product:', err);
-      
-      // Check if error is due to existing orders
-      const errorMessage =
-        err instanceof Error ? err.message : 'Failed to delete product';
-      
-      if (errorMessage.includes('order') || errorMessage.includes('Order')) {
-        this.notificationService.error(
-          'Cannot delete product: It has associated orders'
-        );
-      } else {
+        const errorMessage =
+          err instanceof Error ? err.message : 'Failed to delete product';
+
+        if (errorMessage.includes('order') || errorMessage.includes('Order')) {
+          this.notificationService.error(
+            'Cannot delete product: It has associated orders'
+          );
+          return;
+        }
+
         this.notificationService.error('Failed to delete product');
       }
-    } finally {
-      this.stopLoading();
-    }
+    );
   }
 }

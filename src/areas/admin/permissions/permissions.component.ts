@@ -12,7 +12,10 @@ import { ConfirmDialogService } from '@shared/ui/dialog';
 import { createFormDialogConfig } from '@shared/ui/dialog/dialog.config';
 import { PermissionManagementService } from './services/permission-management.service';
 import { PermissionMatrixComponent } from './permission-matrix/permission-matrix.component';
-import { PermissionFormDialogComponent } from './permission-form-dialog/permission-form-dialog.component';
+import {
+  PermissionFormDialogComponent,
+  PermissionFormDialogData,
+} from './permission-form-dialog/permission-form-dialog.component';
 import { PermissionsByRole } from './model';
 import { UserRole } from '@core/types';
 
@@ -127,26 +130,29 @@ export class PermissionsComponent extends BaseComponent implements OnInit {
    * Open create permission dialog
    */
   protected openCreateDialog(): void {
-    const dialogRef = this.dialog.open(
+    this.dialog.open<PermissionFormDialogComponent, PermissionFormDialogData>(
       PermissionFormDialogComponent,
-      createFormDialogConfig('Create Custom Permission', 'Create')
-    );
-
-    dialogRef.afterClosed().subscribe(async (result) => {
-      if (result?.formValue) {
-        this.startLoading();
-        try {
-          await this.permissionManagementService.createPermission(result.formValue);
-          await this.loadPermissions();
-          this.notificationService.success('Permission created successfully');
-        } catch (err: unknown) {
-          console.error('Failed to create permission:', err);
-          this.notificationService.error('Failed to create permission');
-        } finally {
-          this.stopLoading();
-        }
+      {
+        ...createFormDialogConfig('Create Custom Permission', 'Create'),
+        data: {
+          ...createFormDialogConfig('Create Custom Permission', 'Create').data,
+          onSave: async (formValue) => {
+            this.startLoading();
+            try {
+              await this.permissionManagementService.createPermission(formValue);
+              await this.loadPermissions();
+              this.notificationService.success('Permission created successfully');
+            } catch (err: unknown) {
+              console.error('Failed to create permission:', err);
+              this.notificationService.error('Failed to create permission');
+              throw err;
+            } finally {
+              this.stopLoading();
+            }
+          },
+        },
       }
-    });
+    );
   }
 
   /**
