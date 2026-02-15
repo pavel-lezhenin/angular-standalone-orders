@@ -1,6 +1,7 @@
-import { Component, OnInit, signal, computed } from '@angular/core';
+import { Component, OnInit, signal, computed, DestroyRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -37,6 +38,8 @@ import type { AddressDTO, SavedPaymentMethodDTO } from '@core/models';
   styleUrl: './account.component.scss',
 })
 export class AccountComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   readonly user = computed(() => this.authService.currentUser());
   readonly savedAddresses = signal<AddressDTO[]>([]);
   readonly selectedAddressId = signal<string>('');
@@ -127,27 +130,29 @@ export class AccountComponent implements OnInit {
       paypalEmail: ['', [Validators.email]],
     });
 
-    this.paymentMethodForm.get('type')?.valueChanges.subscribe((type) => {
-      if (type === 'paypal') {
-        this.paymentMethodForm.get('paypalEmail')?.setValidators([Validators.required, Validators.email]);
-        this.paymentMethodForm.get('cardholderName')?.clearValidators();
-        this.paymentMethodForm.get('cardNumber')?.clearValidators();
-        this.paymentMethodForm.get('expiryMonth')?.clearValidators();
-        this.paymentMethodForm.get('expiryYear')?.clearValidators();
-      } else {
-        this.paymentMethodForm.get('paypalEmail')?.clearValidators();
-        this.paymentMethodForm.get('cardholderName')?.setValidators([Validators.required, Validators.minLength(2)]);
-        this.paymentMethodForm.get('cardNumber')?.setValidators([Validators.required, Validators.pattern(/^\d{13,19}$/)]);
-        this.paymentMethodForm.get('expiryMonth')?.setValidators([Validators.required, Validators.pattern(/^(0[1-9]|1[0-2])$/)]);
-        this.paymentMethodForm.get('expiryYear')?.setValidators([Validators.required, Validators.pattern(/^\d{4}$/)]);
-      }
+    this.paymentMethodForm.get('type')?.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((type) => {
+        if (type === 'paypal') {
+          this.paymentMethodForm.get('paypalEmail')?.setValidators([Validators.required, Validators.email]);
+          this.paymentMethodForm.get('cardholderName')?.clearValidators();
+          this.paymentMethodForm.get('cardNumber')?.clearValidators();
+          this.paymentMethodForm.get('expiryMonth')?.clearValidators();
+          this.paymentMethodForm.get('expiryYear')?.clearValidators();
+        } else {
+          this.paymentMethodForm.get('paypalEmail')?.clearValidators();
+          this.paymentMethodForm.get('cardholderName')?.setValidators([Validators.required, Validators.minLength(2)]);
+          this.paymentMethodForm.get('cardNumber')?.setValidators([Validators.required, Validators.pattern(/^\d{13,19}$/)]);
+          this.paymentMethodForm.get('expiryMonth')?.setValidators([Validators.required, Validators.pattern(/^(0[1-9]|1[0-2])$/)]);
+          this.paymentMethodForm.get('expiryYear')?.setValidators([Validators.required, Validators.pattern(/^\d{4}$/)]);
+        }
 
-      this.paymentMethodForm.get('paypalEmail')?.updateValueAndValidity();
-      this.paymentMethodForm.get('cardholderName')?.updateValueAndValidity();
-      this.paymentMethodForm.get('cardNumber')?.updateValueAndValidity();
-      this.paymentMethodForm.get('expiryMonth')?.updateValueAndValidity();
-      this.paymentMethodForm.get('expiryYear')?.updateValueAndValidity();
-    });
+        this.paymentMethodForm.get('paypalEmail')?.updateValueAndValidity();
+        this.paymentMethodForm.get('cardholderName')?.updateValueAndValidity();
+        this.paymentMethodForm.get('cardNumber')?.updateValueAndValidity();
+        this.paymentMethodForm.get('expiryMonth')?.updateValueAndValidity();
+        this.paymentMethodForm.get('expiryYear')?.updateValueAndValidity();
+      });
   }
 
   async ngOnInit(): Promise<void> {

@@ -12,7 +12,7 @@ import { NotificationService } from '@shared/services/notification.service';
 import { OrderService } from '@shared/services/order.service';
 import { DialogComponent } from '@shared/ui/dialog';
 import type { AddOrderCommentDTO, OrderDTO, OrderStatusChangeActorDTO, UserDTO } from '@core/models';
-import type { OrderStatus } from '@core/types';
+import type { OrderStatus, PaginatedResponse } from '@core/types';
 import { AuthService } from '@core/services/auth.service';
 import { OrderDetailsDialogComponent } from './order-details-dialog/order-details-dialog.component';
 
@@ -297,11 +297,18 @@ export class OrdersBoardComponent implements OnInit, OnDestroy {
 
   private async loadCustomerLabels(orders: readonly OrderDTO[]): Promise<void> {
     try {
-      const response = await firstValueFrom(this.http.get<{ users: UserDTO[] }>('/api/users'));
+      const response = await firstValueFrom(
+        this.http.get<PaginatedResponse<UserDTO>>('/api/users', {
+          params: {
+            page: 1,
+            limit: 500,
+          },
+        })
+      );
       const neededUserIds = new Set(orders.map(order => order.userId));
       const labels: Record<string, string> = {};
 
-      for (const user of response.users) {
+      for (const user of response.data) {
         if (!neededUserIds.has(user.id)) {
           continue;
         }

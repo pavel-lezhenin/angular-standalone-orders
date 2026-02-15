@@ -1,6 +1,7 @@
-import { Component, OnInit, Input, inject } from '@angular/core';
+import { Component, OnInit, Input, inject, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -56,6 +57,7 @@ export interface PaymentFormData {
 })
 export class PaymentFormComponent implements OnInit {
   private fb = inject(FormBuilder);
+  private destroyRef = inject(DestroyRef);
 
   /**
    * List of saved payment methods for current user
@@ -102,9 +104,11 @@ export class PaymentFormComponent implements OnInit {
     });
 
     // Watch payment method changes
-    this.paymentForm.get('method')?.valueChanges.subscribe((method) => {
-      this.updateValidators(method);
-    });
+    this.paymentForm.get('method')?.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((method) => {
+        this.updateValidators(method);
+      });
   }
 
   /**

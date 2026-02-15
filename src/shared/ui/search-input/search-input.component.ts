@@ -70,16 +70,20 @@ export class SearchInputComponent {
 
   constructor() {
     // Setup debounce effect when input becomes available
-    effect(() => {
+    effect((onCleanup) => {
       const control = this.searchControl();
       const debounceMs = this.debounceMs();
 
       // Setup subscription to form control value changes
-      control.valueChanges
+      const subscription = control.valueChanges
         .pipe(debounceTime(debounceMs), distinctUntilChanged())
         .subscribe((value) => {
           this.search.emit(value || '');
         });
+
+      onCleanup(() => {
+        subscription.unsubscribe();
+      });
     });
   }
 

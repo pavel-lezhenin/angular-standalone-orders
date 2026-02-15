@@ -1,9 +1,10 @@
-import { Component, OnInit, signal, computed, inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, signal, computed, inject, PLATFORM_ID, DestroyRef } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -66,6 +67,7 @@ export default class CheckoutComponent implements OnInit {
   private notification = inject(NotificationService);
   private authService = inject(AuthService);
   private platformId = inject(PLATFORM_ID);
+  private destroyRef = inject(DestroyRef);
   private isBrowser = isPlatformBrowser(this.platformId);
 
   protected checkoutForm!: FormGroup;
@@ -180,13 +182,15 @@ export default class CheckoutComponent implements OnInit {
       });
 
       // Watch email field for availability check
-      this.checkoutForm.get('email')?.valueChanges.subscribe((email) => {
-        if (email && this.checkoutForm.get('email')?.valid) {
-          this.checkEmailAvailability(email);
-        } else {
-          this.emailExists.set(false);
-        }
-      });
+      this.checkoutForm.get('email')?.valueChanges
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe((email) => {
+          if (email && this.checkoutForm.get('email')?.valid) {
+            this.checkEmailAvailability(email);
+          } else {
+            this.emailExists.set(false);
+          }
+        });
     } else {
       // Authenticated user - pre-fill with profile data
       const profile = currentUser.profile;
@@ -247,23 +251,23 @@ export default class CheckoutComponent implements OnInit {
         return;
       }
 
-      // Fetch product details for each cart item
-      const itemsWithProducts = await Promise.all(
-        items.map(async (cartItem) => {
-          try {
-            const response = await firstValueFrom(
-              this.http.get<{ product: ProductDTO }>(`/api/products/${cartItem.productId}`)
-            );
-            return {
-              cartItem,
-              product: response.product,
-            };
-          } catch (error) {
-            console.error('Failed to load product:', cartItem.productId, error);
-            throw new Error(`Failed to load product details for ${cartItem.productId}`);
-          }
-        })
+      const productIds = [...new Set(items.map((item) => item.productId))];
+      const response = await firstValueFrom(
+        this.http.post<{ products: ProductDTO[] }>('/api/products/batch', { productIds })
       );
+      const productsMap = new Map(response.products.map((product) => [product.id, product]));
+
+      const itemsWithProducts = items.map((cartItem) => {
+        const product = productsMap.get(cartItem.productId);
+        if (!product) {
+          throw new Error(`Failed to load product details for ${cartItem.productId}`);
+        }
+
+        return {
+          cartItem,
+          product,
+        };
+      });
 
       this.cartItems.set(itemsWithProducts);
     } catch (err) {
@@ -371,16 +375,18 @@ export default class CheckoutComponent implements OnInit {
       throw new Error('Failed to create user account');
     }
 
-    await this.http.post(`/api/users/${response.id}/addresses`, {
-      label: 'Home',
-      recipientName: `${formValue.firstName} ${formValue.lastName}`.trim(),
-      addressLine1: formValue.addressLine1,
-      addressLine2: formValue.addressLine2 || '',
-      city: formValue.city,
-      postalCode: formValue.postalCode,
-      phone: formValue.phone,
-      isDefault: true,
-    }).toPromise();
+    await firstValueFrom(
+      this.http.post(`/api/users/${response.id}/addresses`, {
+        label: 'Home',
+        recipientName: `${formValue.firstName} ${formValue.lastName}`.trim(),
+        addressLine1: formValue.addressLine1,
+        addressLine2: formValue.addressLine2 || '',
+        city: formValue.city,
+        postalCode: formValue.postalCode,
+        phone: formValue.phone,
+        isDefault: true,
+      })
+    );
 
     return response;
   }

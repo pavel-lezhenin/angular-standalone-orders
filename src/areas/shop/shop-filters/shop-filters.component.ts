@@ -1,6 +1,7 @@
-import { Component, input, output, signal } from '@angular/core';
+import { Component, DestroyRef, inject, input, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
@@ -37,6 +38,8 @@ export interface ShopFilters {
   styleUrl: './shop-filters.component.scss',
 })
 export class ShopFiltersComponent {
+  private readonly destroyRef = inject(DestroyRef);
+
   readonly categories = input.required<CategoryDTO[]>();
   readonly isLoading = input<boolean>(false);
 
@@ -62,7 +65,9 @@ export class ShopFiltersComponent {
 
   constructor() {
     // Category filter changes emit immediately
-    this.categoryControl.valueChanges.subscribe(() => this.emitFilters());
+    this.categoryControl.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.emitFilters());
   }
 
   /**

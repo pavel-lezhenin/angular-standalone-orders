@@ -1,6 +1,7 @@
 import { Injectable, signal, inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
 import type { UserDTO } from '../models';
 
 @Injectable({
@@ -14,9 +15,9 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   async login(email: string, password: string): Promise<UserDTO> {
-    const response = await this.http
-      .post<{ user: UserDTO; token: string }>('/api/auth/login', { email, password })
-      .toPromise();
+    const response = await firstValueFrom(
+      this.http.post<{ user: UserDTO; token: string }>('/api/auth/login', { email, password })
+    );
 
     if (!response?.user) {
       throw new Error('Login failed');
@@ -33,7 +34,7 @@ export class AuthService {
   }
 
   async logout(): Promise<void> {
-    await this.http.post('/api/auth/logout', {}).toPromise();
+    await firstValueFrom(this.http.post('/api/auth/logout', {}));
     if (this.isBrowser) {
       localStorage.removeItem('authToken');
       localStorage.removeItem('currentUserId');
@@ -74,7 +75,9 @@ export class AuthService {
     console.log('🔍 Found userId in storage:', userId, '- fetching user data...');
 
     try {
-      const response = await this.http.get<{ user: UserDTO }>('/api/auth/me').toPromise();
+      const response = await firstValueFrom(
+        this.http.get<{ user: UserDTO }>('/api/auth/me')
+      );
       if (response?.user) {
         this.currentUser.set(response.user);
         console.log('✅ User session restored:', response.user.email);

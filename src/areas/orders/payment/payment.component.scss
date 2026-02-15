@@ -19,8 +19,8 @@
 
 .order-summary {
   background-color: var(--surface-primary);
-  border: var(--spacing-1px) solid var(--border-default);
-  border-radius: var(--app-border-radius);
+  border: var(--spacing-1px) solid var(--color-border);
+  border-radius: var(--border-radius-md);
   padding: var(--spacing-lg);
   margin-bottom: var(--spacing-xl);
 
@@ -55,7 +55,7 @@
   &.total {
     margin-top: var(--spacing-sm);
     padding-top: var(--spacing-md);
-    border-top: var(--spacing-1px) solid var(--border-default);
+    border-top: var(--spacing-1px) solid var(--color-border);
     font-weight: var(--font-weight-semibold);
     color: var(--text-primary);
     font-size: var(--font-size-lg);
@@ -98,7 +98,7 @@
 
   button {
     flex: 1;
-    min-height: var(--button-height);
+    min-height: var(--spacing-3xl);
 
     mat-icon {
       margin-right: var(--spacing-xs);
@@ -106,7 +106,7 @@
   }
 
   .cancel-btn {
-    border-color: var(--border-default);
+    border-color: var(--color-border);
   }
 
   .pay-btn {
@@ -127,8 +127,8 @@
   text-align: center;
   padding: var(--spacing-4xl) var(--spacing-xl);
   background-color: var(--surface-primary);
-  border: var(--spacing-1px) solid var(--border-default);
-  border-radius: var(--app-border-radius);
+  border: var(--spacing-1px) solid var(--color-border);
+  border-radius: var(--border-radius-md);
 
   mat-spinner {
     margin-bottom: var(--spacing-xl);
@@ -153,13 +153,13 @@
     gap: var(--spacing-xs);
     padding: var(--spacing-md) var(--spacing-lg);
     background-color: var(--surface-secondary);
-    border-radius: var(--app-border-radius);
+    border-radius: var(--border-radius-md);
     font-size: var(--font-size-sm);
     color: var(--text-secondary);
 
     mat-icon {
       color: var(--app-success);
-      font-size: var(--icon-size-sm);
+      font-size: var(--font-size-sm);
     }
   }
 }
@@ -176,8 +176,8 @@
   text-align: center;
   padding: var(--spacing-4xl) var(--spacing-xl);
   background-color: var(--surface-primary);
-  border: var(--spacing-1px) solid var(--border-default);
-  border-radius: var(--app-border-radius);
+  border: var(--spacing-1px) solid var(--color-border);
+  border-radius: var(--border-radius-md);
 
   .success-icon-wrapper {
     margin-bottom: var(--spacing-xl);
@@ -203,7 +203,7 @@
     font-family: monospace;
     background-color: var(--surface-secondary);
     padding: var(--spacing-sm) var(--spacing-md);
-    border-radius: var(--app-border-radius);
+    border-radius: var(--border-radius-md);
     margin-bottom: var(--spacing-lg);
   }
 
@@ -238,8 +238,8 @@
   text-align: center;
   padding: var(--spacing-4xl) var(--spacing-xl);
   background-color: var(--surface-primary);
-  border: var(--spacing-1px) solid var(--border-default);
-  border-radius: var(--app-border-radius);
+  border: var(--spacing-1px) solid var(--color-border);
+  border-radius: var(--border-radius-md);
 
   .error-icon-wrapper {
     margin-bottom: var(--spacing-xl);
@@ -282,7 +282,7 @@
 
     button {
       flex: 1;
-      min-height: var(--button-height);
+      min-height: var(--spacing-3xl);
 
       mat-icon {
         margin-right: var(--spacing-xs);
@@ -290,7 +290,7 @@
     }
 
     .cancel-btn {
-      border-color: var(--border-default);
+      border-color: var(--color-border);
     }
 
     .retry-btn {

@@ -95,26 +95,16 @@ export default class OrderConfirmationComponent implements OnInit {
       const order = await this.orderService.getOrder(orderId);
       this.order.set(order);
 
-      // Load product details for each order item
-      const itemsWithProducts = await Promise.all(
-        order.items.map(async (item) => {
-          try {
-            const response = await firstValueFrom(
-              this.http.get<{ product: ProductDTO }>(`/api/products/${item.productId}`)
-            );
-            return {
-              ...item,
-              product: response.product,
-            };
-          } catch (error) {
-            console.error('Failed to load product:', item.productId, error);
-            return {
-              ...item,
-              product: undefined,
-            };
-          }
-        })
+      const productIds = [...new Set(order.items.map((item) => item.productId))];
+      const response = await firstValueFrom(
+        this.http.post<{ products: ProductDTO[] }>('/api/products/batch', { productIds })
       );
+      const productsMap = new Map(response.products.map((product) => [product.id, product]));
+
+      const itemsWithProducts = order.items.map((item) => ({
+        ...item,
+        product: productsMap.get(item.productId),
+      }));
 
       this.orderItems.set(itemsWithProducts);
     } catch (err) {

@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -33,6 +34,8 @@ import { ContactChannel } from './models';
   styleUrl: './lead-capture-form.component.scss',
 })
 export class LeadCaptureFormComponent {
+  private readonly destroyRef = inject(DestroyRef);
+
   leadForm: FormGroup;
   selectedChannel: ContactChannel = 'email';
 
@@ -51,10 +54,12 @@ export class LeadCaptureFormComponent {
     });
 
     // Watch channel changes to update validation
-    this.leadForm.get('channel')?.valueChanges.subscribe((channel: ContactChannel) => {
-      this.selectedChannel = channel;
-      this.updateChannelValidation(channel);
-    });
+    this.leadForm.get('channel')?.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((channel: ContactChannel) => {
+        this.selectedChannel = channel;
+        this.updateChannelValidation(channel);
+      });
   }
 
   onSubmit(): void {

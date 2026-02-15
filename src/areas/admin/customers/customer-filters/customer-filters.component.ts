@@ -1,6 +1,7 @@
-import { Component, input, output, signal } from '@angular/core';
+import { Component, DestroyRef, inject, input, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
@@ -37,6 +38,8 @@ export interface CustomerFilters {
   styleUrl: './customer-filters.component.scss',
 })
 export class CustomerFiltersComponent {
+  private readonly destroyRef = inject(DestroyRef);
+
   readonly isLoading = input<boolean>(false);
 
   readonly searchControl = new FormControl<string>('');
@@ -61,7 +64,9 @@ export class CustomerFiltersComponent {
 
   constructor() {
     // Immediate role filter
-    this.roleControl.valueChanges.subscribe(() => this.emitFilters());
+    this.roleControl.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.emitFilters());
   }
 
   /**
