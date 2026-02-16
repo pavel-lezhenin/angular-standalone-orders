@@ -24,10 +24,3 @@
     text-overflow: clip;
   }
 }
-
-.actions-inline {
-  display: inline-flex;
-  align-items: center;
-  flex-wrap: nowrap;
-  gap: var(--spacing-xxs);
-}
