@@ -1,0 +1,21 @@
+<div class="order-summary" [class]="variant()">
+  <h2>{{ title() }}</h2>
+  
+  @for (line of summaryLines(); track line.label) {
+    <div class="summary-row" [class]="line.class || ''">
+      <span>{{ line.label }}:</span>
+      <span class="amount">{{ line.value | currency }}</span>
+    </div>
+  }
+  
+  @if (showDivider()) {
+    <div class="summary-divider"></div>
+  }
+  
+  <div class="summary-row total">
+    <span>{{ totalLabel() }}:</span>
+    <span class="amount">{{ total() | currency }}</span>
+  </div>
+  
+  <ng-content></ng-content>
+</div>

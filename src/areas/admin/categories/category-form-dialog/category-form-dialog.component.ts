@@ -1,12 +1,11 @@
 import { Component, inject, OnInit, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 
 import { CategoryDTO } from '@core';
 import { DialogComponent, DialogConfig } from '@shared/ui/dialog';
+import { FormFieldComponent } from '@shared/ui';
 
 export interface CategoryFormDialogData extends DialogConfig {
   mode: 'create' | 'edit';
@@ -29,8 +28,7 @@ export interface CategoryFormDialogData extends DialogConfig {
     CommonModule,
     ReactiveFormsModule,
     DialogComponent,
-    MatFormFieldModule,
-    MatInputModule,
+    FormFieldComponent,
   ],
   templateUrl: './category-form-dialog.component.html',
   styleUrl: './category-form-dialog.component.scss',
@@ -110,30 +108,9 @@ export class CategoryFormDialogComponent implements OnInit {
   }
 
   /**
-   * Get form control error message
+   * Get form control as FormControl
    */
-  protected getErrorMessage(controlName: string): string {
-    const control = this.form.get(controlName);
-    if (!control) return '';
-
-    if (control.hasError('required')) {
-      return 'This field is required';
-    }
-
-    if (control.hasError('maxlength')) {
-      const maxLength = control.errors?.['maxlength'].requiredLength;
-      return `Maximum length is ${maxLength} characters`;
-    }
-
-    return '';
-  }
-
-  /**
-   * Get character count hint for field
-   */
-  protected getCharacterHint(controlName: string, maxLength: number): string {
-    const control = this.form.get(controlName);
-    const currentLength = control?.value?.length || 0;
-    return `${currentLength}/${maxLength}`;
+  protected getControl(name: string): FormControl {
+    return this.form.get(name) as FormControl;
   }
 }

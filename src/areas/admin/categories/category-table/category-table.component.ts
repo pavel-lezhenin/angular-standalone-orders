@@ -1,11 +1,9 @@
 import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { CategoryDTO } from '@core';
+import { TableActionButtonsComponent } from '@shared/ui';
 
 /**
  * Category table component with pagination and loading state
@@ -19,10 +17,8 @@ import { CategoryDTO } from '@core';
   imports: [
     CommonModule,
     MatTableModule,
-    MatButtonModule,
-    MatIconModule,
-    MatTooltipModule,
     MatPaginatorModule,
+    TableActionButtonsComponent,
   ],
   templateUrl: './category-table.component.html',
   styleUrl: './category-table.component.scss',

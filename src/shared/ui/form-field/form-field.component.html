@@ -1,0 +1,59 @@
+<mat-form-field 
+  [appearance]="appearance()" 
+  [class]="fieldClass()">
+  <mat-label>{{ label() }}</mat-label>
+  
+  @if (prefixIcon()) {
+    <mat-icon matPrefix>{{ prefixIcon() }}</mat-icon>
+  }
+  
+  @if (type() === 'textarea') {
+    <textarea 
+      matInput
+      [formControl]="control()"
+      [placeholder]="placeholder()"
+      [rows]="rows()"
+      [maxlength]="maxLength() ?? null"
+      [required]="required()"
+      [attr.autocomplete]="autocomplete() || null"
+      [attr.aria-label]="ariaLabel() || label()"
+    ></textarea>
+  } @else if (type() === 'select') {
+    <mat-select 
+      [formControl]="control()" 
+      [required]="required()"
+      [attr.aria-label]="ariaLabel() || label()">
+      <ng-content select="mat-option"></ng-content>
+    </mat-select>
+  } @else {
+    <input
+      matInput
+      [type]="type()"
+      [formControl]="control()"
+      [placeholder]="placeholder()"
+      [maxlength]="maxLength() ?? null"
+      [min]="min() ?? null"
+      [max]="max() ?? null"
+      [step]="step() ?? null"
+      [required]="required()"
+      [attr.autocomplete]="autocomplete() || null"
+      [attr.aria-label]="ariaLabel() || label()"
+    />
+  }
+  
+  @if (suffixIcon()) {
+    <mat-icon matSuffix>{{ suffixIcon() }}</mat-icon>
+  }
+  
+  @if (hint() && !showCharacterCount()) {
+    <mat-hint [align]="hintAlign()">{{ hint() }}</mat-hint>
+  }
+  
+  @if (showCharacterCount() && maxLength()) {
+    <mat-hint align="end">{{ characterCountText() }}</mat-hint>
+  }
+  
+  @if (control().invalid && control().touched) {
+    <mat-error>{{ getErrorMessage() }}</mat-error>
+  }
+</mat-form-field>

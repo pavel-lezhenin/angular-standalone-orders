@@ -3,35 +3,24 @@
   (cancel)="onCancel()"
 >
   <form [formGroup]="form" class="category-form">
-    <mat-form-field appearance="outline">
-      <mat-label>Name</mat-label>
-      <input
-        matInput
-        formControlName="name"
-        placeholder="Enter category name"
-        maxlength="32"
-        required
-      />
-      <mat-hint align="end">{{ getCharacterHint('name', 32) }}</mat-hint>
-      @if (form.get('name')?.invalid && form.get('name')?.touched) {
-        <mat-error>{{ getErrorMessage('name') }}</mat-error>
-      }
-    </mat-form-field>
+    <app-form-field
+      [label]="'Name'"
+      [control]="getControl('name')"
+      [placeholder]="'Enter category name'"
+      [maxLength]="32"
+      [showCharacterCount]="true"
+      [required]="true"
+    />
 
-    <mat-form-field appearance="outline">
-      <mat-label>Description</mat-label>
-      <textarea
-        matInput
-        formControlName="description"
-        placeholder="Enter category description"
-        rows="3"
-        maxlength="128"
-        required
-      ></textarea>
-      <mat-hint align="end">{{ getCharacterHint('description', 128) }}</mat-hint>
-      @if (form.get('description')?.invalid && form.get('description')?.touched) {
-        <mat-error>{{ getErrorMessage('description') }}</mat-error>
-      }
-    </mat-form-field>
+    <app-form-field
+      [label]="'Description'"
+      [control]="getControl('description')"
+      [type]="'textarea'"
+      [placeholder]="'Enter category description'"
+      [rows]="3"
+      [maxLength]="128"
+      [showCharacterCount]="true"
+      [required]="true"
+    />
   </form>
 </app-dialog>

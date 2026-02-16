@@ -1,0 +1,32 @@
+<div class="action-buttons">
+  @if (canView()) {
+    <button 
+      mat-icon-button 
+      [matTooltip]="viewTooltip()"
+      [attr.aria-label]="viewAriaLabel() || viewTooltip()"
+      (click)="view.emit(); $event.stopPropagation()">
+      <mat-icon>{{ viewIcon() }}</mat-icon>
+    </button>
+  }
+
+  @if (canEdit()) {
+    <button 
+      mat-icon-button 
+      [matTooltip]="editTooltip()"
+      [attr.aria-label]="editAriaLabel() || editTooltip()"
+      (click)="edit.emit(); $event.stopPropagation()">
+      <mat-icon>{{ editIcon() }}</mat-icon>
+    </button>
+  }
+
+  @if (canDelete()) {
+    <button 
+      mat-icon-button 
+      color="warn"
+      [matTooltip]="deleteTooltip()"
+      [attr.aria-label]="deleteAriaLabel() || deleteTooltip()"
+      (click)="delete.emit(); $event.stopPropagation()">
+      <mat-icon>{{ deleteIcon() }}</mat-icon>
+    </button>
+  }
+</div>
