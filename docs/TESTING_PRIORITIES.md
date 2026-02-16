@@ -12,6 +12,8 @@
 2. Validate Material + theme behavior for reusable UI blocks.
 3. Keep test suite fast, stable, and cheap to maintain.
 
+Storybook environment setup and known pitfalls are documented in [STORYBOOK_SETUP.md](./STORYBOOK_SETUP.md).
+
 ---
 
 ## Priority Order
