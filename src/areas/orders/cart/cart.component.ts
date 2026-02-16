@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { PageLoaderComponent } from '@shared/ui/page-loader/page-loader.component';
+import { EmptyStateComponent } from '@shared/ui';
 import { CartService } from '@shared/services/cart.service';
 import { NotificationService } from '@shared/services/notification.service';
 import type { CartItemDTO, ProductDTO } from '@core/models';
@@ -38,6 +39,7 @@ interface CartItemWithDetails extends CartItemDTO {
     MatProgressSpinnerModule,
     MatCheckboxModule,
     PageLoaderComponent,
+    EmptyStateComponent,
   ],
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.scss',

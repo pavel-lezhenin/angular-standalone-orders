@@ -1,6 +1,6 @@
 import { Component, DestroyRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -11,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ContactChannel } from './models';
+import { FormFieldComponent } from '@shared/ui';
 
 /**
  * Lead capture form with multi-channel contact options
@@ -29,6 +30,7 @@ import { ContactChannel } from './models';
     MatButtonModule,
     MatIconModule,
     MatSnackBarModule,
+    FormFieldComponent,
   ],
   templateUrl: './lead-capture-form.component.html',
   styleUrl: './lead-capture-form.component.scss',
@@ -144,5 +146,9 @@ export class LeadCaptureFormComponent {
       horizontalPosition: 'center',
       verticalPosition: 'top',
     });
+  }
+
+  getControl(name: string): FormControl {
+    return this.leadForm.get(name) as FormControl;
   }
 }

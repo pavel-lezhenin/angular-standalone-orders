@@ -8,7 +8,13 @@
       <p class="error">{{ error() }}</p>
     } @else {
       @if (orders().length === 0) {
-        <p class="empty">No orders found</p>
+        <app-empty-state
+          [icon]="'receipt_long'"
+          [title]="'No orders found'"
+          [message]="'Start shopping to create your first order!'"
+          [actionLabel]="'Browse Products'"
+          (action)="goToShop()"
+        />
       } @else {
         <section class="orders-card">
           <div class="orders-table-wrapper">

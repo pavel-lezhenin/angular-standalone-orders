@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import {
   FormBuilder,
+  FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
@@ -17,6 +18,7 @@ import { MatIconModule } from '@angular/material/icon';
 
 import { AuthService } from '@core/services/auth.service';
 import { BaseComponent } from '@core';
+import { FormFieldComponent } from '@shared/ui';
 
 /**
  * Login form component with email/password authentication.
@@ -35,6 +37,7 @@ import { BaseComponent } from '@core';
     MatProgressSpinnerModule,
     MatCardModule,
     MatIconModule,
+    FormFieldComponent,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -149,5 +152,12 @@ export class LoginComponent extends BaseComponent implements OnInit {
       return 'Password must be at least 6 characters';
     }
     return '';
+  }
+
+  /**
+   * Get form control as FormControl
+   */
+  getControl(name: string): FormControl {
+    return this.loginForm.get(name) as FormControl;
   }
 }

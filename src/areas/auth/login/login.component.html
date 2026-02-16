@@ -16,22 +16,16 @@
         aria-label="Login form"
       >
         <!-- Email Field -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Email</mat-label>
-          <input
-            matInput
-            type="email"
-            formControlName="email"
-            placeholder="user@example.com"
-            aria-label="Email address"
-            aria-describedby="email-error"
-            autocomplete="email"
-          />
-          <mat-icon matPrefix>email</mat-icon>
-          @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
-            <mat-error id="email-error">{{ getEmailError() }}</mat-error>
-          }
-        </mat-form-field>
+        <app-form-field
+          [label]="'Email'"
+          [control]="getControl('email')"
+          [type]="'email'"
+          [placeholder]="'user@example.com'"
+          [prefixIcon]="'email'"
+          [required]="true"
+          [autocomplete]="'email'"
+          [ariaLabel]="'Email address'"
+        />
 
         <!-- Password Field -->
         <mat-form-field appearance="outline" class="full-width">

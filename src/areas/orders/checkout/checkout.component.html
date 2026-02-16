@@ -5,14 +5,13 @@
     <app-page-loader [isLoading]="loading()" />
 
     @if (hasLoaded() && isEmpty()) {
-      <div class="empty-state">
-        <mat-icon class="empty-icon">shopping_cart</mat-icon>
-        <h2>Your cart is empty</h2>
-        <p>Please add items to cart before checkout.</p>
-        <button mat-raised-button color="primary" routerLink="/shop">
-          Go to Shop
-        </button>
-      </div>
+      <app-empty-state
+        [icon]="'shopping_cart'"
+        [title]="'Your cart is empty'"
+        [message]="'Please add items to cart before checkout.'"
+        [actionLabel]="'Go to Shop'"
+        (action)="goToShop()"
+      />
     } @else if (hasLoaded()) {
       <div class="checkout-content">
         <!-- Left Column: Delivery Form -->

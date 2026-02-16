@@ -13,6 +13,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { PageLoaderComponent } from '@shared/ui/page-loader/page-loader.component';
+import { EmptyStateComponent } from '@shared/ui';
 import { CartService } from '@shared/services/cart.service';
 import { PaymentStateService } from '@shared/services/payment-state.service';
 import { UserPreferencesService } from '@shared/services/user-preferences.service';
@@ -78,6 +79,7 @@ interface CheckoutAddressFormValue {
     MatIconModule,
     MatCheckboxModule,
     PageLoaderComponent,
+    EmptyStateComponent,
   ],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.scss',
@@ -595,6 +597,13 @@ export default class CheckoutComponent implements OnInit {
    */
   protected backToCart(): void {
     this.router.navigate(['/orders/cart']);
+  }
+
+  /**
+   * Navigate to shop
+   */
+  protected goToShop(): void {
+    this.router.navigate(['/shop']);
   }
 }
 

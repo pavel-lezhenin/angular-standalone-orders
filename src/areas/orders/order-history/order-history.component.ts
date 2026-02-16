@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { LayoutService } from '@/shared/services/layout.service';
 import { PaginationComponent } from '@shared/ui/pagination/pagination.component';
+import { EmptyStateComponent } from '@shared/ui';
 import { OrderService } from '@shared/services/order.service';
 import { AuthService } from '@core/services/auth.service';
 import type { OrderDTO } from '@core/models';
@@ -13,7 +14,7 @@ import type { OrderStatus } from '@core/types';
 @Component({
   selector: 'app-order-history',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatIconModule, PaginationComponent],
+  imports: [CommonModule, MatButtonModule, MatIconModule, PaginationComponent, EmptyStateComponent],
   templateUrl: './order-history.component.html',
   styleUrl: './order-history.component.scss',
 })
@@ -135,5 +136,12 @@ export class OrderHistoryComponent implements OnInit {
   protected goToPage(page: number): void {
     const boundedPage = Math.max(1, Math.min(this.totalPages(), page));
     this.currentPage.set(boundedPage);
+  }
+
+  /**
+   * Navigate to shop
+   */
+  protected goToShop(): void {
+    this.router.navigate(['/shop']);
   }
 }
