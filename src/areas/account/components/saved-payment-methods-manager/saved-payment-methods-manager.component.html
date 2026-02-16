@@ -1,0 +1,152 @@
+<div class="payment-methods-section">
+  <div class="section-header">
+    <h3>Payment Methods</h3>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="toggleForm.emit()"
+    >
+      @if (showPaymentMethodForm()) {
+        <mat-icon>close</mat-icon>
+        Cancel
+      } @else {
+        <mat-icon>add</mat-icon>
+        Add Payment Method
+      }
+    </button>
+  </div>
+
+  @if (!showPaymentMethodForm()) {
+    <div class="selection-controls">
+      <mat-form-field appearance="outline" class="payment-select">
+        <mat-label>Selected Payment Method</mat-label>
+        <mat-select
+          [value]="selectedPaymentMethodId()"
+          (selectionChange)="paymentMethodSelectionChange.emit($event.value)"
+        >
+          @for (method of savedPaymentMethods(); track method.id) {
+            <mat-option [value]="method.id">
+              {{ method.label }}
+              @if (method.isDefault) {
+                (Default)
+              }
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <div class="action-buttons">
+        @if (canSetAsDefault()) {
+          <button
+            mat-stroked-button
+            color="primary"
+            (click)="setAsDefault.emit()"
+          >
+            Set as Default
+          </button>
+        }
+
+        @if (canDeleteSelected()) {
+          <button
+            mat-stroked-button
+            color="warn"
+            (click)="deleteSelected.emit()"
+          >
+            <mat-icon>delete</mat-icon>
+            Delete
+          </button>
+        }
+      </div>
+    </div>
+
+    @if (selectedPaymentMethod(); as method) {
+      <div class="selected-payment-display">
+        <div class="payment-details">
+          <p><strong>{{ method.label }}</strong></p>
+          @if (method.type === 'card' && method.cardDetails) {
+            <mat-chip-set>
+              <mat-chip>Card ending in {{ method.cardDetails.lastFourDigits }}</mat-chip>
+            </mat-chip-set>
+            <p>Expires: {{ method.cardDetails.expiryMonth }}/{{ method.cardDetails.expiryYear }}</p>
+          } @else if (method.type === 'paypal' && method.paypalEmail) {
+            <mat-chip-set>
+              <mat-chip>PayPal</mat-chip>
+            </mat-chip-set>
+            <p>{{ method.paypalEmail }}</p>
+          }
+        </div>
+      </div>
+    }
+  } @else {
+    <form [formGroup]="paymentMethodForm()" class="payment-method-form">
+      <mat-form-field appearance="outline">
+        <mat-label>Payment Type</mat-label>
+        <mat-select
+          [value]="selectedPaymentType()"
+          (selectionChange)="paymentTypeChange.emit($event.value)"
+        >
+          <mat-option value="card">Credit/Debit Card</mat-option>
+          <mat-option value="paypal">PayPal</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      @if (selectedPaymentType() === 'card') {
+        <div class="card-fields">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Cardholder Name</mat-label>
+            <input matInput formControlName="cardholderName" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Card Number</mat-label>
+            <input
+              matInput
+              formControlName="cardNumber"
+              placeholder="1234 5678 9012 3456"
+              maxlength="19"
+            />
+          </mat-form-field>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Expiry Month</mat-label>
+              <mat-select formControlName="expiryMonth">
+                @for (month of [1,2,3,4,5,6,7,8,9,10,11,12]; track month) {
+                  <mat-option [value]="month">{{ month }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Expiry Year</mat-label>
+              <mat-select formControlName="expiryYear">
+                @for (year of [2024,2025,2026,2027,2028,2029,2030,2031,2032,2033,2034]; track year) {
+                  <mat-option [value]="year">{{ year }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      } @else {
+        <div class="paypal-fields">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>PayPal Email</mat-label>
+            <input matInput formControlName="paypalEmail" type="email" />
+          </mat-form-field>
+        </div>
+      }
+
+      <div class="form-actions">
+        <button
+          mat-raised-button
+          color="primary"
+          type="button"
+          [disabled]="paymentMethodForm().invalid"
+          (click)="savePaymentMethod.emit()"
+        >
+          Save Payment Method
+        </button>
+      </div>
+    </form>
+  }
+</div>

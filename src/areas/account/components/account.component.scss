@@ -11,10 +11,6 @@
   grid-column: 1;
 }
 
-.stats-card {
-  grid-column: 1;
-}
-
 // Card Header
 .header-content {
   display: flex;
@@ -42,86 +38,9 @@
   flex-direction: column;
 }
 
-// Form
-.profile-form {
-  padding: var(--spacing-xl) 0;
-}
-
-.form-section {
-  margin-bottom: var(--spacing-2xl);
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-}
-
-.section-title {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-xxs);
-  margin-bottom: var(--spacing-xl);
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-medium);
-  color: var(--text-primary);
-
-  mat-icon {
-    color: var(--app-primary);
-  }
-}
-
-.form-row {
-  display: grid;
-  gap: var(--spacing-md);
-  grid-template-columns: 1fr;
-}
-
-.form-field {
-  width: 100%;
-}
-
-.placeholder-text {
-  color: var(--text-secondary);
-  font-style: italic;
-  margin: 0;
-  padding: var(--spacing-md);
-  background-color: var(--surface-tertiary);
-  border-radius: var(--border-radius-xs);
-}
-
-.shipping-address-text {
-  margin: 0;
-  padding: var(--spacing-md);
-  background-color: var(--surface-tertiary);
-  border-radius: var(--border-radius-xs);
-
-  p {
-    margin: 0 0 var(--spacing-xs) 0;
-    color: var(--text-primary);
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-}
-
-.selection-controls {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
-  margin-bottom: var(--spacing-md);
-}
-
-.preference-form {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
-  margin-top: var(--spacing-sm);
-}
-
-.inline-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: var(--spacing-md);
+// Section Dividers
+.section-divider {
+  margin: var(--spacing-2xl) 0;
 }
 
 // Actions
@@ -136,44 +55,6 @@
     align-items: center;
     gap: var(--spacing-xxs);
   }
-}
-
-// Stats Card
-.stats-card {
-  mat-card-content {
-    padding: var(--spacing-xl);
-  }
-}
-
-.stat-item {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
-  padding: var(--spacing-md) 0;
-
-  mat-icon {
-    color: var(--app-primary);
-    font-size: var(--font-size-3xl);
-    width: 2rem;
-    height: 2rem;
-  }
-}
-
-.stat-content {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-.stat-label {
-  font-size: var(--font-size-sm);
-  color: var(--text-secondary);
-}
-
-.stat-value {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-medium);
-  color: var(--text-primary);
 }
 
 // Error Card
@@ -208,15 +89,9 @@
 :host-context(.tablet) .account-page,
 :host-context(.desktop) .account-page {
   grid-template-columns: 2fr 1fr;
-}
 
-:host-context(.tablet) .stats-card,
-:host-context(.desktop) .stats-card {
-  grid-column: 2;
-  grid-row: 1;
-}
-
-:host-context(.tablet) .form-row,
-:host-context(.desktop) .form-row {
-  grid-template-columns: 1fr 1fr;
+  app-account-stats {
+    grid-column: 2;
+    grid-row: 1;
+  }
 }

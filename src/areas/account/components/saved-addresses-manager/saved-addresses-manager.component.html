@@ -1,0 +1,130 @@
+<div class="addresses-section">
+  <div class="section-header">
+    <h3>Shipping Addresses</h3>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="toggleForm.emit()"
+    >
+      @if (showAddressForm()) {
+        <mat-icon>close</mat-icon>
+        Cancel
+      } @else {
+        <mat-icon>add</mat-icon>
+        Add Address
+      }
+    </button>
+  </div>
+
+  @if (!showAddressForm()) {
+    <div class="selection-controls">
+      <mat-form-field appearance="outline" class="address-select">
+        <mat-label>Selected Address</mat-label>
+        <mat-select
+          [value]="selectedAddressId()"
+          (selectionChange)="addressSelectionChange.emit($event.value)"
+        >
+          @for (address of savedAddresses(); track address.id) {
+            <mat-option [value]="address.id">
+              {{ address.label }}
+              @if (address.isDefault) {
+                (Default)
+              }
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <div class="action-buttons">
+        @if (canSetAsDefault()) {
+          <button
+            mat-stroked-button
+            color="primary"
+            (click)="setAsDefault.emit()"
+          >
+            Set as Default
+          </button>
+        }
+
+        @if (canDeleteSelected()) {
+          <button
+            mat-stroked-button
+            color="warn"
+            (click)="deleteSelected.emit()"
+          >
+            <mat-icon>delete</mat-icon>
+            Delete
+          </button>
+        }
+      </div>
+    </div>
+
+    @if (selectedAddress(); as address) {
+      <div class="selected-address-display">
+        <div class="address-details">
+          <p><strong>{{ address.label }}</strong></p>
+          <p>{{ address.recipientName }}</p>
+          <p>{{ address.addressLine1 }}</p>
+          @if (address.addressLine2) {
+            <p>{{ address.addressLine2 }}</p>
+          }
+          <p>{{ address.city }}, {{ address.postalCode }}</p>
+          <p>{{ address.phone }}</p>
+        </div>
+      </div>
+    }
+  } @else {
+    <form [formGroup]="addressForm()" class="address-form">
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Label</mat-label>
+          <input matInput formControlName="label" placeholder="e.g., Home, Work" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Recipient Name</mat-label>
+          <input matInput formControlName="recipientName" />
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Address Line 1</mat-label>
+        <input matInput formControlName="addressLine1" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Address Line 2 (Optional)</mat-label>
+        <input matInput formControlName="addressLine2" />
+      </mat-form-field>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>City</mat-label>
+          <input matInput formControlName="city" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Postal Code</mat-label>
+          <input matInput formControlName="postalCode" />
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Phone</mat-label>
+        <input matInput formControlName="phone" type="tel" />
+      </mat-form-field>
+
+      <div class="form-actions">
+        <button
+          mat-raised-button
+          color="primary"
+          type="button"
+          [disabled]="addressForm().invalid"
+          (click)="saveAddress.emit()"
+        >
+          Save Address
+        </button>
+      </div>
+    </form>
+  }
+</div>

@@ -33,6 +33,25 @@ export interface SavedPaymentMethodDTO {
 }
 
 /**
+ * Payment method for UI components
+ * Extended version with formatted display data
+ */
+export interface PaymentMethodDTO {
+  id: string;
+  label: string; // Display label (e.g., "Card •••• 4242" or "PayPal (user@example.com)")
+  type: 'card' | 'paypal';
+  isDefault: boolean;
+  // For cards
+  cardDetails?: {
+    lastFourDigits: string;
+    expiryMonth: number;
+    expiryYear: number;
+  };
+  // For PayPal
+  paypalEmail?: string;
+}
+
+/**
  * User profile DTO
  */
 export interface UserProfileDTO {

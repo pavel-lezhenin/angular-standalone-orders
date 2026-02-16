@@ -1,0 +1,145 @@
+.payment-methods-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-md);
+
+  h3 {
+    margin: 0;
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+  }
+}
+
+.selection-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+
+  .payment-select {
+    width: 100%;
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+
+    button {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+    }
+  }
+}
+
+.selected-payment-display {
+  padding: var(--spacing-md);
+  border: var(--spacing-1px) solid var(--color-border);
+  border-radius: var(--border-radius-base);
+  background-color: var(--surface-secondary);
+
+  .payment-details {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+
+    p {
+      margin: var(--spacing-xs) 0;
+
+      &:first-child {
+        margin-top: 0;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    mat-chip-set {
+      margin: var(--spacing-xs) 0;
+    }
+  }
+}
+
+.payment-method-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+
+  .card-fields,
+  .paypal-fields {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-md);
+  }
+
+  .full-width {
+    width: 100%;
+  }
+
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-sm);
+    padding-top: var(--spacing-sm);
+  }
+}
+
+/* ============================================
+ * Responsive Styles
+ * ============================================ */
+
+/* Mobile Styles */
+:host-context(.mobile) {
+  .section-header {
+    flex-direction: column;
+    align-items: stretch;
+
+    button {
+      width: 100%;
+    }
+  }
+
+  .selection-controls {
+    .action-buttons {
+      flex-direction: column;
+
+      button {
+        width: 100%;
+      }
+    }
+  }
+
+  .payment-method-form {
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+
+    .form-actions {
+      flex-direction: column;
+
+      button {
+        width: 100%;
+      }
+    }
+  }
+}

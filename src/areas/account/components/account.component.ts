@@ -1,20 +1,19 @@
-import { Component, OnInit, signal, computed, DestroyRef, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, OnInit, signal, computed, effect } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatSelectModule } from '@angular/material/select';
 import { AuthService } from '@core/services/auth.service';
 import { LayoutService } from '@/shared/services/layout.service';
 import { UserPreferencesService } from '@shared/services/user-preferences.service';
 import { NotificationService } from '@shared/services/notification.service';
-import type { AddressDTO, SavedPaymentMethodDTO } from '@core/models';
+import { ProfileInfoComponent } from './profile-info/profile-info.component';
+import { SavedAddressesManagerComponent } from './saved-addresses-manager/saved-addresses-manager.component';
+import { SavedPaymentMethodsManagerComponent } from './saved-payment-methods-manager/saved-payment-methods-manager.component';
+import { AccountStatsComponent } from './account-stats/account-stats.component';
+import type { AddressDTO, PaymentMethodDTO } from '@core/models';
 
 /**
  * Account/Profile page for managing user information
@@ -23,68 +22,27 @@ import type { AddressDTO, SavedPaymentMethodDTO } from '@core/models';
   selector: 'app-account',
   standalone: true,
   imports: [
-    CommonModule,
-    ReactiveFormsModule,
     MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
     MatButtonModule,
     MatIconModule,
     MatDividerModule,
     MatChipsModule,
-    MatSelectModule,
+    ProfileInfoComponent,
+    SavedAddressesManagerComponent,
+    SavedPaymentMethodsManagerComponent,
+    AccountStatsComponent,
   ],
   templateUrl: './account.component.html',
   styleUrl: './account.component.scss',
 })
 export class AccountComponent implements OnInit {
-  private readonly destroyRef = inject(DestroyRef);
 
   readonly user = computed(() => this.authService.currentUser());
   readonly savedAddresses = signal<AddressDTO[]>([]);
   readonly selectedAddressId = signal<string>('');
-  readonly selectedAddress = computed(() => {
-    const addresses = this.savedAddresses();
-    return addresses.find(address => address.id === this.selectedAddressId()) ?? null;
-  });
-  readonly savedPaymentMethods = signal<SavedPaymentMethodDTO[]>([]);
+  readonly savedPaymentMethods = signal<PaymentMethodDTO[]>([]);
   readonly selectedPaymentMethodId = signal<string>('');
-  readonly selectedPaymentMethod = computed(() => {
-    const paymentMethods = this.savedPaymentMethods();
-    return paymentMethods.find(method => method.id === this.selectedPaymentMethodId()) ?? null;
-  });
-  readonly canDeleteSelectedAddress = computed(() => {
-    const address = this.selectedAddress();
-    if (!address) {
-      return false;
-    }
-
-    if (!address.isDefault) {
-      return true;
-    }
-
-    return this.savedAddresses().length > 1;
-  });
-  readonly canDeleteSelectedPaymentMethod = computed(() => {
-    const method = this.selectedPaymentMethod();
-    if (!method) {
-      return false;
-    }
-
-    if (!method.isDefault) {
-      return true;
-    }
-
-    return this.savedPaymentMethods().length > 1;
-  });
-  readonly canSetSelectedAddressAsDefault = computed(() => {
-    const address = this.selectedAddress();
-    return !!address && !address.isDefault;
-  });
-  readonly canSetSelectedPaymentMethodAsDefault = computed(() => {
-    const paymentMethod = this.selectedPaymentMethod();
-    return !!paymentMethod && !paymentMethod.isDefault;
-  });
+  readonly selectedPaymentType = signal<'card' | 'paypal'>('card');
   readonly isEditMode = signal(false);
   readonly showAddressForm = signal(false);
   readonly showPaymentMethodForm = signal(false);
@@ -122,37 +80,36 @@ export class AccountComponent implements OnInit {
     });
 
     this.paymentMethodForm = this.fb.group({
-      type: ['card', Validators.required],
       cardholderName: ['', [Validators.required, Validators.minLength(2)]],
       cardNumber: ['', [Validators.required, Validators.pattern(/^\d{13,19}$/)]],
-      expiryMonth: ['', [Validators.required, Validators.pattern(/^(0[1-9]|1[0-2])$/)]],
-      expiryYear: ['', [Validators.required, Validators.pattern(/^\d{4}$/)]],
-      paypalEmail: ['', [Validators.email]],
+      expiryMonth: [null, [Validators.required]],
+      expiryYear: [null, [Validators.required]],
+      paypalEmail: [''],
     });
 
-    this.paymentMethodForm.get('type')?.valueChanges
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((type) => {
-        if (type === 'paypal') {
-          this.paymentMethodForm.get('paypalEmail')?.setValidators([Validators.required, Validators.email]);
-          this.paymentMethodForm.get('cardholderName')?.clearValidators();
-          this.paymentMethodForm.get('cardNumber')?.clearValidators();
-          this.paymentMethodForm.get('expiryMonth')?.clearValidators();
-          this.paymentMethodForm.get('expiryYear')?.clearValidators();
-        } else {
-          this.paymentMethodForm.get('paypalEmail')?.clearValidators();
-          this.paymentMethodForm.get('cardholderName')?.setValidators([Validators.required, Validators.minLength(2)]);
-          this.paymentMethodForm.get('cardNumber')?.setValidators([Validators.required, Validators.pattern(/^\d{13,19}$/)]);
-          this.paymentMethodForm.get('expiryMonth')?.setValidators([Validators.required, Validators.pattern(/^(0[1-9]|1[0-2])$/)]);
-          this.paymentMethodForm.get('expiryYear')?.setValidators([Validators.required, Validators.pattern(/^\d{4}$/)]);
-        }
+    // Watch for payment type changes using effect instead of pipe (signals don't have pipe)
+    effect(() => {
+      const type = this.selectedPaymentType();
+      if (type === 'paypal') {
+        this.paymentMethodForm.get('paypalEmail')?.setValidators([Validators.required, Validators.email]);
+        this.paymentMethodForm.get('cardholderName')?.clearValidators();
+        this.paymentMethodForm.get('cardNumber')?.clearValidators();
+        this.paymentMethodForm.get('expiryMonth')?.clearValidators();
+        this.paymentMethodForm.get('expiryYear')?.clearValidators();
+      } else {
+        this.paymentMethodForm.get('paypalEmail')?.clearValidators();
+        this.paymentMethodForm.get('cardholderName')?.setValidators([Validators.required, Validators.minLength(2)]);
+        this.paymentMethodForm.get('cardNumber')?.setValidators([Validators.required, Validators.pattern(/^\d{13,19}$/)]);
+        this.paymentMethodForm.get('expiryMonth')?.setValidators([Validators.required]);
+        this.paymentMethodForm.get('expiryYear')?.setValidators([Validators.required]);
+      }
 
-        this.paymentMethodForm.get('paypalEmail')?.updateValueAndValidity();
-        this.paymentMethodForm.get('cardholderName')?.updateValueAndValidity();
-        this.paymentMethodForm.get('cardNumber')?.updateValueAndValidity();
-        this.paymentMethodForm.get('expiryMonth')?.updateValueAndValidity();
-        this.paymentMethodForm.get('expiryYear')?.updateValueAndValidity();
-      });
+      this.paymentMethodForm.get('paypalEmail')?.updateValueAndValidity();
+      this.paymentMethodForm.get('cardholderName')?.updateValueAndValidity();
+      this.paymentMethodForm.get('cardNumber')?.updateValueAndValidity();
+      this.paymentMethodForm.get('expiryMonth')?.updateValueAndValidity();
+      this.paymentMethodForm.get('expiryYear')?.updateValueAndValidity();
+    }, { allowSignalWrites: true });
   }
 
   async ngOnInit(): Promise<void> {
@@ -166,7 +123,26 @@ export class AccountComponent implements OnInit {
     ]);
 
     this.savedAddresses.set(addresses);
-    this.savedPaymentMethods.set(paymentMethods);
+    // Map SavedPaymentMethodDTO to PaymentMethodDTO format expected by sub-component
+    const mappedPaymentMethods: PaymentMethodDTO[] = paymentMethods.map(method => ({
+      id: method.id,
+      label: method.type === 'card' 
+        ? `Card •••• ${method.last4Digits}` 
+        : `PayPal (${method.paypalEmail})`,
+      type: method.type,
+      isDefault: method.isDefault,
+      ...(method.type === 'card' && method.last4Digits && {
+        cardDetails: {
+          lastFourDigits: method.last4Digits,
+          expiryMonth: Number(method.expiryMonth) || 1,
+          expiryYear: Number(method.expiryYear) || 2024,
+        }
+      }),
+      ...(method.type === 'paypal' && method.paypalEmail && {
+        paypalEmail: method.paypalEmail,
+      }),
+    }));
+    this.savedPaymentMethods.set(mappedPaymentMethods);
 
     const defaultAddress = addresses.find(address => address.isDefault) ?? addresses[0] ?? null;
     this.selectedAddressId.set(defaultAddress?.id ?? '');
@@ -177,20 +153,20 @@ export class AccountComponent implements OnInit {
     this.showPaymentMethodForm.set(paymentMethods.length === 0);
   }
 
+  // Address handlers
   onAddressSelectionChange(addressId: string): void {
     this.selectedAddressId.set(addressId);
   }
 
-  onPaymentMethodSelectionChange(methodId: string): void {
-    this.selectedPaymentMethodId.set(methodId);
-  }
-
   toggleAddressForm(): void {
     this.showAddressForm.update(value => !value);
-  }
-
-  togglePaymentMethodForm(): void {
-    this.showPaymentMethodForm.update(value => !value);
+    if (this.showAddressForm()) {
+      this.addressForm.reset({
+        label: 'Home',
+        recipientName: `${this.user()?.profile.firstName ?? ''} ${this.user()?.profile.lastName ?? ''}`.trim(),
+        phone: this.user()?.profile.phone ?? '',
+      });
+    }
   }
 
   async saveAddress(): Promise<void> {
@@ -238,13 +214,13 @@ export class AccountComponent implements OnInit {
   }
 
   async setSelectedAddressAsDefault(): Promise<void> {
-    const selectedAddress = this.selectedAddress();
-    if (!selectedAddress || selectedAddress.isDefault) {
+    const selectedAddressId = this.selectedAddressId();
+    if (!selectedAddressId) {
       return;
     }
 
     try {
-      await this.userPreferencesService.setDefaultAddress(selectedAddress.id);
+      await this.userPreferencesService.setDefaultAddress(selectedAddressId);
       await this.loadPreferences();
       this.notification.success('Default address updated');
     } catch (error) {
@@ -256,6 +232,23 @@ export class AccountComponent implements OnInit {
     }
   }
 
+  // Payment method handlers
+  onPaymentMethodSelectionChange(methodId: string): void {
+    this.selectedPaymentMethodId.set(methodId);
+  }
+
+  onPaymentTypeChange(type: 'card' | 'paypal'): void {
+    this.selectedPaymentType.set(type);
+  }
+
+  togglePaymentMethodForm(): void {
+    this.showPaymentMethodForm.update(value => !value);
+    if (this.showPaymentMethodForm()) {
+      this.selectedPaymentType.set('card');
+      this.paymentMethodForm.reset();
+    }
+  }
+
   async savePaymentMethod(): Promise<void> {
     if (this.paymentMethodForm.invalid) {
       this.paymentMethodForm.markAllAsTouched();
@@ -263,8 +256,9 @@ export class AccountComponent implements OnInit {
     }
 
     const formValue = this.paymentMethodForm.value;
+    const type = this.selectedPaymentType();
 
-    if (formValue.type === 'paypal') {
+    if (type === 'paypal') {
       await this.userPreferencesService.addPaymentMethod({
         type: 'paypal',
         paypalEmail: formValue.paypalEmail,
@@ -309,13 +303,13 @@ export class AccountComponent implements OnInit {
   }
 
   async setSelectedPaymentMethodAsDefault(): Promise<void> {
-    const selectedMethod = this.selectedPaymentMethod();
-    if (!selectedMethod || selectedMethod.isDefault) {
+    const selectedMethodId = this.selectedPaymentMethodId();
+    if (!selectedMethodId) {
       return;
     }
 
     try {
-      await this.userPreferencesService.setDefaultPaymentMethod(selectedMethod.id);
+      await this.userPreferencesService.setDefaultPaymentMethod(selectedMethodId);
       await this.loadPreferences();
       this.notification.success('Default payment method updated');
     } catch (error) {
@@ -327,6 +321,7 @@ export class AccountComponent implements OnInit {
     }
   }
 
+  // Profile handlers
   toggleEditMode(): void {
     this.isEditMode.update(v => !v);
     
@@ -349,7 +344,8 @@ export class AccountComponent implements OnInit {
     }
   }
 
-  getRoleBadgeColor(role?: string): string {
+  // View helpers
+  getRoleBadgeColor(role?: string): 'warn' | 'accent' | 'primary' {
     switch (role) {
       case 'admin':
         return 'warn';
@@ -364,11 +360,8 @@ export class AccountComponent implements OnInit {
     return role ? role.charAt(0).toUpperCase() + role.slice(1) : 'User';
   }
 
-  getPaymentMethodLabel(method: { type: 'card' | 'paypal'; last4Digits?: string; paypalEmail?: string }): string {
-    if (method.type === 'card') {
-      return method.last4Digits ? `Card •••• ${method.last4Digits}` : 'Card';
-    }
-
-    return method.paypalEmail ? `PayPal (${method.paypalEmail})` : 'PayPal';
-  }
+  // Account stats computed properties
+  readonly totalOrders = computed(() => 0); // TODO: Implement from service
+  readonly totalSpent = computed(() => 0); // TODO: Implement from service
+  readonly loyaltyPoints = computed(() => 0); // TODO: Implement from service
 }

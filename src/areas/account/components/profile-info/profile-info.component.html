@@ -1,0 +1,64 @@
+<form [formGroup]="profileForm()" class="profile-form">
+  <!-- Personal Information Section -->
+  <section class="form-section">
+    <h3 class="section-title">
+      <mat-icon>person</mat-icon>
+      Personal Information
+    </h3>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>First Name</mat-label>
+        <input 
+          matInput 
+          formControlName="firstName" 
+          [readonly]="!isEditMode()"
+        />
+        @if (!isEditMode()) {
+          <mat-icon matSuffix>lock</mat-icon>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Last Name</mat-label>
+        <input 
+          matInput 
+          formControlName="lastName" 
+          [readonly]="!isEditMode()"
+        />
+        @if (!isEditMode()) {
+          <mat-icon matSuffix>lock</mat-icon>
+        }
+      </mat-form-field>
+    </div>
+  </section>
+
+  <!-- Contact Information Section -->
+  <section class="form-section">
+    <h3 class="section-title">
+      <mat-icon>contact_mail</mat-icon>
+      Contact Information
+    </h3>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" readonly />
+        <mat-icon matSuffix>lock</mat-icon>
+        <mat-hint>Email cannot be changed</mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Phone</mat-label>
+        <input 
+          matInput 
+          formControlName="phone" 
+          [readonly]="!isEditMode()"
+        />
+        @if (!isEditMode()) {
+          <mat-icon matSuffix>lock</mat-icon>
+        }
+      </mat-form-field>
+    </div>
+  </section>
+</form>
