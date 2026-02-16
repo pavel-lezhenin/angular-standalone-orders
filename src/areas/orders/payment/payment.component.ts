@@ -10,6 +10,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { PaymentFormComponent, PaymentFormData } from '@shared/ui/payment-form/payment-form.component';
 import { PageLoaderComponent } from '@shared/ui/page-loader/page-loader.component';
+import { OrderSummaryComponent } from '@shared/ui';
 import { PaymentService, PaymentRequest, PaymentResult } from '@shared/services/payment.service';
 import { PaymentStateService } from '@shared/services/payment-state.service';
 import { UserPreferencesService } from '@shared/services/user-preferences.service';
@@ -35,7 +36,6 @@ type PaymentState = 'form' | 'processing' | 'success' | 'failure';
   standalone: true,
   imports: [
     CommonModule,
-    CurrencyPipe,
     ReactiveFormsModule,
     MatButtonModule,
     MatIconModule,
@@ -45,6 +45,7 @@ type PaymentState = 'form' | 'processing' | 'success' | 'failure';
     MatProgressSpinnerModule,
     PaymentFormComponent,
     PageLoaderComponent,
+    OrderSummaryComponent,
   ],
   templateUrl: './payment.component.html',
   styleUrl: './payment.component.scss',

@@ -7,7 +7,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { ProductDTO, ProductWithCategoryDTO } from '@core';
-import { TableActionButtonsComponent } from '@shared/ui';
+import { TableActionButtonsComponent, StatusBadgeComponent } from '@shared/ui';
+import type { StatusBadgeVariant } from '@shared/ui';
 
 /**
  * Product table component with pagination and loading state
@@ -28,6 +29,7 @@ import { TableActionButtonsComponent } from '@shared/ui';
     MatChipsModule,
     MatPaginatorModule,
     TableActionButtonsComponent,
+    StatusBadgeComponent,
   ],
   templateUrl: './product-table.component.html',
   styleUrl: './product-table.component.scss',
@@ -47,10 +49,22 @@ export class ProductTableComponent {
 
   protected readonly displayedColumns = ['image', 'name', 'category', 'price', 'stock', 'actions'];
 
-  protected getStockBadgeClass(stock: number): string {
-    if (stock === 0) return 'badge-danger';
-    if (stock <= 10) return 'badge-warning';
-    return 'badge-success';
+  /**
+   * Get status badge variant for stock level
+   */
+  protected getStockVariant(stock: number): StatusBadgeVariant {
+    if (stock === 0) return 'error';
+    if (stock <= 10) return 'warning';
+    return 'success';
+  }
+
+  /**
+   * Get stock icon
+   */
+  protected getStockIcon(stock: number): string {
+    if (stock === 0) return 'close';
+    if (stock <= 10) return 'warning';
+    return 'check';
   }
 
   protected getStockLabel(stock: number): string {

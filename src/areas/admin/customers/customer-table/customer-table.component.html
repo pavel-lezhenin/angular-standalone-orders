@@ -10,9 +10,10 @@
     <ng-container matColumnDef="role">
       <th mat-header-cell *matHeaderCellDef>Role</th>
       <td mat-cell *matCellDef="let user">
-        <mat-chip [class]="getRoleBadgeClass(user.role)">
-          {{ user.role }}
-        </mat-chip>
+        <app-status-badge
+          [label]="getRoleLabel(user.role)"
+          [variant]="getRoleVariant(user.role)"
+        />
       </td>
     </ng-container>
 

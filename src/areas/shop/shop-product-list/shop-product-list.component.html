@@ -1,7 +1,9 @@
 @if (products().length === 0) {
-  <div class="empty-state">
-    <p>No products found</p>
-  </div>
+  <app-empty-state
+    [icon]="'inventory_2'"
+    [title]="'No products found'"
+    [message]="'Try adjusting your search or filters to find what you are looking for.'"
+    [size]="'default'" />
 } @else {
   <div class="products-grid">
     @for (product of products(); track product.id) {

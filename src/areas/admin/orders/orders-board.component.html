@@ -52,7 +52,11 @@
 
           <div class="column-content">
             @if (getOrdersForStatus(column.status).length === 0) {
-              <div class="empty-column">No orders</div>
+              <app-empty-state
+                [icon]="'inbox'"
+                [title]="'No orders'"
+                [message]="''"
+                [size]="'small'" />
             } @else {
               @for (order of getOrdersForStatus(column.status); track order.id) {
                 <mat-card

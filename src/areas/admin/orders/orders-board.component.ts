@@ -11,6 +11,7 @@ import { firstValueFrom } from 'rxjs';
 import { NotificationService } from '@shared/services/notification.service';
 import { OrderService } from '@shared/services/order.service';
 import { DialogComponent } from '@shared/ui/dialog';
+import { EmptyStateComponent } from '@shared/ui';
 import type { AddOrderCommentDTO, OrderDTO, OrderStatusChangeActorDTO, UserDTO } from '@core/models';
 import type { OrderStatus, PaginatedResponse } from '@core/types';
 import { AuthService } from '@core/services/auth.service';
@@ -71,6 +72,7 @@ const BOARD_COLUMNS: BoardColumnConfig[] = [
     MatIconModule,
     MatProgressSpinnerModule,
     MatDialogModule,
+    EmptyStateComponent,
   ],
   templateUrl: './orders-board.component.html',
   styleUrl: './orders-board.component.scss',

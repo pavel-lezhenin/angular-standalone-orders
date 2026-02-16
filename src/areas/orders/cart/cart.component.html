@@ -124,8 +124,6 @@
 
         <!-- Cart Summary -->
         <div class="cart-summary">
-          <h2>Order Summary</h2>
-
           @if (hasSelectedItems()) {
             <div class="summary-info">
               <span class="selected-count">{{ selectedItems().size }} item(s) selected</span>
@@ -136,40 +134,28 @@
               <span>Select items to proceed</span>
             </div>
           }
-          
-          <div class="summary-row">
-            <span>Subtotal:</span>
-            <span class="amount">{{ subtotal() | currency }}</span>
-          </div>
-          
-          <div class="summary-row">
-            <span>Tax (10%):</span>
-            <span class="amount">{{ tax() | currency }}</span>
-          </div>
-          
-          <div class="summary-divider"></div>
-          
-          <div class="summary-row total">
-            <span>Total:</span>
-            <span class="amount">{{ total() | currency }}</span>
-          </div>
 
-          <div class="summary-actions">
-            <button 
-              mat-stroked-button 
-              (click)="continueShopping()"
-              class="continue-btn">
-              Continue Shopping
-            </button>
-            <button 
-              mat-raised-button 
-              color="primary"
-              (click)="proceedToCheckout()"
-              [disabled]="!hasSelectedItems()"
-              class="checkout-btn">
-              Proceed to Checkout
-            </button>
-          </div>
+          <app-order-summary
+            [title]="'Order Summary'"
+            [summaryLines]="summaryLines()"
+            [total]="total()">
+            <div class="summary-actions">
+              <button 
+                mat-stroked-button 
+                (click)="continueShopping()"
+                class="continue-btn">
+                Continue Shopping
+              </button>
+              <button 
+                mat-raised-button 
+                color="primary"
+                (click)="proceedToCheckout()"
+                [disabled]="!hasSelectedItems()"
+                class="checkout-btn">
+                Proceed to Checkout
+              </button>
+            </div>
+          </app-order-summary>
         </div>
       </div>
     }

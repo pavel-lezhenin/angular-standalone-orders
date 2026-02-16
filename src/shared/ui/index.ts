@@ -10,4 +10,5 @@ export { FormFieldComponent } from './form-field/form-field.component';
 export { TableActionButtonsComponent } from './table-action-buttons/table-action-buttons.component';
 export { OrderSummaryComponent, type SummaryLine } from './order-summary/order-summary.component';
 export { EmptyStateComponent } from './empty-state/empty-state.component';
+export { StatusBadgeComponent, type StatusBadgeVariant } from './status-badge/status-badge.component';
 

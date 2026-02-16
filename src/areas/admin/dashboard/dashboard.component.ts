@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { firstValueFrom } from 'rxjs';
+import { EmptyStateComponent } from '@shared/ui';
 import type { OrderDTO, ProductDTO, UserDTO } from '@core/models';
 import type { PaginatedResponse } from '@core/types';
 
@@ -17,7 +18,12 @@ interface DashboardStat {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatIconModule],
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatIconModule,
+    EmptyStateComponent,
+  ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })

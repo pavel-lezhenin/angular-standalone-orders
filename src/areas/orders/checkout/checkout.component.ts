@@ -13,7 +13,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { PageLoaderComponent } from '@shared/ui/page-loader/page-loader.component';
-import { EmptyStateComponent } from '@shared/ui';
+import { EmptyStateComponent, OrderSummaryComponent } from '@shared/ui';
+import type { SummaryLine } from '@shared/ui/order-summary/order-summary.component';
 import { CartService } from '@shared/services/cart.service';
 import { PaymentStateService } from '@shared/services/payment-state.service';
 import { UserPreferencesService } from '@shared/services/user-preferences.service';
@@ -80,6 +81,7 @@ interface CheckoutAddressFormValue {
     MatCheckboxModule,
     PageLoaderComponent,
     EmptyStateComponent,
+    OrderSummaryComponent,
   ],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.scss',
@@ -145,6 +147,14 @@ export default class CheckoutComponent implements OnInit {
    * Computed total
    */
   protected total = computed(() => this.subtotal() + this.tax());
+
+  /**
+   * Summary lines for order summary component
+   */
+  protected summaryLines = computed<SummaryLine[]>(() => [
+    { label: 'Subtotal', value: this.subtotal() },
+    { label: 'Tax (10%)', value: this.tax() },
+  ]);
 
   /**
    * Check if cart is empty

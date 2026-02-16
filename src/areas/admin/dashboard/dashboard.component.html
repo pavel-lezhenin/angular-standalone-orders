@@ -42,7 +42,11 @@
         </mat-card-header>
         <mat-card-content>
           @if (recentOrders().length === 0) {
-            <p class="placeholder">No orders yet</p>
+            <app-empty-state
+              [icon]="'receipt_long'"
+              [title]="'No orders yet'"
+              [message]="'Orders will appear here as they are placed.'"
+              [size]="'small'" />
           } @else {
             <div class="recent-orders-list">
               @for (order of recentOrders(); track order.id) {

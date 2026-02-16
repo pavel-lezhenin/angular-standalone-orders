@@ -5,22 +5,13 @@
     <h1>Payment</h1>
 
     <!-- Order Summary -->
-    <div class="order-summary">
-      <h2>
-        <mat-icon>shopping_cart</mat-icon>
-        Order Summary
-      </h2>
-      <div class="summary-details">
-        <div class="summary-row">
-          <span>Items:</span>
-          <span>{{ itemCount() }}</span>
-        </div>
-        <div class="summary-row total">
-          <span>Total:</span>
-          <span class="amount">{{ total() | currency }}</span>
-        </div>
-      </div>
-    </div>
+    <app-order-summary
+      [title]="'Order Summary'"
+      [summaryLines]="[{ label: 'Items', value: itemCount() }]"
+      [total]="total()"
+      [showDivider]="false"
+      [variant]="'compact'">
+    </app-order-summary>
 
     <!-- Payment Form State -->
     @if (state() === 'form') {

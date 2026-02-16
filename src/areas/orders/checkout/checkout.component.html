@@ -235,54 +235,40 @@
           </div>
 
           <!-- Order Totals -->
-          <div class="order-totals">
-            <div class="total-row">
-              <span>Subtotal:</span>
-              <span class="amount">{{ subtotal() | currency }}</span>
-            </div>
-            
-            <div class="total-row">
-              <span>Tax (10%):</span>
-              <span class="amount">{{ tax() | currency }}</span>
-            </div>
-            
-            <div class="total-divider"></div>
-            
-            <div class="total-row grand-total">
-              <span>Total:</span>
-              <span class="amount">{{ total() | currency }}</span>
-            </div>
-          </div>
+          <app-order-summary
+            [title]="''"
+            [summaryLines]="summaryLines()"
+            [total]="total()">
+            <!-- Error Message -->
+            @if (error()) {
+              <div class="error-message">
+                <mat-icon>error</mat-icon>
+                <span>{{ error() }}</span>
+              </div>
+            }
 
-          <!-- Error Message -->
-          @if (error()) {
-            <div class="error-message">
-              <mat-icon>error</mat-icon>
-              <span>{{ error() }}</span>
+            <!-- Actions -->
+            <div class="checkout-actions">
+              <button 
+                mat-stroked-button 
+                (click)="backToCart()"
+                [disabled]="submitting()">
+                Back to Cart
+              </button>
+              <button 
+                mat-raised-button 
+                color="primary"
+                (click)="placeOrder()"
+                [disabled]="checkoutForm.invalid || submitting()">
+                @if (submitting()) {
+                  <mat-spinner diameter="20"></mat-spinner>
+                  <span>Processing...</span>
+                } @else {
+                  <span>Place Order</span>
+                }
+              </button>
             </div>
-          }
-
-          <!-- Actions -->
-          <div class="checkout-actions">
-            <button 
-              mat-stroked-button 
-              (click)="backToCart()"
-              [disabled]="submitting()">
-              Back to Cart
-            </button>
-            <button 
-              mat-raised-button 
-              color="primary"
-              (click)="placeOrder()"
-              [disabled]="checkoutForm.invalid || submitting()">
-              @if (submitting()) {
-                <mat-spinner diameter="20"></mat-spinner>
-                <span>Processing...</span>
-              } @else {
-                <span>Place Order</span>
-              }
-            </button>
-          </div>
+          </app-order-summary>
         </div>
       </div>
     }

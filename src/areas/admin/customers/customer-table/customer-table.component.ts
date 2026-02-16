@@ -9,7 +9,8 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { UserDTO } from '@core';
 import { UserRole } from '@core/types';
 import { formatDate } from '@shared/utils';
-import { TableActionButtonsComponent } from '@shared/ui';
+import { TableActionButtonsComponent, StatusBadgeComponent } from '@shared/ui';
+import type { StatusBadgeVariant } from '@shared/ui';
 
 /**
  * Customer table component with pagination and loading state
@@ -29,6 +30,7 @@ import { TableActionButtonsComponent } from '@shared/ui';
     MatChipsModule,
     MatPaginatorModule,
     TableActionButtonsComponent,
+    StatusBadgeComponent,
   ],
   templateUrl: './customer-table.component.html',
   styleUrl: './customer-table.component.scss',
@@ -52,12 +54,27 @@ export class CustomerTableComponent {
     return formatDate(timestamp);
   }
 
-  protected getRoleBadgeClass(role: UserRole): string {
-    const classes: Record<UserRole, string> = {
-      admin: 'badge-admin',
-      manager: 'badge-manager',
-      user: 'badge-user',
+  /**
+   * Get status badge variant for user role
+   */
+  protected getRoleVariant(role: UserRole): StatusBadgeVariant {
+    const variants: Record<UserRole, StatusBadgeVariant> = {
+      admin: 'error',
+      manager: 'info',
+      user: 'neutral',
     };
-    return classes[role] || '';
+    return variants[role] || 'neutral';
+  }
+
+  /**
+   * Get formatted role label
+   */
+  protected getRoleLabel(role: UserRole): string {
+    const labels: Record<UserRole, string> = {
+      admin: 'Admin',
+      manager: 'Manager',
+      user: 'User',
+    };
+    return labels[role] || role;
   }
 }
