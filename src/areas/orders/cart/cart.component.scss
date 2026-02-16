@@ -166,21 +166,6 @@
   color: var(--text-primary);
 }
 
-/* Quantity Controls */
-.quantity-controls {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-
-  .quantity {
-    min-width: 40px;
-    text-align: center;
-    font-size: var(--font-size-md);
-    font-weight: var(--font-weight-medium);
-    color: var(--text-primary);
-  }
-}
-
 /* Subtotal Cell */
 .subtotal-cell {
   font-size: var(--font-size-md);
@@ -335,10 +320,6 @@
   .product-cell .product-info {
     flex-direction: column;
     text-align: center;
-  }
-
-  .quantity-controls {
-    justify-content: center;
   }
 
   .cart-summary {

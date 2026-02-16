@@ -8,7 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { PageLoaderComponent } from '@shared/ui/page-loader/page-loader.component';
-import { EmptyStateComponent, OrderSummaryComponent } from '@shared/ui';
+import { EmptyStateComponent, OrderSummaryComponent, QuantityControlComponent } from '@shared/ui';
 import type { SummaryLine } from '@shared/ui/order-summary/order-summary.component';
 import { CartService } from '@shared/services/cart.service';
 import { NotificationService } from '@shared/services/notification.service';
@@ -42,6 +42,7 @@ interface CartItemWithDetails extends CartItemDTO {
     PageLoaderComponent,
     EmptyStateComponent,
     OrderSummaryComponent,
+    QuantityControlComponent,
   ],
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.scss',
@@ -260,6 +261,14 @@ export default class CartComponent implements OnInit {
       this.cartService.updateQuantity(productId, currentQuantity - 1);
       this.updateLocalItem(productId, currentQuantity - 1);
     }
+  }
+
+  /**
+   * Handle quantity change from quantity control
+   */
+  protected onQuantityChange(productId: string, newQuantity: number): void {
+    this.cartService.updateQuantity(productId, newQuantity);
+    this.updateLocalItem(productId, newQuantity);
   }
 
   /**
