@@ -4,6 +4,7 @@ import {
   FormBuilder,
   FormGroup,
   FormArray,
+  FormControl,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -23,6 +24,7 @@ import {
   ImageGalleryComponent,
   ImageItem,
 } from '@shared/ui/image-gallery/image-gallery.component';
+import { FormFieldComponent } from '@shared/ui';
 import { CategoryDTO, ProductDTO, ProductSpecificationDTO } from '@core';
 import { FileStorageService } from '@core';
 import { DEFAULT_PRODUCT_IMAGE } from '@shared/constants/product.constants';
@@ -81,6 +83,7 @@ export interface ProductFormResult {
     MatIconModule,
     MatProgressSpinnerModule,
     ImageGalleryComponent,
+    FormFieldComponent,
   ],
   templateUrl: './product-form-dialog.component.html',
   styleUrl: './product-form-dialog.component.scss',
@@ -317,5 +320,12 @@ export class ProductFormDialogComponent implements OnInit {
    */
   protected get dialogTitle(): string {
     return this.isEditMode ? 'Edit Product' : 'Create Product';
+  }
+
+  /**
+   * Get form control as FormControl
+   */
+  protected getControl(name: string): FormControl {
+    return this.productForm.get(name) as FormControl;
   }
 }

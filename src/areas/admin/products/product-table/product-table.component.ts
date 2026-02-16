@@ -7,6 +7,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { ProductDTO, ProductWithCategoryDTO } from '@core';
+import { TableActionButtonsComponent } from '@shared/ui';
 
 /**
  * Product table component with pagination and loading state
@@ -26,6 +27,7 @@ import { ProductDTO, ProductWithCategoryDTO } from '@core';
     MatTooltipModule,
     MatChipsModule,
     MatPaginatorModule,
+    TableActionButtonsComponent,
   ],
   templateUrl: './product-table.component.html',
   styleUrl: './product-table.component.scss',

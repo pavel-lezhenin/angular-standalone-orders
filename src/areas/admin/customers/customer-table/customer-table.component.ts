@@ -9,6 +9,7 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { UserDTO } from '@core';
 import { UserRole } from '@core/types';
 import { formatDate } from '@shared/utils';
+import { TableActionButtonsComponent } from '@shared/ui';
 
 /**
  * Customer table component with pagination and loading state
@@ -27,6 +28,7 @@ import { formatDate } from '@shared/utils';
     MatTooltipModule,
     MatChipsModule,
     MatPaginatorModule,
+    TableActionButtonsComponent,
   ],
   templateUrl: './customer-table.component.html',
   styleUrl: './customer-table.component.scss',

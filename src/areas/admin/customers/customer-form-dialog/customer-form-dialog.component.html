@@ -2,94 +2,64 @@
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="form-content">
       <!-- Email -->
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Email</mat-label>
-        <input
-          matInput
-          type="email"
-          formControlName="email"
-          placeholder="user@example.com"
-          required
-        />
-        @if (form.get('email')?.touched && form.get('email')?.invalid) {
-          <mat-error>{{ getErrorMessage('email') }}</mat-error>
-        }
-      </mat-form-field>
+      <app-form-field
+        [label]="'Email'"
+        [control]="getControl('email')"
+        [type]="'email'"
+        [placeholder]="'user@example.com'"
+        [required]="true"
+        [autocomplete]="'email'"
+      />
 
       <!-- Password -->
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>
-          {{ data.mode === 'create' ? 'Password' : 'Password (leave empty to keep current)' }}
-        </mat-label>
-        <input
-          matInput
-          type="password"
-          formControlName="password"
-          placeholder="Enter password"
-          [required]="data.mode === 'create'"
-        />
-        @if (form.get('password')?.touched && form.get('password')?.invalid) {
-          <mat-error>{{ getErrorMessage('password') }}</mat-error>
-        }
-      </mat-form-field>
+      <app-form-field
+        [label]="data.mode === 'create' ? 'Password' : 'Password (leave empty to keep current)'"
+        [control]="getControl('password')"
+        [type]="'password'"
+        [placeholder]="'Enter password'"
+        [required]="data.mode === 'create'"
+        [autocomplete]="'new-password'"
+      />
 
       <!-- Role -->
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Role</mat-label>
-        <mat-select formControlName="role" required>
-          @for (role of roles; track role) {
-            <mat-option [value]="role">{{ role }}</mat-option>
-          }
-        </mat-select>
-        @if (form.get('role')?.touched && form.get('role')?.invalid) {
-          <mat-error>{{ getErrorMessage('role') }}</mat-error>
+      <app-form-field
+        [label]="'Role'"
+        [control]="getControl('role')"
+        [type]="'select'"
+        [required]="true"
+      >
+        @for (role of roles; track role) {
+          <mat-option [value]="role">{{ role }}</mat-option>
         }
-      </mat-form-field>
+      </app-form-field>
 
       <!-- First Name -->
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>First Name</mat-label>
-        <input
-          matInput
-          type="text"
-          formControlName="firstName"
-          placeholder="John"
-          required
-        />
-        @if (form.get('firstName')?.touched && form.get('firstName')?.invalid) {
-          <mat-error>{{ getErrorMessage('firstName') }}</mat-error>
-        }
-      </mat-form-field>
+      <app-form-field
+        [label]="'First Name'"
+        [control]="getControl('firstName')"
+        [placeholder]="'John'"
+        [required]="true"
+        [autocomplete]="'given-name'"
+      />
 
       <!-- Last Name -->
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Last Name</mat-label>
-        <input
-          matInput
-          type="text"
-          formControlName="lastName"
-          placeholder="Doe"
-          required
-        />
-        @if (form.get('lastName')?.touched && form.get('lastName')?.invalid) {
-          <mat-error>{{ getErrorMessage('lastName') }}</mat-error>
-        }
-      </mat-form-field>
+      <app-form-field
+        [label]="'Last Name'"
+        [control]="getControl('lastName')"
+        [placeholder]="'Doe'"
+        [required]="true"
+        [autocomplete]="'family-name'"
+      />
 
       <!-- Phone -->
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Phone</mat-label>
-        <input
-          matInput
-          type="tel"
-          formControlName="phone"
-          placeholder="+1 234 567 8900"
-          required
-        />
-        @if (form.get('phone')?.touched && form.get('phone')?.invalid) {
-          <mat-error>{{ getErrorMessage('phone') }}</mat-error>
-        }
-      </mat-form-field>
+      <app-form-field
+        [label]="'Phone'"
+        [control]="getControl('phone')"
+        [type]="'tel'"
+        [placeholder]="'+1 234 567 8900'"
+        [required]="true"
+        [autocomplete]="'tel'"
+      />
 
     </div>
   </form>

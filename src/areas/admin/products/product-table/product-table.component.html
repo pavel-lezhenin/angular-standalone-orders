@@ -53,25 +53,14 @@
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>Actions</th>
       <td mat-cell *matCellDef="let product">
-        @if (canEdit()) {
-          <button
-            mat-icon-button
-            matTooltip="Edit product"
-            (click)="editClick.emit(product.id)"
-          >
-            <mat-icon>edit</mat-icon>
-          </button>
-        }
-        @if (canDelete()) {
-          <button
-            mat-icon-button
-            matTooltip="Delete product"
-            (click)="deleteClick.emit(product.id)"
-            color="warn"
-          >
-            <mat-icon>delete</mat-icon>
-          </button>
-        }
+        <app-table-action-buttons
+          [canEdit]="canEdit()"
+          [canDelete]="canDelete()"
+          [editTooltip]="'Edit product'"
+          [deleteTooltip]="'Delete product'"
+          (edit)="editClick.emit(product.id)"
+          (delete)="deleteClick.emit(product.id)"
+        />
       </td>
     </ng-container>
 

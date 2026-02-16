@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -9,6 +9,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { UserDTO } from '@core';
 import { UserRole } from '@core/types';
 import { DialogComponent, DialogConfig } from '@shared/ui/dialog';
+import { FormFieldComponent } from '@shared/ui';
 import { CustomerFormData } from '../model';
 
 export interface CustomerFormDialogData extends DialogConfig {
@@ -32,6 +33,7 @@ export interface CustomerFormDialogData extends DialogConfig {
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    FormFieldComponent,
   ],
   templateUrl: './customer-form-dialog.component.html',
   styleUrl: './customer-form-dialog.component.scss',
@@ -136,5 +138,12 @@ export class CustomerFormDialogComponent implements OnInit {
     }
 
     return 'Invalid value';
+  }
+
+  /**
+   * Get form control as FormControl
+   */
+  protected getControl(name: string): FormControl {
+    return this.form.get(name) as FormControl;
   }
 }
