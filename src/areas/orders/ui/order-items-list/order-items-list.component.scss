@@ -1,7 +1,5 @@
 .order-items-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
+  /* Flex layout via utility classes: flex-col gap-md */
 }
 
 .list-title {
@@ -12,9 +10,7 @@
 }
 
 .items-container {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
+  /* Flex layout via utility classes: flex-col gap-md */
 }
 
 .items-count {

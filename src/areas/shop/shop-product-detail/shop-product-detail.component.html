@@ -15,10 +15,10 @@
     <div class="product-content">
       <!-- Image Gallery (Amazon-style) -->
       <div class="image-section">
-        <div class="gallery-container">
+        <div class="gallery-container flex gap-sm">
           <!-- Thumbnails (vertical on left) -->
           @if (allImages.length > 1) {
-            <div class="thumbnail-list">
+            <div class="thumbnail-list flex-col gap-xs">
               @for (imageUrl of allImages; track $index) {
                 <div 
                   class="thumbnail-wrapper"
@@ -34,7 +34,7 @@
           <!-- Main image (fixed size container) -->
           <div class="main-image" (click)="openImageZoom()">
             <img [src]="currentImage" [alt]="product.name" />
-            <div class="zoom-hint">
+            <div class="zoom-hint flex items-center gap-xs">
               <mat-icon>search</mat-icon>
               Click to zoom
             </div>
@@ -43,10 +43,10 @@
       </div>
 
       <!-- Product Information -->
-      <div class="info-section">
+      <div class="info-section flex-col gap-md">
         <h1>{{ product.name }}</h1>
 
-        <div class="price-stock">
+        <div class="price-stock flex items-center gap-md">
           <div class="price">${{ product.price.toFixed(2) }}</div>
           
           <div class="stock-status">
@@ -70,7 +70,7 @@
 
         <!-- Specifications -->
         @if (product.specifications && product.specifications.length > 0) {
-          <div class="specifications-section">
+          <div class="specifications-section flex-col gap-sm">
             <h2>Specifications</h2>
             <mat-divider></mat-divider>
             <dl class="specs-list">
@@ -83,7 +83,7 @@
         }
 
         <!-- Actions -->
-        <div class="actions">
+        <div class="actions flex gap-sm">
           <button
             mat-raised-button
             color="primary"

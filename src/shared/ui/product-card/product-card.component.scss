@@ -1,6 +1,5 @@
 .product-card {
-  display: flex;
-  flex-direction: column;
+  /* Flex layout via utility classes: flex-col */
   border: var(--spacing-1px) solid var(--color-border);
   border-radius: var(--border-radius-md);
   background: var(--surface-primary);
@@ -51,9 +50,7 @@
   }
 
   &__content {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-xs);
+    /* Flex layout via utility classes: flex-col gap-xs */
     padding: var(--spacing-md);
   }
 
@@ -75,9 +72,7 @@
   }
 
   &__footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    /* Flex layout via utility classes: flex items-center justify-between */
     margin-top: var(--spacing-xs);
   }
 

@@ -8,9 +8,7 @@
  * ============================================ */
 
 .breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
+  /* Flex layout via utility classes: flex items-center gap-sm */
   margin-bottom: var(--spacing-xl);
   padding: var(--spacing-sm) 0;
 
@@ -35,10 +33,7 @@
  * ============================================ */
 
 .error-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  /* Flex layout via utility classes: flex-col items-center justify-center */
   padding: var(--spacing-5xl) var(--spacing-xl);
   text-align: center;
 }
@@ -126,9 +121,7 @@
  * ============================================ */
 
 .order-details {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xl);
+  /* Flex layout via utility classes: flex-col gap-xl */
   margin-bottom: var(--spacing-2xl);
 }
 
@@ -138,9 +131,7 @@
   padding: var(--spacing-xl);
 
   h2 {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
+    /* Flex layout via utility classes: flex items-center gap-sm */
     margin: 0 0 var(--spacing-lg) 0;
     color: var(--text-heading);
     font-size: var(--font-size-xl);
@@ -173,14 +164,11 @@
 
 /* Order Items */
 .order-items {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
+  /* Flex layout via utility classes: flex-col gap-md */
 }
 
 .order-item {
-  display: flex;
-  gap: var(--spacing-md);
+  /* Flex layout via utility classes: flex gap-md */
   padding: var(--spacing-md);
   background: var(--surface-secondary);
   border-radius: var(--border-radius-sm);
@@ -198,9 +186,7 @@
     }
 
     .no-image {
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      /* Flex layout via utility classes: flex items-center justify-center */
       width: 100%;
       height: 100%;
       background: var(--surface-tertiary);
@@ -246,9 +232,7 @@
 /* Order Summary */
 .order-summary {
   .summary-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    /* Flex layout via utility classes: flex justify-between items-center */
     padding: var(--spacing-md) 0;
     font-size: var(--font-size-md);
     color: var(--text-primary);
@@ -294,9 +278,7 @@
  * ============================================ */
 
 .confirmation-actions {
-  display: flex;
-  gap: var(--spacing-md);
-  justify-content: center;
+  /* Flex layout via utility classes: flex gap-md justify-center */
 
   button {
     min-width: 200px;

@@ -1,6 +1,6 @@
-<div class="order-card" (click)="onCardClick()">
-  <div class="order-header">
-    <div class="order-id-date">
+<div class="order-card flex-col gap-md" (click)="onCardClick()">
+  <div class="order-header flex justify-between items-start flex justify-between items-start">
+    <div class="order-id-date flex-col gap-xs">
       <h3 class="order-id">#{{ order().id.slice(0, 8) }}</h3>
       <span class="order-date">{{ order().createdAt | date:'short' }}</span>
     </div>

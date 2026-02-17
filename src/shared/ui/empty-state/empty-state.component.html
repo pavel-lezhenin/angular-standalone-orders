@@ -1,4 +1,4 @@
-<div class="empty-state" [class]="stateClass() + ' ' + size()">
+<div class="empty-state flex-col items-center justify-center" [class]="stateClass() + ' ' + size()">
   <mat-icon class="state-icon">{{ icon() }}</mat-icon>
   <h2>{{ title() }}</h2>
   @if (message()) {

@@ -1,7 +1,5 @@
 .order-card {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
+  /* Flex layout via utility classes: flex-col gap-md */
   padding: var(--spacing-lg);
   background: var(--surface-primary);
   border: var(--spacing-1px) solid var(--border-primary);
@@ -16,17 +14,13 @@
 }
 
 .order-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  /* Flex layout via utility classes: flex justify-between items-start */
   padding-bottom: var(--spacing-md);
   border-bottom: var(--spacing-1px) solid var(--border-primary);
 }
 
 .order-id-date {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xs);
+  /* Flex layout via utility classes: flex-col gap-xs */
 
   .order-id {
     margin: 0;

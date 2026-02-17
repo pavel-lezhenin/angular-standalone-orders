@@ -16,7 +16,7 @@
       <div class="checkout-content">
         <!-- Left Column: Delivery Form -->
         <div class="delivery-section card-shadow">
-          <form [formGroup]="checkoutForm" class="delivery-form">
+          <form [formGroup]="checkoutForm" class="delivery-form flex-col gap-md">
             <!-- Guest Account Creation Section -->
             @if (isGuest()) {
               <div class="account-section">
@@ -73,7 +73,7 @@
               <h2>Delivery Information</h2>
 
               @if (!isGuest() && hasSavedAddresses()) {
-                <div class="saved-address-controls">
+                <div class="saved-address-controls flex-col gap-md">
                   <app-form-field
                     [label]="'Delivery Address'"
                     [control]="$any(checkoutForm.controls['selectedAddressId'])"
@@ -162,7 +162,7 @@
                   </div>
                 }
               } @else {
-                <div class="using-saved-address-note">
+                <div class="using-saved-address-note flex items-center gap-sm">
                   <mat-icon>local_shipping</mat-icon>
                   <span>Using selected saved address for this order</span>
                 </div>

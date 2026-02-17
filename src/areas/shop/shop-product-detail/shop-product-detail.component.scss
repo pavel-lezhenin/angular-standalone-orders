@@ -32,16 +32,13 @@
 }
 
 .gallery-container {
-  display: flex;
-  gap: var(--spacing-sm);
+  /* Flex layout via utility classes: flex gap-sm */
   max-width: var(--gallery-container-width);
 }
 
 /* Vertical thumbnail list on the left */
 .thumbnail-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xs);
+  /* Flex layout via utility classes: flex-col gap-xs */
   flex-shrink: 0;
 }
 
@@ -100,9 +97,7 @@
   position: absolute;
   bottom: var(--spacing-sm);
   right: var(--spacing-sm);
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-xs);
+  /* Flex layout via utility classes: flex items-center gap-xs */
   padding: var(--spacing-xs) var(--spacing-sm);
   background: var(--color-black-60);
   color: var(--color-white);
@@ -124,9 +119,7 @@
  * ============================================ */
 
 .info-section {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
+  /* Flex layout via utility classes: flex-col gap-md */
   
   h1 {
     font-size: var(--font-size-2xl);
@@ -145,9 +138,7 @@
 }
 
 .price-stock {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
+  /* Flex layout via utility classes: flex items-center gap-md */
   flex-wrap: wrap;
 }
 
@@ -189,9 +180,7 @@
 }
 
 .specifications-section {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
+  /* Flex layout via utility classes: flex-col gap-sm */
 }
 
 .specs-list {
@@ -214,8 +203,7 @@
 }
 
 .actions {
-  display: flex;
-  gap: var(--spacing-sm);
+  /* Flex layout via utility classes: flex gap-sm */
   margin-top: var(--spacing-md);
   
   .add-to-cart-btn {

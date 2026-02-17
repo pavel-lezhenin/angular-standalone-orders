@@ -1,8 +1,5 @@
 .pagination {
-  display: flex;
-  gap: var(--spacing-xs);
-  align-items: center;
-  justify-content: center;
+  /* Flex layout via utility classes: flex gap-xs items-center justify-center */
 
   &__btn {
     min-width: var(--spacing-3xl);

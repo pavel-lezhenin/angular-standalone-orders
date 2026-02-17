@@ -88,6 +88,14 @@
 /**
  * Flex gaps (common spacing values)
  */
+.gap-xxs {
+  gap: var(--spacing-xxs);
+}
+
+.gap-2xs {
+  gap: var(--spacing-2xs);
+}
+
 .gap-xs {
   gap: var(--spacing-xs);
 }

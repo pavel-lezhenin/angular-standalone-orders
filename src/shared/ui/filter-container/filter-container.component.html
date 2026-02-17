@@ -1,9 +1,9 @@
-<div class="filter-container">
+<div class="filter-container flex gap-md items-start">
   <div class="filter-fields">
     <ng-content></ng-content>
   </div>
 
-  <div class="filter-actions">
+  <div class="filter-actions flex-col gap-xs items-end">
     @for (filterAction of actions(); track filterAction.id) {
       <button
         mat-icon-button

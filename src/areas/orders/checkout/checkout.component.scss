@@ -36,9 +36,7 @@
 }
 
 .delivery-form {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
+  /* Flex layout via utility classes: flex-col gap-md */
 
   .form-field {
     width: 100%;
@@ -46,16 +44,12 @@
 }
 
 .saved-address-controls {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
+  /* Flex layout via utility classes: flex-col gap-md */
   margin-bottom: var(--spacing-md);
 }
 
 .using-saved-address-note {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
+  /* Flex layout via utility classes: flex items-center gap-sm */
   padding: var(--spacing-md);
   border-radius: var(--border-radius-sm);
   background: var(--surface-secondary);

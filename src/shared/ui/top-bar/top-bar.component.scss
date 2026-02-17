@@ -9,9 +9,7 @@
 }
 
 .top-bar-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  /* Flex layout via utility classes: flex justify-between items-center */
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
@@ -19,17 +17,13 @@
 }
 
 .left-section {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-2xl);
+  /* Flex layout via utility classes: flex items-center gap-2xl */
   flex: 1;
   min-width: 0;
 }
 
 .logo-section {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-xxs);
+  /* Flex layout via utility classes: flex items-center gap-xxs */
   text-decoration: none;
   color: inherit;
   transition: opacity 0.2s;
@@ -56,9 +50,7 @@
 }
 
 .desktop-nav {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-xxs);
+  /* Flex layout via utility classes: flex items-center gap-xxs */
 
   .nav-active {
     color: var(--app-primary);
@@ -114,8 +106,7 @@
 }
 
 .right-section {
-  display: flex;
-  align-items: center;
+  /* Flex layout via utility classes: flex items-center */
   flex-shrink: 0;
 }
 

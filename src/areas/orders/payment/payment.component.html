@@ -15,9 +15,9 @@
 
     <!-- Payment Form State -->
     @if (state() === 'form') {
-      <div class="payment-form-section">
+      <div class="payment-form-section flex-col gap-xl">
         @if (usingSavedPaymentMethod()) {
-          <div class="saved-payment-controls">
+          <div class="saved-payment-controls flex-col gap-md">
             <app-form-field
               [label]="'Payment Method'"
               [control]="savedMethodSelectControl"
@@ -69,7 +69,7 @@
           }
         }
 
-        <div class="payment-actions">
+        <div class="payment-actions flex justify-between gap-md">
           <button 
             mat-stroked-button 
             (click)="cancelPayment()"

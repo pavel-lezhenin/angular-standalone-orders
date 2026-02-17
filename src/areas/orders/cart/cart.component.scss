@@ -170,9 +170,7 @@
     }
 
     &.warning {
-      display: flex;
-      align-items: center;
-      gap: var(--spacing-sm);
+      /* Flex layout via utility classes: flex items-center gap-sm */
       background: var(--app-warning);
       color: var(--text-on-warning);
 
@@ -210,9 +208,7 @@
   }
 
   .summary-actions {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-md);
+    /* Flex layout via utility classes: flex-col gap-md */
     margin-top: var(--spacing-2xl);
 
     button {

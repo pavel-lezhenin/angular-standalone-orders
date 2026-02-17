@@ -1,4 +1,4 @@
-<article class="product-card" (click)="onClick()">
+<article class="product-card flex-col" (click)="onClick()">
   <div class="product-card__image">
     <img
       [src]="productImage"
@@ -16,14 +16,14 @@
     }
   </div>
 
-  <div class="product-card__content">
+  <div class="product-card__content flex-col gap-xs">
     <h3 class="product-card__title">{{ product().name }}</h3>
     
     @if (product().categoryName) {
       <p class="product-card__category">{{ product().categoryName }}</p>
     }
 
-    <div class="product-card__footer">
+    <div class="product-card__footer flex items-center justify-between">
       <span class="product-card__price">${{ product().price | number: '1.2-2' }}</span>
       
       @if (showAddToCart() && !isOutOfStock) {

@@ -1,11 +1,9 @@
 .filter-container {
-  display: flex;
-  gap: var(--spacing-md);
+  /* Flex layout via utility classes: flex gap-md items-start */
   padding: var(--spacing-md);
   background: var(--surface-secondary);
   border-radius: var(--border-radius-md);
   margin-bottom: var(--spacing-lg);
-  align-items: flex-start;
 }
 
 .filter-fields {
@@ -17,10 +15,7 @@
 }
 
 .filter-actions {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xs);
-  align-items: flex-end;
+  /* Flex layout via utility classes: flex-col gap-xs items-end */
 }
 
 .action-button {

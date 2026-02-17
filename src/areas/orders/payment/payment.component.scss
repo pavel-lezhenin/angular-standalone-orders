@@ -71,15 +71,11 @@
  * ============================================ */
 
 .payment-form-section {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xl);
+  /* Flex layout via utility classes: flex-col gap-xl */
 }
 
 .saved-payment-controls {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
+  /* Flex layout via utility classes: flex-col gap-md */
 
   .form-field {
     width: 100%;
@@ -91,9 +87,7 @@
 }
 
 .payment-actions {
-  display: flex;
-  justify-content: space-between;
-  gap: var(--spacing-md);
+  /* Flex layout via utility classes: flex justify-between gap-md */
   margin-top: var(--spacing-lg);
 
   button {

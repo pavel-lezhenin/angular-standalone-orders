@@ -1,13 +1,9 @@
 .user-menu {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-xxs);
+  /* Flex layout via utility classes: flex items-center gap-xxs */
 }
 
 .user-button {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-xs);
+  /* Flex layout via utility classes: flex items-center gap-xs */
 }
 
 .user-name {

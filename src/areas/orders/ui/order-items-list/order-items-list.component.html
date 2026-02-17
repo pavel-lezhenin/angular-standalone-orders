@@ -1,9 +1,9 @@
-<div class="order-items-list">
+<div class="order-items-list flex-col gap-md">
   @if (showTitle()) {
     <h3 class="list-title">{{ title() }}</h3>
   }
   
-  <div class="items-container">
+  <div class="items-container flex-col gap-md">
     @for (item of items(); track item.productId) {
       <app-order-item-row [item]="item" />
     } @empty {

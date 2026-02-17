@@ -63,7 +63,7 @@
 
         <!-- Error Message -->
         @if (errorMessage()) {
-          <mat-error role="alert" aria-live="polite" class="global-error">
+          <mat-error role="alert" aria-live="polite" class="global-error flex items-center gap-xxs">
             <mat-icon>error</mat-icon>
             {{ errorMessage() }}
           </mat-error>
@@ -88,11 +88,11 @@
 
       <!-- Demo Users Section -->
       <div class="demo-section">
-        <div class="divider">
+        <div class="divider flex items-center">
           <span>Demo Accounts</span>
         </div>
         
-        <div class="demo-users">
+        <div class="demo-users flex-col gap-sm">
           @for (user of demoUsers; track user.email) {
             <button
               mat-stroked-button
@@ -102,7 +102,7 @@
               [disabled]="isLoading()"
             >
               <mat-icon>person</mat-icon>
-              <div class="demo-user-info">
+              <div class="demo-user-info flex items-center gap-xs">
                 <span>{{ user.role }}</span>
                 <small>{{ user.email }}</small>
               </div>

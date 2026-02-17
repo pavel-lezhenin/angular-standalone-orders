@@ -11,9 +11,7 @@
   }
 
   .summary-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    /* Flex layout via utility classes: flex justify-between items-center */
     padding: var(--spacing-sm) 0;
     font-size: var(--font-size-sm);
     color: var(--text-secondary);

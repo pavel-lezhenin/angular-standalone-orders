@@ -33,7 +33,7 @@
               <span class="selected-count">{{ selectedItems().size }} item(s) selected</span>
             </div>
           } @else {
-            <div class="summary-info warning">
+            <div class="summary-info warning flex items-center gap-sm">
               <mat-icon>info</mat-icon>
               <span>Select items to proceed</span>
             </div>
@@ -43,7 +43,7 @@
             [title]="'Order Summary'"
             [summaryLines]="summaryLines()"
             [total]="total()">
-            <div class="summary-actions">
+            <div class="summary-actions flex-col gap-md">
               <button 
                 mat-stroked-button 
                 (click)="continueShopping()"

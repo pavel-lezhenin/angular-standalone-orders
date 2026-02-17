@@ -1,7 +1,7 @@
 <mat-toolbar class="top-bar">
-  <div class="top-bar-content">
+  <div class="top-bar-content flex justify-between items-center">
     <!-- Left: Logo + Title + Navigation -->
-    <div class="left-section">
+    <div class="left-section flex items-center gap-2xl">
       @if (showSidenavToggle) {
         <button
           mat-icon-button
@@ -14,13 +14,13 @@
         </button>
       }
 
-      <a routerLink="/" class="logo-section">
+      <a routerLink="/" class="logo-section flex items-center gap-xxs">
         <mat-icon class="logo-icon">shopping_bag</mat-icon>
         <span class="title">{{ title }}</span>
       </a>
 
       <!-- Desktop navigation -->
-      <nav class="desktop-nav">
+      <nav class="desktop-nav flex items-center gap-xxs">
         @for (item of navItems; track item.label) {
           <button 
             mat-button 
@@ -46,7 +46,7 @@
     </div>
 
     <!-- Right: User Menu -->
-    <div class="right-section">
+    <div class="right-section flex items-center">
       <app-user-menu />
     </div>
   </div>

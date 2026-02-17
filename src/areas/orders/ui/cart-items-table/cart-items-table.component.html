@@ -24,14 +24,14 @@
         
         @if (item.loading) {
           <td colspan="6">
-            <div class="item-loading">
+            <div class="item-loading flex items-center gap-md">
               <mat-spinner diameter="30"></mat-spinner>
               <span>Loading product details...</span>
             </div>
           </td>
         } @else if (item.error) {
           <td colspan="6">
-            <div class="item-error">
+            <div class="item-error flex items-center gap-md">
               <mat-icon>error</mat-icon>
               <span>{{ item.error }}</span>
             </div>
@@ -48,7 +48,7 @@
 
           <!-- Product Info -->
           <td class="product-cell">
-            <div class="product-info">
+            <div class="product-info flex items-center gap-md">
               @if (item.product.imageUrls && item.product.imageUrls.length > 0) {
                 <img 
                   [src]="item.product.imageUrls[0]" 

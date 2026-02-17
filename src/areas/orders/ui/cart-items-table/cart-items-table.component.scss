@@ -55,9 +55,7 @@
 // Row content styles
 .item-loading,
 .item-error {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
+  /* Flex layout via utility classes: flex items-center gap-md */
   padding: var(--spacing-md);
   justify-content: center;
 }
@@ -80,8 +78,7 @@
 }
 
 .product-info {
-  display: flex;
-  gap: var(--spacing-md);
+  /* Flex layout via utility classes: flex items-center gap-md */
   align-items: flex-start;
 }
 

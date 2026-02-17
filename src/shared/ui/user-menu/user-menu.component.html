@@ -1,7 +1,7 @@
-<div class="user-menu">
+<div class="user-menu flex items-center gap-xxs">
   @if (authService.currentUser(); as user) {
     <!-- Authenticated user menu -->
-    <button mat-button [matMenuTriggerFor]="userMenu" class="user-button">
+    <button mat-button [matMenuTriggerFor]="userMenu" class="user-button flex items-center gap-xs">
       <mat-icon>account_circle</mat-icon>
       <span class="user-name">{{ getUserDisplayName(user.role) }}</span>
       <mat-icon>arrow_drop_down</mat-icon>

@@ -20,8 +20,7 @@ button {
 }
 
 .divider {
-  display: flex;
-  align-items: center;
+  /* Flex layout via utility classes: flex items-center */
   text-align: center;
   margin: var(--spacing-xl) 0;
 
@@ -39,22 +38,16 @@ button {
 }
 
 .demo-users {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
+  /* Flex layout via utility classes: flex-col gap-sm */
 }
 
 .demo-user-info {
-  display: flex;
-  gap: var(--spacing-xs);
-  align-items: center;
+  /* Flex layout via utility classes: flex items-center gap-xs */
   text-align: left;
 }
 
 .global-error {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-xxs);
+  /* Flex layout via utility classes: flex items-center gap-xxs */
   margin-bottom: var(--spacing-md);
 
   mat-icon {
