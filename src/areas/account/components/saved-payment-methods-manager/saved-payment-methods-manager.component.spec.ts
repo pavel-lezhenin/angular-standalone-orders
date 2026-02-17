@@ -79,7 +79,7 @@ describe('SavedPaymentMethodsManagerComponent', () => {
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
-    const form = compiled.querySelector('.payment-method-form');
+    const form = compiled.querySelector('.account-payment-form');
     const display = compiled.querySelector('.selected-payment-display');
 
     expect(form).toBeTruthy();

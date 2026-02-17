@@ -5,88 +5,96 @@
     <h1>Payment</h1>
 
     <!-- Order Summary -->
-    <app-order-summary
-      [title]="'Order Summary'"
-      [summaryLines]="[{ label: 'Items', value: itemCount() }]"
-      [total]="total()"
-      [showDivider]="false"
-      [variant]="'compact'">
-    </app-order-summary>
+    <mat-card>
+      <mat-card-content>
+        <app-order-summary
+          [title]="'Order Summary'"
+          [summaryLines]="[{ label: 'Items', value: itemCount() }]"
+          [total]="total()"
+          [showDivider]="false"
+          [variant]="'compact'">
+        </app-order-summary>
+      </mat-card-content>
+    </mat-card>
 
     <!-- Payment Form State -->
     @if (state() === 'form') {
-      <div class="payment-form-section flex-col gap-xl">
-        @if (usingSavedPaymentMethod()) {
-          <div class="saved-payment-controls flex-col gap-md">
-            <app-form-field
-              [label]="'Payment Method'"
-              [control]="savedMethodSelectControl"
-              [type]="'select'"
-              [prefixIcon]="'credit_card'"
-              [fieldClass]="'form-field'"
-              [selectOptions]="paymentMethodSelectOptions()"
-            />
+      <mat-card>
+        <mat-card-content>
+          <div class="payment-form-section flex-col gap-xl">
+            @if (usingSavedPaymentMethod()) {
+              <div class="saved-payment-controls flex-col gap-md">
+                <app-form-field
+                  [label]="'Payment Method'"
+                  [control]="savedMethodSelectControl"
+                  [type]="'select'"
+                  [prefixIcon]="'credit_card'"
+                  [fieldClass]="'form-field'"
+                  [selectOptions]="paymentMethodSelectOptions()"
+                />
 
-            @if (selectedSavedMethodType() === 'card') {
-              <app-form-field
-                [label]="'CVV'"
-                [control]="savedMethodCvv"
-                [type]="'password'"
-                [placeholder]="'123'"
-                [maxLength]="4"
-                [prefixIcon]="'lock'"
-                [fieldClass]="'form-field'"
-              />
+                @if (selectedSavedMethodType() === 'card') {
+                  <app-form-field
+                    [label]="'CVV'"
+                    [control]="savedMethodCvv"
+                    [type]="'password'"
+                    [placeholder]="'123'"
+                    [maxLength]="4"
+                    [prefixIcon]="'lock'"
+                    [fieldClass]="'form-field'"
+                  />
+                }
+
+                <button
+                  mat-stroked-button
+                  type="button"
+                  (click)="toggleNewPaymentForm()">
+                  Add New Payment Method
+                </button>
+
+                <button
+                  mat-stroked-button
+                  color="warn"
+                  type="button"
+                  [disabled]="!canDeleteSelectedSavedMethod()"
+                  (click)="deleteSelectedSavedMethod()">
+                  Delete Selected Method
+                </button>
+              </div>
+            } @else {
+              <app-orders-payment-form />
+
+              @if (hasSavedPaymentMethods()) {
+                <button
+                  mat-stroked-button
+                  type="button"
+                  class="use-saved-btn"
+                  (click)="toggleNewPaymentForm()">
+                  Back to Saved Methods
+                </button>
+              }
             }
 
-            <button
-              mat-stroked-button
-              type="button"
-              (click)="toggleNewPaymentForm()">
-              Add New Payment Method
-            </button>
-
-            <button
-              mat-stroked-button
-              color="warn"
-              type="button"
-              [disabled]="!canDeleteSelectedSavedMethod()"
-              (click)="deleteSelectedSavedMethod()">
-              Delete Selected Method
-            </button>
+            <div class="payment-actions flex justify-between gap-md">
+              <button 
+                mat-stroked-button 
+                (click)="cancelPayment()"
+                class="cancel-btn">
+                <mat-icon>arrow_back</mat-icon>
+                Back to Cart
+              </button>
+              <button 
+                mat-raised-button 
+                color="primary"
+                (click)="processPayment()"
+                class="pay-btn">
+                <mat-icon>payment</mat-icon>
+                Pay Now
+              </button>
+            </div>
           </div>
-        } @else {
-          <app-payment-form />
-
-          @if (hasSavedPaymentMethods()) {
-            <button
-              mat-stroked-button
-              type="button"
-              class="use-saved-btn"
-              (click)="toggleNewPaymentForm()">
-              Back to Saved Methods
-            </button>
-          }
-        }
-
-        <div class="payment-actions flex justify-between gap-md">
-          <button 
-            mat-stroked-button 
-            (click)="cancelPayment()"
-            class="cancel-btn">
-            <mat-icon>arrow_back</mat-icon>
-            Back to Cart
-          </button>
-          <button 
-            mat-raised-button 
-            color="primary"
-            (click)="processPayment()"
-            class="pay-btn">
-            <mat-icon>payment</mat-icon>
-            Pay Now
-          </button>
-        </div>
-      </div>
+        </mat-card-content>
+      </mat-card>
     }
 
     <!-- Processing State -->

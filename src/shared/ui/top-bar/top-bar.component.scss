@@ -83,6 +83,11 @@
   display: none;
 }
 
+/* Desktop Styles */
+:host-context(.desktop) .mobile-menu-button {
+  display: none;
+}
+
 .sidenav-toggle-button {
   border: var(--spacing-1px) solid var(--color-border);
   background: var(--surface-primary);

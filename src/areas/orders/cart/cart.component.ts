@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
 import { PageLoaderComponent } from '@shared/ui/page-loader/page-loader.component';
 import { EmptyStateComponent, OrderSummaryComponent } from '@shared/ui';
 import type { SummaryLine } from '@shared/ui/order-summary/order-summary.component';
@@ -30,6 +31,7 @@ import { CartItemsTableComponent, type CartItemWithDetails } from '../ui';
     CommonModule,
     MatButtonModule,
     MatIconModule,
+    MatCardModule,
     PageLoaderComponent,
     EmptyStateComponent,
     OrderSummaryComponent,

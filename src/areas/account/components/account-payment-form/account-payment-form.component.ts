@@ -1,24 +1,37 @@
 import { Component, input, output } from '@angular/core';
 import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { FormFieldComponent } from '@shared/ui/form-field/form-field.component';
-import type { SelectOption } from '@shared/ui/form-field/form-field.component';
+import { FormFieldComponent, type SelectOption } from '@shared/ui/form-field/form-field.component';
 
 /**
- * Payment Method Form Component
+ * Account Payment Form Component (Dumb)
  *
- * Reusable form for creating/editing payment methods (card or PayPal)
+ * Account settings payment method form wrapper.
+ * Uses shared PaymentFormComponent for card fields.
+ * 
+ * Features:
+ * - Payment type selection (Card/PayPal)
+ * - Label field for naming saved methods
+ * - No CVV field (not needed for saved methods)
+ * - Save/Cancel actions
+ * 
+ * This is a DUMB component:
+ * - Receives FormGroup via input
+ * - NO validation logic (parent responsibility)
+ * - Domain-specific (account settings)
  */
 @Component({
-  selector: 'app-payment-method-form',
+  selector: 'app-account-payment-form',
   standalone: true,
-  imports: [ReactiveFormsModule, MatButtonModule, MatInputModule, MatSelectModule, FormFieldComponent],
-  templateUrl: './payment-method-form.component.html',
-  styleUrl: './payment-method-form.component.scss',
+  imports: [
+    ReactiveFormsModule,
+    MatButtonModule,
+    FormFieldComponent,
+  ],
+  templateUrl: './account-payment-form.component.html',
+  styleUrl: './account-payment-form.component.scss',
 })
-export class PaymentMethodFormComponent {
+export class AccountPaymentFormComponent {
   /**
    * Payment method form group
    */
@@ -74,7 +87,7 @@ export class PaymentMethodFormComponent {
   /**
    * Helper method to get typed FormControl from form group
    */
-  getControl(name: string): FormControl {
+  protected getControl(name: string): FormControl {
     const control = this.paymentMethodForm().get(name);
     if (!control) {
       console.error(`Control '${name}' not found in payment method form`);

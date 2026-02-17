@@ -15,52 +15,56 @@
     } @else if (hasLoaded()) {
       <div class="cart-content">
         <!-- Cart Items Table -->
-        <div class="cart-items card-shadow">
-          <app-cart-items-table
-            [items]="cartItems()"
-            [selectedItemIds]="selectedItems()"
-            (itemSelectionChange)="onItemSelectionChange($event)"
-            (allSelectionChange)="onAllSelectionChange($event)"
-            (quantityChange)="onQuantityChange($event)"
-            (itemRemove)="removeItem($event)"
-          />
-        </div>
+        <mat-card>
+          <mat-card-content>
+            <app-cart-items-table
+              [items]="cartItems()"
+              [selectedItemIds]="selectedItems()"
+              (itemSelectionChange)="onItemSelectionChange($event)"
+              (allSelectionChange)="onAllSelectionChange($event)"
+              (quantityChange)="onQuantityChange($event)"
+              (itemRemove)="removeItem($event)"
+            />
+          </mat-card-content>
+        </mat-card>
 
         <!-- Cart Summary -->
-        <div class="cart-summary">
-          @if (hasSelectedItems()) {
-            <div class="summary-info">
-              <span class="selected-count">{{ selectedItems().size }} item(s) selected</span>
-            </div>
-          } @else {
-            <div class="summary-info warning flex items-center gap-sm">
-              <mat-icon>info</mat-icon>
-              <span>Select items to proceed</span>
-            </div>
-          }
+        <mat-card class="sticky-sidebar">
+          <mat-card-content>
+            @if (hasSelectedItems()) {
+              <div class="summary-info">
+                <span class="selected-count">{{ selectedItems().size }} item(s) selected</span>
+              </div>
+            } @else {
+              <div class="summary-info warning flex items-center gap-sm">
+                <mat-icon>info</mat-icon>
+                <span>Select items to proceed</span>
+              </div>
+            }
 
-          <app-order-summary
-            [title]="'Order Summary'"
-            [summaryLines]="summaryLines()"
-            [total]="total()">
-            <div class="summary-actions flex-col gap-md">
-              <button 
-                mat-stroked-button 
-                (click)="continueShopping()"
-                class="continue-btn">
-                Continue Shopping
-              </button>
-              <button 
-                mat-raised-button 
-                color="primary"
-                (click)="proceedToCheckout()"
-                [disabled]="!hasSelectedItems()"
-                class="checkout-btn">
-                Proceed to Checkout
-              </button>
-            </div>
-          </app-order-summary>
-        </div>
+            <app-order-summary
+              [title]="'Order Summary'"
+              [summaryLines]="summaryLines()"
+              [total]="total()">
+              <div class="summary-actions flex-col gap-md">
+                <button 
+                  mat-stroked-button 
+                  (click)="continueShopping()"
+                  class="continue-btn">
+                  Continue Shopping
+                </button>
+                <button 
+                  mat-raised-button 
+                  color="primary"
+                  (click)="proceedToCheckout()"
+                  [disabled]="!hasSelectedItems()"
+                  class="checkout-btn">
+                  Proceed to Checkout
+                </button>
+              </div>
+            </app-order-summary>
+          </mat-card-content>
+        </mat-card>
       </div>
     }
   </div>

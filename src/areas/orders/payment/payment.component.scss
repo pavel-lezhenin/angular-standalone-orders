@@ -13,65 +13,16 @@
   }
 }
 
-/* ============================================
- * Order Summary Card
- * ============================================ */
-
-.order-summary {
-  background-color: var(--surface-primary);
+mat-card {
   border: var(--spacing-1px) solid var(--color-border);
   border-radius: var(--border-radius-md);
-  padding: var(--spacing-lg);
+  box-shadow: none;
   margin-bottom: var(--spacing-xl);
-
-  h2 {
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-semibold);
-    color: var(--text-primary);
-    margin-bottom: var(--spacing-md);
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-xs);
-
-    mat-icon {
-      color: var(--app-primary);
-    }
-  }
 }
 
-.summary-details {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
+mat-card > mat-card-content {
+  padding: var(--spacing-xl);
 }
-
-.summary-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: var(--font-size-base);
-  color: var(--text-secondary);
-
-  &.total {
-    margin-top: var(--spacing-sm);
-    padding-top: var(--spacing-md);
-    border-top: var(--spacing-1px) solid var(--color-border);
-    font-weight: var(--font-weight-semibold);
-    color: var(--text-primary);
-    font-size: var(--font-size-lg);
-  }
-
-  .amount {
-    color: var(--app-primary);
-  }
-}
-
-/* ============================================
- * Payment Form Section
- * ============================================ */
-
-.payment-form-section {
-  }
 
 .saved-payment-controls {
   .form-field {

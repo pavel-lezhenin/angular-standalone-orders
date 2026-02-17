@@ -15,8 +15,9 @@
     } @else if (hasLoaded()) {
       <div class="checkout-content">
         <!-- Left Column: Delivery Form -->
-        <div class="delivery-section card-shadow">
-          <form [formGroup]="checkoutForm" class="delivery-form flex-col gap-md">
+        <mat-card>
+          <mat-card-content>
+            <form [formGroup]="checkoutForm" class="delivery-form flex-col gap-md">
             <!-- Guest Account Creation Section -->
             @if (isGuest()) {
               <div class="account-section">
@@ -169,18 +170,21 @@
               }
             </div>
           </form>
-        </div>
+          </mat-card-content>
+        </mat-card>
 
         <!-- Right Column: Order Summary -->
-        <div class="order-summary-section card-shadow sticky-sidebar">
-          <h2>Order Summary</h2>
-
-          <!-- Order Items -->
-          <app-order-items-list
-            [items]="orderItems()"
-            [title]="''"
-            [showTitle]="false"
-          />
+        <mat-card class="sticky-sidebar">
+          <mat-card-header>
+            <mat-card-title>Order Summary</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <!-- Order Items -->
+            <app-order-items-list
+              [items]="orderItems()"
+              [title]="''"
+              [showTitle]="false"
+            />
 
           <!-- Order Totals -->
           <app-order-summary
@@ -217,7 +221,8 @@
               </button>
             </div>
           </app-order-summary>
-        </div>
+          </mat-card-content>
+        </mat-card>
       </div>
     }
   </div>

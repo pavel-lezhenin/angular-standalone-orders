@@ -24,34 +24,46 @@
   </div>
 
   @if (showPaymentMethodForm()) {
-    <app-payment-method-form
-      [paymentMethodForm]="paymentMethodForm()"
-      [selectedPaymentType]="selectedPaymentType()"
-      (paymentTypeChange)="paymentTypeChange.emit($event)"
-      (save)="savePaymentMethod.emit()"
-      (cancel)="toggleForm.emit()"
-    />
+    <mat-card>
+      <mat-card-content>
+        <app-account-payment-form
+          [paymentMethodForm]="paymentMethodForm()"
+          [selectedPaymentType]="selectedPaymentType()"
+          (paymentTypeChange)="paymentTypeChange.emit($event)"
+          (save)="savePaymentMethod.emit()"
+          (cancel)="toggleForm.emit()"
+        />
+      </mat-card-content>
+    </mat-card>
   } @else {
     @if (savedPaymentMethods().length > 0) {
-      <app-payment-method-selector
-        [savedPaymentMethods]="savedPaymentMethods()"
-        [selectedPaymentMethodId]="selectedPaymentMethodId()"
-        [isEditMode]="isEditMode()"
-        (selectionChange)="paymentMethodSelectionChange.emit($event)"
-        (setAsDefault)="setAsDefault.emit()"
-        (deleteSelected)="deleteSelected.emit()"
-      />
+      <mat-card>
+        <mat-card-content>
+          <app-payment-method-selector
+            [savedPaymentMethods]="savedPaymentMethods()"
+            [selectedPaymentMethodId]="selectedPaymentMethodId()"
+            [isEditMode]="isEditMode()"
+            (selectionChange)="paymentMethodSelectionChange.emit($event)"
+            (setAsDefault)="setAsDefault.emit()"
+            (deleteSelected)="deleteSelected.emit()"
+          />
+        </mat-card-content>
+      </mat-card>
     } @else {
-      <div class="empty-state">
-        <mat-icon>payment</mat-icon>
-        @if (isEditMode()) {
-          <p>No payment methods yet</p>
-          <p class="hint">Click "Add Payment Method" to get started</p>
-        } @else {
-          <p>No payment methods saved</p>
-          <p class="hint">Activate edit mode to add payment methods</p>
-        }
-      </div>
+      <mat-card>
+        <mat-card-content>
+          <div class="empty-state">
+            <mat-icon>payment</mat-icon>
+            @if (isEditMode()) {
+              <p>No payment methods yet</p>
+              <p class="hint">Click "Add Payment Method" to get started</p>
+            } @else {
+              <p>No payment methods saved</p>
+              <p class="hint">Activate edit mode to add payment methods</p>
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
     }
   }
 </div>

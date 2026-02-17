@@ -1,82 +1,145 @@
 import type { Meta, StoryObj } from '@storybook/angular';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { applicationConfig } from '@storybook/angular';
 import { PaymentFormComponent } from './payment-form.component';
-import type { SavedPaymentMethodDTO } from '@core/models';
 
-const mockSavedMethods: SavedPaymentMethodDTO[] = [
-  {
-    id: '1',
-    type: 'card',
-    last4Digits: '4242',
-    cardholderName: 'John Doe',
-    expiryMonth: '12',
-    expiryYear: '2025',
-    isDefault: true,
-    createdAt: Date.parse('2024-01-01T00:00:00Z'),
-  },
-  {
-    id: '2',
-    type: 'card',
-    last4Digits: '5555',
-    cardholderName: 'Jane Smith',
-    expiryMonth: '06',
-    expiryYear: '2026',
-    isDefault: false,
-    createdAt: Date.parse('2024-02-01T00:00:00Z'),
-  },
-];
+/**
+ * PaymentFormComponent Stories
+ * 
+ * Demonstrates the Dumb UI component for card payment fields.
+ * Parent components must create and provide the FormGroup.
+ */
 
 const meta: Meta<PaymentFormComponent> = {
   title: 'Shared/UI/PaymentForm',
   component: PaymentFormComponent,
   tags: ['autodocs'],
-  args: {
-    savedMethods: [],
-  },
+  decorators: [
+    applicationConfig({
+      providers: [],
+    }),
+  ],
 };
 
 export default meta;
 type Story = StoryObj<PaymentFormComponent>;
 
-export const CardPayment: Story = {
-  args: {
-    savedMethods: [],
+/**
+ * Helper to create a card FormGroup
+ */
+function createCardFormGroup(fb: FormBuilder): FormGroup {
+  return fb.group({
+    cardNumber: ['', [Validators.required, Validators.pattern(/^\d{13,19}$/)]],
+    cardholderName: ['', [Validators.required, Validators.minLength(2)]],
+    expiryMonth: ['', Validators.required],
+    expiryYear: ['', Validators.required],
+  });
+}
+
+/**
+ * Default card fields (no CVV, no label)
+ */
+export const Default: Story = {
+  render: () => {
+    const fb = new FormBuilder();
+    const formGroup = createCardFormGroup(fb);
+    
+    return {
+      props: { formGroup },
+      template: '<app-payment-form [formGroup]="formGroup" />',
+      moduleMetadata: {
+        imports: [ReactiveFormsModule],
+      },
+    };
   },
 };
 
-export const WithSavedMethods: Story = {
-  args: {
-    savedMethods: mockSavedMethods,
+/**
+ * With CVV field (checkout context)
+ */
+export const WithCVV: Story = {
+  render: () => {
+    const fb = new FormBuilder();
+    const formGroup = fb.group({
+      cardNumber: ['', [Validators.required, Validators.pattern(/^\d{13,19}$/)]],
+      cardholderName: ['', [Validators.required, Validators.minLength(2)]],
+      expiryMonth: ['', Validators.required],
+      expiryYear: ['', Validators.required],
+      cvv: ['', [Validators.required, Validators.pattern(/^\d{3,4}$/)]],
+    });
+    
+    return {
+      props: { formGroup, showCvv: true },
+      template: '<app-payment-form [formGroup]="formGroup" [showCvv]="showCvv" />',
+      moduleMetadata: {
+        imports: [ReactiveFormsModule],
+      },
+    };
   },
 };
 
-export const PayPal: Story = {
-  render: (args) => ({
-    props: args,
-    template: `
-      <app-payment-form [savedMethods]="savedMethods"></app-payment-form>
-    `,
-  }),
-  play: async ({ canvasElement }) => {
-    // Auto-select PayPal method for demonstration
-    const paypalRadio = canvasElement.querySelector('input[value="paypal"]') as HTMLInputElement;
-    if (paypalRadio) {
-      paypalRadio.click();
-    }
+/**
+ * With label field (account settings context)
+ */
+export const WithLabel: Story = {
+  render: () => {
+    const fb = new FormBuilder();
+    const formGroup = fb.group({
+      label: ['', Validators.required],
+      cardNumber: ['', [Validators.required, Validators.pattern(/^\d{13,19}$/)]],
+      cardholderName: ['', [Validators.required, Validators.minLength(2)]],
+      expiryMonth: ['', Validators.required],
+      expiryYear: ['', Validators.required],
+    });
+    
+    return {
+      props: { formGroup, showLabel: true },
+      template: '<app-payment-form [formGroup]="formGroup" [showLabel]="showLabel" />',
+      moduleMetadata: {
+        imports: [ReactiveFormsModule],
+      },
+    };
   },
 };
 
-export const CashOnDelivery: Story = {
-  render: (args) => ({
-    props: args,
-    template: `
-      <app-payment-form [savedMethods]="savedMethods"></app-payment-form>
-    `,
-  }),
-  play: async ({ canvasElement }) => {
-    // Auto-select COD method for demonstration
-    const codRadio = canvasElement.querySelector('input[value="cash_on_delivery"]') as HTMLInputElement;
-    if (codRadio) {
-      codRadio.click();
-    }
+/**
+ * Pre-filled form (edit mode)
+ */
+export const PreFilled: Story = {
+  render: () => {
+    const fb = new FormBuilder();
+    const formGroup = fb.group({
+      label: ['My Visa'],
+      cardNumber: ['4242 4242 4242 4242'],
+      cardholderName: ['John Doe'],
+      expiryMonth: ['12'],
+      expiryYear: ['2026'],
+    });
+    
+    return {
+      props: { formGroup, showLabel: true },
+      template: '<app-payment-form [formGroup]="formGroup" [showLabel]="showLabel" />',
+      moduleMetadata: {
+        imports: [ReactiveFormsModule],
+      },
+    };
+  },
+};
+
+/**
+ * Without card number formatting
+ */
+export const NoFormatting: Story = {
+  render: () => {
+    const fb = new FormBuilder();
+    const formGroup = createCardFormGroup(fb);
+    
+    return {
+      props: { formGroup, enableFormatting: false },
+      template: '<app-payment-form [formGroup]="formGroup" [enableFormatting]="enableFormatting" />',
+      moduleMetadata: {
+        imports: [ReactiveFormsModule],
+      },
+    };
   },
 };

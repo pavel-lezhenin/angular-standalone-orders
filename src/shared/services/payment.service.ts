@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PaymentFormData } from '@shared/ui/payment-form/payment-form.component';
+import type { PaymentFormData } from '@areas/orders/ui/payment-form/orders-payment-form.component';
 
 export interface PaymentRequest {
   method: 'card' | 'paypal' | 'cash_on_delivery';

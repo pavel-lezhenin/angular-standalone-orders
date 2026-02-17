@@ -39,6 +39,7 @@ export class AddressHandler {
   /** Loads addresses from API and selects the default. */
   async load(): Promise<void> {
     const addresses = await this.preferencesService.getSavedAddresses();
+    console.log('🔍 AddressHandler.load() - Addresses from API:', addresses);
     this.items.set(addresses);
 
     const defaultItem = addresses.find(a => a.isDefault) ?? addresses[0] ?? null;

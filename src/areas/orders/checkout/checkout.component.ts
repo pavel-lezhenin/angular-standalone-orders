@@ -1,9 +1,9 @@
-import { Component, OnInit, signal, computed, inject, PLATFORM_ID, DestroyRef } from '@angular/core';
+import { Component, OnInit, signal, computed, inject, PLATFORM_ID, DestroyRef, OnDestroy } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, NavigationEnd } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, firstValueFrom } from 'rxjs';
+import { debounceTime, distinctUntilChanged, firstValueFrom, filter } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -12,6 +12,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatCardModule } from '@angular/material/card';
 import { PageLoaderComponent } from '@shared/ui/page-loader/page-loader.component';
 import { EmptyStateComponent, OrderSummaryComponent } from '@shared/ui';
 import type { SummaryLine } from '@shared/ui/order-summary/order-summary.component';
@@ -82,6 +83,7 @@ interface CheckoutAddressFormValue {
     MatProgressSpinnerModule,
     MatIconModule,
     MatCheckboxModule,
+    MatCardModule,
     PageLoaderComponent,
     EmptyStateComponent,
     OrderSummaryComponent,
@@ -91,7 +93,7 @@ interface CheckoutAddressFormValue {
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.scss',
 })
-export default class CheckoutComponent implements OnInit {
+export default class CheckoutComponent implements OnInit, OnDestroy {
   private http = inject(HttpClient);
   private fb = inject(FormBuilder);
   private router = inject(Router);
@@ -193,6 +195,22 @@ export default class CheckoutComponent implements OnInit {
     this.initializeForm();
     this.initializeSavedAddresses();
     this.loadCartItems();
+
+    // Reload cart items when navigating back from payment
+    this.router.events
+      .pipe(
+        filter(event => event instanceof NavigationEnd),
+        filter((event: NavigationEnd) => event.url === '/orders/checkout'),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(() => {
+        console.log('🔄 Navigated back to checkout, reloading cart items');
+        this.loadCartItems();
+      });
+  }
+
+  ngOnDestroy(): void {
+    console.log('🧹 CheckoutComponent destroyed');
   }
 
   private async initializeSavedAddresses(): Promise<void> {

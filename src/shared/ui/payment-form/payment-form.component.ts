@@ -1,254 +1,119 @@
-import { Component, OnInit, Input, inject, DestroyRef } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  ReactiveFormsModule,
-  FormBuilder,
-  FormGroup,
-  Validators,
-  AbstractControl,
-  ValidationErrors,
-} from '@angular/forms';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatRadioModule } from '@angular/material/radio';
-import { MatIconModule } from '@angular/material/icon';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { FormFieldComponent } from '../form-field/form-field.component';
-import type { SavedPaymentMethodDTO } from '@core/models';
-
-export type PaymentMethod = 'card' | 'paypal' | 'cash_on_delivery';
-
-export interface PaymentFormData {
-  method: PaymentMethod;
-  useSavedMethod: boolean;
-  savedMethodId?: string;
-  shouldSaveMethod: boolean;
-  cardNumber?: string;
-  cardholderName?: string;
-  expiryMonth?: string;
-  expiryYear?: string;
-  cvv?: string;
-}
+import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
+import { FormFieldComponent, type SelectOption } from '../form-field/form-field.component';
 
 /**
- * Payment Form Component
+ * Payment Form Component (Dumb UI)
  * 
- * Collects payment information with validation.
- * Supports Card, PayPal, and Cash on Delivery.
- * Supports saved payment methods for authenticated users.
+ * Pure presentation component for card payment fields.
+ * Reusable across different payment contexts (checkout, account settings).
  * 
  * Features:
  * - Card number formatting (4-4-4-4)
- * - Card format validation (digits + length)
- * - Expiry date validation (future only)
- * - CVV masking
- * - Saved payment methods selection
- * - Save new payment method option
+ * - Cardholder name input
+ * - Expiry month/year selectors
+ * - Optional CVV field (checkout)
+ * - Optional Label field (account settings)
+ * 
+ * This is a DUMB component:
+ * - Receives FormGroup via input
+ * - NO validation logic (parent responsibility)
+ * - NO form creation (parent responsibility)
+ * - Pure presentation only
  */
 @Component({
   selector: 'app-payment-form',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatRadioModule,
-    MatIconModule,
-    MatCheckboxModule,
-    FormFieldComponent,
-  ],
+  imports: [CommonModule, ReactiveFormsModule, FormFieldComponent],
   templateUrl: './payment-form.component.html',
   styleUrl: './payment-form.component.scss',
 })
-export class PaymentFormComponent implements OnInit {
-  private fb = inject(FormBuilder);
-  private destroyRef = inject(DestroyRef);
-  private readonly cardFieldNames = ['cardNumber', 'cardholderName', 'expiryMonth', 'expiryYear', 'cvv'] as const;
+export class PaymentFormComponent {
+  // ============================================
+  // Inputs
+  // ============================================
 
   /**
-   * List of saved payment methods for current user
+   * FormGroup containing card fields:
+   * - cardNumber: string
+   * - cardholderName: string
+   * - expiryMonth: string
+   * - expiryYear: string
+   * - cvv?: string (optional, controlled by showCvv)
+   * - label?: string (optional, controlled by showLabel)
    */
-  @Input() savedMethods: SavedPaymentMethodDTO[] = [];
+  readonly formGroup = input.required<FormGroup>();
 
-  paymentForm!: FormGroup;
-  
-  // Payment method options
-  paymentMethods: { value: PaymentMethod; label: string }[] = [
-    { value: 'card', label: 'Credit/Debit Card' },
-    { value: 'paypal', label: 'PayPal' },
-    { value: 'cash_on_delivery', label: 'Cash on Delivery' },
-  ];
+  /**
+   * Show CVV field (checkout flow only)
+   */
+  readonly showCvv = input<boolean>(false);
 
-  // Expiry month options
-  months = Array.from({ length: 12 }, (_, i) => {
+  /**
+   * Show Label field (account settings only)
+   */
+  readonly showLabel = input<boolean>(false);
+
+  /**
+   * Enable real-time card number formatting with spaces
+   */
+  readonly enableFormatting = input<boolean>(true);
+
+  // ============================================
+  // Data
+  // ============================================
+
+  /**
+   * Month options (01-12)
+   */
+  protected readonly months: SelectOption[] = Array.from({ length: 12 }, (_, i) => {
     const month = (i + 1).toString().padStart(2, '0');
     return { value: month, label: month };
   });
 
-  // Expiry year options (current year + 15 years)
-  years = Array.from({ length: 16 }, (_, i) => {
-    const year = new Date().getFullYear() + i;
-    return { value: year.toString(), label: year.toString() };
-  });
-
-  ngOnInit(): void {
-    this.initializeForm();
-  }
-
   /**
-   * Initialize payment form
+   * Year options (current year + 15 years)
    */
-  private initializeForm(): void {
-    this.paymentForm = this.fb.group({
-      method: ['card', Validators.required],
-      shouldSaveMethod: [true], // Save new method for future use (default enabled)
-      cardNumber: ['', [Validators.required, this.cardNumberValidator]],
-      cardholderName: ['', [Validators.required, Validators.minLength(3)]],
-      expiryMonth: ['', Validators.required],
-      expiryYear: ['', Validators.required],
-      cvv: ['', [Validators.required, Validators.pattern(/^\d{3,4}$/)]],
+  protected readonly years: SelectOption[] = (() => {
+    const currentYear = new Date().getFullYear();
+    return Array.from({ length: 16 }, (_, i) => {
+      const year = currentYear + i;
+      return { value: year.toString(), label: year.toString() };
     });
+  })();
 
-    // Watch payment method changes
-    this.paymentForm.get('method')?.valueChanges
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((method) => {
-        this.updateValidators(method);
-      });
-  }
-
-  /**
-   * Update validators based on payment method
-   */
-  private updateValidators(method: PaymentMethod): void {
-    if (method === 'card') {
-      this.cardFieldNames.forEach((field) => {
-        const control = this.paymentForm.get(field);
-        if (!control) {
-          return;
-        }
-
-        if (field === 'cardNumber') {
-          control.setValidators([Validators.required, this.cardNumberValidator]);
-        } else if (field === 'cardholderName') {
-          control.setValidators([Validators.required, Validators.minLength(3)]);
-        } else if (field === 'cvv') {
-          control.setValidators([Validators.required, Validators.pattern(/^\d{3,4}$/)]);
-        } else {
-          control.setValidators([Validators.required]);
-        }
-
-        control.enable({ emitEvent: false });
-        control.updateValueAndValidity({ emitEvent: false });
-      });
-    } else {
-      // PayPal and COD don't need card details
-      this.cardFieldNames.forEach((field) => {
-        const control = this.paymentForm.get(field);
-        if (!control) {
-          return;
-        }
-
-        control.clearValidators();
-        control.setErrors(null);
-        control.disable({ emitEvent: false });
-        control.updateValueAndValidity({ emitEvent: false });
-      });
-    }
-
-    this.paymentForm.updateValueAndValidity({ emitEvent: false });
-  }
+  // ============================================
+  // Methods
+  // ============================================
 
   /**
    * Format card number as user types (4-4-4-4)
+   * Only if enableFormatting is true
    */
-  formatCardNumber(event: Event): void {
+  protected formatCardNumber(event: Event): void {
+    if (!this.enableFormatting()) return;
+
     const input = event.target as HTMLInputElement;
     let value = input.value.replace(/\s/g, ''); // Remove spaces
-    
+
     // Only allow digits
     value = value.replace(/\D/g, '');
-    
+
     // Limit to 16 digits
     value = value.substring(0, 16);
-    
+
     // Add space every 4 digits
     const formatted = value.match(/.{1,4}/g)?.join(' ') || value;
-    
-    this.paymentForm.patchValue({ cardNumber: formatted }, { emitEvent: false });
+
+    this.formGroup().patchValue({ cardNumber: formatted }, { emitEvent: false });
     input.value = formatted;
   }
 
   /**
-   * Card number validator for demo mode
-   * Accepts 13-19 digits (common card lengths)
+   * Get FormControl by name with type safety
    */
-  private cardNumberValidator(control: AbstractControl): ValidationErrors | null {
-    if (!control.value) {
-      return null;
-    }
-
-    const cardNumber = control.value.replace(/\s/g, '');
-    
-    if (!/^\d+$/.test(cardNumber)) {
-      return { invalidCard: 'Card number must contain only digits' };
-    }
-
-    if (cardNumber.length < 13 || cardNumber.length > 19) {
-      return { invalidCard: 'Card number must be 13-19 digits' };
-    }
-
-    // Prevent obviously invalid repeated digits like 0000... or 1111...
-    if (/^(\d)\1+$/.test(cardNumber)) {
-      return { invalidCard: 'Invalid card number' };
-    }
-
-    return null;
-  }
-
-  /**
-   * Get form data
-   */
-  getFormData(): PaymentFormData | null {
-    if (this.paymentForm.invalid) {
-      return null;
-    }
-
-    const formValue = this.paymentForm.getRawValue();
-    
-    const data: PaymentFormData = {
-      method: formValue.method,
-      useSavedMethod: false,
-      shouldSaveMethod: formValue.shouldSaveMethod,
-      cvv: formValue.cvv, // Always required, even for saved methods
-    };
-
-    // Include card details for new cards
-    if (formValue.method === 'card') {
-      data.cardNumber = formValue.cardNumber.replace(/\s/g, '');
-      data.cardholderName = formValue.cardholderName;
-      data.expiryMonth = formValue.expiryMonth;
-      data.expiryYear = formValue.expiryYear;
-    }
-
-    return data;
-  }
-
-  /**
-   * Check if form is valid
-   */
-  isValid(): boolean {
-    return this.paymentForm.valid;
-  }
-
-  /**
-   * Mark all fields as touched (for validation display)
-   */
-  markAllAsTouched(): void {
-    this.paymentForm.markAllAsTouched();
+  protected getControl(name: string): FormControl {
+    return this.formGroup().get(name) as FormControl;
   }
 }

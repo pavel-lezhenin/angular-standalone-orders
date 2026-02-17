@@ -1,6 +1,7 @@
 import { Component, input, output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { AddressFormComponent } from '../address-form/address-form.component';
 import { AddressSelectorComponent } from '../address-selector/address-selector.component';
@@ -16,6 +17,7 @@ import type { AddressDTO } from '@core/models';
   standalone: true,
   imports: [
     MatButtonModule,
+    MatCardModule,
     MatIconModule,
     AddressFormComponent,
     AddressSelectorComponent,

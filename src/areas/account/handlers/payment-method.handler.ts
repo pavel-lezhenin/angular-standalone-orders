@@ -39,6 +39,7 @@ export class PaymentMethodHandler {
   /** Loads payment methods from API, maps to display format, selects the default. */
   async load(): Promise<void> {
     const methods = await this.preferencesService.getSavedPaymentMethods();
+    console.log('🔍 PaymentMethodHandler.load() - Raw methods from API:', methods);
 
     const mapped: PaymentMethodDTO[] = methods.map(m => ({
       id: m.id,
@@ -59,6 +60,7 @@ export class PaymentMethodHandler {
       }),
     }));
 
+    console.log('🔍 PaymentMethodHandler.load() - Mapped items:', mapped);
     this.items.set(mapped);
 
     const defaultItem = methods.find(m => m.isDefault) ?? methods[0] ?? null;

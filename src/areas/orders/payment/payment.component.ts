@@ -9,7 +9,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { PaymentFormComponent, PaymentFormData } from '@shared/ui/payment-form/payment-form.component';
+import { MatCardModule } from '@angular/material/card';
+import { OrdersPaymentFormComponent, PaymentFormData } from '../ui/payment-form/orders-payment-form.component';
 import { PageLoaderComponent } from '@shared/ui/page-loader/page-loader.component';
 import { OrderSummaryComponent } from '@shared/ui';
 import { FormFieldComponent, type SelectOption } from '@shared/ui/form-field/form-field.component';
@@ -45,7 +46,8 @@ type PaymentState = 'form' | 'processing' | 'success' | 'failure';
     MatInputModule,
     MatSelectModule,
     MatProgressSpinnerModule,
-    PaymentFormComponent,
+    MatCardModule,
+    OrdersPaymentFormComponent,
     PageLoaderComponent,
     OrderSummaryComponent,
     FormFieldComponent,
@@ -64,7 +66,7 @@ export default class PaymentComponent implements OnInit {
   private platformId = inject(PLATFORM_ID);
   private isBrowser = isPlatformBrowser(this.platformId);
 
-  @ViewChild(PaymentFormComponent) paymentForm!: PaymentFormComponent;
+  @ViewChild(OrdersPaymentFormComponent) paymentForm!: OrdersPaymentFormComponent;
 
   protected state = signal<PaymentState>('form');
   protected orderData = signal<CreateOrderDTO | null>(null);
@@ -281,7 +283,7 @@ export default class PaymentComponent implements OnInit {
     }
 
     // Validate payment data
-    const validation = this.paymentService.validatePaymentData(formData);
+    const validation = this.paymentService.validatePaymentData(formData!);
     if (!validation.valid) {
       this.notification.error(validation.error || 'Invalid payment data');
       return;
@@ -289,14 +291,14 @@ export default class PaymentComponent implements OnInit {
 
     // Build payment request
     const paymentRequest: PaymentRequest = {
-      method: formData.method,
+      method: formData!.method,
       amount: this.total(),
       currency: 'USD',
-      cardNumber: formData.cardNumber,
-      cardholderName: formData.cardholderName,
-      expiryMonth: formData.expiryMonth,
-      expiryYear: formData.expiryYear,
-      cvv: formData.cvv,
+      cardNumber: formData!.cardNumber,
+      cardholderName: formData!.cardholderName,
+      expiryMonth: formData!.expiryMonth,
+      expiryYear: formData!.expiryYear,
+      cvv: formData!.cvv,
     };
 
     // Start processing
@@ -313,16 +315,16 @@ export default class PaymentComponent implements OnInit {
         this.state.set('success');
 
         // Save payment method if requested
-        if (!this.usingSavedPaymentMethod() && formData.shouldSaveMethod && !formData.useSavedMethod) {
+        if (!this.usingSavedPaymentMethod() && formData!.shouldSaveMethod && !formData!.useSavedMethod) {
           try {
-            await this.savePaymentMethod(formData);
+            await this.savePaymentMethod(formData!);
           } catch {
             // Payment is already successful; continue order creation
           }
         }
 
         // Create order
-        await this.createOrder(result.transactionId || '', formData.method);
+        await this.createOrder(result.transactionId || '', formData!.method);
 
       } else {
         // Payment failed

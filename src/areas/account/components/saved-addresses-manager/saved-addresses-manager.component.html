@@ -24,32 +24,44 @@
   </div>
 
   @if (showAddressForm()) {
-    <app-address-form
-      [addressForm]="addressForm()"
-      (save)="saveAddress.emit()"
-      (cancel)="toggleForm.emit()"
-    />
+    <mat-card>
+      <mat-card-content>
+        <app-address-form
+          [addressForm]="addressForm()"
+          (save)="saveAddress.emit()"
+          (cancel)="toggleForm.emit()"
+        />
+      </mat-card-content>
+    </mat-card>
   } @else {
     @if (savedAddresses().length > 0) {
-      <app-address-selector
-        [savedAddresses]="savedAddresses()"
-        [selectedAddressId]="selectedAddressId()"
-        [isEditMode]="isEditMode()"
-        (selectionChange)="addressSelectionChange.emit($event)"
-        (setAsDefault)="setAsDefault.emit()"
-        (deleteSelected)="deleteSelected.emit()"
-      />
+      <mat-card>
+        <mat-card-content>
+          <app-address-selector
+            [savedAddresses]="savedAddresses()"
+            [selectedAddressId]="selectedAddressId()"
+            [isEditMode]="isEditMode()"
+            (selectionChange)="addressSelectionChange.emit($event)"
+            (setAsDefault)="setAsDefault.emit()"
+            (deleteSelected)="deleteSelected.emit()"
+          />
+        </mat-card-content>
+      </mat-card>
     } @else {
-      <div class="empty-state">
-        <mat-icon>location_on</mat-icon>
-        @if (isEditMode()) {
-          <p>No shipping addresses yet</p>
-          <p class="hint">Click "Add Address" to get started</p>
-        } @else {
-          <p>No addresses saved</p>
-          <p class="hint">Activate edit mode to add addresses</p>
-        }
-      </div>
+      <mat-card>
+        <mat-card-content>
+          <div class="empty-state">
+            <mat-icon>location_on</mat-icon>
+            @if (isEditMode()) {
+              <p>No shipping addresses yet</p>
+              <p class="hint">Click "Add Address" to get started</p>
+            } @else {
+              <p>No addresses saved</p>
+              <p class="hint">Activate edit mode to add addresses</p>
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
     }
   }
 </div>

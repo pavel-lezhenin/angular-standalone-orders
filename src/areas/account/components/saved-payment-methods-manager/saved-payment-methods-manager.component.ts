@@ -1,8 +1,9 @@
 import { Component, input, output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { PaymentMethodFormComponent } from '../payment-method-form/payment-method-form.component';
+import { AccountPaymentFormComponent } from '../account-payment-form/account-payment-form.component';
 import { PaymentMethodSelectorComponent } from '../payment-method-selector/payment-method-selector.component';
 import type { PaymentMethodDTO } from '@core/models';
 
@@ -16,8 +17,9 @@ import type { PaymentMethodDTO } from '@core/models';
   standalone: true,
   imports: [
     MatButtonModule,
+    MatCardModule,
     MatIconModule,
-    PaymentMethodFormComponent,
+    AccountPaymentFormComponent,
     PaymentMethodSelectorComponent,
   ],
   templateUrl: './saved-payment-methods-manager.component.html',

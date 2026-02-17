@@ -18,15 +18,19 @@
   align-items: start;
 }
 
-/* ============================================
- * Cart Items Table
- * ============================================ */
-
-.cart-items {
-  background: var(--surface-primary);
+.cart-content > mat-card {
+  border: var(--spacing-1px) solid var(--color-border);
   border-radius: var(--border-radius-md);
+  box-shadow: none;
+}
+
+.cart-content > mat-card > mat-card-content {
   padding: var(--spacing-xl);
 }
+
+/* ============================================
+ * Cart Items Table Styles
+ * ============================================ */
 
 .items-table {
   width: 100%;
@@ -142,22 +146,10 @@
 }
 
 /* ============================================
- * Cart Summary
+ * Cart Summary Styles
  * ============================================ */
 
-.cart-summary {
-  background: var(--surface-primary);
-  border-radius: var(--border-radius-md);
-  padding: var(--spacing-xl);
-
-  h2 {
-    margin: 0 0 var(--spacing-xl) 0;
-    font-size: var(--font-size-xl);
-    font-weight: var(--font-weight-semibold);
-    color: var(--text-heading);
-  }
-
-  .summary-info {
+.summary-info {
     padding: var(--spacing-md);
     border-radius: var(--border-radius-sm);
     background: var(--surface-secondary);
@@ -199,14 +191,16 @@
       font-weight: var(--font-weight-semibold);
     }
   }
+}
 
-  .summary-divider {
+.summary-divider {
     height: 1px;
     background: var(--color-border);
     margin: var(--spacing-md) 0;
   }
+}
 
-  .summary-actions {
+.summary-actions {
     margin-top: var(--spacing-2xl);
 
     button {
@@ -240,10 +234,6 @@
     grid-template-columns: 1fr;
   }
 
-  .cart-items {
-    padding: var(--spacing-md);
-  }
-
   /* Stack table cells vertically on mobile */
   .items-table {
     thead {
@@ -265,10 +255,6 @@
   .product-cell .product-info {
     flex-direction: column;
     text-align: center;
-  }
-
-  .cart-summary {
-    position: static;
   }
 }
 

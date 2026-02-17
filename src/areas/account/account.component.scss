@@ -9,6 +9,8 @@
 
 .profile-card {
   grid-column: 1;
+  border: var(--spacing-1px) solid var(--color-border);
+  box-shadow: none;
 }
 
 // Card Header

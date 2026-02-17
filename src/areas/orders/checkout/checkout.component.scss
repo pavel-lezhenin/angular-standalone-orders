@@ -18,22 +18,23 @@
   align-items: start;
 }
 
-/* ============================================
- * Delivery Section
- * ============================================ */
-
-.delivery-section {
-  background: var(--surface-primary);
+.checkout-content > mat-card {
+  border: var(--spacing-1px) solid var(--color-border);
   border-radius: var(--border-radius-md);
-  padding: var(--spacing-xl);
-
-  h2 {
-    margin: 0 0 var(--spacing-md) 0;
-    font-size: var(--font-size-xl);
-    font-weight: var(--font-weight-semibold);
-    color: var(--text-heading);
-  }
+  box-shadow: none;
 }
+
+.checkout-content > mat-card > mat-card-content {
+  padding: var(--spacing-xl);
+}
+
+.checkout-content > mat-card > mat-card-header {
+  padding: var(--spacing-xl) var(--spacing-xl) 0;
+}
+
+/* ============================================
+ * Delivery Form Styles
+ * ============================================ */
 
 .delivery-form {
   .form-field {
@@ -122,21 +123,8 @@
 }
 
 /* ============================================
- * Order Summary Section
+ * Order Items Styles
  * ============================================ */
-
-.order-summary-section {
-  background: var(--surface-primary);
-  border-radius: var(--border-radius-md);
-  padding: var(--spacing-xl);
-
-  h2 {
-    margin: 0 0 var(--spacing-xl) 0;
-    font-size: var(--font-size-xl);
-    font-weight: var(--font-weight-semibold);
-    color: var(--text-heading);
-  }
-}
 
 /* Order Items */
 .order-items {
@@ -311,15 +299,6 @@
 
   .checkout-content {
     grid-template-columns: 1fr;
-  }
-
-  .delivery-section,
-  .order-summary-section {
-    padding: var(--spacing-md);
-  }
-
-  .order-summary-section {
-    position: static;
   }
 
   .order-items {

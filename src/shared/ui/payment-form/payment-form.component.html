@@ -1,113 +1,74 @@
 <div class="payment-form">
-  <form [formGroup]="paymentForm">
-    <!-- Payment Method Selection -->
-    <div class="form-section">
-      <h3>Payment Method</h3>
-      <mat-radio-group formControlName="method" class="payment-methods">
-        @for (method of paymentMethods; track method.value) {
-          <mat-radio-button [value]="method.value">
-            {{ method.label }}
-          </mat-radio-button>
-        }
-      </mat-radio-group>
-    </div>
+  <!-- Label Field (Account Settings) -->
+  @if (showLabel()) {
+    <app-form-field
+      [label]="'Label'"
+      [control]="getControl('label')"
+      [placeholder]="'e.g., My Visa'"
+      [customErrorMessages]="{
+        'required': 'Label is required'
+      }"
+    />
+  }
 
-    <!-- Card Payment Fields -->
-    @if (paymentForm.get('method')?.value === 'card') {
-      <div class="form-section card-details">
-        <h3>Card Details</h3>
+  <!-- Cardholder Name -->
+  <app-form-field
+    [label]="'Cardholder Name'"
+    [control]="getControl('cardholderName')"
+    [type]="'text'"
+    [placeholder]="'Name on card'"
+    [customErrorMessages]="{
+      'required': 'Cardholder name is required',
+      'minlength': 'Name must be at least 2 characters'
+    }"
+  />
 
-        <!-- Card Number -->
-        <app-form-field
-          [label]="'Card Number'"
-          [control]="$any(paymentForm.get('cardNumber'))"
-          [type]="'text'"
-          [placeholder]="'1234 5678 9012 3456'"
-          [maxLength]="19"
-          [prefixIcon]="'credit_card'"
-          [fieldClass]="'full-width'"
-          (inputChange)="formatCardNumber($event)"
-          [customErrorMessages]="{
-            'required': 'Card number is required',
-            'invalidCard': paymentForm.get('cardNumber')?.errors?.['invalidCard']
-          }"
-        />
+  <!-- Card Number -->
+  <app-form-field
+    [label]="'Card Number'"
+    [control]="getControl('cardNumber')"
+    [type]="'text'"
+    [placeholder]="'1234 5678 9012 3456'"
+    [maxLength]="19"
+    (inputChange)="formatCardNumber($event)"
+    [customErrorMessages]="{
+      'required': 'Card number is required',
+      'pattern': 'Card must be 13-19 digits',
+      'invalidCard': getControl('cardNumber').errors?.['invalidCard'] || ''
+    }"
+  />
 
-        <!-- Cardholder Name -->
-        <app-form-field
-          [label]="'Cardholder Name'"
-          [control]="$any(paymentForm.get('cardholderName'))"
-          [type]="'text'"
-          [placeholder]="'JOHN DOE'"
-          [prefixIcon]="'person'"
-          [fieldClass]="'full-width'"
-          [customErrorMessages]="{
-            'required': 'Cardholder name is required',
-            'minlength': 'Name must be at least 3 characters'
-          }"
-        />
+  <!-- Expiry Date Row -->
+  <div class="card-expiry-row">
+    <app-form-field
+      [label]="'Expiry Month'"
+      [control]="getControl('expiryMonth')"
+      [type]="'select'"
+      [selectOptions]="months"
+      [customErrorMessages]="{'required': 'Month required'}"
+    />
 
-        <!-- Expiry Date & CVV -->
-        <div class="card-extra-fields">
-          <div class="expiry-fields">
-            <app-form-field
-              [label]="'Month'"
-              [control]="$any(paymentForm.get('expiryMonth'))"
-              [type]="'select'"
-              [fieldClass]="'expiry-month'"
-              [selectOptions]="months"
-              [customErrorMessages]="{'required': 'Required'}"
-            />
+    <app-form-field
+      [label]="'Expiry Year'"
+      [control]="getControl('expiryYear')"
+      [type]="'select'"
+      [selectOptions]="years"
+      [customErrorMessages]="{'required': 'Year required'}"
+    />
+  </div>
 
-            <app-form-field
-              [label]="'Year'"
-              [control]="$any(paymentForm.get('expiryYear'))"
-              [type]="'select'"
-              [fieldClass]="'expiry-year'"
-              [selectOptions]="years"
-              [customErrorMessages]="{'required': 'Required'}"
-            />
-          </div>
-
-          <app-form-field
-            [label]="'CVV'"
-            [control]="$any(paymentForm.get('cvv'))"
-            [type]="'password'"
-            [placeholder]="'123'"
-            [maxLength]="4"
-            [prefixIcon]="'lock'"
-            [fieldClass]="'cvv-field'"
-            [customErrorMessages]="{
-              'required': 'CVV required',
-              'pattern': 'Must be 3-4 digits'
-            }"
-          />
-        </div>
-
-        <!-- Save Method Checkbox -->
-        <div class="save-method-option">
-          <mat-checkbox formControlName="shouldSaveMethod">
-            <span class="save-label">Save this payment method for future orders</span>
-          </mat-checkbox>
-        </div>
-      </div>
-    }
-
-
-    <!-- PayPal Message -->
-    @if (paymentForm.get('method')?.value === 'paypal') {
-      <div class="payment-info-message">
-        <mat-icon>info</mat-icon>
-        <p>You will be redirected to PayPal to complete your payment.</p>
-      </div>
-    }
-
-    <!-- Cash on Delivery Message -->
-    @if (paymentForm.get('method')?.value === 'cash_on_delivery') {
-      <div class="payment-info-message">
-        <mat-icon>info</mat-icon>
-        <p>Pay with cash when your order is delivered.</p>
-      </div>
-    }
-  </form>
+  <!-- CVV Field (Checkout Only) -->
+  @if (showCvv()) {
+    <app-form-field
+      [label]="'CVV'"
+      [control]="getControl('cvv')"
+      [type]="'password'"
+      [placeholder]="'123'"
+      [maxLength]="4"
+      [customErrorMessages]="{
+        'required': 'CVV required',
+        'pattern': 'Must be 3-4 digits'
+      }"
+    />
+  }
 </div>
