@@ -4,7 +4,18 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
+
+/**
+ * Option item for select-type form fields
+ */
+export interface SelectOption {
+  /** Option value */
+  value: unknown;
+  /** Display label */
+  label: string;
+}
 
 /**
  * Reusable form field component with validation support
@@ -29,6 +40,12 @@ import { MatIconModule } from '@angular/material/icon';
  * 
  * @example
  * <app-form-field
+ *   [label]="'Name'"
+ *   [control]="myForm.controls['name']"
+ * />
+ * 
+ * @example
+ * <app-form-field
  *   [label]="'Description'"
  *   [control]="descriptionControl"
  *   [type]="'textarea'"
@@ -46,6 +63,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    MatOptionModule,
     MatIconModule,
   ],
   templateUrl: './form-field.component.html',
@@ -58,7 +76,7 @@ export class FormFieldComponent {
   readonly label = input.required<string>();
 
   /**
-   * Form control for the input (required)
+  * Form control for the input (required)
    */
   readonly control = input.required<FormControl>();
 
@@ -159,6 +177,12 @@ export class FormFieldComponent {
   readonly readonly = input<boolean>(false);
 
   /**
+   * Options for select-type fields
+   * Required when type is 'select'
+   */
+  readonly selectOptions = input<SelectOption[]>([]);
+
+  /**
    * Custom error messages map
    * Key is the error type, value is the error message
    */
@@ -170,6 +194,11 @@ export class FormFieldComponent {
   readonly inputChange = output<Event>();
 
   /**
+   * Event emitted when select value changes
+   */
+  readonly selectionChange = output<{ value: unknown }>();
+
+  /**
    * Computed character count text
    */
   readonly characterCountText = computed(() => {
@@ -178,6 +207,39 @@ export class FormFieldComponent {
     const currentLength = this.control().value?.length || 0;
     return `${currentLength}/${maxLen}`;
   });
+
+  /**
+   * Handle input/change events and update control value
+   */
+  onInputChange(event: Event): void {
+    const target = event.target as HTMLInputElement | HTMLTextAreaElement;
+    const ctrl = this.control();
+    if (ctrl) {
+      ctrl.setValue(target.value);
+    }
+    this.inputChange.emit(event);
+  }
+
+  /**
+   * Handle blur events and mark control as touched
+   */
+  onBlur(): void {
+    const ctrl = this.control();
+    if (ctrl) {
+      ctrl.markAsTouched();
+    }
+  }
+
+  /**
+   * Handle mat-select selection change
+   */
+  onSelectionChange(value: any): void {
+    const ctrl = this.control();
+    if (ctrl) {
+      ctrl.setValue(value);
+      ctrl.markAsTouched();
+    }
+  }
 
   /**
    * Gets the appropriate error message for the current validation error

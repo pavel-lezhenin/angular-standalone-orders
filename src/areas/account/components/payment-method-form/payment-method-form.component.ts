@@ -1,0 +1,85 @@
+import { Component, input, output } from '@angular/core';
+import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { FormFieldComponent } from '@shared/ui/form-field/form-field.component';
+import type { SelectOption } from '@shared/ui/form-field/form-field.component';
+
+/**
+ * Payment Method Form Component
+ *
+ * Reusable form for creating/editing payment methods (card or PayPal)
+ */
+@Component({
+  selector: 'app-payment-method-form',
+  standalone: true,
+  imports: [ReactiveFormsModule, MatButtonModule, MatInputModule, MatSelectModule, FormFieldComponent],
+  templateUrl: './payment-method-form.component.html',
+  styleUrl: './payment-method-form.component.scss',
+})
+export class PaymentMethodFormComponent {
+  /**
+   * Payment method form group
+   */
+  readonly paymentMethodForm = input.required<FormGroup>();
+
+  /**
+   * Currently selected payment type ('card' or 'paypal')
+   */
+  readonly selectedPaymentType = input.required<'card' | 'paypal'>();
+
+  /**
+   * Event emitted when payment type changes
+   */
+  readonly paymentTypeChange = output<'card' | 'paypal'>();
+
+  /**
+   * Event emitted when form is saved
+   */
+  readonly save = output<void>();
+
+  /**
+   * Event emitted when form is canceled
+   */
+  readonly cancel = output<void>();
+
+  /**
+   * Payment type select options
+   */
+  readonly paymentTypeOptions: SelectOption[] = [
+    { value: 'card', label: 'Credit/Debit Card' },
+    { value: 'paypal', label: 'PayPal' },
+  ];
+
+  /**
+   * Month select options (01-12)
+   */
+  readonly monthOptions: SelectOption[] = Array.from({ length: 12 }, (_, i) => ({
+    value: i + 1,
+    label: String(i + 1).padStart(2, '0'),
+  }));
+
+  /**
+   * Generates array of years from current year to +10 years
+   */
+  get yearOptions(): SelectOption[] {
+    const currentYear = new Date().getFullYear();
+    return Array.from({ length: 10 }, (_, i) => ({
+      value: currentYear + i,
+      label: String(currentYear + i),
+    }));
+  }
+
+  /**
+   * Helper method to get typed FormControl from form group
+   */
+  getControl(name: string): FormControl {
+    const control = this.paymentMethodForm().get(name);
+    if (!control) {
+      console.error(`Control '${name}' not found in payment method form`);
+      return new FormControl();
+    }
+    return control as FormControl;
+  }
+}

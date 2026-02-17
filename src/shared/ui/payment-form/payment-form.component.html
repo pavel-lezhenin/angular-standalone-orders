@@ -55,24 +55,18 @@
               [control]="$any(paymentForm.get('expiryMonth'))"
               [type]="'select'"
               [fieldClass]="'expiry-month'"
+              [selectOptions]="months"
               [customErrorMessages]="{'required': 'Required'}"
-            >
-              @for (month of months; track month.value) {
-                <mat-option [value]="month.value">{{ month.label }}</mat-option>
-              }
-            </app-form-field>
+            />
 
             <app-form-field
               [label]="'Year'"
               [control]="$any(paymentForm.get('expiryYear'))"
               [type]="'select'"
               [fieldClass]="'expiry-year'"
+              [selectOptions]="years"
               [customErrorMessages]="{'required': 'Required'}"
-            >
-              @for (year of years; track year.value) {
-                <mat-option [value]="year.value">{{ year.label }}</mat-option>
-              }
-            </app-form-field>
+            />
           </div>
 
           <app-form-field

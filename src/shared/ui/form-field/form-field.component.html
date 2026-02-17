@@ -1,6 +1,6 @@
 <mat-form-field 
   [appearance]="appearance()" 
-  [class]="fieldClass()">
+  [ngClass]="fieldClass()">
   <mat-label>{{ label() }}</mat-label>
   
   @if (prefixIcon()) {
@@ -13,18 +13,20 @@
       [formControl]="control()"
       [placeholder]="placeholder()"
       [rows]="rows()"
-      [maxlength]="maxLength() ?? null"
+      [attr.maxlength]="maxLength() ?? null"
       [required]="required()"
-      [readonly]="readonly()"
-      [attr.autocomplete]="autocomplete() || null"
-      [attr.aria-label]="ariaLabel() || label()"
+      [attr.aria-label]="label()"
     ></textarea>
   } @else if (type() === 'select') {
     <mat-select 
-      [formControl]="control()" 
+      [formControl]="control()"
+      [placeholder]="placeholder()"
       [required]="required()"
-      [attr.aria-label]="ariaLabel() || label()">
-      <ng-content select="mat-option"></ng-content>
+      [attr.aria-label]="label()"
+      (selectionChange)="selectionChange.emit($event)">
+      @for (option of selectOptions(); track option.value) {
+        <mat-option [value]="option.value">{{ option.label }}</mat-option>
+      }
     </mat-select>
   } @else {
     <input
@@ -32,15 +34,12 @@
       [type]="type()"
       [formControl]="control()"
       [placeholder]="placeholder()"
-      [maxlength]="maxLength() ?? null"
-      [min]="min() ?? null"
-      [max]="max() ?? null"
-      [step]="step() ?? null"
+      [attr.maxlength]="maxLength() ?? null"
+      [attr.min]="min() ?? null"
+      [attr.max]="max() ?? null"
+      [attr.step]="step() ?? null"
       [required]="required()"
-      [readonly]="readonly()"
-      [attr.autocomplete]="autocomplete() || null"
-      [attr.aria-label]="ariaLabel() || label()"
-      (input)="inputChange.emit($event)"
+      [attr.aria-label]="label()"
     />
   }
   
@@ -56,7 +55,7 @@
     <mat-hint align="end">{{ characterCountText() }}</mat-hint>
   }
   
-  @if (control().invalid && control().touched) {
+  @if (control() && control().invalid && control().touched) {
     <mat-error>{{ getErrorMessage() }}</mat-error>
   }
 </mat-form-field>

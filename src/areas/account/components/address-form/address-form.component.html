@@ -1,0 +1,64 @@
+<form [formGroup]="addressForm()" class="address-form">
+  <div class="form-row">
+    <app-form-field
+      [label]="'Label'"
+      [control]="getControl('label')"
+      [placeholder]="'e.g., Home, Work'"
+    />
+
+    <app-form-field
+      [label]="'Recipient Name'"
+      [control]="getControl('recipientName')"
+    />
+  </div>
+
+  <app-form-field
+    [label]="'Address Line 1'"
+    [control]="getControl('addressLine1')"
+    [fieldClass]="'full-width'"
+  />
+
+  <app-form-field
+    [label]="'Address Line 2 (Optional)'"
+    [control]="getControl('addressLine2')"
+    [fieldClass]="'full-width'"
+  />
+
+  <div class="form-row">
+    <app-form-field
+      [label]="'City'"
+      [control]="getControl('city')"
+    />
+
+    <app-form-field
+      [label]="'Postal Code'"
+      [control]="getControl('postalCode')"
+    />
+  </div>
+
+  <app-form-field
+    [label]="'Phone'"
+    [control]="getControl('phone')"
+    [type]="'tel'"
+    [fieldClass]="'full-width'"
+  />
+
+  <div class="form-actions">
+    <button
+      mat-button
+      type="button"
+      (click)="cancel.emit()"
+    >
+      Cancel
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      type="button"
+      [disabled]="addressForm().invalid"
+      (click)="save.emit()"
+    >
+      Save Address
+    </button>
+  </div>
+</form>

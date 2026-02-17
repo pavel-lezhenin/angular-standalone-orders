@@ -5,6 +5,7 @@ import { DatabaseService } from './database.service';
 import { UserRepository } from './repositories/user.repository';
 import { ProductRepository } from './repositories/product.repository';
 import { OrderRepository } from './repositories/order.repository';
+import { AddressRepository } from './repositories/address.repository';
 import { SeedService } from './services/seed.service';
 import { AuthHandlerService } from './handlers/auth-handler.service';
 import { ProductHandlerService } from './handlers/product-handler.service';
@@ -37,6 +38,7 @@ export class FakeBFFService {
     private userRepo: UserRepository,
     private productRepo: ProductRepository,
     private orderRepo: OrderRepository,
+    private addressRepo: AddressRepository,
     private seedService: SeedService,
     private authHandler: AuthHandlerService,
     private productHandler: ProductHandlerService,
@@ -65,8 +67,9 @@ export class FakeBFFService {
     // Always reseed in development to ensure latest data
     // Check if data exists, if not or if incomplete - reseed
     const productCount = await this.productRepo.count();
-    if (productCount < 40) {
-      console.log(`⚠️  Found ${productCount} products, expected 40. Reseeding...`);
+    const addressCount = await this.addressRepo.count();
+    if (productCount < 40 || addressCount === 0) {
+      console.log(`⚠️  Found ${productCount} products, ${addressCount} addresses. Reseeding...`);
       await this.seedService.seedAll();
     }
 

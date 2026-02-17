@@ -1,0 +1,63 @@
+<div class="payment-method-form">
+  <app-form-field 
+    [label]="'Payment Type'" 
+    [control]="getControl('type')" 
+    [type]="'select'"
+    [selectOptions]="paymentTypeOptions"
+    (selectionChange)="paymentTypeChange.emit($any($event.value))">
+  </app-form-field>
+
+  @if (selectedPaymentType() === 'card') {
+    <app-form-field 
+      [label]="'Label'" 
+      [control]="getControl('label')" 
+      [placeholder]="'e.g., My Visa'" 
+    />
+
+    <app-form-field
+      [label]="'Cardholder Name'"
+      [control]="getControl('cardholderName')"
+      [placeholder]="'Name on card'"
+    />
+
+    <app-form-field
+      [label]="'Card Number'"
+      [control]="getControl('cardNumber')"
+      [placeholder]="'1234 5678 9012 3456'"
+    />
+
+    <div class="form-row">
+      <app-form-field [label]="'Expiry Month'" [control]="getControl('expiryMonth')" [type]="'select'" [selectOptions]="monthOptions">
+      </app-form-field>
+
+      <app-form-field [label]="'Expiry Year'" [control]="getControl('expiryYear')" [type]="'select'" [selectOptions]="yearOptions">
+      </app-form-field>
+    </div>
+  } @else {
+    <app-form-field 
+      [label]="'Label'" 
+      [control]="getControl('label')" 
+      [placeholder]="'e.g., My PayPal'" 
+    />
+
+    <app-form-field
+      [label]="'PayPal Email'"
+      [control]="getControl('paypalEmail')"
+      [type]="'email'"
+      [placeholder]="'your@email.com'"
+    />
+  }
+
+  <div class="form-actions">
+    <button mat-stroked-button type="button" (click)="cancel.emit()">Cancel</button>
+    <button
+      mat-raised-button
+      color="primary"
+      type="button"
+      [disabled]="paymentMethodForm().invalid"
+      (click)="save.emit()"
+    >
+      Save Payment Method
+    </button>
+  </div>
+</div>

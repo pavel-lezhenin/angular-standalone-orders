@@ -3,7 +3,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { UserRepository } from '../repositories/user.repository';
 import { ProductRepository } from '../repositories/product.repository';
 import { CategoryRepository } from '../repositories/category.repository';
-import { User, Product, Category } from '../models';
+import { AddressRepository } from '../repositories/address.repository';
+import { PaymentMethodRepository } from '../repositories/payment-method.repository';
+import { User, Product, Category, Address, PaymentMethod } from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +15,8 @@ export class SeedService {
     private userRepo: UserRepository,
     private productRepo: ProductRepository,
     private categoryRepo: CategoryRepository,
+    private addressRepo: AddressRepository,
+    private paymentMethodRepo: PaymentMethodRepository,
   ) {}
 
   async seedAll(): Promise<void> {
@@ -24,6 +28,7 @@ export class SeedService {
       await this.seedUsers();
       const categories = await this.seedCategories();
       await this.seedProducts(categories);
+      await this.seedAddressesAndPaymentMethods();
 
       // Verify data was created
       const userCount = await this.userRepo.count();
@@ -123,6 +128,79 @@ export class SeedService {
       }
     }
     console.log('✅ Demo users created (3)');
+  }
+
+  private async seedAddressesAndPaymentMethods(): Promise<void> {
+    const users = await this.userRepo.getAll();
+    const now = Date.now();
+
+    for (const user of users) {
+      // Seed addresses
+      const addresses: Address[] = [
+        {
+          id: uuidv4(),
+          userId: user.id,
+          label: 'Home',
+          recipientName: `${user.profile.firstName} ${user.profile.lastName}`,
+          addressLine1: '123 Main Street',
+          addressLine2: 'Apt 4B',
+          city: 'New York',
+          postalCode: '10001',
+          phone: user.profile.phone || '+1 (555) 000-0000',
+          isDefault: true,
+          createdAt: now,
+          updatedAt: now,
+        },
+        {
+          id: uuidv4(),
+          userId: user.id,
+          label: 'Work',
+          recipientName: `${user.profile.firstName} ${user.profile.lastName}`,
+          addressLine1: '456 Business Ave',
+          city: 'New York',
+          postalCode: '10018',
+          phone: user.profile.phone || '+1 (555) 000-0000',
+          isDefault: false,
+          createdAt: now,
+          updatedAt: now,
+        },
+      ];
+
+      for (const address of addresses) {
+        await this.addressRepo.create(address);
+      }
+
+      // Seed payment methods
+      const paymentMethods: PaymentMethod[] = [
+        {
+          id: uuidv4(),
+          userId: user.id,
+          type: 'card',
+          last4Digits: '4242',
+          cardholderName: `${user.profile.firstName} ${user.profile.lastName}`,
+          expiryMonth: '12',
+          expiryYear: '2028',
+          isDefault: true,
+          createdAt: now,
+          updatedAt: now,
+        },
+        {
+          id: uuidv4(),
+          userId: user.id,
+          type: 'paypal',
+          paypalEmail: user.email,
+          isDefault: false,
+          createdAt: now,
+          updatedAt: now,
+        },
+      ];
+
+      for (const method of paymentMethods) {
+        await this.paymentMethodRepo.create(method);
+      }
+    }
+
+    console.log(`✅ Demo addresses & payment methods seeded for ${users.length} users`);
   }
 
   private async seedCategories(): Promise<Category[]> {
