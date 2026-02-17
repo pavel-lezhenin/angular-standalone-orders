@@ -24,56 +24,42 @@
                 <p class="section-description">Create an account to track your order</p>
 
                 <!-- Email -->
-                <mat-form-field appearance="outline" class="form-field">
-                  <mat-label>Email</mat-label>
-                  <input matInput type="email" formControlName="email" placeholder="john.doe@example.com">
-                  <mat-icon matPrefix>email</mat-icon>
-                  @if (emailChecking()) {
-                    <mat-spinner matSuffix diameter="20"></mat-spinner>
-                  }
-                  @if (checkoutForm.get('email')?.hasError('required')) {
-                    <mat-error>Email is required</mat-error>
-                  }
-                  @if (checkoutForm.get('email')?.hasError('email')) {
-                    <mat-error>Enter a valid email address</mat-error>
-                  }
-                  @if (checkoutForm.get('email')?.hasError('emailTaken')) {
-                    <mat-error>This email is already registered. Please <a routerLink="/auth/login">login</a></mat-error>
-                  }
-                </mat-form-field>
+                <app-form-field
+                  [label]="'Email'"
+                  [control]="$any(checkoutForm.controls['email'])"
+                  [type]="'email'"
+                  [placeholder]="'john.doe@example.com'"
+                  [prefixIcon]="'email'"
+                  [fieldClass]="'form-field'"
+                />
 
                 <!-- Password -->
-                <mat-form-field appearance="outline" class="form-field">
-                  <mat-label>Password</mat-label>
-                  <input matInput type="password" formControlName="password" placeholder="••••••••">
-                  <mat-icon matPrefix>lock</mat-icon>
-                  @if (checkoutForm.get('password')?.hasError('required')) {
-                    <mat-error>Password is required</mat-error>
-                  }
-                  @if (checkoutForm.get('password')?.hasError('minlength')) {
-                    <mat-error>Password must be at least 6 characters</mat-error>
-                  }
-                </mat-form-field>
+                <app-form-field
+                  [label]="'Password'"
+                  [control]="$any(checkoutForm.controls['password'])"
+                  [type]="'password'"
+                  [placeholder]="'••••••••'"
+                  [prefixIcon]="'lock'"
+                  [fieldClass]="'form-field'"
+                />
 
                 <!-- First Name -->
-                <mat-form-field appearance="outline" class="form-field">
-                  <mat-label>First Name</mat-label>
-                  <input matInput formControlName="firstName" placeholder="John">
-                  <mat-icon matPrefix>person</mat-icon>
-                  @if (checkoutForm.get('firstName')?.hasError('required')) {
-                    <mat-error>First name is required</mat-error>
-                  }
-                </mat-form-field>
+                <app-form-field
+                  [label]="'First Name'"
+                  [control]="$any(checkoutForm.controls['firstName'])"
+                  [placeholder]="'John'"
+                  [prefixIcon]="'person'"
+                  [fieldClass]="'form-field'"
+                />
 
                 <!-- Last Name -->
-                <mat-form-field appearance="outline" class="form-field">
-                  <mat-label>Last Name</mat-label>
-                  <input matInput formControlName="lastName" placeholder="Doe">
-                  <mat-icon matPrefix>person_outline</mat-icon>
-                  @if (checkoutForm.get('lastName')?.hasError('required')) {
-                    <mat-error>Last name is required</mat-error>
-                  }
-                </mat-form-field>
+                <app-form-field
+                  [label]="'Last Name'"
+                  [control]="$any(checkoutForm.controls['lastName'])"
+                  [placeholder]="'Doe'"
+                  [prefixIcon]="'person_outline'"
+                  [fieldClass]="'form-field'"
+                />
 
                 <!-- Login Link -->
                 <div class="login-link-container">
@@ -88,22 +74,22 @@
 
               @if (!isGuest() && hasSavedAddresses()) {
                 <div class="saved-address-controls">
-                  <mat-form-field appearance="outline" class="form-field">
-                    <mat-label>Delivery Address</mat-label>
-                    <mat-select
-                      formControlName="selectedAddressId"
-                      (selectionChange)="onSavedAddressChange($event.value)">
-                      @for (address of savedAddresses(); track address.id) {
-                        <mat-option [value]="address.id">
-                          {{ address.label }} — {{ address.addressLine1 }}, {{ address.city }}
-                          @if (address.isDefault) {
-                            (Default)
-                          }
-                        </mat-option>
-                      }
-                    </mat-select>
-                    <mat-icon matPrefix>bookmark</mat-icon>
-                  </mat-form-field>
+                  <app-form-field
+                    [label]="'Delivery Address'"
+                    [control]="$any(checkoutForm.controls['selectedAddressId'])"
+                    [type]="'select'"
+                    [prefixIcon]="'bookmark'"
+                    [fieldClass]="'form-field'"
+                  >
+                    @for (address of savedAddresses(); track address.id) {
+                      <mat-option [value]="address.id">
+                        {{ address.label }} — {{ address.addressLine1 }}, {{ address.city }}
+                        @if (address.isDefault) {
+                          (Default)
+                        }
+                      </mat-option>
+                    }
+                  </app-form-field>
 
                   <button
                     mat-stroked-button
@@ -120,75 +106,60 @@
 
               @if (!isGuest() && shouldShowAddressForm()) {
                 <!-- Full Name (authenticated users only) -->
-                <mat-form-field appearance="outline" class="form-field">
-                  <mat-label>Full Name</mat-label>
-                  <input matInput formControlName="fullName" placeholder="John Doe">
-                  <mat-icon matPrefix>person</mat-icon>
-                  @if (checkoutForm.get('fullName')?.hasError('required')) {
-                    <mat-error>Full name is required</mat-error>
-                  }
-                  @if (checkoutForm.get('fullName')?.hasError('minlength')) {
-                    <mat-error>Name must be at least 2 characters</mat-error>
-                  }
-                </mat-form-field>
+                <app-form-field
+                  [label]="'Full Name'"
+                  [control]="$any(checkoutForm.controls['fullName'])"
+                  [placeholder]="'John Doe'"
+                  [prefixIcon]="'person'"
+                  [fieldClass]="'form-field'"
+                />
               }
 
               @if (shouldShowAddressForm()) {
                 <!-- Address Line 1 -->
-                <mat-form-field appearance="outline" class="form-field">
-                  <mat-label>Address Line 1</mat-label>
-                  <input matInput formControlName="addressLine1" placeholder="123 Main Street">
-                  <mat-icon matPrefix>home</mat-icon>
-                  @if (checkoutForm.get('addressLine1')?.hasError('required')) {
-                    <mat-error>Address is required</mat-error>
-                  }
-                  @if (checkoutForm.get('addressLine1')?.hasError('minlength')) {
-                    <mat-error>Address must be at least 5 characters</mat-error>
-                  }
-                </mat-form-field>
+                <app-form-field
+                  [label]="'Address Line 1'"
+                  [control]="$any(checkoutForm.controls['addressLine1'])"
+                  [placeholder]="'123 Main Street'"
+                  [prefixIcon]="'home'"
+                  [fieldClass]="'form-field'"
+                />
 
                 <!-- Address Line 2 -->
-                <mat-form-field appearance="outline" class="form-field">
-                  <mat-label>Address Line 2 (Optional)</mat-label>
-                  <input matInput formControlName="addressLine2" placeholder="Apt, Suite, etc.">
-                  <mat-icon matPrefix>apartment</mat-icon>
-                </mat-form-field>
+                <app-form-field
+                  [label]="'Address Line 2 (Optional)'"
+                  [control]="$any(checkoutForm.controls['addressLine2'])"
+                  [placeholder]="'Apt, Suite, etc.'"
+                  [prefixIcon]="'apartment'"
+                  [fieldClass]="'form-field'"
+                />
 
                 <!-- City -->
-                <mat-form-field appearance="outline" class="form-field">
-                  <mat-label>City</mat-label>
-                  <input matInput formControlName="city" placeholder="New York">
-                  <mat-icon matPrefix>location_city</mat-icon>
-                  @if (checkoutForm.get('city')?.hasError('required')) {
-                    <mat-error>City is required</mat-error>
-                  }
-                </mat-form-field>
+                <app-form-field
+                  [label]="'City'"
+                  [control]="$any(checkoutForm.controls['city'])"
+                  [placeholder]="'New York'"
+                  [prefixIcon]="'location_city'"
+                  [fieldClass]="'form-field'"
+                />
 
                 <!-- Postal Code -->
-                <mat-form-field appearance="outline" class="form-field">
-                  <mat-label>Postal Code</mat-label>
-                  <input matInput formControlName="postalCode" placeholder="12345">
-                  <mat-icon matPrefix>markunread_mailbox</mat-icon>
-                  @if (checkoutForm.get('postalCode')?.hasError('required')) {
-                    <mat-error>Postal code is required</mat-error>
-                  }
-                  @if (checkoutForm.get('postalCode')?.hasError('postalCode')) {
-                    <mat-error>{{ checkoutForm.get('postalCode')?.errors?.['postalCode']?.message }}</mat-error>
-                  }
-                </mat-form-field>
+                <app-form-field
+                  [label]="'Postal Code'"
+                  [control]="$any(checkoutForm.controls['postalCode'])"
+                  [placeholder]="'12345'"
+                  [prefixIcon]="'markunread_mailbox'"
+                  [fieldClass]="'form-field'"
+                />
 
                 <!-- Phone -->
-                <mat-form-field appearance="outline" class="form-field">
-                  <mat-label>Phone Number</mat-label>
-                  <input matInput formControlName="phone" placeholder="+1 (555) 123-4567">
-                  <mat-icon matPrefix>phone</mat-icon>
-                  @if (checkoutForm.get('phone')?.hasError('required')) {
-                    <mat-error>Phone number is required</mat-error>
-                  }
-                  @if (checkoutForm.get('phone')?.hasError('phone')) {
-                    <mat-error>{{ checkoutForm.get('phone')?.errors?.['phone']?.message }}</mat-error>
-                  }
-                </mat-form-field>
+                <app-form-field
+                  [label]="'Phone Number'"
+                  [control]="$any(checkoutForm.controls['phone'])"
+                  [placeholder]="'+1 (555) 123-4567'"
+                  [prefixIcon]="'phone'"
+                  [fieldClass]="'form-field'"
+                />
 
                 <!-- Save Address Checkbox (authenticated users only) -->
                 @if (!isGuest()) {

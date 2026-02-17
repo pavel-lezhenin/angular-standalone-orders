@@ -105,23 +105,19 @@
         <div class="specifications-list" formArrayName="specifications">
           @for (spec of specifications.controls; track $index; let i = $index) {
             <div [formGroupName]="i" class="specification-item">
-              <mat-form-field appearance="outline">
-                <mat-label>Name</mat-label>
-                <input
-                  matInput
-                  formControlName="name"
-                  placeholder="e.g., Screen Size"
-                />
-              </mat-form-field>
+              <app-form-field
+                [label]="'Name'"
+                [control]="$any(spec.get('name'))"
+                [type]="'text'"
+                [placeholder]="'e.g., Screen Size'"
+              />
 
-              <mat-form-field appearance="outline">
-                <mat-label>Value</mat-label>
-                <input
-                  matInput
-                  formControlName="value"
-                  placeholder="e.g., 15.6 inches"
-                />
-              </mat-form-field>
+              <app-form-field
+                [label]="'Value'"
+                [control]="$any(spec.get('value'))"
+                [type]="'text'"
+                [placeholder]="'e.g., 15.6 inches'"
+              />
 
               <button
                 mat-icon-button

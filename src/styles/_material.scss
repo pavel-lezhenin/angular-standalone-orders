@@ -108,3 +108,37 @@ html.theme-light {
 html.theme-dark {
   @include apply-dark-theme;
 }
+
+/* ============================================
+ * Global Material Button Styles
+ * ============================================ */
+.mat-mdc-button,
+.mat-mdc-raised-button,
+.mat-mdc-outlined-button,
+.mat-mdc-unelevated-button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: var(--spacing-xs) !important;
+
+  .mdc-button__label {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: var(--spacing-xs) !important;
+  }
+
+  mat-icon {
+    vertical-align: middle !important;
+    line-height: 1 !important;
+  }
+}
+
+.mat-mdc-icon-button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.mat-icon {
+  vertical-align: middle !important;
+}

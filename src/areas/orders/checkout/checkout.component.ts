@@ -15,6 +15,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { PageLoaderComponent } from '@shared/ui/page-loader/page-loader.component';
 import { EmptyStateComponent, OrderSummaryComponent } from '@shared/ui';
 import type { SummaryLine } from '@shared/ui/order-summary/order-summary.component';
+import { FormFieldComponent } from '@shared/ui/form-field/form-field.component';
 import { CartService } from '@shared/services/cart.service';
 import { PaymentStateService } from '@shared/services/payment-state.service';
 import { UserPreferencesService } from '@shared/services/user-preferences.service';
@@ -82,6 +83,7 @@ interface CheckoutAddressFormValue {
     PageLoaderComponent,
     EmptyStateComponent,
     OrderSummaryComponent,
+    FormFieldComponent,
   ],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.scss',
@@ -254,6 +256,15 @@ export default class CheckoutComponent implements OnInit {
         phone: [profile.phone || '', [Validators.required, FormValidators.phone]],
         saveAddress: [true], // Save address to profile by default
       });
+
+      // Watch selectedAddressId for saved address changes
+      this.checkoutForm.get('selectedAddressId')?.valueChanges
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe((addressId) => {
+          if (addressId) {
+            this.onSavedAddressChange(addressId);
+          }
+        });
     }
   }
 

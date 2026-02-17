@@ -11,13 +11,15 @@
     (clear)="onSearchClear()"
   />
 
-  <mat-form-field appearance="outline" class="role-field">
-    <mat-label>Filter by role</mat-label>
-    <mat-select [formControl]="roleControl">
-      <mat-option [value]="undefined">All roles</mat-option>
-      <mat-option value="user">User</mat-option>
-      <mat-option value="manager">Manager</mat-option>
-      <mat-option value="admin">Admin</mat-option>
-    </mat-select>
-  </mat-form-field>
+  <app-form-field
+    [label]="'Filter by role'"
+    [control]="roleControl"
+    [type]="'select'"
+    [fieldClass]="'role-field'"
+  >
+    <mat-option [value]="undefined">All roles</mat-option>
+    <mat-option value="user">User</mat-option>
+    <mat-option value="manager">Manager</mat-option>
+    <mat-option value="admin">Admin</mat-option>
+  </app-form-field>
 </app-filter-container>

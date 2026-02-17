@@ -15,6 +15,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { FormFieldComponent } from '../form-field/form-field.component';
 import type { SavedPaymentMethodDTO } from '@core/models';
 
 export type PaymentMethod = 'card' | 'paypal' | 'cash_on_delivery';
@@ -58,6 +59,7 @@ export interface PaymentFormData {
     MatRadioModule,
     MatIconModule,
     MatCheckboxModule,
+    FormFieldComponent,
   ],
   templateUrl: './payment-form.component.html',
   styleUrl: './payment-form.component.scss',

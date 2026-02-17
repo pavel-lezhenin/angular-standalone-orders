@@ -18,83 +18,76 @@
         <h3>Card Details</h3>
 
         <!-- Card Number -->
-        <mat-form-field class="full-width">
-          <mat-label>Card Number</mat-label>
-          <input 
-            matInput 
-            formControlName="cardNumber"
-            placeholder="1234 5678 9012 3456"
-            (input)="formatCardNumber($event)"
-            maxlength="19">
-          <mat-icon matPrefix>credit_card</mat-icon>
-          @if (paymentForm.get('cardNumber')?.hasError('required') && paymentForm.get('cardNumber')?.touched) {
-            <mat-error>Card number is required</mat-error>
-          }
-          @if (paymentForm.get('cardNumber')?.hasError('invalidCard')) {
-            <mat-error>{{ paymentForm.get('cardNumber')?.errors?.['invalidCard'] }}</mat-error>
-          }
-        </mat-form-field>
+        <app-form-field
+          [label]="'Card Number'"
+          [control]="$any(paymentForm.get('cardNumber'))"
+          [type]="'text'"
+          [placeholder]="'1234 5678 9012 3456'"
+          [maxLength]="19"
+          [prefixIcon]="'credit_card'"
+          [fieldClass]="'full-width'"
+          (inputChange)="formatCardNumber($event)"
+          [customErrorMessages]="{
+            'required': 'Card number is required',
+            'invalidCard': paymentForm.get('cardNumber')?.errors?.['invalidCard']
+          }"
+        />
 
         <!-- Cardholder Name -->
-        <mat-form-field class="full-width">
-          <mat-label>Cardholder Name</mat-label>
-          <input 
-            matInput 
-            formControlName="cardholderName"
-            placeholder="JOHN DOE">
-          <mat-icon matPrefix>person</mat-icon>
-          @if (paymentForm.get('cardholderName')?.hasError('required') && paymentForm.get('cardholderName')?.touched) {
-            <mat-error>Cardholder name is required</mat-error>
-          }
-          @if (paymentForm.get('cardholderName')?.hasError('minlength')) {
-            <mat-error>Name must be at least 3 characters</mat-error>
-          }
-        </mat-form-field>
+        <app-form-field
+          [label]="'Cardholder Name'"
+          [control]="$any(paymentForm.get('cardholderName'))"
+          [type]="'text'"
+          [placeholder]="'JOHN DOE'"
+          [prefixIcon]="'person'"
+          [fieldClass]="'full-width'"
+          [customErrorMessages]="{
+            'required': 'Cardholder name is required',
+            'minlength': 'Name must be at least 3 characters'
+          }"
+        />
 
         <!-- Expiry Date & CVV -->
         <div class="card-extra-fields">
           <div class="expiry-fields">
-            <mat-form-field class="expiry-month">
-              <mat-label>Month</mat-label>
-              <mat-select formControlName="expiryMonth">
-                @for (month of months; track month.value) {
-                  <mat-option [value]="month.value">{{ month.label }}</mat-option>
-                }
-              </mat-select>
-              @if (paymentForm.get('expiryMonth')?.hasError('required') && paymentForm.get('expiryMonth')?.touched) {
-                <mat-error>Required</mat-error>
+            <app-form-field
+              [label]="'Month'"
+              [control]="$any(paymentForm.get('expiryMonth'))"
+              [type]="'select'"
+              [fieldClass]="'expiry-month'"
+              [customErrorMessages]="{'required': 'Required'}"
+            >
+              @for (month of months; track month.value) {
+                <mat-option [value]="month.value">{{ month.label }}</mat-option>
               }
-            </mat-form-field>
+            </app-form-field>
 
-            <mat-form-field class="expiry-year">
-              <mat-label>Year</mat-label>
-              <mat-select formControlName="expiryYear">
-                @for (year of years; track year.value) {
-                  <mat-option [value]="year.value">{{ year.label }}</mat-option>
-                }
-              </mat-select>
-              @if (paymentForm.get('expiryYear')?.hasError('required') && paymentForm.get('expiryYear')?.touched) {
-                <mat-error>Required</mat-error>
+            <app-form-field
+              [label]="'Year'"
+              [control]="$any(paymentForm.get('expiryYear'))"
+              [type]="'select'"
+              [fieldClass]="'expiry-year'"
+              [customErrorMessages]="{'required': 'Required'}"
+            >
+              @for (year of years; track year.value) {
+                <mat-option [value]="year.value">{{ year.label }}</mat-option>
               }
-            </mat-form-field>
+            </app-form-field>
           </div>
 
-          <mat-form-field class="cvv-field">
-            <mat-label>CVV</mat-label>
-            <input 
-              matInput 
-              formControlName="cvv"
-              type="password"
-              placeholder="123"
-              maxlength="4">
-            <mat-icon matPrefix>lock</mat-icon>
-            @if (paymentForm.get('cvv')?.hasError('required') && paymentForm.get('cvv')?.touched) {
-              <mat-error>CVV required</mat-error>
-            }
-            @if (paymentForm.get('cvv')?.hasError('pattern')) {
-              <mat-error>Must be 3-4 digits</mat-error>
-            }
-          </mat-form-field>
+          <app-form-field
+            [label]="'CVV'"
+            [control]="$any(paymentForm.get('cvv'))"
+            [type]="'password'"
+            [placeholder]="'123'"
+            [maxLength]="4"
+            [prefixIcon]="'lock'"
+            [fieldClass]="'cvv-field'"
+            [customErrorMessages]="{
+              'required': 'CVV required',
+              'pattern': 'Must be 3-4 digits'
+            }"
+          />
         </div>
 
         <!-- Save Method Checkbox -->

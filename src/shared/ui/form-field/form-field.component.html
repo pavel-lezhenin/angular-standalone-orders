@@ -15,6 +15,7 @@
       [rows]="rows()"
       [maxlength]="maxLength() ?? null"
       [required]="required()"
+      [readonly]="readonly()"
       [attr.autocomplete]="autocomplete() || null"
       [attr.aria-label]="ariaLabel() || label()"
     ></textarea>
@@ -36,8 +37,10 @@
       [max]="max() ?? null"
       [step]="step() ?? null"
       [required]="required()"
+      [readonly]="readonly()"
       [attr.autocomplete]="autocomplete() || null"
       [attr.aria-label]="ariaLabel() || label()"
+      (input)="inputChange.emit($event)"
     />
   }
   

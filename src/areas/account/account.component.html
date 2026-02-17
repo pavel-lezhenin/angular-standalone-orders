@@ -1,5 +1,7 @@
 <div class="account-page">
-  @if (user(); as currentUser) {
+  @if (isLoading()) {
+    <app-page-loader [isLoading]="true" />
+  } @else if (user(); as currentUser) {
     <mat-card class="profile-card">
       <mat-card-header>
         <div class="header-content">
@@ -89,12 +91,5 @@
       [totalSpent]="totalSpent()"
       [loyaltyPoints]="loyaltyPoints()"
     />
-  } @else {
-    <mat-card class="error-card">
-      <mat-card-content>
-        <mat-icon>error_outline</mat-icon>
-        <p>Unable to load account information. Please log in.</p>
-      </mat-card-content>
-    </mat-card>
   }
 </div>

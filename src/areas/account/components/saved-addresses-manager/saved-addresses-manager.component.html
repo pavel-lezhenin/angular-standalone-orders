@@ -7,33 +7,36 @@
       (click)="toggleForm.emit()"
     >
       @if (showAddressForm()) {
-        <mat-icon>close</mat-icon>
-        Cancel
+        <ng-container>
+          <mat-icon>close</mat-icon>
+          Cancel
+        </ng-container>
       } @else {
-        <mat-icon>add</mat-icon>
-        Add Address
+        <ng-container>
+          <mat-icon>add</mat-icon>
+          Add Address
+        </ng-container>
       }
     </button>
   </div>
 
   @if (!showAddressForm()) {
     <div class="selection-controls">
-      <mat-form-field appearance="outline" class="address-select">
-        <mat-label>Selected Address</mat-label>
-        <mat-select
-          [value]="selectedAddressId()"
-          (selectionChange)="addressSelectionChange.emit($event.value)"
-        >
-          @for (address of savedAddresses(); track address.id) {
-            <mat-option [value]="address.id">
-              {{ address.label }}
-              @if (address.isDefault) {
-                (Default)
-              }
-            </mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
+      <app-form-field
+        [label]="'Selected Address'"
+        [control]="addressSelectControl"
+        [type]="'select'"
+        [fieldClass]="'address-select'"
+      >
+        @for (address of savedAddresses(); track address.id) {
+          <mat-option [value]="address.id">
+            {{ address.label }}
+            @if (address.isDefault) {
+              (Default)
+            }
+          </mat-option>
+        }
+      </app-form-field>
 
       <div class="action-buttons">
         @if (canSetAsDefault()) {
@@ -76,43 +79,48 @@
   } @else {
     <form [formGroup]="addressForm()" class="address-form">
       <div class="form-row">
-        <mat-form-field appearance="outline">
-          <mat-label>Label</mat-label>
-          <input matInput formControlName="label" placeholder="e.g., Home, Work" />
-        </mat-form-field>
+        <app-form-field
+          [label]="'Label'"
+          [control]="$any(addressForm().controls['label'])"
+          [placeholder]="'e.g., Home, Work'"
+        />
 
-        <mat-form-field appearance="outline">
-          <mat-label>Recipient Name</mat-label>
-          <input matInput formControlName="recipientName" />
-        </mat-form-field>
+        <app-form-field
+          [label]="'Recipient Name'"
+          [control]="$any(addressForm().controls['recipientName'])"
+        />
       </div>
 
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Address Line 1</mat-label>
-        <input matInput formControlName="addressLine1" />
-      </mat-form-field>
+      <app-form-field
+        [label]="'Address Line 1'"
+        [control]="$any(addressForm().controls['addressLine1'])"
+        [fieldClass]="'full-width'"
+      />
 
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Address Line 2 (Optional)</mat-label>
-        <input matInput formControlName="addressLine2" />
-      </mat-form-field>
+      <app-form-field
+        [label]="'Address Line 2 (Optional)'"
+        [control]="$any(addressForm().controls['addressLine2'])"
+        [fieldClass]="'full-width'"
+      />
 
       <div class="form-row">
-        <mat-form-field appearance="outline">
-          <mat-label>City</mat-label>
-          <input matInput formControlName="city" />
-        </mat-form-field>
+        <app-form-field
+          [label]="'City'"
+          [control]="$any(addressForm().controls['city'])"
+        />
 
-        <mat-form-field appearance="outline">
-          <mat-label>Postal Code</mat-label>
-          <input matInput formControlName="postalCode" />
-        </mat-form-field>
+        <app-form-field
+          [label]="'Postal Code'"
+          [control]="$any(addressForm().controls['postalCode'])"
+        />
       </div>
 
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Phone</mat-label>
-        <input matInput formControlName="phone" type="tel" />
-      </mat-form-field>
+      <app-form-field
+        [label]="'Phone'"
+        [control]="$any(addressForm().controls['phone'])"
+        [type]="'tel'"
+        [fieldClass]="'full-width'"
+      />
 
       <div class="form-actions">
         <button

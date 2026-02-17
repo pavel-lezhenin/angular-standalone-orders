@@ -15,12 +15,6 @@
     font-size: var(--font-size-lg);
     font-weight: var(--font-weight-semibold);
   }
-
-  button {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-xs);
-  }
 }
 
 .selection-controls {
@@ -36,12 +30,6 @@
     display: flex;
     gap: var(--spacing-sm);
     flex-wrap: wrap;
-
-    button {
-      display: flex;
-      align-items: center;
-      gap: var(--spacing-xs);
-    }
   }
 }
 

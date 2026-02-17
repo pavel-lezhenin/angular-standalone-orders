@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
+import { FormFieldComponent } from '@shared/ui/form-field/form-field.component';
 import { firstValueFrom } from 'rxjs';
 import type { OrderDTO, AddOrderCommentDTO, OrderStatusChangeActorDTO, ProductDTO } from '@core/models';
 
@@ -36,6 +37,7 @@ interface ProductLineItem {
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
+    FormFieldComponent,
   ],
   templateUrl: './order-details-dialog.component.html',
   styleUrl: './order-details-dialog.component.scss',

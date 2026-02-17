@@ -18,44 +18,37 @@
       <div class="payment-form-section">
         @if (usingSavedPaymentMethod()) {
           <div class="saved-payment-controls">
-            <mat-form-field appearance="outline" class="form-field">
-              <mat-label>Payment Method</mat-label>
-              <mat-select
-                [value]="selectedSavedMethodId()"
-                (selectionChange)="onSavedMethodChange($event.value)">
-                @for (method of savedPaymentMethods(); track method.id) {
-                  <mat-option [value]="method.id">
-                    @if (method.type === 'card') {
-                      Card ending in {{ method.last4Digits }}
-                    } @else {
-                      PayPal {{ method.paypalEmail ? '(' + method.paypalEmail + ')' : '' }}
-                    }
-                    @if (method.isDefault) {
-                      (Default)
-                    }
-                  </mat-option>
-                }
-              </mat-select>
-              <mat-icon matPrefix>credit_card</mat-icon>
-            </mat-form-field>
+            <app-form-field
+              [label]="'Payment Method'"
+              [control]="savedMethodSelectControl"
+              [type]="'select'"
+              [prefixIcon]="'credit_card'"
+              [fieldClass]="'form-field'"
+            >
+              @for (method of savedPaymentMethods(); track method.id) {
+                <mat-option [value]="method.id">
+                  @if (method.type === 'card') {
+                    Card ending in {{ method.last4Digits }}
+                  } @else {
+                    PayPal {{ method.paypalEmail ? '(' + method.paypalEmail + ')' : '' }}
+                  }
+                  @if (method.isDefault) {
+                    (Default)
+                  }
+                </mat-option>
+              }
+            </app-form-field>
 
             @if (selectedSavedMethodType() === 'card') {
-              <mat-form-field appearance="outline" class="form-field">
-                <mat-label>CVV</mat-label>
-                <input
-                  matInput
-                  type="password"
-                  [formControl]="savedMethodCvv"
-                  placeholder="123"
-                  maxlength="4">
-                <mat-icon matPrefix>lock</mat-icon>
-                @if (savedMethodCvv.hasError('required') && savedMethodCvv.touched) {
-                  <mat-error>CVV is required</mat-error>
-                }
-                @if (savedMethodCvv.hasError('pattern') && savedMethodCvv.touched) {
-                  <mat-error>Enter a valid CVV</mat-error>
-                }
-              </mat-form-field>
+              <app-form-field
+                [label]="'CVV'"
+                [control]="savedMethodCvv"
+                [type]="'password'"
+                [placeholder]="'123'"
+                [maxLength]="4"
+                [prefixIcon]="'lock'"
+                [fieldClass]="'form-field'"
+              />
             }
 
             <button

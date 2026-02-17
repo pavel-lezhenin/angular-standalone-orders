@@ -3,6 +3,7 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
+import { FormFieldComponent } from '@shared/ui/form-field/form-field.component';
 
 /**
  * Profile Information Component
@@ -17,6 +18,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
+    FormFieldComponent,
   ],
   templateUrl: './profile-info.component.html',
   styleUrl: './profile-info.component.scss',

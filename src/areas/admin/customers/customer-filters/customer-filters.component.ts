@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { UserRole } from '@core/types';
 import { SearchInputComponent } from '@shared/ui/search-input';
 import { FilterContainerComponent, FilterAction } from '@shared/ui/filter-container';
+import { FormFieldComponent } from '@shared/ui/form-field/form-field.component';
 
 export interface CustomerFilters {
   search: string;
@@ -33,6 +34,7 @@ export interface CustomerFilters {
     MatFormFieldModule,
     MatSelectModule,
     MatIconModule,
+    FormFieldComponent,
   ],
   templateUrl: './customer-filters.component.html',
   styleUrl: './customer-filters.component.scss',

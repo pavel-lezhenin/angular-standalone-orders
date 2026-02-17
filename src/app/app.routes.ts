@@ -70,7 +70,7 @@ export const routes: Routes = [
       {
         path: 'account',
         canActivate: [authGuard],
-        loadComponent: () => import('../areas/account/components/account.component').then(m => m.AccountComponent),
+        loadComponent: () => import('../areas/account/account.component').then(m => m.AccountComponent),
         title: 'My Account - Orders Platform',
       },
     ],

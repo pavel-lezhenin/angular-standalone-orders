@@ -1,5 +1,7 @@
-import { Component, OnInit, signal, computed, effect } from '@angular/core';
+import { Component, OnInit, signal, computed, effect, inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,10 +11,11 @@ import { AuthService } from '@core/services/auth.service';
 import { LayoutService } from '@/shared/services/layout.service';
 import { UserPreferencesService } from '@shared/services/user-preferences.service';
 import { NotificationService } from '@shared/services/notification.service';
-import { ProfileInfoComponent } from './profile-info/profile-info.component';
-import { SavedAddressesManagerComponent } from './saved-addresses-manager/saved-addresses-manager.component';
-import { SavedPaymentMethodsManagerComponent } from './saved-payment-methods-manager/saved-payment-methods-manager.component';
-import { AccountStatsComponent } from './account-stats/account-stats.component';
+import { PageLoaderComponent } from '@shared/ui/page-loader/page-loader.component';
+import { ProfileInfoComponent } from './components/profile-info/profile-info.component';
+import { SavedAddressesManagerComponent } from './components/saved-addresses-manager/saved-addresses-manager.component';
+import { SavedPaymentMethodsManagerComponent } from './components/saved-payment-methods-manager/saved-payment-methods-manager.component';
+import { AccountStatsComponent } from './components/account-stats/account-stats.component';
 import type { AddressDTO, PaymentMethodDTO } from '@core/models';
 
 /**
@@ -22,11 +25,13 @@ import type { AddressDTO, PaymentMethodDTO } from '@core/models';
   selector: 'app-account',
   standalone: true,
   imports: [
+    CommonModule,
     MatCardModule,
     MatButtonModule,
     MatIconModule,
     MatDividerModule,
     MatChipsModule,
+    PageLoaderComponent,
     ProfileInfoComponent,
     SavedAddressesManagerComponent,
     SavedPaymentMethodsManagerComponent,
@@ -38,6 +43,7 @@ import type { AddressDTO, PaymentMethodDTO } from '@core/models';
 export class AccountComponent implements OnInit {
 
   readonly user = computed(() => this.authService.currentUser());
+  readonly isLoading = signal(true);
   readonly savedAddresses = signal<AddressDTO[]>([]);
   readonly selectedAddressId = signal<string>('');
   readonly savedPaymentMethods = signal<PaymentMethodDTO[]>([]);
@@ -50,6 +56,9 @@ export class AccountComponent implements OnInit {
   profileForm: FormGroup;
   addressForm: FormGroup;
   paymentMethodForm: FormGroup;
+  
+  private router = inject(Router);
+  private platformId = inject(PLATFORM_ID);
   
   constructor(
     private authService: AuthService,
@@ -113,7 +122,23 @@ export class AccountComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    await this.loadPreferences();
+    // Only in browser - SSR and guard already handled access
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    try {
+      // If somehow user is not authenticated (expired session, etc.), redirect
+      if (!this.user()) {
+        console.warn('⚠️ Account page loaded without authenticated user - redirecting to login');
+        this.router.navigate(['/auth/login'], { queryParams: { returnUrl: '/account' } });
+        return;
+      }
+      
+      await this.loadPreferences();
+    } finally {
+      this.isLoading.set(false);
+    }
   }
 
   private async loadPreferences(): Promise<void> {

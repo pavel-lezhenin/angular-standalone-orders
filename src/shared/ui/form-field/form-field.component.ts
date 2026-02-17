@@ -1,4 +1,4 @@
-import { Component, input, computed } from '@angular/core';
+import { Component, input, computed, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -153,10 +153,21 @@ export class FormFieldComponent {
   readonly ariaLabel = input<string>('');
 
   /**
+   * Whether the field is readonly
+   * @default false
+   */
+  readonly readonly = input<boolean>(false);
+
+  /**
    * Custom error messages map
    * Key is the error type, value is the error message
    */
   readonly customErrorMessages = input<Record<string, string>>({});
+
+  /**
+   * Event emitted when input value changes (for formatting, etc.)
+   */
+  readonly inputChange = output<Event>();
 
   /**
    * Computed character count text

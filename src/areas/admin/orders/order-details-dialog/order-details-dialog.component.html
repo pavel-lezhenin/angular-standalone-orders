@@ -42,18 +42,15 @@
       }
     </div>
 
-    <mat-form-field appearance="outline" class="comment-field">
-      <mat-label>Add manager comment</mat-label>
-      <textarea
-        matInput
-        rows="3"
-        [formControl]="commentControl"
-        placeholder="Example: Item unavailable in warehouse, initiate refund"
-      ></textarea>
-      @if (commentControl.invalid && commentControl.touched) {
-        <mat-error>Comment must be at least 3 characters</mat-error>
-      }
-    </mat-form-field>
+    <app-form-field
+      [label]="'Add manager comment'"
+      [control]="commentControl"
+      [type]="'textarea'"
+      [rows]="3"
+      [placeholder]="'Example: Item unavailable in warehouse, initiate refund'"
+      [fieldClass]="'comment-field'"
+      [customErrorMessages]="{'minlength': 'Comment must be at least 3 characters'}"
+    />
 
     <button mat-flat-button type="button" (click)="addComment()" [disabled]="isSavingComment()">
       <mat-icon>note_add</mat-icon>

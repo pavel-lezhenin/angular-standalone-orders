@@ -1,7 +1,8 @@
-import { Component, OnInit, ViewChild, signal, computed, inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, ViewChild, signal, computed, inject, PLATFORM_ID, effect } from '@angular/core';
 import { CommonModule, isPlatformBrowser, CurrencyPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -11,6 +12,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { PaymentFormComponent, PaymentFormData } from '@shared/ui/payment-form/payment-form.component';
 import { PageLoaderComponent } from '@shared/ui/page-loader/page-loader.component';
 import { OrderSummaryComponent } from '@shared/ui';
+import { FormFieldComponent } from '@shared/ui/form-field/form-field.component';
 import { PaymentService, PaymentRequest, PaymentResult } from '@shared/services/payment.service';
 import { PaymentStateService } from '@shared/services/payment-state.service';
 import { UserPreferencesService } from '@shared/services/user-preferences.service';
@@ -46,6 +48,7 @@ type PaymentState = 'form' | 'processing' | 'success' | 'failure';
     PaymentFormComponent,
     PageLoaderComponent,
     OrderSummaryComponent,
+    FormFieldComponent,
   ],
   templateUrl: './payment.component.html',
   styleUrl: './payment.component.scss',
@@ -68,7 +71,8 @@ export default class PaymentComponent implements OnInit {
   protected total = signal<number>(0);
   protected itemCount = signal<number>(0);
   protected savedPaymentMethods = signal<SavedPaymentMethodDTO[]>([]);
-  protected selectedSavedMethodId = signal<string>('');
+  protected selectedSavedMethodId = signal<string>('');  
+  protected savedMethodSelectControl = new FormControl('');
   protected showNewPaymentForm = signal(false);
   protected savedMethodCvv = new FormControl('', [Validators.required, Validators.pattern(/^\d{3,4}$/)]);
   protected errorMessage = signal<string>('');
@@ -93,6 +97,25 @@ export default class PaymentComponent implements OnInit {
     return this.savedPaymentMethods().length > 1;
   });
   protected selectedSavedMethodType = computed(() => this.getSelectedSavedMethod()?.type ?? null);
+
+  constructor() {
+    // Synchronize savedMethodSelectControl with selectedSavedMethodId signal
+    effect(() => {
+      const methodId = this.selectedSavedMethodId();
+      if (this.savedMethodSelectControl.value !== methodId) {
+        this.savedMethodSelectControl.setValue(methodId, { emitEvent: false });
+      }
+    });
+
+    // Subscribe to savedMethodSelectControl changes to trigger onSavedMethodChange
+    this.savedMethodSelectControl.valueChanges
+      .pipe(takeUntilDestroyed())
+      .subscribe(methodId => {
+        if (methodId && methodId !== this.selectedSavedMethodId()) {
+          this.onSavedMethodChange(methodId);
+        }
+      });
+  }
 
   ngOnInit(): void {
     // Skip on server

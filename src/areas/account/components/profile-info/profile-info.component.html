@@ -7,29 +7,21 @@
     </h3>
 
     <div class="form-row">
-      <mat-form-field appearance="outline" class="form-field">
-        <mat-label>First Name</mat-label>
-        <input 
-          matInput 
-          formControlName="firstName" 
-          [readonly]="!isEditMode()"
-        />
-        @if (!isEditMode()) {
-          <mat-icon matSuffix>lock</mat-icon>
-        }
-      </mat-form-field>
+      <app-form-field
+        [label]="'First Name'"
+        [control]="$any(profileForm().controls['firstName'])"
+        [readonly]="!isEditMode()"
+        [suffixIcon]="isEditMode() ? '' : 'lock'"
+        [fieldClass]="'form-field'"
+      />
 
-      <mat-form-field appearance="outline" class="form-field">
-        <mat-label>Last Name</mat-label>
-        <input 
-          matInput 
-          formControlName="lastName" 
-          [readonly]="!isEditMode()"
-        />
-        @if (!isEditMode()) {
-          <mat-icon matSuffix>lock</mat-icon>
-        }
-      </mat-form-field>
+      <app-form-field
+        [label]="'Last Name'"
+        [control]="$any(profileForm().controls['lastName'])"
+        [readonly]="!isEditMode()"
+        [suffixIcon]="isEditMode() ? '' : 'lock'"
+        [fieldClass]="'form-field'"
+      />
     </div>
   </section>
 
@@ -41,24 +33,22 @@
     </h3>
 
     <div class="form-row">
-      <mat-form-field appearance="outline" class="form-field">
-        <mat-label>Email</mat-label>
-        <input matInput formControlName="email" readonly />
-        <mat-icon matSuffix>lock</mat-icon>
-        <mat-hint>Email cannot be changed</mat-hint>
-      </mat-form-field>
+      <app-form-field
+        [label]="'Email'"
+        [control]="$any(profileForm().controls['email'])"
+        [readonly]="true"
+        [suffixIcon]="'lock'"
+        [hint]="'Email cannot be changed'"
+        [fieldClass]="'form-field'"
+      />
 
-      <mat-form-field appearance="outline" class="form-field">
-        <mat-label>Phone</mat-label>
-        <input 
-          matInput 
-          formControlName="phone" 
-          [readonly]="!isEditMode()"
-        />
-        @if (!isEditMode()) {
-          <mat-icon matSuffix>lock</mat-icon>
-        }
-      </mat-form-field>
+      <app-form-field
+        [label]="'Phone'"
+        [control]="$any(profileForm().controls['phone'])"
+        [readonly]="!isEditMode()"
+        [suffixIcon]="isEditMode() ? '' : 'lock'"
+        [fieldClass]="'form-field'"
+      />
     </div>
   </section>
 </form>

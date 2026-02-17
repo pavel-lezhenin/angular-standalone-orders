@@ -11,15 +11,17 @@
     (clear)="onSearchClear()"
   />
 
-  <mat-form-field appearance="outline" class="category-field">
-    <mat-label>Category</mat-label>
-    <mat-select [formControl]="categoryControl">
-      <mat-option [value]="undefined">All Categories</mat-option>
-      @for (category of categories(); track category.id) {
-        <mat-option [value]="category.id">
-          {{ category.name }}
-        </mat-option>
-      }
-    </mat-select>
-  </mat-form-field>
+  <app-form-field
+    [label]="'Category'"
+    [control]="categoryControl"
+    [type]="'select'"
+    [fieldClass]="'category-field'"
+  >
+    <mat-option [value]="undefined">All Categories</mat-option>
+    @for (category of categories(); track category.id) {
+      <mat-option [value]="category.id">
+        {{ category.name }}
+      </mat-option>
+    }
+  </app-form-field>
 </app-filter-container>

@@ -1,10 +1,11 @@
-import { Component, input, output, computed } from '@angular/core';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Component, input, output, computed, effect } from '@angular/core';
+import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { FormFieldComponent } from '@shared/ui/form-field/form-field.component';
 import type { AddressDTO } from '@core/models';
 
 /**
@@ -22,6 +23,7 @@ import type { AddressDTO } from '@core/models';
     MatSelectModule,
     MatButtonModule,
     MatIconModule,
+    FormFieldComponent,
   ],
   templateUrl: './saved-addresses-manager.component.html',
   styleUrl: './saved-addresses-manager.component.scss',
@@ -46,6 +48,11 @@ export class SavedAddressesManagerComponent {
    * Address form group
    */
   readonly addressForm = input.required<FormGroup>();
+
+  /**
+   * FormControl for address selection (wrapper for app-form-field)
+   */
+  readonly addressSelectControl = new FormControl('');
 
   /**
    * Selected address computed from ID
@@ -96,4 +103,22 @@ export class SavedAddressesManagerComponent {
    * Emitted when user wants to set selected address as default
    */
   readonly setAsDefault = output<void>();
+
+  constructor() {
+    // Sync address selection with input signal
+    effect(() => {
+      const selectedId = this.selectedAddressId();
+      this.addressSelectControl.setValue(selectedId, { emitEvent: false });
+    });
+
+    // Emit change when FormControl value changes
+    effect(() => {
+      const control = this.addressSelectControl;
+      control.valueChanges.subscribe(value => {
+        if (value) {
+          this.addressSelectionChange.emit(value);
+        }
+      });
+    }, { allowSignalWrites: false });
+  }
 }

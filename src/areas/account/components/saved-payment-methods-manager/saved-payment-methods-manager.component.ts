@@ -1,11 +1,12 @@
-import { Component, input, output, computed } from '@angular/core';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Component, input, output, computed, effect } from '@angular/core';
+import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
+import { FormFieldComponent } from '@shared/ui/form-field/form-field.component';
 import type { PaymentMethodDTO } from '@core/models';
 
 /**
@@ -24,6 +25,7 @@ import type { PaymentMethodDTO } from '@core/models';
     MatButtonModule,
     MatIconModule,
     MatChipsModule,
+    FormFieldComponent,
   ],
   templateUrl: './saved-payment-methods-manager.component.html',
   styleUrl: './saved-payment-methods-manager.component.scss',
@@ -53,6 +55,16 @@ export class SavedPaymentMethodsManagerComponent {
    * Selected payment method type ('card' or 'paypal')
    */
   readonly selectedPaymentType = input.required<'card' | 'paypal'>();
+
+  /**
+   * FormControl for payment method selection (wrapper for app-form-field)
+   */
+  readonly paymentMethodSelectControl = new FormControl('');
+
+  /**
+   * FormControl for payment type selection (wrapper for app-form-field)
+   */
+  readonly paymentTypeSelectControl = new FormControl<'card' | 'paypal'>('card');
 
   /**
    * Selected payment method computed from ID
@@ -108,4 +120,37 @@ export class SavedPaymentMethodsManagerComponent {
    * Emitted when user wants to set selected payment method as default
    */
   readonly setAsDefault = output<void>();
+
+  constructor() {
+    // Sync payment method selection with input signal
+    effect(() => {
+      const selectedId = this.selectedPaymentMethodId();
+      this.paymentMethodSelectControl.setValue(selectedId, { emitEvent: false });
+    });
+
+    // Sync payment type with input signal
+    effect(() => {
+      const type = this.selectedPaymentType();
+      this.paymentTypeSelectControl.setValue(type, { emitEvent: false });
+    });
+
+    // Emit change when FormControl value changes
+    effect(() => {
+      const control = this.paymentMethodSelectControl;
+      control.valueChanges.subscribe(value => {
+        if (value) {
+          this.paymentMethodSelectionChange.emit(value);
+        }
+      });
+    }, { allowSignalWrites: false });
+
+    effect(() => {
+      const control = this.paymentTypeSelectControl;
+      control.valueChanges.subscribe(value => {
+        if (value) {
+          this.paymentTypeChange.emit(value);
+        }
+      });
+    }, { allowSignalWrites: false });
+  }
 }
