@@ -1,7 +1,3 @@
-@import '@/styles/variables/colors';
-@import '@/styles/variables/spacing';
-@import '@/styles/variables/typography';
-
 .order-item {
   display: flex;
   gap: var(--spacing-md);
@@ -10,7 +6,7 @@
   border-radius: var(--border-radius-md);
   background: var(--surface-primary);
   transition: box-shadow var(--transition-fast);
-  
+
   &:hover {
     box-shadow: var(--shadow-sm);
   }
@@ -54,7 +50,7 @@
     font-weight: var(--font-weight-semibold);
     color: var(--text-primary);
   }
-  
+
   .item-description {
     margin: 0;
     font-size: var(--font-size-sm);
@@ -70,25 +66,25 @@
   display: flex;
   gap: var(--spacing-lg);
   font-size: var(--font-size-sm);
-  
+
   > div {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-xs);
   }
-  
+
   .label {
     color: var(--text-secondary);
     font-size: var(--font-size-xs);
     text-transform: uppercase;
     letter-spacing: var(--spacing-1px);
   }
-  
+
   .value {
     color: var(--text-primary);
     font-weight: var(--font-weight-semibold);
   }
-  
+
   .subtotal .value {
     color: var(--app-primary);
     font-size: var(--font-size-md);
@@ -112,22 +108,22 @@
   .order-item {
     flex-direction: column;
   }
-  
+
   .item-image {
     width: 100%;
     height: auto;
     max-height: 200px;
   }
-  
+
   .item-image-placeholder {
     width: 100%;
     height: 120px;
   }
-  
+
   .item-pricing {
     flex-direction: column;
     gap: var(--spacing-sm);
-    
+
     > div {
       flex-direction: row;
       justify-content: space-between;

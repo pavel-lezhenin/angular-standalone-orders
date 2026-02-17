@@ -1,5 +1,5 @@
-<div class="checkout-page">
-  <div class="checkout-container">
+<div class="checkout-page page-wrapper">
+  <div class="checkout-container page-container">
     <h1>Checkout</h1>
 
     <app-page-loader [isLoading]="loading()" />
@@ -15,7 +15,7 @@
     } @else if (hasLoaded()) {
       <div class="checkout-content">
         <!-- Left Column: Delivery Form -->
-        <div class="delivery-section">
+        <div class="delivery-section card-shadow">
           <form [formGroup]="checkoutForm" class="delivery-form">
             <!-- Guest Account Creation Section -->
             @if (isGuest()) {
@@ -172,7 +172,7 @@
         </div>
 
         <!-- Right Column: Order Summary -->
-        <div class="order-summary-section">
+        <div class="order-summary-section card-shadow sticky-sidebar">
           <h2>Order Summary</h2>
 
           <!-- Order Items -->

@@ -1,6 +1,6 @@
 <app-page-loader [isLoading]="loading()" />
 
-<div class="confirmation-page">
+<div class="confirmation-page page-wrapper">
   <div class="confirmation-container">
     @if (error()) {
       <div class="error-state">
@@ -21,7 +21,7 @@
       </div>
 
       <!-- Success Header -->
-      <div class="success-header">
+      <div class="success-header card-shadow">
         <div class="success-icon-wrapper">
           <mat-icon class="success-icon">check_circle</mat-icon>
         </div>
@@ -35,7 +35,7 @@
       <!-- Order Details -->
       <div class="order-details">
         <!-- Delivery Information -->
-        <div class="detail-section">
+        <div class="detail-section card-shadow">
           <h2>
             <mat-icon>local_shipping</mat-icon>
             Delivery Information
@@ -52,7 +52,7 @@
         </div>
 
         <!-- Order Items -->
-        <div class="detail-section">
+        <div class="detail-section card-shadow">
           <h2>
             <mat-icon>shopping_bag</mat-icon>
             Order Items
@@ -85,7 +85,7 @@
         </div>
 
         <!-- Order Summary -->
-        <div class="detail-section">
+        <div class="detail-section card-shadow">
           <h2>
             <mat-icon>receipt</mat-icon>
             Order Summary

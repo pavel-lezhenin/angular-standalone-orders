@@ -9,3 +9,126 @@
 .full-width {
   width: 100%;
 }
+
+/**
+ * Page wrapper for full-height pages
+ */
+.page-wrapper {
+  min-height: calc(100vh - var(--top-bar-height));
+  background: var(--app-background);
+  padding: var(--spacing-xl) var(--spacing-md);
+}
+
+/**
+ * Centered content container with max-width
+ */
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/**
+ * Card shadow (elevation level 1)
+ */
+.card-shadow {
+  box-shadow: 0 var(--spacing-2px) var(--spacing-xxs) var(--color-black-08);
+}
+
+/**
+ * Sticky sidebar positioning
+ */
+.sticky-sidebar {
+  position: sticky;
+  top: calc(var(--top-bar-height) + var(--spacing-xl));
+}
+
+/* ============================================
+ * Flex Layout Utilities
+ * ============================================ */
+
+/**
+ * Basic flex container
+ */
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+/**
+ * Flex alignment
+ */
+.items-center {
+  align-items: center;
+}
+
+.items-start {
+  align-items: flex-start;
+}
+
+.items-end {
+  align-items: flex-end;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+/**
+ * Flex gaps (common spacing values)
+ */
+.gap-xs {
+  gap: var(--spacing-xs);
+}
+
+.gap-sm {
+  gap: var(--spacing-sm);
+}
+
+.gap-md {
+  gap: var(--spacing-md);
+}
+
+.gap-lg {
+  gap: var(--spacing-lg);
+}
+
+.gap-xl {
+  gap: var(--spacing-xl);
+}
+
+.gap-2xl {
+  gap: var(--spacing-2xl);
+}
+
+/**
+ * Common flex patterns (combined utilities)
+ */
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flex-col-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

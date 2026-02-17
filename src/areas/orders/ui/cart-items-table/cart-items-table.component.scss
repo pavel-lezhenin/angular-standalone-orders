@@ -1,21 +1,17 @@
-@import '@/styles/variables/colors';
-@import '@/styles/variables/spacing';
-@import '@/styles/variables/typography';
-
 .cart-items-table {
   width: 100%;
   border-collapse: collapse;
   background: var(--surface-primary);
   border-radius: var(--border-radius-md);
   overflow: hidden;
-  
+
   thead {
     background: var(--surface-secondary);
-    
+
     tr {
       border-bottom: var(--spacing-1px) solid var(--border-primary);
     }
-    
+
     th {
       padding: var(--spacing-md);
       text-align: left;
@@ -24,31 +20,31 @@
       color: var(--text-secondary);
       text-transform: uppercase;
       letter-spacing: var(--spacing-1px);
-      
+
       &.checkbox-cell {
         width: 50px;
         text-align: center;
       }
     }
   }
-  
+
   tbody {
     tr.cart-item-row {
       border-bottom: var(--spacing-1px) solid var(--border-primary);
       transition: background-color var(--transition-fast);
-      
+
       &:hover {
         background: var(--surface-hover);
       }
-      
+
       &.selected {
         background: var(--surface-selected);
       }
-      
+
       &:last-child {
         border-bottom: none;
       }
-      
+
       td {
         padding: var(--spacing-md);
       }
@@ -68,7 +64,7 @@
 
 .item-error {
   color: var(--color-error);
-  
+
   mat-icon {
     color: var(--color-error);
   }
@@ -99,14 +95,14 @@
 
 .product-details {
   flex: 1;
-  
+
   h3 {
     margin: 0 0 var(--spacing-xs) 0;
     font-size: var(--font-size-md);
     font-weight: var(--font-weight-semibold);
     color: var(--text-primary);
   }
-  
+
   .product-description {
     margin: 0;
     font-size: var(--font-size-sm);
@@ -141,15 +137,15 @@
 /* Mobile Styles */
 :host-context(.mobile) .cart-items-table {
   display: block;
-  
+
   thead {
     display: none;
   }
-  
+
   tbody {
     display: block;
   }
-  
+
   tr.cart-item-row {
     display: flex;
     flex-direction: column;
@@ -157,17 +153,17 @@
     margin-bottom: var(--spacing-md);
     border: var(--spacing-1px) solid var(--border-primary);
     border-radius: var(--border-radius-md);
-    
+
     td {
       display: flex;
       justify-content: space-between;
       padding: var(--spacing-sm) 0;
       border-bottom: var(--spacing-1px) solid var(--border-secondary);
-      
+
       &:last-child {
         border-bottom: none;
       }
-      
+
       &::before {
         content: attr(data-label);
         font-weight: var(--font-weight-semibold);

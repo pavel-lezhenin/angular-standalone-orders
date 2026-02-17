@@ -1,5 +1,5 @@
-<div class="cart-page">
-  <div class="cart-container">
+<div class="cart-page page-wrapper">
+  <div class="cart-container page-container">
     <h1>Shopping Cart</h1>
 
     <app-page-loader [isLoading]="loading()" />
@@ -15,7 +15,7 @@
     } @else if (hasLoaded()) {
       <div class="cart-content">
         <!-- Cart Items Table -->
-        <div class="cart-items">
+        <div class="cart-items card-shadow">
           <app-cart-items-table
             [items]="cartItems()"
             [selectedItemIds]="selectedItems()"
