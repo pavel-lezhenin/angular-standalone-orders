@@ -150,62 +150,59 @@
  * ============================================ */
 
 .summary-info {
-    padding: var(--spacing-md);
-    border-radius: var(--border-radius-sm);
-    background: var(--surface-secondary);
-    margin-bottom: var(--spacing-lg);
-    font-size: var(--font-size-sm);
-    color: var(--text-primary);
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius-sm);
+  background: var(--surface-secondary);
+  margin-bottom: var(--spacing-lg);
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
 
-    .selected-count {
-      font-weight: var(--font-weight-medium);
-    }
-
-    &.warning {
-      background: var(--app-warning);
-      color: var(--text-on-warning);
-
-      mat-icon {
-        font-size: var(--font-size-lg);
-        width: var(--font-size-lg);
-        height: var(--font-size-lg);
-      }
-    }
+  .selected-count {
+    font-weight: var(--font-weight-medium);
   }
 
-  .summary-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: var(--spacing-sm) 0;
-    font-size: var(--font-size-md);
-    color: var(--text-primary);
+  &.warning {
+    background: var(--app-warning);
+    color: var(--text-on-warning);
 
-    &.total {
+    mat-icon {
       font-size: var(--font-size-lg);
-      font-weight: var(--font-weight-bold);
-      color: var(--text-heading);
+      width: var(--font-size-lg);
+      height: var(--font-size-lg);
     }
+  }
+}
 
-    .amount {
-      font-weight: var(--font-weight-semibold);
-    }
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm) 0;
+  font-size: var(--font-size-md);
+  color: var(--text-primary);
+
+  &.total {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-heading);
+  }
+
+  .amount {
+    font-weight: var(--font-weight-semibold);
   }
 }
 
 .summary-divider {
-    height: 1px;
-    background: var(--color-border);
-    margin: var(--spacing-md) 0;
-  }
+  height: var(--spacing-1px);
+  background: var(--color-border);
+  margin: var(--spacing-md) 0;
 }
 
 .summary-actions {
-    margin-top: var(--spacing-2xl);
+  margin-top: var(--spacing-2xl);
 
-    button {
-      width: 100%;
-    }
+  button {
+    width: 100%;
   }
 }
 
