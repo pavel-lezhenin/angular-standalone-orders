@@ -19,7 +19,7 @@ Reusable Material filter container with:
       (action)="onFilterAction($event)"
     >
       <app-search-input [searchControl]="searchControl" (search)="onSearch($event)" />
-      <mat-form-field appearance="outline">
+      <mat-form-field>
         <mat-label>Category</mat-label>
         <mat-select [formControl]="categoryControl" />
       </mat-form-field>

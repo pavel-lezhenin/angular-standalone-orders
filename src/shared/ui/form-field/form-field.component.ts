@@ -92,12 +92,6 @@ export class FormFieldComponent {
   readonly placeholder = input<string>('');
 
   /**
-   * Material form field appearance
-   * @default 'outline'
-   */
-  readonly appearance = input<'fill' | 'outline'>('outline');
-
-  /**
    * CSS class to apply to the form field
    */
   readonly fieldClass = input<string>('');

@@ -222,7 +222,7 @@ All three tables share identical structure:
 ### Pattern Identified
 
 ```html
-<mat-form-field appearance="outline" class="full-width">
+<mat-form-field class="full-width">
   <mat-label>Product Name</mat-label>
   <input
     matInput

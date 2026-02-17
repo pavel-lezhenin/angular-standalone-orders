@@ -43,10 +43,6 @@
  * ============================================ */
 
 .card-details {
-  .full-width {
-    width: 100%;
-  }
-
   .save-method-option {
     margin-top: var(--spacing-lg);
     padding: var(--spacing-md);
@@ -109,17 +105,16 @@
  * Responsive Styles
  * ============================================ */
 
-/* Mobile Styles */
-:host-context(.mobile) {
-  .card-extra-fields {
-    grid-template-columns: 1fr !important;
+/* Tablet & Mobile Styles */
+:host-context(.tablet) .card-extra-fields,
+:host-context(.mobile) .card-extra-fields {
+  grid-template-columns: 1fr;
 
-    .expiry-fields {
-      order: 1;
-    }
+  .expiry-fields {
+    order: 1;
+  }
 
-    .cvv-field {
-      order: 2;
-    }
+  .cvv-field {
+    order: 2;
   }
 }

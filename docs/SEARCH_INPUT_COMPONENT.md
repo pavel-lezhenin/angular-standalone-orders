@@ -124,7 +124,7 @@ export class ShopFiltersComponent {
       (clear)="onSearchClear()"
     />
 
-    <mat-form-field appearance="outline" class="category-field">
+    <mat-form-field class="category-field">
       <mat-label>Category</mat-label>
       <mat-select [formControl]="categoryControl">
         <mat-option [value]="undefined">All Categories</mat-option>

@@ -1,12 +1,22 @@
 import type { Preview } from '@storybook/angular';
+import { applicationConfig } from '@storybook/angular';
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 
 type ThemeMode = 'system' | 'light' | 'dark';
-type DeviceMode = 'desktop' | 'tablet' | 'mobile';
+type DeviceMode = 'desktop' | 'tablet-max' | 'tablet-min' | 'mobile-max' | 'mobile-min';
 
+/**
+ * Container widths for Storybook device preview
+ * Testing boundary values (edge cases) for each breakpoint:
+ * mobile (0-600), tablet (601-960), desktop (961+)
+ */
 const DEVICE_WIDTHS: Record<DeviceMode, string> = {
-  desktop: '1280px',
-  tablet: '960px',
-  mobile: '375px',
+  desktop: '1280px',      // Desktop comfortable width
+  'tablet-max': '960px',  // Tablet upper boundary (max-width: 960px)
+  'tablet-min': '601px',  // Tablet lower boundary (min-width: 601px)
+  'mobile-max': '600px',  // Mobile upper boundary (max-width: 600px)
+  'mobile-min': '320px',  // Mobile lower boundary (smallest phones)
 };
 
 const applyTheme = (theme: ThemeMode): void => {
@@ -25,7 +35,15 @@ const applyTheme = (theme: ThemeMode): void => {
 const applyDevice = (device: DeviceMode): void => {
   const html = document.documentElement;
   html.classList.remove('desktop', 'tablet', 'mobile');
-  html.classList.add(device);
+  
+  // Map device variants to base classes
+  if (device === 'desktop') {
+    html.classList.add('desktop');
+  } else if (device.startsWith('tablet')) {
+    html.classList.add('tablet');
+  } else if (device.startsWith('mobile')) {
+    html.classList.add('mobile');
+  }
 
   const root = document.getElementById('storybook-root');
   if (!root) {
@@ -63,15 +81,26 @@ const preview: Preview = {
       toolbar: {
         icon: 'mobile',
         items: [
-          { value: 'desktop', title: 'Desktop' },
-          { value: 'tablet', title: 'Tablet' },
-          { value: 'mobile', title: 'Mobile' },
+          { value: 'desktop', title: 'Desktop (1280px)' },
+          { value: 'tablet-max', title: 'Tablet Max (960px)' },
+          { value: 'tablet-min', title: 'Tablet Min (601px)' },
+          { value: 'mobile-max', title: 'Mobile Max (600px)' },
+          { value: 'mobile-min', title: 'Mobile Min (320px)' },
         ],
         dynamicTitle: true,
       },
     },
   },
   decorators: [
+    applicationConfig({
+      providers: [
+        provideAnimations(),
+        {
+          provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+          useValue: { appearance: 'outline' },
+        },
+      ],
+    }),
     (story, context) => {
       applyTheme(context.globals['theme'] as ThemeMode);
       applyDevice(context.globals['device'] as DeviceMode);

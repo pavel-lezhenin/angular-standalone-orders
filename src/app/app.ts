@@ -20,7 +20,7 @@ export class App implements OnInit {
 
   private initBreakpoints(): void {
     const mobile = window.matchMedia('(max-width: 600px)');
-    const tablet = window.matchMedia('(max-width: 960px)');
+    const tablet = window.matchMedia('(min-width: 601px) and (max-width: 960px)');
     const desktop = window.matchMedia('(min-width: 961px)');
 
     const updateClasses = () => {
@@ -31,7 +31,7 @@ export class App implements OnInit {
         html.classList.add('mobile');
       } else if (tablet.matches) {
         html.classList.add('tablet');
-      } else {
+      } else if (desktop.matches) {
         html.classList.add('desktop');
       }
     };

@@ -207,6 +207,61 @@
 
 ---
 
+## � Known Architecture Issues
+
+### 1. Payment Forms Duplication (HIGH PRIORITY)
+
+**Status:** 🔴 Open — [PAYMENT_FORMS_REFACTORING.md](./PAYMENT_FORMS_REFACTORING.md)  
+**Estimated Effort:** 4-6 hours
+
+**Problem:**
+- `shared/ui/payment-form/` (270 lines, Smart)
+- `areas/account/ui/payment-method-form/` (85 lines, Dumb)
+- ~60% code duplication (card inputs, validation, formatting)
+
+**Impact:**
+- Violates DRY principle
+- Maintenance burden (changes need 2 locations)
+- Unclear responsibility boundaries
+
+**Proposed Solution:**
+1. Extract `shared/ui/payment-card-fields/` (Dumb UI component)
+2. Refactor both components to use shared UI
+3. Move orchestration to domain layers
+
+**Blocker:** None — can be done anytime  
+**Recommendation:** Complete after orders area decomposition
+
+---
+
+### 2. Orders Area Decomposition (CRITICAL)
+
+**Status:** 🔴 Open — Needs analysis  
+**Estimated Effort:** 8-12 hours
+
+**Problem:**
+- Orders domain lacks proper FSD decomposition
+- Mixed concerns and responsibilities
+- `PaymentFormComponent` in `shared/ui/` should be in `areas/orders/ui/`
+
+**Impact:**
+- Harder to maintain and extend
+- Violates FSD layer boundaries
+- Confusing for new developers
+
+**Proposed Solution:**
+1. Analyze orders flow and components
+2. Create proper FSD structure in `areas/orders/`
+3. Move checkout-specific components from `shared/` to `orders/`
+4. Separate concerns: widgets, features, entities
+
+**Blocker:** Requires architectural planning  
+**Recommendation:** Complete BEFORE payment forms refactoring
+
+**Related:** See [UI_DECOMPOSITION_ANALYSIS.md](./UI_DECOMPOSITION_ANALYSIS.md)
+
+---
+
 ## 🚀 Quick Wins
 
 Easy tasks that add value:
@@ -218,4 +273,4 @@ Easy tasks that add value:
 
 ---
 
-**Next recommended task:** Orders Board Kanban (highest remaining business value)
+**Next recommended task:** Orders area decomposition planning (architectural foundation for future refactoring)
