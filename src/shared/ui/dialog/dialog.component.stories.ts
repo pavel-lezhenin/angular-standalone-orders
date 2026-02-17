@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/angular';
-import { applicationConfig, moduleMetadata } from '@storybook/angular';
+import { applicationConfig } from '@storybook/angular';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Component } from '@angular/core';
 import { DialogComponent } from './dialog.component';
 import type { DialogConfig } from './dialog.config';
@@ -35,11 +34,6 @@ const meta: Meta<DialogComponent> = {
   title: 'Shared/UI/Dialog',
   component: DialogComponent,
   tags: ['autodocs'],
-  decorators: [
-    moduleMetadata({
-      imports: [BrowserAnimationsModule],
-    }),
-  ],
 };
 
 export default meta;

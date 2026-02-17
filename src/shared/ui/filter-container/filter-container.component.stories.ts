@@ -1,10 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/angular';
-import { moduleMetadata } from '@storybook/angular';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FilterContainerComponent, FilterAction } from './filter-container.component';
 import { Component, Input } from '@angular/core';
 
@@ -56,11 +54,6 @@ const meta: Meta<FilterContainerComponent> = {
   title: 'Shared/UI/FilterContainer',
   component: FilterContainerComponent,
   tags: ['autodocs'],
-  decorators: [
-    moduleMetadata({
-      imports: [BrowserAnimationsModule, MockFilterContentComponent],
-    }),
-  ],
   args: {
     isLoading: false,
     actions: defaultActions,

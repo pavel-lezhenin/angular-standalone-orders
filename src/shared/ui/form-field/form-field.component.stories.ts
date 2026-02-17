@@ -1,7 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/angular';
-import { moduleMetadata } from '@storybook/angular';
 import { FormControl, Validators } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormFieldComponent, SelectOption } from './form-field.component';
 
 /**
@@ -39,11 +37,6 @@ const meta: Meta<FormFieldComponent> = {
   title: 'Shared/UI/FormField',
   component: FormFieldComponent,
   tags: ['autodocs'],
-  decorators: [
-    moduleMetadata({
-      imports: [BrowserAnimationsModule],
-    }),
-  ],
   argTypes: {
     type: {
       control: 'select',

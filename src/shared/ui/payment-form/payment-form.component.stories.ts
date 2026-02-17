@@ -1,6 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/angular';
-import { moduleMetadata } from '@storybook/angular';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PaymentFormComponent } from './payment-form.component';
 import type { SavedPaymentMethodDTO } from '@core/models';
 
@@ -31,11 +29,6 @@ const meta: Meta<PaymentFormComponent> = {
   title: 'Shared/UI/PaymentForm',
   component: PaymentFormComponent,
   tags: ['autodocs'],
-  decorators: [
-    moduleMetadata({
-      imports: [BrowserAnimationsModule],
-    }),
-  ],
   args: {
     savedMethods: [],
   },
