@@ -9,12 +9,12 @@ import { EmptyStateComponent } from '@shared/ui';
 import { OrderService } from '@shared/services/order.service';
 import { AuthService } from '@core/services/auth.service';
 import type { OrderDTO } from '@core/models';
-import type { OrderStatus } from '@core/types';
+import { OrderCardComponent } from '../ui';
 
 @Component({
   selector: 'app-order-history',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatIconModule, PaginationComponent, EmptyStateComponent],
+  imports: [CommonModule, MatButtonModule, MatIconModule, PaginationComponent, EmptyStateComponent, OrderCardComponent],
   templateUrl: './order-history.component.html',
   styleUrl: './order-history.component.scss',
 })
@@ -32,7 +32,6 @@ export class OrderHistoryComponent implements OnInit {
   protected readonly currentPage = signal(1);
   protected readonly pageSize = 10;
   protected readonly cancelingOrderIds = signal<readonly string[]>([]);
-  protected readonly cancellableStatuses: readonly OrderStatus[] = ['pending_payment', 'paid'];
 
   protected readonly totalPages = computed(() => {
     const pages = Math.ceil(this.orders().length / this.pageSize);
@@ -85,22 +84,16 @@ export class OrderHistoryComponent implements OnInit {
   /**
    * Navigates to order details page
    */
-  protected viewOrderDetails(orderId: string): void {
+  protected onOrderClick(orderId: string): void {
     this.router.navigate(['/orders/details', orderId]);
-  }
-
-  protected canCancel(order: OrderDTO): boolean {
-    return this.cancellableStatuses.includes(order.status);
   }
 
   protected isCanceling(orderId: string): boolean {
     return this.cancelingOrderIds().includes(orderId);
   }
 
-  protected async cancelOrder(event: Event, order: OrderDTO): Promise<void> {
-    event.stopPropagation();
-
-    if (!this.canCancel(order) || this.isCanceling(order.id)) {
+  protected async onCancelOrder(order: OrderDTO): Promise<void> {
+    if (this.isCanceling(order.id)) {
       return;
     }
 

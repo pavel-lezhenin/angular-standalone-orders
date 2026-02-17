@@ -5,20 +5,13 @@ import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 import { PageLoaderComponent } from '@shared/ui/page-loader/page-loader.component';
-import { EmptyStateComponent, OrderSummaryComponent, QuantityControlComponent } from '@shared/ui';
+import { EmptyStateComponent, OrderSummaryComponent } from '@shared/ui';
 import type { SummaryLine } from '@shared/ui/order-summary/order-summary.component';
 import { CartService } from '@shared/services/cart.service';
 import { NotificationService } from '@shared/services/notification.service';
 import type { CartItemDTO, ProductDTO } from '@core/models';
-
-interface CartItemWithDetails extends CartItemDTO {
-  product?: ProductDTO;
-  loading: boolean;
-  error?: string;
-}
+import { CartItemsTableComponent, type CartItemWithDetails } from '../ui';
 
 /**
  * Cart Page Component
@@ -37,12 +30,10 @@ interface CartItemWithDetails extends CartItemDTO {
     CommonModule,
     MatButtonModule,
     MatIconModule,
-    MatProgressSpinnerModule,
-    MatCheckboxModule,
     PageLoaderComponent,
     EmptyStateComponent,
     OrderSummaryComponent,
-    QuantityControlComponent,
+    CartItemsTableComponent,
   ],
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.scss',
@@ -64,25 +55,6 @@ export default class CartComponent implements OnInit {
    * Tax rate (10%)
    */
   private readonly TAX_RATE = 0.1;
-
-  /**
-   * Check if all items are selected
-   */
-  protected allSelected = computed(() => {
-    const items = this.cartItems();
-    const selected = this.selectedItems();
-    return items.length > 0 && items.every(item => selected.has(item.productId));
-  });
-
-  /**
-   * Check if some (but not all) items are selected
-   */
-  protected someSelected = computed(() => {
-    const items = this.cartItems();
-    const selected = this.selectedItems();
-    const selectedCount = items.filter(item => selected.has(item.productId)).length;
-    return selectedCount > 0 && selectedCount < items.length;
-  });
 
   /**
    * Check if any items are selected
@@ -137,13 +109,13 @@ export default class CartComponent implements OnInit {
   /**
    * Toggle item selection
    */
-  protected toggleItemSelection(productId: string): void {
+  protected onItemSelectionChange(event: { productId: string; selected: boolean }): void {
     this.selectedItems.update(selected => {
       const newSelected = new Set(selected);
-      if (newSelected.has(productId)) {
-        newSelected.delete(productId);
+      if (event.selected) {
+        newSelected.add(event.productId);
       } else {
-        newSelected.add(productId);
+        newSelected.delete(event.productId);
       }
       return newSelected;
     });
@@ -152,23 +124,13 @@ export default class CartComponent implements OnInit {
   /**
    * Toggle all items selection
    */
-  protected toggleAllSelection(): void {
-    const items = this.cartItems();
-    if (this.allSelected()) {
-      // Deselect all
-      this.selectedItems.set(new Set());
-    } else {
-      // Select all
-      const allIds = items.map(item => item.productId);
+  protected onAllSelectionChange(selectAll: boolean): void {
+    if (selectAll) {
+      const allIds = this.cartItems().map(item => item.productId);
       this.selectedItems.set(new Set(allIds));
+    } else {
+      this.selectedItems.set(new Set());
     }
-  }
-
-  /**
-   * Check if item is selected
-   */
-  protected isItemSelected(productId: string): boolean {
-    return this.selectedItems().has(productId);
   }
 
   /**
@@ -246,29 +208,11 @@ export default class CartComponent implements OnInit {
   }
 
   /**
-   * Increases item quantity
+   * Handle quantity change from cart items table
    */
-  protected increaseQuantity(productId: string, currentQuantity: number): void {
-    this.cartService.updateQuantity(productId, currentQuantity + 1);
-    this.updateLocalItem(productId, currentQuantity + 1);
-  }
-
-  /**
-   * Decreases item quantity
-   */
-  protected decreaseQuantity(productId: string, currentQuantity: number): void {
-    if (currentQuantity > 1) {
-      this.cartService.updateQuantity(productId, currentQuantity - 1);
-      this.updateLocalItem(productId, currentQuantity - 1);
-    }
-  }
-
-  /**
-   * Handle quantity change from quantity control
-   */
-  protected onQuantityChange(productId: string, newQuantity: number): void {
-    this.cartService.updateQuantity(productId, newQuantity);
-    this.updateLocalItem(productId, newQuantity);
+  protected onQuantityChange(event: { productId: string; quantity: number }): void {
+    this.cartService.updateQuantity(event.productId, event.quantity);
+    this.updateLocalItem(event.productId, event.quantity);
   }
 
   /**

@@ -1,0 +1,98 @@
+<table class="cart-items-table">
+  <thead>
+    <tr>
+      <th class="checkbox-cell">
+        <mat-checkbox
+          [checked]="allSelected()"
+          [indeterminate]="someSelected()"
+          (change)="onToggleAll()"
+          aria-label="Select all items">
+        </mat-checkbox>
+      </th>
+      <th>Product</th>
+      <th>Price</th>
+      <th>Quantity</th>
+      <th>Subtotal</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (item of items(); track item.productId) {
+      <tr 
+        class="cart-item-row" 
+        [class.selected]="isItemSelected(item.productId)">
+        
+        @if (item.loading) {
+          <td colspan="6">
+            <div class="item-loading">
+              <mat-spinner diameter="30"></mat-spinner>
+              <span>Loading product details...</span>
+            </div>
+          </td>
+        } @else if (item.error) {
+          <td colspan="6">
+            <div class="item-error">
+              <mat-icon>error</mat-icon>
+              <span>{{ item.error }}</span>
+            </div>
+          </td>
+        } @else if (item.product) {
+          <!-- Checkbox -->
+          <td class="checkbox-cell">
+            <mat-checkbox
+              [checked]="isItemSelected(item.productId)"
+              (change)="onItemSelectionChange(item.productId, $event.checked)"
+              [attr.aria-label]="'Select ' + item.product.name">
+            </mat-checkbox>
+          </td>
+
+          <!-- Product Info -->
+          <td class="product-cell">
+            <div class="product-info">
+              @if (item.product.imageUrls && item.product.imageUrls.length > 0) {
+                <img 
+                  [src]="item.product.imageUrls[0]" 
+                  [alt]="item.product.name"
+                  class="product-image">
+              }
+              <div class="product-details">
+                <h3>{{ item.product.name }}</h3>
+                <p class="product-description">{{ item.product.description }}</p>
+              </div>
+            </div>
+          </td>
+
+          <!-- Price -->
+          <td class="price-cell">
+            {{ item.product.price | currency }}
+          </td>
+
+          <!-- Quantity Controls -->
+          <td class="quantity-cell">
+            <app-quantity-control
+              [quantity]="item.quantity"
+              [min]="1"
+              (quantityChange)="onQuantityChange(item.productId, $event)"
+            />
+          </td>
+
+          <!-- Subtotal -->
+          <td class="subtotal-cell">
+            {{ item.product.price * item.quantity | currency }}
+          </td>
+
+          <!-- Remove Button -->
+          <td class="actions-cell">
+            <button 
+              mat-icon-button 
+              color="warn"
+              (click)="onItemRemove(item.productId)"
+              aria-label="Remove item">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        }
+      </tr>
+    }
+  </tbody>
+</table>

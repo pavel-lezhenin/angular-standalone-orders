@@ -24,6 +24,7 @@ import { AuthService } from '@core/services/auth.service';
 import { FormValidators } from '@shared/validators/form-validators';
 import type { CartItemDTO, ProductDTO, CreateOrderDTO, OrderItemDTO, AddressDTO } from '@core/models';
 import type { SelectOption } from '@shared/ui/form-field/form-field.component';
+import { OrderItemsListComponent, type OrderItem } from '../ui';
 
 interface CartItemWithProduct {
   cartItem: CartItemDTO;
@@ -85,6 +86,7 @@ interface CheckoutAddressFormValue {
     EmptyStateComponent,
     OrderSummaryComponent,
     FormFieldComponent,
+    OrderItemsListComponent,
   ],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.scss',
@@ -169,6 +171,18 @@ export default class CheckoutComponent implements OnInit {
    * Check if cart is empty
    */
   protected isEmpty = computed(() => this.cartItems().length === 0);
+
+  /**
+   * Order items for display component
+   */
+  protected orderItems = computed<OrderItem[]>(() =>
+    this.cartItems().map(item => ({
+      productId: item.cartItem.productId,
+      quantity: item.cartItem.quantity,
+      price: item.product.price,
+      product: item.product,
+    }))
+  );
 
   ngOnInit(): void {
     // Skip data loading on server (SSR)

@@ -176,26 +176,11 @@
           <h2>Order Summary</h2>
 
           <!-- Order Items -->
-          <div class="order-items">
-            @for (item of cartItems(); track item.cartItem.productId) {
-              <div class="order-item">
-                <div class="item-image">
-                  @if (item.product.imageUrls && item.product.imageUrls.length > 0) {
-                    <img 
-                      [src]="item.product.imageUrls[0]" 
-                      [alt]="item.product.name">
-                  }
-                </div>
-                <div class="item-details">
-                  <h3>{{ item.product.name }}</h3>
-                  <p class="item-quantity">Qty: {{ item.cartItem.quantity }}</p>
-                </div>
-                <div class="item-price">
-                  {{ item.product.price * item.cartItem.quantity | currency }}
-                </div>
-              </div>
-            }
-          </div>
+          <app-order-items-list
+            [items]="orderItems()"
+            [title]="''"
+            [showTitle]="false"
+          />
 
           <!-- Order Totals -->
           <app-order-summary
