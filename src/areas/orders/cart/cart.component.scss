@@ -42,7 +42,7 @@
       border-bottom: var(--spacing-2px) solid var(--color-border);
 
       &.checkbox-cell {
-        width: 48px;
+        width: var(--size-button-icon);
         padding-left: var(--spacing-md);
       }
     }
@@ -170,7 +170,6 @@
     }
 
     &.warning {
-      /* Flex layout via utility classes: flex items-center gap-sm */
       background: var(--app-warning);
       color: var(--text-on-warning);
 
@@ -208,7 +207,6 @@
   }
 
   .summary-actions {
-    /* Flex layout via utility classes: flex-col gap-md */
     margin-top: var(--spacing-2xl);
 
     button {
@@ -273,3 +271,4 @@
     position: static;
   }
 }
+

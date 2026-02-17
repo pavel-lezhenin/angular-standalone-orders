@@ -6,7 +6,7 @@
 }
 
 .footer-content {
-  max-width: 1400px;
+  max-width: var(--container-width-2xl);
   margin: 0 auto;
 }
 
@@ -60,8 +60,8 @@
   mat-icon {
     margin-right: var(--spacing-xxs);
     font-size: var(--font-size-lg);
-    width: 18px;
-    height: 18px;
+    width: var(--icon-size-md);
+    height: var(--icon-size-md);
   }
 
   &:hover {

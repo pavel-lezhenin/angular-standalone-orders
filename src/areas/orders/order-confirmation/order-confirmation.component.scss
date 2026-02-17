@@ -1,5 +1,5 @@
 .confirmation-container {
-  max-width: 900px;
+  max-width: var(--container-width-lg);
   margin: 0 auto;
 }
 
@@ -8,7 +8,6 @@
  * ============================================ */
 
 .breadcrumb {
-  /* Flex layout via utility classes: flex items-center gap-sm */
   margin-bottom: var(--spacing-xl);
   padding: var(--spacing-sm) 0;
 
@@ -33,7 +32,6 @@
  * ============================================ */
 
 .error-state {
-  /* Flex layout via utility classes: flex-col items-center justify-center */
   padding: var(--spacing-5xl) var(--spacing-xl);
   text-align: center;
 }
@@ -121,7 +119,6 @@
  * ============================================ */
 
 .order-details {
-  /* Flex layout via utility classes: flex-col gap-xl */
   margin-bottom: var(--spacing-2xl);
 }
 
@@ -131,7 +128,6 @@
   padding: var(--spacing-xl);
 
   h2 {
-    /* Flex layout via utility classes: flex items-center gap-sm */
     margin: 0 0 var(--spacing-lg) 0;
     color: var(--text-heading);
     font-size: var(--font-size-xl);
@@ -164,11 +160,9 @@
 
 /* Order Items */
 .order-items {
-  /* Flex layout via utility classes: flex-col gap-md */
-}
+  }
 
 .order-item {
-  /* Flex layout via utility classes: flex gap-md */
   padding: var(--spacing-md);
   background: var(--surface-secondary);
   border-radius: var(--border-radius-sm);
@@ -186,7 +180,6 @@
     }
 
     .no-image {
-      /* Flex layout via utility classes: flex items-center justify-center */
       width: 100%;
       height: 100%;
       background: var(--surface-tertiary);
@@ -232,7 +225,6 @@
 /* Order Summary */
 .order-summary {
   .summary-row {
-    /* Flex layout via utility classes: flex justify-between items-center */
     padding: var(--spacing-md) 0;
     font-size: var(--font-size-md);
     color: var(--text-primary);
@@ -278,10 +270,8 @@
  * ============================================ */
 
 .confirmation-actions {
-  /* Flex layout via utility classes: flex gap-md justify-center */
-
   button {
-    min-width: 200px;
+    min-width: var(--size-image-small);
 
     mat-icon {
       margin-right: var(--spacing-xs);
@@ -351,3 +341,4 @@
     }
   }
 }
+

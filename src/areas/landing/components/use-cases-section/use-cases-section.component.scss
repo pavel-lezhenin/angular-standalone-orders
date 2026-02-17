@@ -39,8 +39,8 @@
 
   mat-icon {
     font-size: var(--font-size-4xl);
-    width: 40px;
-    height: 40px;
+    width: var(--size-avatar);
+    height: var(--size-avatar);
     color: var(--app-tertiary);
     margin-bottom: var(--spacing-md);
   }

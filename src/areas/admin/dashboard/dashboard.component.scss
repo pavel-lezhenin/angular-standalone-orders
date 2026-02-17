@@ -41,8 +41,8 @@
   }
 
   .stat-icon {
-    width: 56px;
-    height: 56px;
+    width: var(--icon-size-6xl);
+    height: var(--icon-size-6xl);
     border-radius: var(--border-radius-md);
     display: flex;
     align-items: center;
@@ -50,8 +50,8 @@
 
     mat-icon {
       font-size: var(--font-size-3xl);
-      width: 32px;
-      height: 32px;
+      width: var(--icon-size-2xl);
+      height: var(--icon-size-2xl);
       color: var(--color-white);
     }
   }

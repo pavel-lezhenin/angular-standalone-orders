@@ -9,21 +9,18 @@
 }
 
 .top-bar-content {
-  /* Flex layout via utility classes: flex justify-between items-center */
   width: 100%;
-  max-width: 1400px;
+  max-width: var(--container-width-2xl);
   margin: 0 auto;
   min-width: 0;
 }
 
 .left-section {
-  /* Flex layout via utility classes: flex items-center gap-2xl */
   flex: 1;
   min-width: 0;
 }
 
 .logo-section {
-  /* Flex layout via utility classes: flex items-center gap-xxs */
   text-decoration: none;
   color: inherit;
   transition: opacity 0.2s;
@@ -36,8 +33,8 @@
 
 .logo-icon {
   font-size: var(--font-size-2xl);
-  width: 28px;
-  height: 28px;
+  width: var(--icon-size-xl);
+  height: var(--icon-size-xl);
   color: var(--app-primary);
 }
 
@@ -50,8 +47,6 @@
 }
 
 .desktop-nav {
-  /* Flex layout via utility classes: flex items-center gap-xxs */
-
   .nav-active {
     color: var(--app-primary);
     font-weight: var(--font-weight-semibold);
@@ -106,7 +101,6 @@
 }
 
 .right-section {
-  /* Flex layout via utility classes: flex items-center */
   flex-shrink: 0;
 }
 
@@ -120,7 +114,7 @@
 
 :host-context(.tablet) .title {
   font-size: var(--font-size-md);
-  max-width: calc(var(--app-spacing) * 10);
+  max-width: var(--spacing-6xl);
 }
 
 :host-context(.tablet) .desktop-nav {

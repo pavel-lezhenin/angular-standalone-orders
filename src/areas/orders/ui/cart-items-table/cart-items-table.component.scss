@@ -22,7 +22,7 @@
       letter-spacing: var(--spacing-1px);
 
       &.checkbox-cell {
-        width: 50px;
+        width: var(--size-thumbnail);
         text-align: center;
       }
     }
@@ -55,7 +55,6 @@
 // Row content styles
 .item-loading,
 .item-error {
-  /* Flex layout via utility classes: flex items-center gap-md */
   padding: var(--spacing-md);
   justify-content: center;
 }
@@ -69,16 +68,15 @@
 }
 
 .checkbox-cell {
-  width: 50px;
+  width: var(--size-thumbnail);
   text-align: center;
 }
 
 .product-cell {
-  min-width: 300px;
+  min-width: var(--size-filter-width);
 }
 
 .product-info {
-  /* Flex layout via utility classes: flex items-center gap-md */
   align-items: flex-start;
 }
 
@@ -169,3 +167,4 @@
     }
   }
 }
+

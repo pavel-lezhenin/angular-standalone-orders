@@ -23,7 +23,7 @@
  * Centered content container with max-width
  */
 .page-container {
-  max-width: 1200px;
+  max-width: var(--container-width-xl);
   margin: 0 auto;
 }
 

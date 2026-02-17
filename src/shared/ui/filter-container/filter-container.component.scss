@@ -1,5 +1,4 @@
 .filter-container {
-  /* Flex layout via utility classes: flex gap-md items-start */
   padding: var(--spacing-md);
   background: var(--surface-secondary);
   border-radius: var(--border-radius-md);
@@ -15,8 +14,7 @@
 }
 
 .filter-actions {
-  /* Flex layout via utility classes: flex-col gap-xs items-end */
-}
+  }
 
 .action-button {
   transition: all 0.2s ease-in-out;
@@ -53,3 +51,4 @@
 :host-context(.mobile) .filter-fields {
   grid-template-columns: 1fr;
 }
+

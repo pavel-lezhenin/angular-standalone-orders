@@ -1,8 +1,8 @@
 .image-zoom-dialog {
   width: 90vw;
   height: 90vh;
-  max-width: 1400px;
-  max-height: 900px;
+  max-width: var(--container-width-2xl);
+  max-height: 56.25rem;
   display: flex;
   flex-direction: column;
   background: var(--surface-primary);
@@ -61,8 +61,8 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 48px;
-  height: 48px;
+  width: var(--size-button-icon);
+  height: var(--size-button-icon);
   background: var(--surface-secondary);
   color: var(--text-primary);
   z-index: 10;
@@ -93,7 +93,7 @@
   border-top: var(--spacing-1px) solid var(--color-border);
   justify-content: center;
   flex-wrap: wrap;
-  max-height: 120px;
+  max-height: var(--size-image-preview);
   overflow-x: auto;
   
   img {
@@ -129,8 +129,8 @@
 }
 
 :host-context(.mobile) .nav-button {
-  width: 40px;
-  height: 40px;
+  width: var(--size-avatar);
+  height: var(--size-avatar);
   
   mat-icon {
     font-size: var(--spacing-xl);
@@ -140,10 +140,10 @@
 }
 
 :host-context(.mobile) .thumbnails {
-  max-height: 80px;
+  max-height: 5rem;
   
   img {
-    width: 48px;
-    height: 48px;
+    width: var(--size-button-icon);
+    height: var(--size-button-icon);
   }
 }

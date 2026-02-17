@@ -99,7 +99,7 @@
   flex-direction: column;
   flex: 0 0 auto;
   gap: var(--spacing-sm);
-  width: 250px;
+  width: var(--size-small-card);
   padding: var(--spacing-md);
   background: var(--surface-primary);
   border-radius: var(--border-radius-sm);

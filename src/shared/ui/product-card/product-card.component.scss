@@ -1,5 +1,4 @@
 .product-card {
-  /* Flex layout via utility classes: flex-col */
   border: var(--spacing-1px) solid var(--color-border);
   border-radius: var(--border-radius-md);
   background: var(--surface-primary);
@@ -50,7 +49,6 @@
   }
 
   &__content {
-    /* Flex layout via utility classes: flex-col gap-xs */
     padding: var(--spacing-md);
   }
 
@@ -72,7 +70,6 @@
   }
 
   &__footer {
-    /* Flex layout via utility classes: flex items-center justify-between */
     margin-top: var(--spacing-xs);
   }
 
@@ -106,3 +103,4 @@
     font-size: var(--font-size-md);
   }
 }
+

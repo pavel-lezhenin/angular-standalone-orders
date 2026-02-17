@@ -13,7 +13,7 @@
 }
 
 mat-accordion {
-  max-width: 900px;
+  max-width: var(--container-width-lg);
   margin: 0 auto;
 }
 

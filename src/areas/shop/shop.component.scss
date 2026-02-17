@@ -1,5 +1,5 @@
 .shop-container {
-  max-width: 1400px;
+  max-width: var(--container-width-2xl);
   margin: 0 auto;
   padding: var(--spacing-xl);
 }

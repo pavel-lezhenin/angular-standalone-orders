@@ -1,5 +1,5 @@
 .account-page {
-  max-width: 1200px;
+  max-width: var(--container-width-xl);
   margin: 0 auto;
   padding: var(--spacing-2xl);
   display: grid;
@@ -28,8 +28,8 @@
 
 .profile-icon {
   font-size: var(--font-size-5xl);
-  width: 3rem;
-  height: 3rem;
+  width: var(--size-button-icon);
+  height: var(--size-button-icon);
   color: var(--app-primary);
 }
 
@@ -108,3 +108,4 @@
     grid-row: 1;
   }
 }
+

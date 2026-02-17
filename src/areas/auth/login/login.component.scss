@@ -8,7 +8,7 @@
 }
 
 .login-container {
-  max-width: 400px;
+  max-width: var(--container-width-xs);
 }
 
 .login-subtitle {
@@ -20,7 +20,6 @@ button {
 }
 
 .divider {
-  /* Flex layout via utility classes: flex items-center */
   text-align: center;
   margin: var(--spacing-xl) 0;
 
@@ -38,16 +37,13 @@ button {
 }
 
 .demo-users {
-  /* Flex layout via utility classes: flex-col gap-sm */
-}
+  }
 
 .demo-user-info {
-  /* Flex layout via utility classes: flex items-center gap-xs */
   text-align: left;
 }
 
 .global-error {
-  /* Flex layout via utility classes: flex items-center gap-xxs */
   margin-bottom: var(--spacing-md);
 
   mat-icon {
@@ -56,3 +52,4 @@ button {
     height: 1.25rem;
   }
 }
+

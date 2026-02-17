@@ -1,6 +1,5 @@
 .order-items-list {
-  /* Flex layout via utility classes: flex-col gap-md */
-}
+  }
 
 .list-title {
   margin: 0 0 var(--spacing-sm) 0;
@@ -10,8 +9,7 @@
 }
 
 .items-container {
-  /* Flex layout via utility classes: flex-col gap-md */
-}
+  }
 
 .items-count {
   padding: var(--spacing-sm) var(--spacing-md);
@@ -29,3 +27,4 @@
   background: var(--surface-secondary);
   border-radius: var(--border-radius-md);
 }
+

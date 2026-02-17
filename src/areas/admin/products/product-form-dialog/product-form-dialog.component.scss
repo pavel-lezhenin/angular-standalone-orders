@@ -1,5 +1,5 @@
 ::ng-deep .mat-mdc-dialog-container .mdc-dialog__surface {
-  max-width: 800px !important;
+  max-width: 50rem !important;
   width: 90vw;
   max-height: 90vh;
   overflow: hidden;
@@ -107,7 +107,7 @@ mat-dialog-actions {
   gap: var(--spacing-sm);
 
   button {
-    min-width: 100px;
+    min-width: var(--size-min-width-xs);
 
     mat-spinner {
       display: inline-block;
@@ -143,6 +143,6 @@ mat-dialog-actions {
 :host-context(.tablet),
 :host-context(.desktop) {
   ::ng-deep .mat-mdc-dialog-container .mdc-dialog__surface {
-    max-width: 900px !important;
+    max-width: var(--container-width-lg) !important;
   }
 }

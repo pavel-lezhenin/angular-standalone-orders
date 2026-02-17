@@ -22,13 +22,13 @@
 
 .search-field {
   flex: 1;
-  max-width: 400px;
-  min-width: 250px;
+  max-width: var(--container-width-xs);
+  min-width: var(--size-small-card);
 }
 
 .role-field {
-  width: 180px;
-  min-width: 150px;
+  width: var(--size-min-width-md);
+  min-width: var(--size-min-width-sm);
 }
 
 :host-context(.mobile) .filters-container {

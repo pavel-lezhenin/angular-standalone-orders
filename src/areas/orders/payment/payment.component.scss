@@ -1,6 +1,6 @@
 .payment-page {
   padding: var(--spacing-xl);
-  max-width: 600px;
+  max-width: var(--container-width-md);
   margin: 0 auto;
 }
 
@@ -71,12 +71,9 @@
  * ============================================ */
 
 .payment-form-section {
-  /* Flex layout via utility classes: flex-col gap-xl */
-}
+  }
 
 .saved-payment-controls {
-  /* Flex layout via utility classes: flex-col gap-md */
-
   .form-field {
     width: 100%;
   }
@@ -87,7 +84,6 @@
 }
 
 .payment-actions {
-  /* Flex layout via utility classes: flex justify-between gap-md */
   margin-top: var(--spacing-lg);
 
   button {
@@ -264,7 +260,7 @@
     font-size: var(--font-size-sm);
     color: var(--text-secondary);
     margin-bottom: var(--spacing-xl);
-    max-width: 500px;
+    max-width: var(--container-width-sm);
   }
 
   .failure-actions {
@@ -272,7 +268,7 @@
     justify-content: center;
     gap: var(--spacing-md);
     width: 100%;
-    max-width: 400px;
+    max-width: var(--container-width-xs);
 
     button {
       flex: 1;
@@ -330,3 +326,4 @@
     padding: var(--spacing-2xl) var(--spacing-md);
   }
 }
+

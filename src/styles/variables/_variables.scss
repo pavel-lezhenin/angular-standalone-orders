@@ -171,4 +171,45 @@
   --border-radius-xs: 0.25rem;      /* 4px */
   --border-radius-sm: 0.5rem;       /* 8px */
   --border-radius-md: 0.75rem;      /* 12px */
+
+  /* ============================================
+   * Icon Sizes
+   * ============================================ */
+  --icon-size-xs: calc(var(--app-spacing) * 0.75);     /* 12px */
+  --icon-size-sm: calc(var(--app-spacing) * 1);        /* 16px */
+  --icon-size-md: calc(var(--app-spacing) * 1.125);    /* 18px */
+  --icon-size-lg: calc(var(--app-spacing) * 1.5);      /* 24px */
+  --icon-size-xl: calc(var(--app-spacing) * 1.75);     /* 28px */
+  --icon-size-2xl: calc(var(--app-spacing) * 2);       /* 32px */
+  --icon-size-3xl: calc(var(--app-spacing) * 2.5);     /* 40px */
+  --icon-size-4xl: calc(var(--app-spacing) * 3);       /* 48px */
+  --icon-size-5xl: calc(var(--app-spacing) * 3.125);   /* 50px */
+  --icon-size-6xl: calc(var(--app-spacing) * 3.5);     /* 56px */
+
+  /* ============================================
+   * Layout Widths
+   * ============================================ */
+  --container-width-xs: 25rem;      /* 400px */
+  --container-width-sm: 31.25rem;   /* 500px */
+  --container-width-md: 37.5rem;    /* 600px */
+  --container-width-lg: 56.25rem;   /* 900px */
+  --container-width-xl: 75rem;      /* 1200px */
+  --container-width-2xl: 87.5rem;   /* 1400px */
+
+  /* ============================================
+   * Common Component Sizes
+   * ============================================ */
+  --size-thumbnail: calc(var(--app-spacing) * 3.125);   /* 50px */
+  --size-avatar: calc(var(--app-spacing) * 2.5);        /* 40px */
+  --size-button-icon: calc(var(--app-spacing) * 3);     /* 48px */
+  --size-small-card: 15.625rem;                         /* 250px */
+  --size-sidebar: 16.25rem;                             /* 260px */
+  --size-filter-width: 18.75rem;                        /* 300px */
+  --size-image-preview: 7.5rem;                         /* 120px */
+  --size-image-small: 12.5rem;                          /* 200px */
+  --size-image-medium: 18.75rem;                        /* 300px */
+  --size-image-large: 25rem;                            /* 400px */
+  --size-min-width-xs: 6.25rem;                         /* 100px */
+  --size-min-width-sm: 9.375rem;                        /* 150px */
+  --size-min-width-md: 11.25rem;                        /* 180px */
 }

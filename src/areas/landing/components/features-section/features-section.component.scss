@@ -40,8 +40,8 @@
 
   .feature-icon {
     font-size: var(--font-size-5xl);
-    width: 48px;
-    height: 48px;
+    width: var(--size-button-icon);
+    height: var(--size-button-icon);
     color: var(--app-primary);
     margin-bottom: var(--spacing-md);
   }

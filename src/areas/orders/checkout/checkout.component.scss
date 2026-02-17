@@ -36,20 +36,16 @@
 }
 
 .delivery-form {
-  /* Flex layout via utility classes: flex-col gap-md */
-
   .form-field {
     width: 100%;
   }
 }
 
 .saved-address-controls {
-  /* Flex layout via utility classes: flex-col gap-md */
   margin-bottom: var(--spacing-md);
 }
 
 .using-saved-address-note {
-  /* Flex layout via utility classes: flex items-center gap-sm */
   padding: var(--spacing-md);
   border-radius: var(--border-radius-sm);
   background: var(--surface-secondary);
@@ -144,7 +140,7 @@
 
 /* Order Items */
 .order-items {
-  max-height: 400px;
+  max-height: var(--size-image-large);
   overflow-y: auto;
   margin-bottom: var(--spacing-xl);
   padding-right: var(--spacing-xs);
@@ -327,6 +323,7 @@
   }
 
   .order-items {
-    max-height: 300px;
+    max-height: var(--size-filter-width);
   }
 }
+
