@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, input, output, signal } from '@angular/core';
+import { Component, DestroyRef, computed, inject, input, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -8,7 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { CategoryDTO } from '@core';
 import { SearchInputComponent } from '@shared/ui/search-input';
 import { FilterContainerComponent, FilterAction } from '@shared/ui/filter-container';
-import { FormFieldComponent } from '@shared/ui/form-field/form-field.component';
+import { FormFieldComponent, type SelectOption } from '@shared/ui/form-field/form-field.component';
 
 export interface ShopFilters {
   search: string;
@@ -44,6 +44,11 @@ export class ShopFiltersComponent {
 
   readonly categories = input.required<CategoryDTO[]>();
   readonly isLoading = input<boolean>(false);
+
+  readonly categorySelectOptions = computed<SelectOption[]>(() => [
+    { value: undefined, label: 'All Categories' },
+    ...this.categories().map(c => ({ value: c.id, label: c.name })),
+  ]);
 
   readonly searchControl = new FormControl<string>('');
   readonly categoryControl = new FormControl<string | undefined>(undefined);

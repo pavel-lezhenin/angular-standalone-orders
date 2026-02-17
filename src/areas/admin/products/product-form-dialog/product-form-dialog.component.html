@@ -18,13 +18,8 @@
       [control]="getControl('categoryId')"
       [type]="'select'"
       [required]="true"
-    >
-      @for (category of data.categories; track category.id) {
-        <mat-option [value]="category.id">
-          {{ category.name }}
-        </mat-option>
-      }
-    </app-form-field>
+      [selectOptions]="categorySelectOptions"
+    />
 
     <!-- Price and stock -->
     <div class="form-row">

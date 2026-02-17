@@ -27,11 +27,8 @@
         [control]="getControl('role')"
         [type]="'select'"
         [required]="true"
-      >
-        @for (role of roles; track role) {
-          <mat-option [value]="role">{{ role }}</mat-option>
-        }
-      </app-form-field>
+        [selectOptions]="roleSelectOptions"
+      />
 
       <!-- First Name -->
       <app-form-field

@@ -24,7 +24,7 @@ import {
   ImageGalleryComponent,
   ImageItem,
 } from '@shared/ui/image-gallery/image-gallery.component';
-import { FormFieldComponent } from '@shared/ui';
+import { FormFieldComponent, type SelectOption } from '@shared/ui';
 import { CategoryDTO, ProductDTO, ProductSpecificationDTO } from '@core';
 import { FileStorageService } from '@core';
 import { DEFAULT_PRODUCT_IMAGE } from '@shared/constants/product.constants';
@@ -97,6 +97,10 @@ export class ProductFormDialogComponent implements OnInit {
   readonly data = inject<ProductFormDialogData>(MAT_DIALOG_DATA);
 
   protected readonly isEditMode = !!this.data.product;
+  protected readonly categorySelectOptions: SelectOption[] = this.data.categories.map(c => ({
+    value: c.id,
+    label: c.name,
+  }));
   protected readonly isSubmitting = signal(false);
   protected readonly isUploadingImage = signal(false);
   protected readonly images = signal<ImageItem[]>([]);

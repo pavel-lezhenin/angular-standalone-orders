@@ -23,6 +23,7 @@ import { NotificationService } from '@shared/services/notification.service';
 import { AuthService } from '@core/services/auth.service';
 import { FormValidators } from '@shared/validators/form-validators';
 import type { CartItemDTO, ProductDTO, CreateOrderDTO, OrderItemDTO, AddressDTO } from '@core/models';
+import type { SelectOption } from '@shared/ui/form-field/form-field.component';
 
 interface CartItemWithProduct {
   cartItem: CartItemDTO;
@@ -123,6 +124,12 @@ export default class CheckoutComponent implements OnInit {
    */
   protected isGuest = computed(() => !this.authService.currentUser());
   protected hasSavedAddresses = computed(() => !this.isGuest() && this.savedAddresses().length > 0);
+  protected addressSelectOptions = computed<SelectOption[]>(() =>
+    this.savedAddresses().map(address => ({
+      value: address.id,
+      label: `${address.label} — ${address.addressLine1}, ${address.city}${address.isDefault ? ' (Default)' : ''}`,
+    }))
+  );
   protected shouldShowAddressForm = computed(() => {
     if (this.isGuest()) {
       return true;

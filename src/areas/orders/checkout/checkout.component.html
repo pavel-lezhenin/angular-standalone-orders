@@ -80,16 +80,8 @@
                     [type]="'select'"
                     [prefixIcon]="'bookmark'"
                     [fieldClass]="'form-field'"
-                  >
-                    @for (address of savedAddresses(); track address.id) {
-                      <mat-option [value]="address.id">
-                        {{ address.label }} — {{ address.addressLine1 }}, {{ address.city }}
-                        @if (address.isDefault) {
-                          (Default)
-                        }
-                      </mat-option>
-                    }
-                  </app-form-field>
+                    [selectOptions]="addressSelectOptions()"
+                  />
 
                   <button
                     mat-stroked-button

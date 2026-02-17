@@ -12,7 +12,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { PaymentFormComponent, PaymentFormData } from '@shared/ui/payment-form/payment-form.component';
 import { PageLoaderComponent } from '@shared/ui/page-loader/page-loader.component';
 import { OrderSummaryComponent } from '@shared/ui';
-import { FormFieldComponent } from '@shared/ui/form-field/form-field.component';
+import { FormFieldComponent, type SelectOption } from '@shared/ui/form-field/form-field.component';
 import { PaymentService, PaymentRequest, PaymentResult } from '@shared/services/payment.service';
 import { PaymentStateService } from '@shared/services/payment-state.service';
 import { UserPreferencesService } from '@shared/services/user-preferences.service';
@@ -97,6 +97,14 @@ export default class PaymentComponent implements OnInit {
     return this.savedPaymentMethods().length > 1;
   });
   protected selectedSavedMethodType = computed(() => this.getSelectedSavedMethod()?.type ?? null);
+  protected paymentMethodSelectOptions = computed<SelectOption[]>(() =>
+    this.savedPaymentMethods().map(method => ({
+      value: method.id,
+      label: method.type === 'card'
+        ? `Card ending in ${method.last4Digits}${method.isDefault ? ' (Default)' : ''}`
+        : `PayPal${method.paypalEmail ? ' (' + method.paypalEmail + ')' : ''}${method.isDefault ? ' (Default)' : ''}`,
+    }))
+  );
 
   constructor() {
     // Synchronize savedMethodSelectControl with selectedSavedMethodId signal

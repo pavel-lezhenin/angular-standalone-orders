@@ -16,10 +16,6 @@
     [control]="roleControl"
     [type]="'select'"
     [fieldClass]="'role-field'"
-  >
-    <mat-option [value]="undefined">All roles</mat-option>
-    <mat-option value="user">User</mat-option>
-    <mat-option value="manager">Manager</mat-option>
-    <mat-option value="admin">Admin</mat-option>
-  </app-form-field>
+    [selectOptions]="roleSelectOptions"
+  />
 </app-filter-container>

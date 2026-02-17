@@ -24,20 +24,8 @@
               [type]="'select'"
               [prefixIcon]="'credit_card'"
               [fieldClass]="'form-field'"
-            >
-              @for (method of savedPaymentMethods(); track method.id) {
-                <mat-option [value]="method.id">
-                  @if (method.type === 'card') {
-                    Card ending in {{ method.last4Digits }}
-                  } @else {
-                    PayPal {{ method.paypalEmail ? '(' + method.paypalEmail + ')' : '' }}
-                  }
-                  @if (method.isDefault) {
-                    (Default)
-                  }
-                </mat-option>
-              }
-            </app-form-field>
+              [selectOptions]="paymentMethodSelectOptions()"
+            />
 
             @if (selectedSavedMethodType() === 'card') {
               <app-form-field

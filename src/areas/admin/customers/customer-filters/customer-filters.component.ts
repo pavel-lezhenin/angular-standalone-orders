@@ -8,7 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { UserRole } from '@core/types';
 import { SearchInputComponent } from '@shared/ui/search-input';
 import { FilterContainerComponent, FilterAction } from '@shared/ui/filter-container';
-import { FormFieldComponent } from '@shared/ui/form-field/form-field.component';
+import { FormFieldComponent, type SelectOption } from '@shared/ui/form-field/form-field.component';
 
 export interface CustomerFilters {
   search: string;
@@ -46,6 +46,12 @@ export class CustomerFiltersComponent {
 
   readonly searchControl = new FormControl<string>('');
   readonly roleControl = new FormControl<UserRole | undefined>(undefined);
+  readonly roleSelectOptions: SelectOption[] = [
+    { value: undefined, label: 'All roles' },
+    { value: 'user', label: 'User' },
+    { value: 'manager', label: 'Manager' },
+    { value: 'admin', label: 'Admin' },
+  ];
 
   readonly filtersChange = output<CustomerFilters>();
 

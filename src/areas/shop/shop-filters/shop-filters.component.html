@@ -16,12 +16,6 @@
     [control]="categoryControl"
     [type]="'select'"
     [fieldClass]="'category-field'"
-  >
-    <mat-option [value]="undefined">All Categories</mat-option>
-    @for (category of categories(); track category.id) {
-      <mat-option [value]="category.id">
-        {{ category.name }}
-      </mat-option>
-    }
-  </app-form-field>
+    [selectOptions]="categorySelectOptions()"
+  />
 </app-filter-container>

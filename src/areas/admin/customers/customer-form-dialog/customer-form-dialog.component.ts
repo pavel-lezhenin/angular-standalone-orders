@@ -9,7 +9,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { UserDTO } from '@core';
 import { UserRole } from '@core/types';
 import { DialogComponent, DialogConfig } from '@shared/ui/dialog';
-import { FormFieldComponent } from '@shared/ui';
+import { FormFieldComponent, type SelectOption } from '@shared/ui';
 import { CustomerFormData } from '../model';
 
 export interface CustomerFormDialogData extends DialogConfig {
@@ -57,6 +57,7 @@ export class CustomerFormDialogComponent implements OnInit {
    * Available roles
    */
   protected readonly roles: UserRole[] = ['user', 'manager', 'admin'];
+  protected readonly roleSelectOptions: SelectOption[] = this.roles.map(r => ({ value: r, label: r }));
 
   ngOnInit(): void {
     this.initForm();
