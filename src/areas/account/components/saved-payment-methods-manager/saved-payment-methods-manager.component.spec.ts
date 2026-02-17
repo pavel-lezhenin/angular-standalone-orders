@@ -64,63 +64,14 @@ describe('SavedPaymentMethodsManagerComponent', () => {
 
   it('should display saved payment methods in selection', () => {
     const compiled = fixture.nativeElement as HTMLElement;
-    const select = compiled.querySelector('.payment-select mat-select');
-    expect(select).toBeTruthy();
+    const selector = compiled.querySelector('app-payment-method-selector');
+    expect(selector).toBeTruthy();
   });
 
-  it('should compute selectedPaymentMethod correctly', () => {
-    const selected = component.selectedPaymentMethod();
-    expect(selected).toBeTruthy();
-    expect(selected?.id).toBe('1');
-    expect(selected?.label).toBe('Personal Card');
-  });
-
-  it('should display selected card details', () => {
+  it('should display selected payment method details via selector', () => {
     const compiled = fixture.nativeElement as HTMLElement;
-    const display = compiled.querySelector('.selected-payment-display');
-    expect(display).toBeTruthy();
-    expect(display?.textContent).toContain('Personal Card');
-    expect(display?.textContent).toContain('4242');
-    expect(display?.textContent).toContain('12/2025');
-  });
-
-  it('should display selected PayPal details', () => {
-    fixture.componentRef.setInput('selectedPaymentMethodId', '2');
-    fixture.detectChanges();
-
-    const compiled = fixture.nativeElement as HTMLElement;
-    const display = compiled.querySelector('.selected-payment-display');
-    expect(display).toBeTruthy();
-    expect(display?.textContent).toContain('PayPal Account');
-    expect(display?.textContent).toContain('user@example.com');
-  });
-
-  it('should show delete button when canDeleteSelected', () => {
-    fixture.componentRef.setInput('selectedPaymentMethodId', '2');
-    fixture.detectChanges();
-
-    const compiled = fixture.nativeElement as HTMLElement;
-    const deleteButton = compiled.querySelector('button[color="warn"]');
-    expect(deleteButton).toBeTruthy();
-    expect(component.canDeleteSelected()).toBe(true);
-  });
-
-  it('should show "Set as Default" button for non-default payment methods', () => {
-    fixture.componentRef.setInput('selectedPaymentMethodId', '2');
-    fixture.detectChanges();
-
-    const compiled = fixture.nativeElement as HTMLElement;
-    const defaultButton = Array.from(compiled.querySelectorAll('button'))
-      .find(btn => btn.textContent?.includes('Set as Default'));
-    expect(defaultButton).toBeTruthy();
-    expect(component.canSetAsDefault()).toBe(true);
-  });
-
-  it('should not show "Set as Default" button for default payment method', () => {
-    fixture.componentRef.setInput('selectedPaymentMethodId', '1');
-    fixture.detectChanges();
-
-    expect(component.canSetAsDefault()).toBe(false);
+    const selector = compiled.querySelector('app-payment-method-selector');
+    expect(selector).toBeTruthy();
   });
 
   it('should toggle to payment method form when showPaymentMethodForm is true', () => {

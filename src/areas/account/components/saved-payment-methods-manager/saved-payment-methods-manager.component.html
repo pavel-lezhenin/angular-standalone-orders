@@ -1,156 +1,57 @@
 <div class="payment-methods-section">
   <div class="section-header">
     <h3>Payment Methods</h3>
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="toggleForm.emit()"
-    >
-      @if (showPaymentMethodForm()) {
-        <ng-container>
-          <mat-icon>close</mat-icon>
-          Cancel
-        </ng-container>
-      } @else {
-        <ng-container>
-          <mat-icon>add</mat-icon>
-          Add Payment Method
-        </ng-container>
-      }
-    </button>
-  </div>
-
-  @if (!showPaymentMethodForm()) {
-    <div class="selection-controls">
-      <app-form-field
-        [label]="'Selected Payment Method'"
-        [control]="paymentMethodSelectControl"
-        [type]="'select'"
-        [fieldClass]="'payment-select'"
-      >
-        @for (method of savedPaymentMethods(); track method.id) {
-          <mat-option [value]="method.id">
-            {{ method.label }}
-            @if (method.isDefault) {
-              (Default)
-            }
-          </mat-option>
-        }
-      </app-form-field>
-
-      <div class="action-buttons">
-        @if (canSetAsDefault()) {
-          <button
-            mat-stroked-button
-            color="primary"
-            (click)="setAsDefault.emit()"
-          >
-            Set as Default
-          </button>
-        }
-
-        @if (canDeleteSelected()) {
-          <button
-            mat-stroked-button
-            color="warn"
-            (click)="deleteSelected.emit()"
-          >
-            <mat-icon>delete</mat-icon>
-            Delete
-          </button>
-        }
-      </div>
-    </div>
-
-    @if (selectedPaymentMethod(); as method) {
-      <div class="selected-payment-display">
-        <div class="payment-details">
-          <p><strong>{{ method.label }}</strong></p>
-          @if (method.type === 'card' && method.cardDetails) {
-            <mat-chip-set>
-              <mat-chip>Card ending in {{ method.cardDetails.lastFourDigits }}</mat-chip>
-            </mat-chip-set>
-            <p>Expires: {{ method.cardDetails.expiryMonth }}/{{ method.cardDetails.expiryYear }}</p>
-          } @else if (method.type === 'paypal' && method.paypalEmail) {
-            <mat-chip-set>
-              <mat-chip>PayPal</mat-chip>
-            </mat-chip-set>
-            <p>{{ method.paypalEmail }}</p>
-          }
-        </div>
-      </div>
-    }
-  } @else {
-    <form [formGroup]="paymentMethodForm()" class="payment-method-form">
-      <app-form-field
-        [label]="'Payment Type'"
-        [control]="paymentTypeSelectControl"
-        [type]="'select'"
-      >
-        <mat-option value="card">Credit/Debit Card</mat-option>
-        <mat-option value="paypal">PayPal</mat-option>
-      </app-form-field>
-
-      @if (selectedPaymentType() === 'card') {
-        <div class="card-fields">
-          <app-form-field
-            [label]="'Cardholder Name'"
-            [control]="$any(paymentMethodForm().controls['cardholderName'])"
-            [fieldClass]="'full-width'"
-          />
-
-          <app-form-field
-            [label]="'Card Number'"
-            [control]="$any(paymentMethodForm().controls['cardNumber'])"
-            [placeholder]="'1234 5678 9012 3456'"
-            [maxLength]="19"
-            [fieldClass]="'full-width'"
-          />
-
-          <div class="form-row">
-            <app-form-field
-              [label]="'Expiry Month'"
-              [control]="$any(paymentMethodForm().controls['expiryMonth'])"
-              [type]="'select'"
-            >
-              @for (month of [1,2,3,4,5,6,7,8,9,10,11,12]; track month) {
-                <mat-option [value]="month">{{ month }}</mat-option>
-              }
-            </app-form-field>
-
-            <app-form-field
-              [label]="'Expiry Year'"
-              [control]="$any(paymentMethodForm().controls['expiryYear'])"
-              [type]="'select'"
-            >
-              @for (year of [2024,2025,2026,2027,2028,2029,2030,2031,2032,2033,2034]; track year) {
-                <mat-option [value]="year">{{ year }}</mat-option>
-              }
-            </app-form-field>
-          </div>
-        </div>
-      } @else {
-        <div class="paypal-fields">
-          <app-form-field
-            [label]="'PayPal Email'"
-            [control]="$any(paymentMethodForm().controls['paypalEmail'])"
-            [type]="'email'"
-            [fieldClass]="'full-width'"
-          />
-        </div>
-      }
-
-      <div class="form-actions">
+    <div class="header-actions">
+      @if (!showPaymentMethodForm() && isEditMode()) {
         <button
           mat-raised-button
           color="primary"
-          type="button"
-          [disabled]="paymentMethodForm().invalid"
-          (click)="savePaymentMethod.emit()"
+          (click)="toggleForm.emit()"
         >
-          Save Payment Method
+          <mat-icon>add</mat-icon>
+          Add Payment Method
         </button>
+      }
+      <button
+        mat-raised-button
+        [color]="isEditMode() ? 'accent' : 'primary'"
+        (click)="toggleEditMode.emit()"
+      >
+        <mat-icon>{{ isEditMode() ? 'check' : 'edit' }}</mat-icon>
+        {{ isEditMode() ? 'Done' : 'Edit' }}
+      </button>
+    </div>
+  </div>
+
+  @if (showPaymentMethodForm()) {
+    <app-payment-method-form
+      [paymentMethodForm]="paymentMethodForm()"
+      [selectedPaymentType]="selectedPaymentType()"
+      (paymentTypeChange)="paymentTypeChange.emit($event)"
+      (save)="savePaymentMethod.emit()"
+      (cancel)="toggleForm.emit()"
+    />
+  } @else {
+    @if (savedPaymentMethods().length > 0) {
+      <app-payment-method-selector
+        [savedPaymentMethods]="savedPaymentMethods()"
+        [selectedPaymentMethodId]="selectedPaymentMethodId()"
+        [isEditMode]="isEditMode()"
+        (selectionChange)="paymentMethodSelectionChange.emit($event)"
+        (setAsDefault)="setAsDefault.emit()"
+        (deleteSelected)="deleteSelected.emit()"
+      />
+    } @else {
+      <div class="empty-state">
+        <mat-icon>payment</mat-icon>
+        @if (isEditMode()) {
+          <p>No payment methods yet</p>
+          <p class="hint">Click "Add Payment Method" to get started</p>
+        } @else {
+          <p>No payment methods saved</p>
+          <p class="hint">Activate edit mode to add payment methods</p>
+        }
       </div>
-    </form>
+    }
   }
 </div>

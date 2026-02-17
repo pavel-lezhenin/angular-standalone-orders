@@ -12,8 +12,8 @@
               <mat-card-subtitle>Manage your profile information</mat-card-subtitle>
             </div>
           </div>
-          <mat-chip [color]="getRoleBadgeColor(currentUser.role)" highlighted>
-            {{ getRoleDisplayName(currentUser.role) }}
+          <mat-chip [color]="profile.getRoleBadgeColor(currentUser.role)" highlighted>
+            {{ profile.getRoleDisplayName(currentUser.role) }}
           </mat-chip>
         </div>
       </mat-card-header>
@@ -22,67 +22,81 @@
 
       <mat-card-content>
         <!-- Profile Information -->
-        <app-profile-info
-          [profileForm]="profileForm"
-          [isEditMode]="isEditMode()"
-        />
+        <div class="profile-section">
+          <div class="section-header">
+            <h3>Personal Information</h3>
+            <div class="header-actions">
+              @if (!profile.isEditMode()) {
+                <button
+                  mat-raised-button
+                  color="primary"
+                  (click)="profile.toggleEditMode()"
+                >
+                  <mat-icon>edit</mat-icon>
+                  Edit
+                </button>
+              } @else {
+                <button
+                  mat-button
+                  (click)="profile.toggleEditMode()"
+                >
+                  Cancel
+                </button>
+                <button
+                  mat-raised-button
+                  color="accent"
+                  (click)="profile.save()"
+                  [disabled]="!profile.form.valid"
+                >
+                  <mat-icon>save</mat-icon>
+                  Save
+                </button>
+              }
+            </div>
+          </div>
+
+          <app-profile-info
+            [profileForm]="profile.form"
+            [isEditMode]="profile.isEditMode()"
+          />
+        </div>
 
         <mat-divider class="section-divider" />
 
         <!-- Payment Methods -->
         <app-saved-payment-methods-manager
-          [savedPaymentMethods]="savedPaymentMethods()"
-          [selectedPaymentMethodId]="selectedPaymentMethodId()"
-          [showPaymentMethodForm]="showPaymentMethodForm()"
-          [paymentMethodForm]="paymentMethodForm"
-          [selectedPaymentType]="selectedPaymentType()"
-          (paymentMethodSelectionChange)="onPaymentMethodSelectionChange($event)"
-          (toggleForm)="togglePaymentMethodForm()"
-          (paymentTypeChange)="onPaymentTypeChange($event)"
-          (savePaymentMethod)="savePaymentMethod()"
-          (deleteSelected)="deleteSelectedPaymentMethod()"
-          (setAsDefault)="setSelectedPaymentMethodAsDefault()"
+          [savedPaymentMethods]="payments.items()"
+          [selectedPaymentMethodId]="payments.selectedId()"
+          [showPaymentMethodForm]="payments.showForm()"
+          [paymentMethodForm]="payments.form"
+          [selectedPaymentType]="payments.selectedType()"
+          [isEditMode]="payments.isEditMode()"
+          (paymentMethodSelectionChange)="payments.onSelectionChange($event)"
+          (toggleForm)="payments.toggleForm()"
+          (toggleEditMode)="payments.toggleEditMode()"
+          (paymentTypeChange)="payments.onTypeChange($event)"
+          (savePaymentMethod)="payments.save()"
+          (deleteSelected)="payments.deleteSelected()"
+          (setAsDefault)="payments.setAsDefault()"
         />
 
         <mat-divider class="section-divider" />
 
         <!-- Shipping Addresses -->
         <app-saved-addresses-manager
-          [savedAddresses]="savedAddresses()"
-          [selectedAddressId]="selectedAddressId()"
-          [showAddressForm]="showAddressForm()"
-          [addressForm]="addressForm"
-          (addressSelectionChange)="onAddressSelectionChange($event)"
-          (toggleForm)="toggleAddressForm()"
-          (saveAddress)="saveAddress()"
-          (deleteSelected)="deleteSelectedAddress()"
-          (setAsDefault)="setSelectedAddressAsDefault()"
+          [savedAddresses]="addresses.items()"
+          [selectedAddressId]="addresses.selectedId()"
+          [showAddressForm]="addresses.showForm()"
+          [addressForm]="addresses.form"
+          [isEditMode]="addresses.isEditMode()"
+          (addressSelectionChange)="addresses.onSelectionChange($event)"
+          (toggleForm)="addresses.toggleForm()"
+          (toggleEditMode)="addresses.toggleEditMode()"
+          (saveAddress)="addresses.save()"
+          (deleteSelected)="addresses.deleteSelected()"
+          (setAsDefault)="addresses.setAsDefault()"
         />
       </mat-card-content>
-
-      <mat-divider />
-
-      <mat-card-actions class="card-actions">
-        @if (!isEditMode()) {
-          <button mat-raised-button color="primary" (click)="toggleEditMode()">
-            <mat-icon>edit</mat-icon>
-            Edit Profile
-          </button>
-        } @else {
-          <button mat-button (click)="toggleEditMode()">
-            Cancel
-          </button>
-          <button 
-            mat-raised-button 
-            color="primary" 
-            (click)="saveProfile()"
-            [disabled]="!profileForm.valid"
-          >
-            <mat-icon>save</mat-icon>
-            Save Changes
-          </button>
-        }
-      </mat-card-actions>
     </mat-card>
 
     <!-- Account Stats -->

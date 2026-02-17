@@ -69,52 +69,14 @@ describe('SavedAddressesManagerComponent', () => {
 
   it('should display saved addresses in selection', () => {
     const compiled = fixture.nativeElement as HTMLElement;
-    const select = compiled.querySelector('.address-select mat-select');
-    expect(select).toBeTruthy();
+    const selector = compiled.querySelector('app-address-selector');
+    expect(selector).toBeTruthy();
   });
 
-  it('should compute selectedAddress correctly', () => {
-    const selected = component.selectedAddress();
-    expect(selected).toBeTruthy();
-    expect(selected?.id).toBe('1');
-    expect(selected?.label).toBe('Home');
-  });
-
-  it('should display selected address details', () => {
+  it('should display selected address details via address-selector', () => {
     const compiled = fixture.nativeElement as HTMLElement;
-    const display = compiled.querySelector('.selected-address-display');
-    expect(display).toBeTruthy();
-    expect(display?.textContent).toContain('Home');
-    expect(display?.textContent).toContain('John Doe');
-    expect(display?.textContent).toContain('123 Main St');
-  });
-
-  it('should show delete button when canDeleteSelected', () => {
-    fixture.componentRef.setInput('selectedAddressId', '2');
-    fixture.detectChanges();
-
-    const compiled = fixture.nativeElement as HTMLElement;
-    const deleteButton = compiled.querySelector('button[color="warn"]');
-    expect(deleteButton).toBeTruthy();
-    expect(component.canDeleteSelected()).toBe(true);
-  });
-
-  it('should show "Set as Default" button for non-default addresses', () => {
-    fixture.componentRef.setInput('selectedAddressId', '2');
-    fixture.detectChanges();
-
-    const compiled = fixture.nativeElement as HTMLElement;
-    const defaultButton = Array.from(compiled.querySelectorAll('button'))
-      .find(btn => btn.textContent?.includes('Set as Default'));
-    expect(defaultButton).toBeTruthy();
-    expect(component.canSetAsDefault()).toBe(true);
-  });
-
-  it('should not show "Set as Default" button for default address', () => {
-    fixture.componentRef.setInput('selectedAddressId', '1');
-    fixture.detectChanges();
-
-    expect(component.canSetAsDefault()).toBe(false);
+    const selector = compiled.querySelector('app-address-selector');
+    expect(selector).toBeTruthy();
   });
 
   it('should toggle to address form when showAddressForm is true', () => {
