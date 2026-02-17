@@ -1,5 +1,10 @@
+import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { QuantityControlComponent } from './quantity-control.component';
+
+const setSignalInput = (component: QuantityControlComponent, inputName: string, value: unknown): void => {
+  (component as unknown as Record<string, unknown>)[inputName] = signal(value);
+};
 
 describe('QuantityControlComponent', () => {
   let component: QuantityControlComponent;
@@ -19,7 +24,7 @@ describe('QuantityControlComponent', () => {
   });
 
   it('should display quantity', () => {
-    fixture.componentRef.setInput('quantity', 5);
+    setSignalInput(component, 'quantity', 5);
     fixture.detectChanges();
 
     const quantitySpan = fixture.nativeElement.querySelector('.quantity');
@@ -27,7 +32,7 @@ describe('QuantityControlComponent', () => {
   });
 
   it('should emit quantityChange on increment', () => {
-    fixture.componentRef.setInput('quantity', 5);
+    setSignalInput(component, 'quantity', 5);
     fixture.detectChanges();
 
     let emittedValue: number | undefined;
@@ -43,7 +48,7 @@ describe('QuantityControlComponent', () => {
   });
 
   it('should emit quantityChange on decrement', () => {
-    fixture.componentRef.setInput('quantity', 5);
+    setSignalInput(component, 'quantity', 5);
     fixture.detectChanges();
 
     let emittedValue: number | undefined;
@@ -59,8 +64,8 @@ describe('QuantityControlComponent', () => {
   });
 
   it('should disable decrement button when at minimum', () => {
-    fixture.componentRef.setInput('quantity', 1);
-    fixture.componentRef.setInput('min', 1);
+    setSignalInput(component, 'quantity', 1);
+    setSignalInput(component, 'min', 1);
     fixture.detectChanges();
 
     const decrementButton = fixture.nativeElement.querySelectorAll('button')[0];
@@ -68,8 +73,8 @@ describe('QuantityControlComponent', () => {
   });
 
   it('should disable increment button when at maximum', () => {
-    fixture.componentRef.setInput('quantity', 10);
-    fixture.componentRef.setInput('max', 10);
+    setSignalInput(component, 'quantity', 10);
+    setSignalInput(component, 'max', 10);
     fixture.detectChanges();
 
     const incrementButton = fixture.nativeElement.querySelectorAll('button')[1];
@@ -77,8 +82,8 @@ describe('QuantityControlComponent', () => {
   });
 
   it('should not disable increment button when max is null', () => {
-    fixture.componentRef.setInput('quantity', 100);
-    fixture.componentRef.setInput('max', null);
+    setSignalInput(component, 'quantity', 100);
+    setSignalInput(component, 'max', null);
     fixture.detectChanges();
 
     const incrementButton = fixture.nativeElement.querySelectorAll('button')[1];
@@ -86,8 +91,8 @@ describe('QuantityControlComponent', () => {
   });
 
   it('should disable all buttons when disabled', () => {
-    fixture.componentRef.setInput('quantity', 5);
-    fixture.componentRef.setInput('disabled', true);
+    setSignalInput(component, 'quantity', 5);
+    setSignalInput(component, 'disabled', true);
     fixture.detectChanges();
 
     const buttons = fixture.nativeElement.querySelectorAll('button');
@@ -96,8 +101,8 @@ describe('QuantityControlComponent', () => {
   });
 
   it('should apply size class', () => {
-    fixture.componentRef.setInput('quantity', 5);
-    fixture.componentRef.setInput('size', 'large');
+    setSignalInput(component, 'quantity', 5);
+    setSignalInput(component, 'size', 'large');
     fixture.detectChanges();
 
     const control = fixture.nativeElement.querySelector('.quantity-control');
@@ -105,8 +110,8 @@ describe('QuantityControlComponent', () => {
   });
 
   it('should not emit below minimum', () => {
-    fixture.componentRef.setInput('quantity', 1);
-    fixture.componentRef.setInput('min', 1);
+    setSignalInput(component, 'quantity', 1);
+    setSignalInput(component, 'min', 1);
     fixture.detectChanges();
 
     let emittedValue: number | undefined;
@@ -114,15 +119,16 @@ describe('QuantityControlComponent', () => {
       emittedValue = value;
     });
 
-    component['decrement']();
+    const decrementButton = fixture.nativeElement.querySelectorAll('button')[0];
+    decrementButton.click();
 
     expect(emittedValue).toBeUndefined();
     subscription.unsubscribe();
   });
 
   it('should not emit above maximum when max is set', () => {
-    fixture.componentRef.setInput('quantity', 10);
-    fixture.componentRef.setInput('max', 10);
+    setSignalInput(component, 'quantity', 10);
+    setSignalInput(component, 'max', 10);
     fixture.detectChanges();
 
     let emittedValue: number | undefined;
@@ -130,7 +136,8 @@ describe('QuantityControlComponent', () => {
       emittedValue = value;
     });
 
-    component['increment']();
+    const incrementButton = fixture.nativeElement.querySelectorAll('button')[1];
+    incrementButton.click();
 
     expect(emittedValue).toBeUndefined();
     subscription.unsubscribe();

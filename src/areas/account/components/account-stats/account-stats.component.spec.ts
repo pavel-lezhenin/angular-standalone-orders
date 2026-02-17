@@ -1,5 +1,10 @@
+import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AccountStatsComponent } from './account-stats.component';
+
+const setSignalInput = (component: AccountStatsComponent, inputName: string, value: unknown): void => {
+  (component as unknown as Record<string, unknown>)[inputName] = signal(value);
+};
 
 describe('AccountStatsComponent', () => {
   let component: AccountStatsComponent;
@@ -13,11 +18,9 @@ describe('AccountStatsComponent', () => {
     fixture = TestBed.createComponent(AccountStatsComponent);
     component = fixture.componentInstance;
 
-    fixture.componentRef.setInput('totalOrders', 42);
-    fixture.componentRef.setInput('totalSpent', 1250.50);
-    fixture.componentRef.setInput('loyaltyPoints', 3500);
-
-    fixture.detectChanges();
+    setSignalInput(component, 'totalOrders', 42);
+    setSignalInput(component, 'totalSpent', 1250.5);
+    setSignalInput(component, 'loyaltyPoints', 3500);
   });
 
   it('should create', () => {
@@ -25,6 +28,7 @@ describe('AccountStatsComponent', () => {
   });
 
   it('should display total orders', () => {
+    fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     const statValues = compiled.querySelectorAll('.stat-value');
     const ordersValue = statValues[0]?.textContent;
@@ -32,6 +36,7 @@ describe('AccountStatsComponent', () => {
   });
 
   it('should display total spent formatted as currency', () => {
+    fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     const statValues = compiled.querySelectorAll('.stat-value');
     const spentValue = statValues[1]?.textContent;
@@ -39,6 +44,7 @@ describe('AccountStatsComponent', () => {
   });
 
   it('should display loyalty points', () => {
+    fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     const statValues = compiled.querySelectorAll('.stat-value');
     const pointsValue = statValues[2]?.textContent;
@@ -46,6 +52,7 @@ describe('AccountStatsComponent', () => {
   });
 
   it('should display all stat labels', () => {
+    fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     const statLabels = compiled.querySelectorAll('.stat-label');
     
@@ -56,6 +63,7 @@ describe('AccountStatsComponent', () => {
   });
 
   it('should have stats-grid with proper structure', () => {
+    fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     const statsGrid = compiled.querySelector('.stats-grid');
     const statItems = compiled.querySelectorAll('.stat-item');

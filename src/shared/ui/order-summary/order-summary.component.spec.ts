@@ -1,5 +1,10 @@
+import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { OrderSummaryComponent, SummaryLine } from './order-summary.component';
+
+const setSignalInput = (component: OrderSummaryComponent, inputName: string, value: unknown): void => {
+  (component as unknown as Record<string, unknown>)[inputName] = signal(value);
+};
 
 describe('OrderSummaryComponent', () => {
   let component: OrderSummaryComponent;
@@ -12,8 +17,7 @@ describe('OrderSummaryComponent', () => {
 
     fixture = TestBed.createComponent(OrderSummaryComponent);
     component = fixture.componentInstance;
-    fixture.componentRef.setInput('total', 100);
-    fixture.detectChanges();
+    setSignalInput(component, 'total', 100);
   });
 
   it('should create', () => {
@@ -22,24 +26,26 @@ describe('OrderSummaryComponent', () => {
 
   describe('Basic rendering', () => {
     it('should display default title', () => {
+      fixture.detectChanges();
       const title = fixture.nativeElement.querySelector('h2');
       expect(title.textContent).toBe('Order Summary');
     });
 
     it('should display custom title', () => {
-      fixture.componentRef.setInput('title', 'Cart Summary');
+      setSignalInput(component, 'title', 'Cart Summary');
       fixture.detectChanges();
       const title = fixture.nativeElement.querySelector('h2');
       expect(title.textContent).toBe('Cart Summary');
     });
 
     it('should display total', () => {
+      fixture.detectChanges();
       const totalRow = fixture.nativeElement.querySelector('.summary-row.total .amount');
       expect(totalRow.textContent).toContain('100');
     });
 
     it('should display custom total label', () => {
-      fixture.componentRef.setInput('totalLabel', 'Grand Total');
+      setSignalInput(component, 'totalLabel', 'Grand Total');
       fixture.detectChanges();
       const totalRow = fixture.nativeElement.querySelector('.summary-row.total');
       expect(totalRow.textContent).toContain('Grand Total:');
@@ -52,7 +58,7 @@ describe('OrderSummaryComponent', () => {
         { label: 'Subtotal', value: 90 },
         { label: 'Tax', value: 10 },
       ];
-      fixture.componentRef.setInput('summaryLines', lines);
+      setSignalInput(component, 'summaryLines', lines);
       fixture.detectChanges();
 
       const rows = fixture.nativeElement.querySelectorAll('.summary-row:not(.total)');
@@ -67,7 +73,7 @@ describe('OrderSummaryComponent', () => {
       const lines: SummaryLine[] = [
         { label: 'Discount', value: -10, class: 'discount' },
       ];
-      fixture.componentRef.setInput('summaryLines', lines);
+      setSignalInput(component, 'summaryLines', lines);
       fixture.detectChanges();
 
       const row = fixture.nativeElement.querySelector('.summary-row.discount');
@@ -77,12 +83,13 @@ describe('OrderSummaryComponent', () => {
 
   describe('Divider', () => {
     it('should show divider by default', () => {
+      fixture.detectChanges();
       const divider = fixture.nativeElement.querySelector('.summary-divider');
       expect(divider).toBeTruthy();
     });
 
     it('should hide divider when showDivider is false', () => {
-      fixture.componentRef.setInput('showDivider', false);
+      setSignalInput(component, 'showDivider', false);
       fixture.detectChanges();
       const divider = fixture.nativeElement.querySelector('.summary-divider');
       expect(divider).toBeFalsy();
@@ -91,19 +98,20 @@ describe('OrderSummaryComponent', () => {
 
   describe('Variants', () => {
     it('should apply default variant class', () => {
+      fixture.detectChanges();
       const summary = fixture.nativeElement.querySelector('.order-summary');
       expect(summary.classList.contains('default')).toBe(true);
     });
 
     it('should apply compact variant class', () => {
-      fixture.componentRef.setInput('variant', 'compact');
+      setSignalInput(component, 'variant', 'compact');
       fixture.detectChanges();
       const summary = fixture.nativeElement.querySelector('.order-summary');
       expect(summary.classList.contains('compact')).toBe(true);
     });
 
     it('should apply card variant class', () => {
-      fixture.componentRef.setInput('variant', 'card');
+      setSignalInput(component, 'variant', 'card');
       fixture.detectChanges();
       const summary = fixture.nativeElement.querySelector('.order-summary');
       expect(summary.classList.contains('card')).toBe(true);

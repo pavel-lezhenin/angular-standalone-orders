@@ -1,4 +1,4 @@
-import { Component, input, computed, output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -193,14 +193,14 @@ export class FormFieldComponent {
   readonly selectionChange = output<{ value: unknown }>();
 
   /**
-   * Computed character count text
+   * Character count text
    */
-  readonly characterCountText = computed(() => {
+  characterCountText(): string {
     const maxLen = this.maxLength();
     if (!maxLen) return '';
     const currentLength = this.control().value?.length || 0;
     return `${currentLength}/${maxLen}`;
-  });
+  }
 
   /**
    * Handle input/change events and update control value

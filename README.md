@@ -48,6 +48,7 @@ admin@demo / demo       (Admin role)
 | Understand data layer | [docs/FAKEBFF_ARCHITECTURE.md](./docs/FAKEBFF_ARCHITECTURE.md) |
 | Overall architecture | [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) |
 | Build features | [docs/IMPLEMENTATION.md](./docs/IMPLEMENTATION.md) |
+| AI project rules | [docs/AGENTS.md](./docs/AGENTS.md) |
 | Limitations & when to use | [docs/USE_CASES.md](./docs/USE_CASES.md) |
 
 ## 🏗️ Architecture (30 Seconds)

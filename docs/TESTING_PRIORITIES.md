@@ -9,8 +9,9 @@
 ## Goals
 
 1. Lock current behavior of critical user flows.
-2. Validate Material + theme behavior for reusable UI blocks.
-3. Keep test suite fast, stable, and cheap to maintain.
+2. Protect high-risk business logic with deterministic, type-safe tests.
+3. Validate Material + theme behavior for reusable UI blocks as a separate UI coverage track.
+4. Keep the full quality workflow fast, stable, and cheap to maintain.
 
 Storybook environment setup and known pitfalls are documented in [STORYBOOK_SETUP.md](./STORYBOOK_SETUP.md).
 
@@ -18,27 +19,29 @@ Storybook environment setup and known pitfalls are documented in [STORYBOOK_SETU
 
 ## Priority Order
 
-### P0 — Visual/Behavior Baseline (Storybook)
+### P0 — Targeted Unit Tests (Risk-Based)
 
-**Why first:** fastest way to lock UI states and validate custom theme behavior on Material components.
+**Why first:** fastest and most stable way to protect high-risk logic before integration-level checks.
 
 **Include now:**
-- Shared UI primitives used across pages.
-- Form controls with validation states.
-- Table/list states (empty, loading, populated).
-- Dialog states (open, submitting, error).
+- Guards and permission checks.
+- Auth/session state transitions.
+- Custom validators.
+- Pure mapping/normalization helpers.
+- Logic with async/race sensitivity.
 
 **Do not include now:**
-- Every page variant.
-- Full business workflows inside stories.
+- Snapshot tests for every component.
+- Boilerplate tests for trivial getters/setters.
+- Coverage-driven tests with low signal.
 
 **Exit criteria:**
-- Stories exist for all high-reuse components.
-- Theme regressions are detectable via Storybook review.
+- High-risk logic has direct unit coverage.
+- New bug-prone logic cannot regress silently.
 
 ---
 
-### P1 — Critical E2E Smoke Pack
+### P1 — Critical E2E Smoke Pack (Playwright)
 
 **Why second:** protects real integration paths with minimal suite size.
 
@@ -67,24 +70,25 @@ Storybook environment setup and known pitfalls are documented in [STORYBOOK_SETU
 
 ---
 
-### P2 — Targeted Unit Tests (Risk-Based)
+## Separate Track (Non-Gate)
 
-**Why third:** unit tests are valuable for logic-heavy code, but expensive when applied indiscriminately.
+### Storybook — UI Documentation and Visual Coverage
+
+**Position in workflow:** maintained continuously, but not part of the merge-gate testing stage unless explicit visual-regression tooling is introduced.
 
 **Include now:**
-- Custom validators.
-- State transitions with async/race sensitivity.
-- Pure mapping/normalization helpers.
-- Guards and permission checks.
+- Shared UI primitives used across pages.
+- Form controls with validation states.
+- Table/list states (empty, loading, populated).
+- Dialog states (open, submitting, error).
 
 **Do not include now:**
-- Snapshot tests for every component.
-- Boilerplate tests for trivial getters/setters.
-- Coverage-driven tests with low signal.
+- Full business workflows inside stories.
+- Treating Storybook stories as pass/fail automated tests.
 
 **Exit criteria:**
-- High-risk logic has direct unit coverage.
-- New bug-prone logic cannot regress silently.
+- Stories exist for all high-reuse components.
+- Theme regressions are detectable during UI review.
 
 ---
 
@@ -100,9 +104,9 @@ Storybook environment setup and known pitfalls are documented in [STORYBOOK_SETU
 
 ## Initial Capacity Envelope
 
-- **Storybook baseline:** 1-2 days.
+- **Targeted unit set:** 1-2 days.
 - **E2E smoke pack:** 1-2 days.
-- **Targeted unit set:** 1 day.
+- **Storybook baseline (separate track):** 1 day.
 
 Total expected first baseline: **3-5 working days**.
 
@@ -111,7 +115,7 @@ Total expected first baseline: **3-5 working days**.
 ## Definition of Done for Baseline
 
 Baseline is considered complete when:
-- Storybook covers high-reuse UI states,
-- smoke E2E covers critical user/business flows,
 - targeted units protect highest-risk logic,
+- smoke E2E covers critical user/business flows,
+- Storybook covers high-reuse UI states as UI documentation/coverage,
 - and overall test runtime remains practical for daily development.

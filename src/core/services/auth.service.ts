@@ -9,10 +9,9 @@ import type { UserDTO } from '../models';
 })
 export class AuthService {
   currentUser = signal<UserDTO | null>(null);
+  private http = inject(HttpClient);
   private platformId = inject(PLATFORM_ID);
   private isBrowser = isPlatformBrowser(this.platformId);
-
-  constructor(private http: HttpClient) {}
 
   async login(email: string, password: string): Promise<UserDTO> {
     const response = await firstValueFrom(

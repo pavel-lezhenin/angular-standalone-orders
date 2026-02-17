@@ -1,7 +1,12 @@
+import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, Validators } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { FormFieldComponent } from './form-field.component';
+
+const setSignalInput = (component: FormFieldComponent, inputName: string, value: unknown): void => {
+  (component as unknown as Record<string, unknown>)[inputName] = signal(value);
+};
 
 describe('FormFieldComponent', () => {
   let component: FormFieldComponent;
@@ -16,9 +21,8 @@ describe('FormFieldComponent', () => {
     control = new FormControl('');
     fixture = TestBed.createComponent(FormFieldComponent);
     component = fixture.componentInstance;
-    fixture.componentRef.setInput('label', 'Test Field');
-    fixture.componentRef.setInput('control', control);
-    fixture.detectChanges();
+    setSignalInput(component, 'label', 'Test Field');
+    setSignalInput(component, 'control', control);
   });
 
   it('should create', () => {
@@ -27,24 +31,26 @@ describe('FormFieldComponent', () => {
 
   describe('Basic rendering', () => {
     it('should display the label', () => {
+      fixture.detectChanges();
       const label = fixture.nativeElement.querySelector('mat-label');
       expect(label.textContent).toBe('Test Field');
     });
 
     it('should render text input by default', () => {
+      fixture.detectChanges();
       const input = fixture.nativeElement.querySelector('input[type="text"]');
       expect(input).toBeTruthy();
     });
 
     it('should render textarea when type is textarea', () => {
-      fixture.componentRef.setInput('type', 'textarea');
+      setSignalInput(component, 'type', 'textarea');
       fixture.detectChanges();
       const textarea = fixture.nativeElement.querySelector('textarea');
       expect(textarea).toBeTruthy();
     });
 
     it('should render select when type is select', () => {
-      fixture.componentRef.setInput('type', 'select');
+      setSignalInput(component, 'type', 'select');
       fixture.detectChanges();
       const select = fixture.nativeElement.querySelector('mat-select');
       expect(select).toBeTruthy();
@@ -53,7 +59,7 @@ describe('FormFieldComponent', () => {
 
   describe('Icons', () => {
     it('should display prefix icon when provided', () => {
-      fixture.componentRef.setInput('prefixIcon', 'email');
+      setSignalInput(component, 'prefixIcon', 'email');
       fixture.detectChanges();
       const icon = fixture.nativeElement.querySelector('mat-icon[matPrefix]');
       expect(icon).toBeTruthy();
@@ -61,7 +67,7 @@ describe('FormFieldComponent', () => {
     });
 
     it('should display suffix icon when provided', () => {
-      fixture.componentRef.setInput('suffixIcon', 'visibility');
+      setSignalInput(component, 'suffixIcon', 'visibility');
       fixture.detectChanges();
       const icon = fixture.nativeElement.querySelector('mat-icon[matSuffix]');
       expect(icon).toBeTruthy();
@@ -109,7 +115,8 @@ describe('FormFieldComponent', () => {
     it('should use custom error message when provided', () => {
       control.setValidators([Validators.required]);
       control.markAsTouched();
-      fixture.componentRef.setInput('customErrorMessages', { required: 'This is mandatory' });
+      control.updateValueAndValidity();
+      setSignalInput(component, 'customErrorMessages', { required: 'This is mandatory' });
       fixture.detectChanges();
 
       expect(component.getErrorMessage()).toBe('This is mandatory');
@@ -118,8 +125,8 @@ describe('FormFieldComponent', () => {
 
   describe('Character count', () => {
     it('should display character count when enabled', () => {
-      fixture.componentRef.setInput('maxLength', 100);
-      fixture.componentRef.setInput('showCharacterCount', true);
+      setSignalInput(component, 'maxLength', 100);
+      setSignalInput(component, 'showCharacterCount', true);
       control.setValue('Hello');
       fixture.detectChanges();
 
@@ -127,8 +134,8 @@ describe('FormFieldComponent', () => {
     });
 
     it('should update character count when value changes', () => {
-      fixture.componentRef.setInput('maxLength', 50);
-      fixture.componentRef.setInput('showCharacterCount', true);
+      setSignalInput(component, 'maxLength', 50);
+      setSignalInput(component, 'showCharacterCount', true);
       control.setValue('Test');
       fixture.detectChanges();
       expect(component.characterCountText()).toBe('4/50');
@@ -141,19 +148,20 @@ describe('FormFieldComponent', () => {
 
   describe('Accessibility', () => {
     it('should have aria-label from label by default', () => {
+      fixture.detectChanges();
       const input = fixture.nativeElement.querySelector('input');
       expect(input.getAttribute('aria-label')).toBe('Test Field');
     });
 
     it('should use custom aria-label when provided', () => {
-      fixture.componentRef.setInput('ariaLabel', 'Custom label');
+      setSignalInput(component, 'ariaLabel', 'Custom label');
       fixture.detectChanges();
       const input = fixture.nativeElement.querySelector('input');
       expect(input.getAttribute('aria-label')).toBe('Custom label');
     });
 
     it('should mark field as required when required is true', () => {
-      fixture.componentRef.setInput('required', true);
+      setSignalInput(component, 'required', true);
       fixture.detectChanges();
       const input = fixture.nativeElement.querySelector('input');
       expect(input.hasAttribute('required')).toBe(true);

@@ -1,5 +1,10 @@
+import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { StatusBadgeComponent } from './status-badge.component';
+
+const setSignalInput = (component: StatusBadgeComponent, inputName: string, value: unknown): void => {
+  (component as unknown as Record<string, unknown>)[inputName] = signal(value);
+};
 
 describe('StatusBadgeComponent', () => {
   let component: StatusBadgeComponent;
@@ -19,7 +24,7 @@ describe('StatusBadgeComponent', () => {
   });
 
   it('should display label', () => {
-    fixture.componentRef.setInput('label', 'Test Label');
+    setSignalInput(component, 'label', 'Test Label');
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
@@ -27,8 +32,8 @@ describe('StatusBadgeComponent', () => {
   });
 
   it('should apply variant class', () => {
-    fixture.componentRef.setInput('label', 'Test');
-    fixture.componentRef.setInput('variant', 'success');
+    setSignalInput(component, 'label', 'Test');
+    setSignalInput(component, 'variant', 'success');
     fixture.detectChanges();
 
     const chip = fixture.nativeElement.querySelector('mat-chip');
@@ -36,8 +41,8 @@ describe('StatusBadgeComponent', () => {
   });
 
   it('should apply size class', () => {
-    fixture.componentRef.setInput('label', 'Test');
-    fixture.componentRef.setInput('size', 'small');
+    setSignalInput(component, 'label', 'Test');
+    setSignalInput(component, 'size', 'small');
     fixture.detectChanges();
 
     const chip = fixture.nativeElement.querySelector('mat-chip');
@@ -45,8 +50,8 @@ describe('StatusBadgeComponent', () => {
   });
 
   it('should render icon when provided', () => {
-    fixture.componentRef.setInput('label', 'Test');
-    fixture.componentRef.setInput('icon', 'check_circle');
+    setSignalInput(component, 'label', 'Test');
+    setSignalInput(component, 'icon', 'check_circle');
     fixture.detectChanges();
 
     const icon = fixture.nativeElement.querySelector('mat-icon');
@@ -55,7 +60,7 @@ describe('StatusBadgeComponent', () => {
   });
 
   it('should not render icon when not provided', () => {
-    fixture.componentRef.setInput('label', 'Test');
+    setSignalInput(component, 'label', 'Test');
     fixture.detectChanges();
 
     const icon = fixture.nativeElement.querySelector('mat-icon');
@@ -63,7 +68,7 @@ describe('StatusBadgeComponent', () => {
   });
 
   it('should use neutral variant by default', () => {
-    fixture.componentRef.setInput('label', 'Test');
+    setSignalInput(component, 'label', 'Test');
     fixture.detectChanges();
 
     const chip = fixture.nativeElement.querySelector('mat-chip');
@@ -71,7 +76,7 @@ describe('StatusBadgeComponent', () => {
   });
 
   it('should use default size by default', () => {
-    fixture.componentRef.setInput('label', 'Test');
+    setSignalInput(component, 'label', 'Test');
     fixture.detectChanges();
 
     const chip = fixture.nativeElement.querySelector('mat-chip');

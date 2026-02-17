@@ -14,14 +14,14 @@
       [rows]="rows()"
       [attr.maxlength]="maxLength() ?? null"
       [required]="required()"
-      [attr.aria-label]="label()"
+      [attr.aria-label]="ariaLabel() || label()"
     ></textarea>
   } @else if (type() === 'select') {
     <mat-select 
       [formControl]="control()"
       [placeholder]="placeholder()"
       [required]="required()"
-      [attr.aria-label]="label()"
+      [attr.aria-label]="ariaLabel() || label()"
       (selectionChange)="selectionChange.emit($event)">
       @for (option of selectOptions(); track option.value) {
         <mat-option [value]="option.value">{{ option.label }}</mat-option>
@@ -38,7 +38,7 @@
       [attr.max]="max() ?? null"
       [attr.step]="step() ?? null"
       [required]="required()"
-      [attr.aria-label]="label()"
+      [attr.aria-label]="ariaLabel() || label()"
     />
   }
   

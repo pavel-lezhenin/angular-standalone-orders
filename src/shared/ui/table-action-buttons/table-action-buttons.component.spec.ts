@@ -1,6 +1,16 @@
+import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TableActionButtonsComponent } from './table-action-buttons.component';
+
+const setSignalInput = (component: TableActionButtonsComponent, inputName: string, value: unknown): void => {
+  (component as unknown as Record<string, unknown>)[inputName] = signal(value);
+};
+
+const findButtonByIcon = (fixture: ComponentFixture<TableActionButtonsComponent>, iconName: string): HTMLButtonElement | undefined => {
+  const buttons = fixture.nativeElement.querySelectorAll('button');
+  return Array.from(buttons).find((btn: any) => btn.querySelector('mat-icon')?.textContent?.trim() === iconName) as HTMLButtonElement | undefined;
+};
 
 describe('TableActionButtonsComponent', () => {
   let component: TableActionButtonsComponent;
@@ -13,7 +23,6 @@ describe('TableActionButtonsComponent', () => {
 
     fixture = TestBed.createComponent(TableActionButtonsComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -22,43 +31,34 @@ describe('TableActionButtonsComponent', () => {
 
   describe('Button visibility', () => {
     it('should show edit button by default', () => {
-      const editButton = fixture.nativeElement.querySelector('button mat-icon:contains("edit")');
+      fixture.detectChanges();
+      const editButton = findButtonByIcon(fixture, 'edit');
       expect(editButton).toBeTruthy();
     });
 
     it('should show delete button by default', () => {
-      const buttons = fixture.nativeElement.querySelectorAll('button');
-      const deleteButton = Array.from(buttons).find((btn: any) => 
-        btn.querySelector('mat-icon')?.textContent?.trim() === 'delete'
-      );
+      fixture.detectChanges();
+      const deleteButton = findButtonByIcon(fixture, 'delete');
       expect(deleteButton).toBeTruthy();
     });
 
     it('should not show view button by default', () => {
-      const buttons = fixture.nativeElement.querySelectorAll('button');
-      const viewButton = Array.from(buttons).find((btn: any) => 
-        btn.querySelector('mat-icon')?.textContent?.trim() === 'visibility'
-      );
+      fixture.detectChanges();
+      const viewButton = findButtonByIcon(fixture, 'visibility');
       expect(viewButton).toBeFalsy();
     });
 
     it('should hide edit button when canEdit is false', () => {
-      fixture.componentRef.setInput('canEdit', false);
+      setSignalInput(component, 'canEdit', false);
       fixture.detectChanges();
-      const buttons = fixture.nativeElement.querySelectorAll('button');
-      const editButton = Array.from(buttons).find((btn: any) => 
-        btn.querySelector('mat-icon')?.textContent?.trim() === 'edit'
-      );
+      const editButton = findButtonByIcon(fixture, 'edit');
       expect(editButton).toBeFalsy();
     });
 
     it('should show view button when canView is true', () => {
-      fixture.componentRef.setInput('canView', true);
+      setSignalInput(component, 'canView', true);
       fixture.detectChanges();
-      const buttons = fixture.nativeElement.querySelectorAll('button');
-      const viewButton = Array.from(buttons).find((btn: any) => 
-        btn.querySelector('mat-icon')?.textContent?.trim() === 'visibility'
-      );
+      const viewButton = findButtonByIcon(fixture, 'visibility');
       expect(viewButton).toBeTruthy();
     });
   });
@@ -67,11 +67,9 @@ describe('TableActionButtonsComponent', () => {
     it('should emit edit event when edit button clicked', () => {
       let emitted = false;
       component.edit.subscribe(() => emitted = true);
+      fixture.detectChanges();
 
-      const buttons = fixture.nativeElement.querySelectorAll('button');
-      const editButton = Array.from(buttons).find((btn: any) => 
-        btn.querySelector('mat-icon')?.textContent?.trim() === 'edit'
-      ) as HTMLButtonElement;
+      const editButton = findButtonByIcon(fixture, 'edit') as HTMLButtonElement;
 
       editButton?.click();
       expect(emitted).toBe(true);
@@ -80,11 +78,9 @@ describe('TableActionButtonsComponent', () => {
     it('should emit delete event when delete button clicked', () => {
       let emitted = false;
       component.delete.subscribe(() => emitted = true);
+      fixture.detectChanges();
 
-      const buttons = fixture.nativeElement.querySelectorAll('button');
-      const deleteButton = Array.from(buttons).find((btn: any) => 
-        btn.querySelector('mat-icon')?.textContent?.trim() === 'delete'
-      ) as HTMLButtonElement;
+      const deleteButton = findButtonByIcon(fixture, 'delete') as HTMLButtonElement;
 
       deleteButton?.click();
       expect(emitted).toBe(true);
@@ -93,58 +89,43 @@ describe('TableActionButtonsComponent', () => {
 
   describe('Customization', () => {
     it('should use custom icons', () => {
-      fixture.componentRef.setInput('editIcon', 'create');
-      fixture.componentRef.setInput('deleteIcon', 'remove');
+      setSignalInput(component, 'editIcon', 'create');
+      setSignalInput(component, 'deleteIcon', 'remove');
       fixture.detectChanges();
 
-      const buttons = fixture.nativeElement.querySelectorAll('button');
-      const editButton = Array.from(buttons).find((btn: any) => 
-        btn.querySelector('mat-icon')?.textContent?.trim() === 'create'
-      );
-      const deleteButton = Array.from(buttons).find((btn: any) => 
-        btn.querySelector('mat-icon')?.textContent?.trim() === 'remove'
-      );
+      const editButton = findButtonByIcon(fixture, 'create');
+      const deleteButton = findButtonByIcon(fixture, 'remove');
 
       expect(editButton).toBeTruthy();
       expect(deleteButton).toBeTruthy();
     });
 
     it('should use custom tooltips', () => {
-      fixture.componentRef.setInput('editTooltip', 'Modify item');
-      fixture.componentRef.setInput('deleteTooltip', 'Remove item');
+      setSignalInput(component, 'editTooltip', 'Modify item');
+      setSignalInput(component, 'deleteTooltip', 'Remove item');
       fixture.detectChanges();
 
-      const buttons = fixture.nativeElement.querySelectorAll('button');
-      const editButton = Array.from(buttons).find((btn: any) => 
-        btn.querySelector('mat-icon')?.textContent?.trim() === 'edit'
-      ) as HTMLElement;
-      const deleteButton = Array.from(buttons).find((btn: any) => 
-        btn.querySelector('mat-icon')?.textContent?.trim() === 'delete'
-      ) as HTMLElement;
+      const editButton = findButtonByIcon(fixture, 'edit') as HTMLElement;
+      const deleteButton = findButtonByIcon(fixture, 'delete') as HTMLElement;
 
-      expect(editButton?.getAttribute('ng-reflect-message')).toBe('Modify item');
-      expect(deleteButton?.getAttribute('ng-reflect-message')).toBe('Remove item');
+      expect(editButton?.getAttribute('aria-label')).toBe('Modify item');
+      expect(deleteButton?.getAttribute('aria-label')).toBe('Remove item');
     });
   });
 
   describe('Accessibility', () => {
     it('should have aria-labels from tooltips by default', () => {
-      const buttons = fixture.nativeElement.querySelectorAll('button');
-      const editButton = Array.from(buttons).find((btn: any) => 
-        btn.querySelector('mat-icon')?.textContent?.trim() === 'edit'
-      ) as HTMLElement;
+      fixture.detectChanges();
+      const editButton = findButtonByIcon(fixture, 'edit') as HTMLElement;
 
       expect(editButton?.getAttribute('aria-label')).toBe('Edit');
     });
 
     it('should use custom aria-labels when provided', () => {
-      fixture.componentRef.setInput('editAriaLabel', 'Edit this item');
+      setSignalInput(component, 'editAriaLabel', 'Edit this item');
       fixture.detectChanges();
 
-      const buttons = fixture.nativeElement.querySelectorAll('button');
-      const editButton = Array.from(buttons).find((btn: any) => 
-        btn.querySelector('mat-icon')?.textContent?.trim() === 'edit'
-      ) as HTMLElement;
+      const editButton = findButtonByIcon(fixture, 'edit') as HTMLElement;
 
       expect(editButton?.getAttribute('aria-label')).toBe('Edit this item');
     });
