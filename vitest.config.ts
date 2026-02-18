@@ -17,11 +17,14 @@ export default defineConfig({
         'src/**/*.routes.ts',
         'src/main.ts',
         'src/main.server.ts',
+        'src/test-setup.ts',
+        'src/server.ts',
         // Barrel re-export files — no executable logic
         'src/**/index.ts',
         // Pure TypeScript interface / type-alias files — compile to nothing
         'src/**/*.dto.ts',
         'src/core/types/shared-types.ts',
+        'src/bff/**/*.ts',
       ],
       thresholds: {
         lines: 4,

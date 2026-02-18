@@ -187,4 +187,13 @@ describe('FileStorageService', () => {
 
     expect(exists).toBe(false);
   });
+
+  it('two consecutive uploadFile calls produce unique fileIds', async () => {
+    const file = makeFile();
+
+    const result1 = await service.uploadFile(file);
+    const result2 = await service.uploadFile(file);
+
+    expect(result1.fileId).not.toBe(result2.fileId);
+  });
 });

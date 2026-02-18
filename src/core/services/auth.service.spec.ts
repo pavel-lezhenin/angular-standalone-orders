@@ -299,4 +299,22 @@ describe('AuthService', () => {
 
     expect(service.isAdmin()).toBe(false);
   });
+
+  it('full flow: login → isAuthenticated true → logout → isAuthenticated false', async () => {
+    expect(service.isAuthenticated()).toBe(false);
+
+    const loginPromise = service.login('user@demo', 'demo');
+    httpTesting.expectOne('/api/auth/login').flush({ user: mockUser, token: 'tok' });
+    await loginPromise;
+
+    expect(service.isAuthenticated()).toBe(true);
+    expect(service.getCurrentUser()).toEqual(mockUser);
+
+    const logoutPromise = service.logout();
+    httpTesting.expectOne('/api/auth/logout').flush({});
+    await logoutPromise;
+
+    expect(service.isAuthenticated()).toBe(false);
+    expect(service.getCurrentUser()).toBeNull();
+  });
 });

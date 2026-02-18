@@ -178,4 +178,74 @@ describe('PermissionService', () => {
 
     expect(service.getCustomPermissions()).toHaveLength(1);
   });
+
+  it('custom permission with granted: false explicitly blocks access', () => {
+    vi.mocked(authServiceMock.getCurrentUser).mockReturnValue(baseUser);
+
+    service.addPermission({
+      role: 'user',
+      section: 'wishlist',
+      action: 'view',
+      granted: false,
+    });
+
+    expect(service.hasAccess('wishlist', 'view')).toBe(false);
+  });
+
+  it('updatePermissionStatus from true to false revokes hasAccess', () => {
+    vi.mocked(authServiceMock.getCurrentUser).mockReturnValue(baseUser);
+
+    const permission = service.addPermission({
+      role: 'user',
+      section: 'wishlist',
+      action: 'view',
+      granted: true,
+    });
+    expect(service.hasAccess('wishlist', 'view')).toBe(true);
+
+    service.updatePermissionStatus(permission.id, false);
+
+    expect(service.hasAccess('wishlist', 'view')).toBe(false);
+  });
+
+  it('updatePermissionStatus from false to true grants hasAccess', () => {
+    vi.mocked(authServiceMock.getCurrentUser).mockReturnValue(baseUser);
+
+    const permission = service.addPermission({
+      role: 'user',
+      section: 'wishlist',
+      action: 'view',
+      granted: false,
+    });
+    expect(service.hasAccess('wishlist', 'view')).toBe(false);
+
+    service.updatePermissionStatus(permission.id, true);
+
+    expect(service.hasAccess('wishlist', 'view')).toBe(true);
+  });
+
+  it('deletePermission removes access granted by that permission', () => {
+    vi.mocked(authServiceMock.getCurrentUser).mockReturnValue(baseUser);
+
+    const permission = service.addPermission({
+      role: 'user',
+      section: 'wishlist',
+      action: 'view',
+      granted: true,
+    });
+    expect(service.hasAccess('wishlist', 'view')).toBe(true);
+
+    service.deletePermission(permission.id);
+
+    expect(service.hasAccess('wishlist', 'view')).toBe(false);
+  });
+
+  it('permissions are cached independently per role', () => {
+    const userPerms = service.getPermissions('user');
+    const managerPerms = service.getPermissions('manager');
+
+    expect(userPerms).not.toBe(managerPerms);
+    expect(userPerms.every((p) => p.role === 'user')).toBe(true);
+    expect(managerPerms.every((p) => p.role === 'manager')).toBe(true);
+  });
 });
