@@ -13,9 +13,9 @@
         (action)="continueShopping()"
       />
     } @else if (hasLoaded()) {
-      <div class="cart-content">
+      <app-two-column-layout sidebarWidth="var(--cart-sidebar-width)">
         <!-- Cart Items Table -->
-        <mat-card>
+        <mat-card main>
           <mat-card-content>
             <app-cart-items-table
               [items]="cartItems()"
@@ -29,7 +29,7 @@
         </mat-card>
 
         <!-- Cart Summary -->
-        <mat-card class="summary-card">
+        <mat-card aside class="summary-card">
           <mat-card-content>
             @if (hasSelectedItems()) {
               <div class="summary-info">
@@ -58,7 +58,7 @@
             </app-order-summary>
           </mat-card-content>
         </mat-card>
-      </div>
+      </app-two-column-layout>
     }
   </div>
 </div>

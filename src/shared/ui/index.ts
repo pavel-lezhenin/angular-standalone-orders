@@ -13,4 +13,5 @@ export { EmptyStateComponent } from './empty-state/empty-state.component';
 export { StatusBadgeComponent, type StatusBadgeVariant } from './status-badge/status-badge.component';
 export { QuantityControlComponent } from './quantity-control/quantity-control.component';
 export { PageLoaderComponent } from './page-loader/page-loader.component';
+export { TwoColumnLayoutComponent } from './two-column-layout/two-column-layout.component';
 

@@ -8,7 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { PageLoaderComponent } from '@shared/ui/page-loader/page-loader.component';
-import { EmptyStateComponent, OrderSummaryComponent } from '@shared/ui';
+import { EmptyStateComponent, OrderSummaryComponent, TwoColumnLayoutComponent } from '@shared/ui';
 import type { SummaryLine } from '@shared/ui/order-summary/order-summary.component';
 import { CartService } from '@shared/services/cart.service';
 import { NotificationService } from '@shared/services/notification.service';
@@ -37,6 +37,7 @@ import { CartItemsTableComponent, type CartItemWithDetails } from '../ui';
     EmptyStateComponent,
     OrderSummaryComponent,
     CartItemsTableComponent,
+    TwoColumnLayoutComponent,
   ],
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.scss',

@@ -13,9 +13,9 @@
         (action)="goToShop()"
       />
     } @else if (hasLoaded()) {
-      <div class="checkout-content">
+      <app-two-column-layout sidebarWidth="var(--checkout-sidebar-width)">
         <!-- Left Column: Delivery Form -->
-        <mat-card>
+        <mat-card main>
           <mat-card-content>
             <form [formGroup]="checkoutForm" class="delivery-form gap-md flex-col">
               <!-- Guest Account Creation Section -->
@@ -174,7 +174,7 @@
         </mat-card>
 
         <!-- Right Column: Order Summary -->
-        <mat-card>
+        <mat-card aside>
           <mat-card-header>
             <mat-card-title>Order Summary</mat-card-title>
           </mat-card-header>
@@ -212,7 +212,7 @@
             </app-order-summary>
           </mat-card-content>
         </mat-card>
-      </div>
+      </app-two-column-layout>
     }
   </div>
 </div>

@@ -16,7 +16,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCardModule } from '@angular/material/card';
 import { PageLoaderComponent } from '@shared/ui/page-loader/page-loader.component';
-import { EmptyStateComponent, OrderSummaryComponent } from '@shared/ui';
+import { EmptyStateComponent, OrderSummaryComponent, TwoColumnLayoutComponent } from '@shared/ui';
 import type { SummaryLine } from '@shared/ui/order-summary/order-summary.component';
 import { FormFieldComponent } from '@shared/ui/form-field/form-field.component';
 import { CartService } from '@shared/services/cart.service';
@@ -89,6 +89,7 @@ interface CheckoutAddressFormValue {
     PageLoaderComponent,
     EmptyStateComponent,
     OrderSummaryComponent,
+    TwoColumnLayoutComponent,
     FormFieldComponent,
     OrderItemsListComponent,
   ],

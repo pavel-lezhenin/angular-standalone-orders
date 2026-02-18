@@ -11,23 +11,17 @@
  * Cart Content Layout
  * ============================================ */
 
-.cart-content {
-  display: grid;
-  grid-template-columns: 1fr var(--cart-sidebar-width);
-  gap: var(--spacing-2xl);
-  align-items: start;
-}
-
-.cart-content > mat-card {
+mat-card {
   border: var(--spacing-1px) solid var(--color-border);
   border-radius: var(--border-radius-md);
   box-shadow: none;
 }
 
-.cart-content mat-card-content {
+mat-card[main] mat-card-content {
   padding: 0;
 }
-.summary-card mat-card-content {
+
+mat-card[aside] mat-card-content {
   padding: var(--spacing-xl);
 }
 /* ============================================
@@ -212,12 +206,6 @@
  * Responsive Styles
  * ============================================ */
 
-/* Tablet & Desktop Styles */
-:host-context(.tablet) .cart-content,
-:host-context(.desktop) .cart-content {
-  /* Keep grid layout */
-}
-
 /* Mobile Styles */
 :host-context(.mobile) {
   .cart-page {
@@ -227,10 +215,6 @@
   .cart-container h1 {
     font-size: var(--font-size-2xl);
     margin-bottom: var(--spacing-xl);
-  }
-
-  .cart-content {
-    grid-template-columns: 1fr;
   }
 
   /* Stack table cells vertically on mobile */

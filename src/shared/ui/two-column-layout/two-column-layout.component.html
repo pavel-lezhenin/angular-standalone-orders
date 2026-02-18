@@ -1,0 +1,8 @@
+<div class="two-col-layout" [style.--sidebar-width]="sidebarWidth()">
+  <div class="two-col-main">
+    <ng-content select="[main]" />
+  </div>
+  <div class="two-col-aside">
+    <ng-content select="[aside]" />
+  </div>
+</div>

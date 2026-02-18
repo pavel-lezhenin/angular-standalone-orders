@@ -1,9 +1,13 @@
+:host {
+  display: block;
+  overflow-x: auto;
+  border-radius: var(--border-radius-md);
+}
+
 .cart-items-table {
   width: 100%;
   border-collapse: collapse;
   background: var(--surface-primary);
-  border-radius: var(--border-radius-md);
-  overflow: hidden;
 
   thead {
     background: var(--surface-secondary);
@@ -20,6 +24,7 @@
       color: var(--text-secondary);
       text-transform: uppercase;
       letter-spacing: var(--spacing-1px);
+      white-space: nowrap;
 
       &.checkbox-cell {
         width: var(--size-thumbnail);
@@ -73,7 +78,7 @@
 }
 
 .product-cell {
-  min-width: var(--size-filter-width);
+  width: 100%;
 }
 
 .product-info {
@@ -90,12 +95,16 @@
 
 .product-details {
   flex: 1;
+  min-width: 0;
 
   h3 {
     margin: 0 0 var(--spacing-xs) 0;
     font-size: var(--font-size-md);
     font-weight: var(--font-weight-semibold);
     color: var(--text-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .product-description {
