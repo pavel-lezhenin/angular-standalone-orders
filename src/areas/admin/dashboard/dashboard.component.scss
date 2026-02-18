@@ -1,5 +1,7 @@
 .dashboard {
   min-width: 0;
+  flex: 1;
+  overflow: auto;
 
   h1 {
     margin: 0 0 var(--spacing-xl) 0;

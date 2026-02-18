@@ -8,7 +8,7 @@
 
   &:hover {
     border-color: var(--app-primary);
-    box-shadow: 0 var(--spacing-xs) var(--spacing-sm) var(--color-black-10);
+    box-shadow: var(--shadow-md);
     transform: translateY(-2px);
   }
 

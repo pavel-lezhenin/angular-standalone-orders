@@ -19,10 +19,10 @@ mat-accordion {
 
 ::ng-deep .mat-expansion-panel {
   margin-bottom: var(--spacing-md);
-  box-shadow: 0 var(--spacing-2px) var(--spacing-xxs) var(--color-black-08);
+  box-shadow: var(--shadow-sm);
 
   &:hover {
-    box-shadow: 0 var(--spacing-xs) var(--spacing-sm) var(--color-black-12);
+    box-shadow: var(--shadow-md);
   }
 }
 

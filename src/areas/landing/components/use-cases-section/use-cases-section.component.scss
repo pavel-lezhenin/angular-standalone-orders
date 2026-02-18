@@ -30,11 +30,11 @@
   background: var(--surface-primary);
   border-radius: var(--border-radius-sm);
   text-align: center;
-  box-shadow: 0 var(--spacing-2px) var(--spacing-xxs) var(--color-black-06);
+  box-shadow: var(--shadow-sm);
   transition: box-shadow 0.3s;
 
   &:hover {
-    box-shadow: 0 var(--spacing-xs) var(--spacing-sm) var(--color-black-10);
+    box-shadow: var(--shadow-md);
   }
 
   mat-icon {

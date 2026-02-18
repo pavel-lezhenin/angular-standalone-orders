@@ -24,15 +24,12 @@
   box-shadow: none;
 }
 
-.cart-content > mat-card > mat-card-content {
+.cart-content mat-card-content {
   padding: 0;
 }
-
-/* Padding for sticky sidebar content */
-.cart-content > mat-card.sticky-sidebar > mat-card-content {
+.summary-card mat-card-content {
   padding: var(--spacing-xl);
 }
-
 /* ============================================
  * Cart Items Table Styles
  * ============================================ */
@@ -259,4 +256,3 @@
     text-align: center;
   }
 }
-

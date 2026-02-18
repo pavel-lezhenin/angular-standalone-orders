@@ -31,7 +31,7 @@
  * Card shadow (elevation level 1)
  */
 .card-shadow {
-  box-shadow: 0 var(--spacing-2px) var(--spacing-xxs) var(--color-black-08);
+  box-shadow: var(--shadow-sm);
 }
 
 /**
@@ -139,4 +139,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.content-wrapper > *:not(router-outlet) {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
 }

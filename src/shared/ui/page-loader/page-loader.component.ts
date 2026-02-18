@@ -35,10 +35,14 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
       display: flex;
       align-items: center;
       justify-content: center;
-      background: var(--color-white-70);
-      backdrop-filter: blur(2px);
+      background: color-mix(in srgb, var(--mat-sys-surface-container) 90%, transparent);
+      backdrop-filter: blur(4px);
       z-index: 100;
       pointer-events: all;
+    }
+
+    :host-context(.dark-mode) .page-loader-overlay {
+      background: color-mix(in srgb, var(--mat-sys-surface-container) 90%, transparent);
     }
 
     .visually-hidden {

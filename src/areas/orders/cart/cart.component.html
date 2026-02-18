@@ -29,36 +29,29 @@
         </mat-card>
 
         <!-- Cart Summary -->
-        <mat-card class="sticky-sidebar">
+        <mat-card class="summary-card">
           <mat-card-content>
             @if (hasSelectedItems()) {
               <div class="summary-info">
                 <span class="selected-count">{{ selectedItems().size }} item(s) selected</span>
               </div>
             } @else {
-              <div class="summary-info warning flex items-center gap-sm">
+              <div class="summary-info warning gap-sm flex items-center">
                 <mat-icon>info</mat-icon>
                 <span>Select items to proceed</span>
               </div>
             }
 
-            <app-order-summary
-              [title]="'Order Summary'"
-              [summaryLines]="summaryLines()"
-              [total]="total()">
-              <div class="summary-actions flex-col gap-md">
-                <button 
-                  mat-stroked-button 
-                  (click)="continueShopping()"
-                  class="continue-btn">
-                  Continue Shopping
-                </button>
-                <button 
-                  mat-raised-button 
+            <app-order-summary [title]="'Order Summary'" [summaryLines]="summaryLines()" [total]="total()">
+              <div class="summary-actions gap-md flex-col">
+                <button mat-stroked-button (click)="continueShopping()" class="continue-btn">Continue Shopping</button>
+                <button
+                  mat-raised-button
                   color="primary"
                   (click)="proceedToCheckout()"
                   [disabled]="!hasSelectedItems()"
-                  class="checkout-btn">
+                  class="checkout-btn"
+                >
                   Proceed to Checkout
                 </button>
               </div>

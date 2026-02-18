@@ -17,12 +17,7 @@
     </div>
   </div>
 
-  @if (loading()) {
-    <div class="loading-state">
-      <mat-spinner diameter="40"></mat-spinner>
-      <p>Loading orders board...</p>
-    </div>
-  } @else if (error()) {
+  @if (error()) {
     <mat-card class="error-card">
       <mat-card-content>
         <mat-icon>error</mat-icon>
@@ -32,7 +27,7 @@
         </div>
       </mat-card-content>
     </mat-card>
-  } @else {
+  } @else if (!loading()) {
     <div class="board-columns">
       @for (column of columns; track column.status) {
         <section
@@ -94,4 +89,6 @@
       }
     </div>
   }
+
+  <app-page-loader [isLoading]="loading()" />
 </div>

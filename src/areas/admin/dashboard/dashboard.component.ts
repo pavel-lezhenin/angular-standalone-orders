@@ -1,11 +1,10 @@
-import type { OnInit} from '@angular/core';
-import { ChangeDetectionStrategy, Component, PLATFORM_ID, computed, inject, signal } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { afterNextRender, ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { firstValueFrom } from 'rxjs';
-import { EmptyStateComponent } from '@shared/ui';
+import { EmptyStateComponent, PageLoaderComponent } from '@shared/ui';
 import type { OrderDTO, ProductDTO, UserDTO } from '@core/models';
 import type { PaginatedResponse } from '@core/types';
 
@@ -24,17 +23,16 @@ interface DashboardStat {
     MatCardModule,
     MatIconModule,
     EmptyStateComponent,
+    PageLoaderComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent {
   private readonly http = inject(HttpClient);
-  private readonly platformId = inject(PLATFORM_ID);
-  private readonly isBrowser = isPlatformBrowser(this.platformId);
 
-  protected readonly loading = signal(false);
+  protected readonly loading = signal(true);
   protected readonly error = signal<string | null>(null);
   protected readonly lastUpdatedAt = signal<number | null>(null);
   protected readonly stats = signal<DashboardStat[]>([]);
@@ -42,12 +40,10 @@ export class DashboardComponent implements OnInit {
 
   protected readonly hasData = computed(() => this.stats().length > 0);
 
-  async ngOnInit(): Promise<void> {
-    if (!this.isBrowser) {
-      return;
-    }
-
-    await this.loadDashboardData();
+  constructor() {
+    afterNextRender(() => {
+      void this.loadDashboardData();
+    });
   }
 
   protected formatDate(timestamp: number): string {

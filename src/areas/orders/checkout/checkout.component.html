@@ -17,210 +17,199 @@
         <!-- Left Column: Delivery Form -->
         <mat-card>
           <mat-card-content>
-            <form [formGroup]="checkoutForm" class="delivery-form flex-col gap-md">
-            <!-- Guest Account Creation Section -->
-            @if (isGuest()) {
-              <div class="account-section">
-                <h2>Account Information</h2>
-                <p class="section-description">Create an account to track your order</p>
+            <form [formGroup]="checkoutForm" class="delivery-form gap-md flex-col">
+              <!-- Guest Account Creation Section -->
+              @if (isGuest()) {
+                <div class="account-section">
+                  <h2>Account Information</h2>
+                  <p class="section-description">Create an account to track your order</p>
 
-                <!-- Email -->
-                <app-form-field
-                  [label]="'Email'"
-                  [control]="$any(checkoutForm.controls['email'])"
-                  [type]="'email'"
-                  [placeholder]="'john.doe@example.com'"
-                  [prefixIcon]="'email'"
-                  [fieldClass]="'form-field'"
-                />
-
-                <!-- Password -->
-                <app-form-field
-                  [label]="'Password'"
-                  [control]="$any(checkoutForm.controls['password'])"
-                  [type]="'password'"
-                  [placeholder]="'••••••••'"
-                  [prefixIcon]="'lock'"
-                  [fieldClass]="'form-field'"
-                />
-
-                <!-- First Name -->
-                <app-form-field
-                  [label]="'First Name'"
-                  [control]="$any(checkoutForm.controls['firstName'])"
-                  [placeholder]="'John'"
-                  [prefixIcon]="'person'"
-                  [fieldClass]="'form-field'"
-                />
-
-                <!-- Last Name -->
-                <app-form-field
-                  [label]="'Last Name'"
-                  [control]="$any(checkoutForm.controls['lastName'])"
-                  [placeholder]="'Doe'"
-                  [prefixIcon]="'person_outline'"
-                  [fieldClass]="'form-field'"
-                />
-
-                <!-- Login Link -->
-                <div class="login-link-container">
-                  <p>Already have an account? <a routerLink="/auth/login" [queryParams]="{returnUrl: '/orders/checkout'}">Login</a></p>
-                </div>
-              </div>
-            }
-
-            <!-- Delivery Information Section -->
-            <div class="address-section">
-              <h2>Delivery Information</h2>
-
-              @if (!isGuest() && hasSavedAddresses()) {
-                <div class="saved-address-controls flex-col gap-md">
+                  <!-- Email -->
                   <app-form-field
-                    [label]="'Delivery Address'"
-                    [control]="$any(checkoutForm.controls['selectedAddressId'])"
-                    [type]="'select'"
-                    [prefixIcon]="'bookmark'"
+                    [label]="'Email'"
+                    [control]="$any(checkoutForm.controls['email'])"
+                    [type]="'email'"
+                    [placeholder]="'john.doe@example.com'"
+                    [prefixIcon]="'email'"
                     [fieldClass]="'form-field'"
-                    [selectOptions]="addressSelectOptions()"
                   />
 
-                  <button
-                    mat-stroked-button
-                    type="button"
-                    (click)="toggleAddressForm()">
-                    @if (showAddressForm()) {
-                      Use Saved Address
-                    } @else {
-                      Add New Address
-                    }
-                  </button>
+                  <!-- Password -->
+                  <app-form-field
+                    [label]="'Password'"
+                    [control]="$any(checkoutForm.controls['password'])"
+                    [type]="'password'"
+                    [placeholder]="'••••••••'"
+                    [prefixIcon]="'lock'"
+                    [fieldClass]="'form-field'"
+                  />
+
+                  <!-- First Name -->
+                  <app-form-field
+                    [label]="'First Name'"
+                    [control]="$any(checkoutForm.controls['firstName'])"
+                    [placeholder]="'John'"
+                    [prefixIcon]="'person'"
+                    [fieldClass]="'form-field'"
+                  />
+
+                  <!-- Last Name -->
+                  <app-form-field
+                    [label]="'Last Name'"
+                    [control]="$any(checkoutForm.controls['lastName'])"
+                    [placeholder]="'Doe'"
+                    [prefixIcon]="'person_outline'"
+                    [fieldClass]="'form-field'"
+                  />
+
+                  <!-- Login Link -->
+                  <div class="login-link-container">
+                    <p>
+                      Already have an account?
+                      <a routerLink="/auth/login" [queryParams]="{ returnUrl: '/orders/checkout' }">Login</a>
+                    </p>
+                  </div>
                 </div>
               }
 
-              @if (!isGuest() && shouldShowAddressForm()) {
-                <!-- Full Name (authenticated users only) -->
-                <app-form-field
-                  [label]="'Full Name'"
-                  [control]="$any(checkoutForm.controls['fullName'])"
-                  [placeholder]="'John Doe'"
-                  [prefixIcon]="'person'"
-                  [fieldClass]="'form-field'"
-                />
-              }
+              <!-- Delivery Information Section -->
+              <div class="address-section">
+                <h2>Delivery Information</h2>
 
-              @if (shouldShowAddressForm()) {
-                <!-- Address Line 1 -->
-                <app-form-field
-                  [label]="'Address Line 1'"
-                  [control]="$any(checkoutForm.controls['addressLine1'])"
-                  [placeholder]="'123 Main Street'"
-                  [prefixIcon]="'home'"
-                  [fieldClass]="'form-field'"
-                />
+                @if (!isGuest() && hasSavedAddresses()) {
+                  <div class="saved-address-controls gap-md flex-col">
+                    <app-form-field
+                      [label]="'Delivery Address'"
+                      [control]="$any(checkoutForm.controls['selectedAddressId'])"
+                      [type]="'select'"
+                      [prefixIcon]="'bookmark'"
+                      [fieldClass]="'form-field'"
+                      [selectOptions]="addressSelectOptions()"
+                    />
 
-                <!-- Address Line 2 -->
-                <app-form-field
-                  [label]="'Address Line 2 (Optional)'"
-                  [control]="$any(checkoutForm.controls['addressLine2'])"
-                  [placeholder]="'Apt, Suite, etc.'"
-                  [prefixIcon]="'apartment'"
-                  [fieldClass]="'form-field'"
-                />
-
-                <!-- City -->
-                <app-form-field
-                  [label]="'City'"
-                  [control]="$any(checkoutForm.controls['city'])"
-                  [placeholder]="'New York'"
-                  [prefixIcon]="'location_city'"
-                  [fieldClass]="'form-field'"
-                />
-
-                <!-- Postal Code -->
-                <app-form-field
-                  [label]="'Postal Code'"
-                  [control]="$any(checkoutForm.controls['postalCode'])"
-                  [placeholder]="'12345'"
-                  [prefixIcon]="'markunread_mailbox'"
-                  [fieldClass]="'form-field'"
-                />
-
-                <!-- Phone -->
-                <app-form-field
-                  [label]="'Phone Number'"
-                  [control]="$any(checkoutForm.controls['phone'])"
-                  [placeholder]="'+1 (555) 123-4567'"
-                  [prefixIcon]="'phone'"
-                  [fieldClass]="'form-field'"
-                />
-
-                <!-- Save Address Checkbox (authenticated users only) -->
-                @if (!isGuest()) {
-                  <div class="save-address-container">
-                    <mat-checkbox formControlName="saveAddress">
-                      Save this delivery address to my profile
-                    </mat-checkbox>
+                    <button mat-stroked-button type="button" (click)="toggleAddressForm()">
+                      @if (showAddressForm()) {
+                        Use Saved Address
+                      } @else {
+                        Add New Address
+                      }
+                    </button>
                   </div>
                 }
-              } @else {
-                <div class="using-saved-address-note flex items-center gap-sm">
-                  <mat-icon>local_shipping</mat-icon>
-                  <span>Using selected saved address for this order</span>
-                </div>
-              }
-            </div>
-          </form>
+
+                @if (!isGuest() && shouldShowAddressForm()) {
+                  <!-- Full Name (authenticated users only) -->
+                  <app-form-field
+                    [label]="'Full Name'"
+                    [control]="$any(checkoutForm.controls['fullName'])"
+                    [placeholder]="'John Doe'"
+                    [prefixIcon]="'person'"
+                    [fieldClass]="'form-field'"
+                  />
+                }
+
+                @if (shouldShowAddressForm()) {
+                  <!-- Address Line 1 -->
+                  <app-form-field
+                    [label]="'Address Line 1'"
+                    [control]="$any(checkoutForm.controls['addressLine1'])"
+                    [placeholder]="'123 Main Street'"
+                    [prefixIcon]="'home'"
+                    [fieldClass]="'form-field'"
+                  />
+
+                  <!-- Address Line 2 -->
+                  <app-form-field
+                    [label]="'Address Line 2 (Optional)'"
+                    [control]="$any(checkoutForm.controls['addressLine2'])"
+                    [placeholder]="'Apt, Suite, etc.'"
+                    [prefixIcon]="'apartment'"
+                    [fieldClass]="'form-field'"
+                  />
+
+                  <!-- City -->
+                  <app-form-field
+                    [label]="'City'"
+                    [control]="$any(checkoutForm.controls['city'])"
+                    [placeholder]="'New York'"
+                    [prefixIcon]="'location_city'"
+                    [fieldClass]="'form-field'"
+                  />
+
+                  <!-- Postal Code -->
+                  <app-form-field
+                    [label]="'Postal Code'"
+                    [control]="$any(checkoutForm.controls['postalCode'])"
+                    [placeholder]="'12345'"
+                    [prefixIcon]="'markunread_mailbox'"
+                    [fieldClass]="'form-field'"
+                  />
+
+                  <!-- Phone -->
+                  <app-form-field
+                    [label]="'Phone Number'"
+                    [control]="$any(checkoutForm.controls['phone'])"
+                    [placeholder]="'+1 (555) 123-4567'"
+                    [prefixIcon]="'phone'"
+                    [fieldClass]="'form-field'"
+                  />
+
+                  <!-- Save Address Checkbox (authenticated users only) -->
+                  @if (!isGuest()) {
+                    <div class="save-address-container">
+                      <mat-checkbox formControlName="saveAddress">
+                        Save this delivery address to my profile
+                      </mat-checkbox>
+                    </div>
+                  }
+                } @else {
+                  <div class="using-saved-address-note gap-sm flex items-center">
+                    <mat-icon>local_shipping</mat-icon>
+                    <span>Using selected saved address for this order</span>
+                  </div>
+                }
+              </div>
+            </form>
           </mat-card-content>
         </mat-card>
 
         <!-- Right Column: Order Summary -->
-        <mat-card class="sticky-sidebar">
+        <mat-card>
           <mat-card-header>
             <mat-card-title>Order Summary</mat-card-title>
           </mat-card-header>
           <mat-card-content>
             <!-- Order Items -->
-            <app-order-items-list
-              [items]="orderItems()"
-              [title]="''"
-              [showTitle]="false"
-            />
+            <app-order-items-list [items]="orderItems()" [title]="''" [showTitle]="false" />
 
-          <!-- Order Totals -->
-          <app-order-summary
-            [title]="''"
-            [summaryLines]="summaryLines()"
-            [total]="total()">
-            <!-- Error Message -->
-            @if (error()) {
-              <div class="error-message">
-                <mat-icon>error</mat-icon>
-                <span>{{ error() }}</span>
+            <!-- Order Totals -->
+            <app-order-summary [title]="''" [summaryLines]="summaryLines()" [total]="total()">
+              <!-- Error Message -->
+              @if (error()) {
+                <div class="error-message">
+                  <mat-icon>error</mat-icon>
+                  <span>{{ error() }}</span>
+                </div>
+              }
+
+              <!-- Actions -->
+              <div class="checkout-actions">
+                <button mat-stroked-button (click)="backToCart()" [disabled]="submitting()">Back to Cart</button>
+                <button
+                  mat-raised-button
+                  color="primary"
+                  (click)="placeOrder()"
+                  [disabled]="checkoutForm.invalid || submitting()"
+                >
+                  @if (submitting()) {
+                    <mat-spinner diameter="20"></mat-spinner>
+                    <span>Processing...</span>
+                  } @else {
+                    <span>Place Order</span>
+                  }
+                </button>
               </div>
-            }
-
-            <!-- Actions -->
-            <div class="checkout-actions">
-              <button 
-                mat-stroked-button 
-                (click)="backToCart()"
-                [disabled]="submitting()">
-                Back to Cart
-              </button>
-              <button 
-                mat-raised-button 
-                color="primary"
-                (click)="placeOrder()"
-                [disabled]="checkoutForm.invalid || submitting()">
-                @if (submitting()) {
-                  <mat-spinner diameter="20"></mat-spinner>
-                  <span>Processing...</span>
-                } @else {
-                  <span>Place Order</span>
-                }
-              </button>
-            </div>
-          </app-order-summary>
+            </app-order-summary>
           </mat-card-content>
         </mat-card>
       </div>
