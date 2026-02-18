@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { HttpRequest, HttpResponse } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import type { HttpRequest, HttpResponse } from '@angular/common/http';
 import { v4 as uuidv4 } from 'uuid';
 import { UserRepository } from '../repositories/user.repository';
 import { randomDelay } from '../utils';
@@ -15,7 +15,7 @@ import { parsePaginationParams, applyPagination, createPaginatedResponse } from 
   providedIn: 'root',
 })
 export class UserHandlerService {
-  constructor(private userRepo: UserRepository) {}
+  private readonly userRepo = inject(UserRepository);
 
   /**
    * Handle get all users request with pagination, search, and filtering
@@ -48,12 +48,12 @@ export class UserHandlerService {
       const paginatedUsers = applyPagination(users, page, limit);
 
       // Map to DTO (exclude password)
-      const data = paginatedUsers.map(({ password, ...user }) => user);
+      const data = paginatedUsers.map(({ password: _p, ...user }) => user);
 
       return new OkResponse(
         createPaginatedResponse(data, total, page, limit)
       );
-    } catch (err) {
+      } catch (err) {
       console.error('Failed to fetch users:', err);
       return new ServerErrorResponse('Failed to fetch users');
     }
@@ -72,9 +72,10 @@ export class UserHandlerService {
       }
 
       // Exclude password
-      const { password, ...userWithoutPassword } = user;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password: _p1, ...userWithoutPassword } = user;
       return new OkResponse(userWithoutPassword);
-    } catch (err) {
+    } catch {
       return new ServerErrorResponse('Failed to fetch user');
     }
   }
@@ -122,7 +123,8 @@ export class UserHandlerService {
       await this.userRepo.create(userData);
       
       // Return without password
-      const { password, ...userWithoutPassword } = userData;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password: _p2, ...userWithoutPassword } = userData;
       return new CreatedResponse(userWithoutPassword);
     } catch (err) {
       console.error('Failed to create user:', err);
@@ -150,7 +152,8 @@ export class UserHandlerService {
       }
 
       // Return without password
-      const { password, ...userWithoutPassword } = updatedUser;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password: _p3, ...userWithoutPassword } = updatedUser;
       return new OkResponse(userWithoutPassword);
     } catch (err) {
       console.error('Failed to update user:', err);

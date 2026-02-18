@@ -1,8 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { PermissionService } from '@core/services/permission.service';
-import { PermissionDTO } from '@core';
-import { UserRole } from '@core/types';
-import { 
+import type { PermissionDTO } from '@core';
+import type { UserRole } from '@core/types';
+import type { 
   PermissionManagementPermissions, 
   PermissionsByRole, 
   PermissionMatrixCell 
@@ -72,10 +72,10 @@ export class PermissionManagementService {
    * For now, we just update the in-memory cache
    */
   async togglePermission(
-    role: UserRole,
-    section: string,
-    action: string,
-    granted: boolean
+    _role: UserRole,
+    _section: string,
+    _action: string,
+    _granted: boolean
   ): Promise<void> {
     // TODO: Implement actual persistence via BFF/repository
     // For now, this is a placeholder

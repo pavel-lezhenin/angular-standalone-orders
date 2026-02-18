@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
+import type { FormGroup} from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { FormFieldComponent, type SelectOption } from '@shared/ui/form-field/form-field.component';
 
@@ -51,12 +52,12 @@ export class AccountPaymentFormComponent {
   /**
    * Event emitted when form is saved
    */
-  readonly save = output<void>();
+  readonly savePayment = output<void>();
 
   /**
    * Event emitted when form is canceled
    */
-  readonly cancel = output<void>();
+  readonly cancelPayment = output<void>();
 
   /**
    * Payment type select options

@@ -18,12 +18,9 @@ import { CartService } from '@shared/services/cart.service';
 import { LayoutService } from '@/shared/services/layout.service';
 import { NotificationService } from '@shared/services/notification.service';
 import { PageLoaderComponent } from '@shared/ui/page-loader';
-import { 
-  ImageZoomDialogComponent, 
-  ImageZoomDialogData 
-} from '@shared/ui/image-zoom-dialog/image-zoom-dialog.component';
-import { ProductDTO } from '@core';
+import { ImageZoomDialogComponent } from '@shared/ui/image-zoom-dialog/image-zoom-dialog.component';
 import { DEFAULT_PRODUCT_IMAGE } from '@shared/constants/product.constants';
+import type { ProductDTO } from '@core';
 
 /**
  * Shop Product Detail Component

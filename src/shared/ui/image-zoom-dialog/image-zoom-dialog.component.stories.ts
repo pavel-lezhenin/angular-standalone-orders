@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { applicationConfig } from '@storybook/angular';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { ImageZoomDialogComponent, ImageZoomDialogData } from './image-zoom-dialog.component';
+import type { ImageZoomDialogData } from './image-zoom-dialog.component';
+import { ImageZoomDialogComponent } from './image-zoom-dialog.component';
 
 const mockDialogRef = {
   close: () => {},

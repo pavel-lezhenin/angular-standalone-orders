@@ -7,7 +7,7 @@
     [label]="'Search users'"
     [placeholder]="'Email or name...'"
     [searchControl]="searchControl"
-    (search)="onSearch($event)"
+    (searchChange)="onSearch($event)"
     (clear)="onSearchClear()"
   />
 

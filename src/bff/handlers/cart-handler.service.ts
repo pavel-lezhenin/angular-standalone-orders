@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { HttpRequest, HttpResponse } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import type { HttpRequest, HttpResponse } from '@angular/common/http';
 import { CartRepository } from '../repositories/cart.repository';
 import type { Cart } from '../models';
 import { OkResponse, BadRequestResponse, ServerErrorResponse } from './http-responses';
@@ -12,7 +12,7 @@ import { OkResponse, BadRequestResponse, ServerErrorResponse } from './http-resp
   providedIn: 'root',
 })
 export class CartHandlerService {
-  constructor(private cartRepo: CartRepository) {}
+  private readonly cartRepo = inject(CartRepository);
 
   /**
    * Handle get cart request
@@ -27,7 +27,7 @@ export class CartHandlerService {
       const cart = await this.cartRepo.getByUserId(userId);
 
       return new OkResponse(cart || { userId, items: [], updatedAt: Date.now() });
-    } catch (err) {
+    } catch {
       return new ServerErrorResponse('Failed to fetch cart');
     }
   }
@@ -61,7 +61,7 @@ export class CartHandlerService {
 
       const updatedCart = await this.cartRepo.getByUserId(userId);
       return new OkResponse(updatedCart);
-    } catch (err) {
+    } catch {
       return new ServerErrorResponse('Failed to update cart');
     }
   }
@@ -82,7 +82,7 @@ export class CartHandlerService {
       const cart = await this.cartRepo.getByUserId(userId);
 
       return new OkResponse({ cart });
-    } catch (err) {
+    } catch {
       return new ServerErrorResponse('Failed to add item to cart');
     }
   }
@@ -103,7 +103,7 @@ export class CartHandlerService {
       const cart = await this.cartRepo.getByUserId(userId);
 
       return new OkResponse({ cart });
-    } catch (err) {
+    } catch {
       return new ServerErrorResponse('Failed to remove item from cart');
     }
   }

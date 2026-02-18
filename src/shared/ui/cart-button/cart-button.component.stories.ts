@@ -8,7 +8,7 @@ import { signal } from '@angular/core';
 /**
  * Creates an isolated mock CartService with a given item count
  */
-function createMockCartService(count: number) {
+function createMockCartService(count: number): { itemCount: ReturnType<typeof signal<number>> } {
   return {
     itemCount: signal(count),
   };

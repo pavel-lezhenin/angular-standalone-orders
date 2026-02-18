@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, input, output, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import type { FormControl} from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -62,7 +63,7 @@ export class SearchInputComponent {
   /**
    * Output event emitted after debounce time with search value
    */
-  readonly search = output<string>();
+  readonly searchChange = output<string>();
 
   /**
    * Output event emitted when clear button is clicked
@@ -79,7 +80,7 @@ export class SearchInputComponent {
       const subscription = control.valueChanges
         .pipe(debounceTime(debounceMs), distinctUntilChanged())
         .subscribe((value) => {
-          this.search.emit(value || '');
+          this.searchChange.emit(value || '');
         });
 
       onCleanup(() => {

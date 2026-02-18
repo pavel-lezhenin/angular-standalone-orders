@@ -1,6 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/angular';
-import { applicationConfig } from '@storybook/angular';
-import { provideAnimations } from '@angular/platform-browser/animations'; 
 import { ShopFiltersComponent } from './shop-filters.component';
 import type { CategoryDTO } from '@core';
 

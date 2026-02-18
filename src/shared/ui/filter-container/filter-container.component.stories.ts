@@ -2,9 +2,10 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { ReactiveFormsModule, FormControl } from '@angular/forms';
-import { FilterContainerComponent, FilterAction } from './filter-container.component';
-import { Component, Input } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import type { FilterAction } from './filter-container.component';
+import { FilterContainerComponent } from './filter-container.component';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-mock-filter-content',
@@ -33,6 +34,7 @@ import { Component, Input } from '@angular/core';
     </mat-form-field>
   `,
 })
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 class MockFilterContentComponent {}
 
 const defaultActions: FilterAction[] = [

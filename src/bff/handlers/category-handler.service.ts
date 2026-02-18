@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { HttpRequest, HttpResponse } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import type { HttpRequest, HttpResponse } from '@angular/common/http';
 import { v4 as uuidv4 } from 'uuid';
 import { CategoryRepository } from '../repositories/category.repository';
 import { ProductRepository } from '../repositories/product.repository';
@@ -16,10 +16,8 @@ import { parsePaginationParams, applyPagination, createPaginatedResponse } from 
   providedIn: 'root',
 })
 export class CategoryHandlerService {
-  constructor(
-    private categoryRepo: CategoryRepository,
-    private productRepo: ProductRepository,
-  ) {}
+  private readonly categoryRepo = inject(CategoryRepository);
+  private readonly productRepo = inject(ProductRepository);
 
   /**
    * Handle get all categories request with pagination and search

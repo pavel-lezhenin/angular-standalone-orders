@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/angular';
-import { ReactiveFormsModule } from '@angular/forms';
 import { PaymentMethodSelectorComponent } from './payment-method-selector.component';
 import type { PaymentMethodDTO } from '@core/models';
 

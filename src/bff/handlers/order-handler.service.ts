@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { HttpRequest, HttpResponse } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import type { HttpRequest, HttpResponse } from '@angular/common/http';
 import { v4 as uuidv4 } from 'uuid';
 import { OrderRepository } from '../repositories/order.repository';
 import type { Order, OrderStatusChangeActor } from '../models';
@@ -15,7 +15,7 @@ import { OkResponse, CreatedResponse, NotFoundResponse, ServerErrorResponse, Bad
   providedIn: 'root',
 })
 export class OrderHandlerService {
-  constructor(private orderRepo: OrderRepository) {}
+  private readonly orderRepo = inject(OrderRepository);
 
   private readonly allowedTransitions: Readonly<Record<OrderStatus, readonly OrderStatus[]>> = {
     pending_payment: ['paid', 'cancelled'],
@@ -30,11 +30,11 @@ export class OrderHandlerService {
   /**
    * Handle get all orders request
    */
-  async handleGetOrders(req: HttpRequest<unknown>): Promise<HttpResponse<unknown>> {
+  async handleGetOrders(_req: HttpRequest<unknown>): Promise<HttpResponse<unknown>> {
     try {
       const orders = await this.orderRepo.getAll();
       return new OkResponse({ orders });
-    } catch (err) {
+    } catch {
       return new ServerErrorResponse('Failed to fetch orders');
     }
   }
@@ -48,7 +48,7 @@ export class OrderHandlerService {
 
       const orders = await this.orderRepo.getByUserId(userId);
       return new OkResponse({ orders });
-    } catch (err) {
+    } catch {
       return new ServerErrorResponse('Failed to fetch user orders');
     }
   }
@@ -100,7 +100,7 @@ export class OrderHandlerService {
       }
 
       return new OkResponse({ order });
-    } catch (err) {
+    } catch {
       return new ServerErrorResponse('Failed to fetch order');
     }
   }

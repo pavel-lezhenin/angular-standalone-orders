@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { DatabaseService } from '../database.service';
-import { Cart } from '../models';
+import type { Cart } from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -8,7 +8,7 @@ import { Cart } from '../models';
 export class CartRepository {
   private storeName = 'cart';
 
-  constructor(private db: DatabaseService) {}
+  private readonly db = inject(DatabaseService);
 
   async getByUserId(userId: string): Promise<Cart | null> {
     const cart = await this.db.read<Cart>(this.storeName, userId);

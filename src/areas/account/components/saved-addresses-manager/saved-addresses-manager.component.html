@@ -28,8 +28,8 @@
       <mat-card-content>
         <app-address-form
           [addressForm]="addressForm()"
-          (save)="saveAddress.emit()"
-          (cancel)="toggleForm.emit()"
+          (saveAddress)="saveAddress.emit()"
+          (cancelAddress)="toggleForm.emit()"
         />
       </mat-card-content>
     </mat-card>

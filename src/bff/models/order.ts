@@ -1,4 +1,4 @@
-import { OrderStatus, PaymentStatus, UserRole } from '@core/types';
+import type { OrderStatus, PaymentStatus, UserRole } from '@core/types';
 
 /**
  * Order item line

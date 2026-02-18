@@ -5,9 +5,10 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
-import { CategoryDTO } from '@core';
+import type { CategoryDTO } from '@core';
 import { SearchInputComponent } from '@shared/ui/search-input';
-import { FilterContainerComponent, FilterAction } from '@shared/ui/filter-container';
+import type { FilterAction } from '@shared/ui/filter-container';
+import { FilterContainerComponent } from '@shared/ui/filter-container';
 import { FormFieldComponent, type SelectOption } from '@shared/ui/form-field/form-field.component';
 
 export interface ShopFilters {

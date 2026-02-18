@@ -1,7 +1,9 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
+import type { OnDestroy, OnInit} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
+import type { CdkDragDrop} from '@angular/cdk/drag-drop';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -126,9 +128,9 @@ export class OrdersBoardComponent implements OnInit, OnDestroy {
   });
 
   ngOnInit(): void {
-    this.loadOrders();
+    void this.loadOrders();
     this.refreshTimerId = setInterval(() => {
-      this.loadOrders({ silent: true });
+      void this.loadOrders({ silent: true });
     }, 15000);
   }
 

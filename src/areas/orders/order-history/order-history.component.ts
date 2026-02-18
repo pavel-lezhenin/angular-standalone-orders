@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, OnInit, computed, inject, PLATFORM_ID, signal } from '@angular/core';
+import type { OnInit} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, PLATFORM_ID, signal } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -86,7 +87,7 @@ export class OrderHistoryComponent implements OnInit {
    * Navigates to order details page
    */
   protected onOrderClick(orderId: string): void {
-    this.router.navigate(['/orders/details', orderId]);
+    void this.router.navigate(['/orders/details', orderId]);
   }
 
   protected isCanceling(orderId: string): boolean {
@@ -136,6 +137,6 @@ export class OrderHistoryComponent implements OnInit {
    * Navigate to shop
    */
   protected goToShop(): void {
-    this.router.navigate(['/shop']);
+    void this.router.navigate(['/shop']);
   }
 }

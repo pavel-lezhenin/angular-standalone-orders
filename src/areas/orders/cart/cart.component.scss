@@ -25,6 +25,11 @@
 }
 
 .cart-content > mat-card > mat-card-content {
+  padding: 0;
+}
+
+/* Padding for sticky sidebar content */
+.cart-content > mat-card.sticky-sidebar > mat-card-content {
   padding: var(--spacing-xl);
 }
 
@@ -150,10 +155,10 @@
  * ============================================ */
 
 .summary-info {
-  padding: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
   border-radius: var(--border-radius-sm);
   background: var(--surface-secondary);
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
   font-size: var(--font-size-sm);
   color: var(--text-primary);
 

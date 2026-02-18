@@ -52,6 +52,10 @@
           [alt]="data.productName + ' - ' + ($index + 1)"
           [class.active]="currentIndex === $index"
           (click)="currentIndex = $index"
+          (keydown.enter)="currentIndex = $index"
+          (keydown.space)="currentIndex = $index"
+          tabindex="0"
+          role="button"
         />
       }
     </div>

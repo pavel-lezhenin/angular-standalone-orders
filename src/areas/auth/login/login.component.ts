@@ -1,10 +1,12 @@
-import { ChangeDetectionStrategy, Component, inject, signal, OnInit } from '@angular/core';
+import type { OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
+import type {
+  FormControl,
+  FormGroup} from '@angular/forms';
 import {
   FormBuilder,
-  FormControl,
-  FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -56,7 +58,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
   ngOnInit(): void {
     if (this.authService.isAuthenticated()) {
       const returnUrl = this.route.snapshot.queryParams['returnUrl'] || this.authService.getRedirectPath();
-      this.router.navigateByUrl(returnUrl);
+      void this.router.navigateByUrl(returnUrl);
     }
   }
 
@@ -109,7 +111,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
       // Get return URL from query params or use role-based redirect
       const returnUrl = this.route.snapshot.queryParams['returnUrl'] || this.authService.getRedirectPath();
       await this.router.navigateByUrl(returnUrl);
-    } catch (error) {
+    } catch {
       this.errorMessage.set(
         'Invalid email or password. Please try again.'
       );

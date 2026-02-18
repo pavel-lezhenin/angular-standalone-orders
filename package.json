@@ -19,8 +19,7 @@
     "test:e2e": "playwright test",
     "storybook": "ng run angular-standalone-orders:storybook",
     "storybook:build": "ng run angular-standalone-orders:build-storybook",
-    "validate:design-system": "node scripts/validate-design-system.js",
-    "lint:styles": "npm run validate:design-system",
+    "validate:design-system": "node scripts/validate-design-system.js", 
     "serve:ssr": "node dist/angular-standalone-orders/server/server.mjs",
     "prepare": "husky install"
   },

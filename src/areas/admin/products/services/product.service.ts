@@ -2,9 +2,9 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { PermissionService } from '@core/services/permission.service';
-import { PaginationParams, PaginatedResponse } from '@core/types';
-import { ProductDTO, CategoryDTO } from '@core';
-import { CreateProductDTO, UpdateProductDTO } from '../model/types';
+import type { PaginationParams, PaginatedResponse } from '@core/types';
+import type { ProductDTO } from '@core';
+import type { CreateProductDTO, UpdateProductDTO } from '../model/types';
 
 export interface ProductPermissions {
   canCreate: boolean;

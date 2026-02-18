@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, OnInit, ViewChild, signal, computed, inject, PLATFORM_ID, effect } from '@angular/core';
-import { CommonModule, isPlatformBrowser, CurrencyPipe } from '@angular/common';
+import type { OnInit} from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewChild, signal, computed, inject, PLATFORM_ID, effect } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -10,11 +11,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
-import { OrdersPaymentFormComponent, PaymentFormData } from '../ui/payment-form/orders-payment-form.component';
+import type { PaymentFormData } from '../ui/payment-form/orders-payment-form.component';
+import { OrdersPaymentFormComponent } from '../ui/payment-form/orders-payment-form.component';
 import { PageLoaderComponent } from '@shared/ui/page-loader/page-loader.component';
 import { OrderSummaryComponent } from '@shared/ui';
 import { FormFieldComponent, type SelectOption } from '@shared/ui/form-field/form-field.component';
-import { PaymentService, PaymentRequest, PaymentResult } from '@areas/orders/services/payment.service';
+import type { PaymentRequest } from '@areas/orders/services/payment.service';
+import { PaymentService } from '@areas/orders/services/payment.service';
 import { PaymentStateService } from '@areas/orders/services/payment-state.service';
 import { UserPreferencesService } from '@shared/services/user-preferences.service';
 import { OrderService } from '@areas/orders/services/order.service';
@@ -139,7 +142,7 @@ export default class PaymentComponent implements OnInit {
 
     if (!pendingPayment) {
       this.notification.error('No pending payment found');
-      this.router.navigate(['/orders/cart']);
+      void this.router.navigate(['/orders/cart']);
       return;
     }
 
@@ -148,7 +151,7 @@ export default class PaymentComponent implements OnInit {
     this.itemCount.set(pendingPayment.itemCount);
 
     // Load saved payment methods
-    this.loadSavedPaymentMethods();
+    void this.loadSavedPaymentMethods();
   }
 
   /**
@@ -343,11 +346,11 @@ export default class PaymentComponent implements OnInit {
   /**
    * Create order after successful payment
    */
-  private async createOrder(transactionId: string, paymentMethod: PaymentFormData['method']): Promise<void> {
+  private async createOrder(transactionId: string, _paymentMethod: PaymentFormData['method']): Promise<void> {
     const orderData = this.orderData();
     if (!orderData) {
       this.notification.error('Order data not found');
-      this.router.navigate(['/orders/cart']);
+      void this.router.navigate(['/orders/cart']);
       return;
     }
 
@@ -370,7 +373,7 @@ export default class PaymentComponent implements OnInit {
 
       // Navigate to confirmation
       setTimeout(() => {
-        this.router.navigate(['/orders/confirmation', createdOrder.id]);
+        void this.router.navigate(['/orders/confirmation', createdOrder.id]);
       }, 1500); // Small delay to show success state
 
     } catch (error) {
@@ -423,6 +426,6 @@ export default class PaymentComponent implements OnInit {
    */
   protected cancelPayment(): void {
     this.paymentStateService.clearPendingPayment();
-    this.router.navigate(['/orders/cart']);
+    void this.router.navigate(['/orders/cart']);
   }
 }

@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { HttpRequest, HttpResponse } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import type { HttpRequest, HttpResponse } from '@angular/common/http';
 import { UserRepository } from '../repositories/user.repository';
 import { OkResponse, UnauthorizedResponse, ServerErrorResponse } from './http-responses';
 
@@ -11,7 +11,7 @@ import { OkResponse, UnauthorizedResponse, ServerErrorResponse } from './http-re
   providedIn: 'root',
 })
 export class AuthHandlerService {
-  constructor(private userRepo: UserRepository) {}
+  private readonly userRepo = inject(UserRepository);
 
   /**
    * Handle login request
@@ -39,7 +39,7 @@ export class AuthHandlerService {
   /**
    * Handle logout request
    */
-  async handleLogout(req: HttpRequest<unknown>): Promise<HttpResponse<unknown>> {
+  async handleLogout(_req: HttpRequest<unknown>): Promise<HttpResponse<unknown>> {
     return new OkResponse({ message: 'Logged out' });
   }
 
@@ -47,7 +47,7 @@ export class AuthHandlerService {
    * Handle get current user request
    * Restores user from localStorage userId (simulating JWT token validation)
    */
-  async handleGetMe(req: HttpRequest<unknown>): Promise<HttpResponse<unknown>> {
+  async handleGetMe(_req: HttpRequest<unknown>): Promise<HttpResponse<unknown>> {
     try {
       // In real implementation, would extract user ID from JWT token
       // For demo, get userId from localStorage

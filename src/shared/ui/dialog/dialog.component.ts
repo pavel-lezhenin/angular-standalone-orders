@@ -1,11 +1,12 @@
-import { ChangeDetectionStrategy, Component, output, computed, inject, OnInit } from '@angular/core';
+import type { OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, output, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { BaseComponent } from '@core';
-import { DialogConfig } from './dialog.config';
+import type { DialogConfig } from './dialog.config';
 
 /**
  * Shared dialog component for consistent dialog UX across the app.
@@ -97,12 +98,12 @@ export class DialogComponent extends BaseComponent implements OnInit {
   /**
    * Emitted when user clicks submit button
    */
-  public readonly submit = output<void>();
+  public readonly submitDialog = output<void>();
 
   /**
    * Emitted when user clicks cancel button
    */
-  public readonly cancel = output<void>();
+  public readonly cancelDialog = output<void>();
 
   ngOnInit(): void {
     // Prevent closing on backdrop click if configured
@@ -146,7 +147,7 @@ export class DialogComponent extends BaseComponent implements OnInit {
     if (this.isLoading()) {
       return;
     }
-    this.submit.emit();
+    this.submitDialog.emit();
   }
 
   /**
@@ -156,7 +157,7 @@ export class DialogComponent extends BaseComponent implements OnInit {
     if (this.isLoading()) {
       return;
     }
-    this.cancel.emit();
+    this.cancelDialog.emit();
     this.dialogRef.close({ cancelled: true });
   }
 

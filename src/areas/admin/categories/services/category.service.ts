@@ -2,9 +2,9 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { PermissionService } from '@core/services/permission.service';
-import { CategoryDTO } from '@core';
-import { PaginationParams, PaginatedResponse } from '@core/types';
-import { CategoryPermissions, CategoryFormData, CreateCategoryDto, UpdateCategoryDto } from '../model';
+import type { CategoryDTO } from '@core';
+import type { PaginationParams, PaginatedResponse } from '@core/types';
+import type { CategoryPermissions, CategoryFormData, CreateCategoryDto, UpdateCategoryDto } from '../model';
 
 /**
  * Category service (admin area)

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/angular';
-import { ImageGalleryComponent, ImageItem } from './image-gallery.component';
+import type { ImageItem } from './image-gallery.component';
+import { ImageGalleryComponent } from './image-gallery.component';
 
 const mockImages: ImageItem[] = [
   {

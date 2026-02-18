@@ -33,8 +33,8 @@ export class OrderCardComponent {
   order = input.required<OrderDTO>();
   canceling = input<boolean>(false);
   
-  click = output<string>();
-  cancel = output<OrderDTO>();
+  cardClick = output<string>();
+  cancelOrder = output<OrderDTO>();
   
   private readonly cancellableStatuses: readonly OrderStatus[] = ['pending_payment', 'paid'];
 
@@ -43,12 +43,12 @@ export class OrderCardComponent {
   }
 
   protected onCardClick(): void {
-    this.click.emit(this.order().id);
+    this.cardClick.emit(this.order().id);
   }
 
   protected onCancelClick(event: Event): void {
     event.stopPropagation();
-    this.cancel.emit(this.order());
+    this.cancelOrder.emit(this.order());
   }
 
   protected getStatusClass(): string {

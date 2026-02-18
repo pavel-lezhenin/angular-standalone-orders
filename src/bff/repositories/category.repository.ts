@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DatabaseService } from '../database.service';
-import { Category } from '../models';
+import type { Category } from '../models';
 import { BaseRepository } from './base.repository';
 
 @Injectable({
@@ -8,8 +7,4 @@ import { BaseRepository } from './base.repository';
 })
 export class CategoryRepository extends BaseRepository<Category> {
   storeName = 'categories';
-
-  constructor(db: DatabaseService) {
-    super(db);
-  }
 }

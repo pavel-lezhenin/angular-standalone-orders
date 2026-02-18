@@ -2,9 +2,9 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { PermissionService } from '@core/services/permission.service';
-import { UserDTO } from '@core';
-import { PaginationParams, PaginatedResponse } from '@core/types';
-import { CustomerPermissions, CustomerFormData, CreateUserDto, UpdateUserDto } from '../model';
+import type { UserDTO } from '@core';
+import type { PaginationParams, PaginatedResponse } from '@core/types';
+import type { CustomerPermissions, CustomerFormData, CreateUserDto, UpdateUserDto } from '../model';
 
 /**
  * Customer service (admin area)

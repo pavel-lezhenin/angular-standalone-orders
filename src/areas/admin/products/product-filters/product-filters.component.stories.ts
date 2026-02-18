@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 
-import { ReactiveFormsModule } from '@angular/forms';
 import { ProductFiltersComponent } from './product-filters.component';
 import type { CategoryDTO } from '@core';
 

@@ -1,5 +1,5 @@
-import { PermissionDTO } from '@core';
-import { UserRole } from '@core/types';
+import type { PermissionDTO } from '@core';
+import type { UserRole } from '@core/types';
 
 /**
  * Permission management permissions

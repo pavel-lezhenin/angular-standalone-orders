@@ -1,11 +1,11 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpRequest, HttpResponse } from '@angular/common/http';
+import type { HttpRequest, HttpResponse } from '@angular/common/http';
 import { v4 as uuidv4 } from 'uuid';
 import { ProductRepository } from '../repositories/product.repository';
 import { CategoryRepository } from '../repositories/category.repository';
 import { OrderRepository } from '../repositories/order.repository';
 import { FileStorageService } from '../../core/services/file-storage.service';
-import { Product, ProductWithCategoryResponse, ProductSpecification } from '../models';
+import type { Product, ProductWithCategoryResponse, ProductSpecification } from '../models';
 import {
   OkResponse,
   CreatedResponse,
@@ -46,12 +46,9 @@ interface ProductRequestBody {
 })
 export class ProductHandlerService {
   private readonly fileStorage = inject(FileStorageService);
-
-  constructor(
-    private productRepo: ProductRepository,
-    private categoryRepo: CategoryRepository,
-    private orderRepo: OrderRepository
-  ) {}
+  private readonly productRepo = inject(ProductRepository);
+  private readonly categoryRepo = inject(CategoryRepository);
+  private readonly orderRepo = inject(OrderRepository);
 
   /**
    * Handle get all products request with pagination, search, and category filter
@@ -65,7 +62,7 @@ export class ProductHandlerService {
       const categoryId = req.params.get('categoryId') || undefined;
 
       // Get filtered products
-      let products = await this.productRepo.filter({ categoryId, search });
+      const products = await this.productRepo.filter({ categoryId, search });
 
       // Load all categories for JOIN
       const categories = await this.categoryRepo.getAll();
@@ -98,7 +95,7 @@ export class ProductHandlerService {
       return new OkResponse(
         createPaginatedResponse(paginatedProducts, total, page, limit)
       );
-    } catch (err) {
+    } catch {
       return new ServerErrorResponse('Failed to fetch products');
     }
   }
@@ -132,7 +129,7 @@ export class ProductHandlerService {
       };
 
       return new OkResponse({ product: productResponse });
-    } catch (err) {
+    } catch {
       return new ServerErrorResponse('Failed to fetch product');
     }
   }

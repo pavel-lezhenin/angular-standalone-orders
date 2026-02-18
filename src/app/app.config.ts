@@ -1,8 +1,10 @@
-import { ApplicationConfig, APP_INITIALIZER, PLATFORM_ID, inject } from '@angular/core';
+import type { ApplicationConfig} from '@angular/core';
+import { APP_INITIALIZER, PLATFORM_ID, inject } from '@angular/core';
 import { provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { HttpInterceptorFn, HttpResponse } from '@angular/common/http';
+import type { HttpInterceptorFn} from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
@@ -11,8 +13,9 @@ import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { FakeBFFService } from '@bff';
 import { AuthService } from '@core';
-import { from, Observable, of } from 'rxjs';
-import { HttpRequest, HttpHandlerFn, HttpEvent } from '@angular/common/http';
+import type { Observable} from 'rxjs';
+import { from, of } from 'rxjs';
+import type { HttpRequest, HttpHandlerFn, HttpEvent } from '@angular/common/http';
 
 function getSsrApiBody(req: HttpRequest<unknown>): unknown {
   const emptyPaginated = { data: [], total: 0, page: 1, limit: 20, totalPages: 0 };
@@ -71,7 +74,7 @@ function getSsrApiBody(req: HttpRequest<unknown>): unknown {
  * 
  * Runs only in browser, not during SSR
  */
-function restoreAuthSession(authService: AuthService, fakeBFF: FakeBFFService, platformId: Object): () => Promise<void> {
+function restoreAuthSession(authService: AuthService, fakeBFF: FakeBFFService, platformId: object): () => Promise<void> {
   return async () => {
     if (!isPlatformBrowser(platformId)) {
       return Promise.resolve();
@@ -84,10 +87,11 @@ function restoreAuthSession(authService: AuthService, fakeBFF: FakeBFFService, p
       if (!fakeBFF.isInitialized()) {
         await fakeBFF.initialize();
       }
-    } catch (error) {
+    } catch {
+      // ignore BFF initialization errors
     }
     
-    return authService.restoreSession().catch((error) => {
+    return authService.restoreSession().catch(() => {
       // Don't throw - allow app to continue even if restore fails
     });
   };
@@ -122,7 +126,7 @@ const apiInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, next: Http
  * This is the ONLY place where BFF initialization should happen
  * IMPORTANT: Must run in browser even after SSR hydration
  */
-function initializeBFF(fakeBFF: FakeBFFService, platformId: Object): () => Promise<void> {
+function initializeBFF(fakeBFF: FakeBFFService, platformId: object): () => Promise<void> {
   return () => {
     if (!isPlatformBrowser(platformId)) {
       return Promise.resolve();

@@ -76,9 +76,8 @@ export class AuthService {
       );
       if (response?.user) {
         this.currentUser.set(response.user);
-      } else {
       }
-    } catch (error) {
+    } catch {
       localStorage.removeItem('authToken');
       localStorage.removeItem('currentUserId');
     }

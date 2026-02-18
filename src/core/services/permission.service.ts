@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import type { PermissionDTO } from '../models';
 import { AuthService } from './auth.service';
 
@@ -12,7 +12,7 @@ export class PermissionService {
   // Custom permissions storage (in-memory, would be IndexedDB in real app)
   private customPermissions: PermissionDTO[] = [];
 
-  constructor(private authService: AuthService) {}
+  private readonly authService = inject(AuthService);
 
   /**
    * Check if current user has access to section:action

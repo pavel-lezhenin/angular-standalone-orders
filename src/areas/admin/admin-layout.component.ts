@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, PLATFORM_ID, computed, inject, signal } from '@angular/core';
+import type { OnDestroy, OnInit} from '@angular/core';
+import { ChangeDetectionStrategy, Component, PLATFORM_ID, computed, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -34,6 +35,7 @@ interface MenuItem {
 export class AdminLayoutComponent implements OnInit, OnDestroy {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly isBrowser = isPlatformBrowser(this.platformId);
+  private readonly authService = inject(AuthService);
   private mobileMediaQuery: MediaQueryList | null = null;
 
   private menuItems: MenuItem[] = [
@@ -56,8 +58,6 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
 
     return this.menuItems.filter(item => item.roles.includes(user.role as 'admin' | 'manager'));
   });
-
-  constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
     if (!this.isBrowser) {

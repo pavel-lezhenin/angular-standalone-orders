@@ -24,6 +24,10 @@
                   class="thumbnail-wrapper"
                   [class.active]="selectedImageIndex() === $index"
                   (click)="selectImage($index)"
+                  (keydown.enter)="selectImage($index)"
+                  (keydown.space)="selectImage($index)"
+                  tabindex="0"
+                  role="button"
                 >
                   <img [src]="imageUrl" [alt]="product.name + ' - ' + ($index + 1)" />
                 </div>
@@ -32,7 +36,7 @@
           }
 
           <!-- Main image (fixed size container) -->
-          <div class="main-image" (click)="openImageZoom()">
+          <div class="main-image" (click)="openImageZoom()" (keydown.enter)="openImageZoom()" (keydown.space)="openImageZoom()" tabindex="0" role="button">
             <img [src]="currentImage" [alt]="product.name" />
             <div class="zoom-hint flex items-center gap-xs">
               <mat-icon>search</mat-icon>

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/angular';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import type { FormGroup} from '@angular/forms';
+import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { applicationConfig } from '@storybook/angular';
 import { PaymentFormComponent } from './payment-form.component';
 

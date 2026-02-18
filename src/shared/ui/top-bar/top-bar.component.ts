@@ -1,11 +1,11 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { NavItem } from '@/shared/models';
+import type { NavItem } from '@/shared/models';
 import { UserMenuComponent } from '../user-menu/user-menu.component';
 
 /**
@@ -34,7 +34,7 @@ export class TopBarComponent {
   @Input() sidenavOpened = true;
   @Input() onToggleSidenav?: () => void;
 
-  constructor(private router: Router) {}
+  private readonly router = inject(Router);
 
   /**
    * Checks if a nav item corresponds to the current active route
@@ -58,7 +58,7 @@ export class TopBarComponent {
     if (item.action) {
       item.action();
     } else if (item.route) {
-      this.router.navigate([item.route]);
+      void this.router.navigate([item.route]);
     }
   }
 

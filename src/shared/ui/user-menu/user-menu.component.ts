@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -28,10 +28,8 @@ import { AuthService } from '@core/services/auth.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserMenuComponent {
-  constructor(
-    public authService: AuthService,
-    private router: Router
-  ) {}
+  readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
   /**
    * Get display name based on user role
@@ -53,11 +51,11 @@ export class UserMenuComponent {
    * Universal navigation handler
    */
   navigateTo(route: string): void {
-    this.router.navigate([route]);
+    void this.router.navigate([route]);
   }
 
-  logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/']);
+  async logout(): Promise<void> {
+    await this.authService.logout();
+    void this.router.navigate(['/']);
   }
 }

@@ -1,4 +1,4 @@
-<article class="product-card flex-col" (click)="onClick()">
+<article class="product-card flex-col" (click)="onClick()" (keydown.enter)="onClick()" (keydown.space)="onClick()" tabindex="0">
   <div class="product-card__image">
     <img
       [src]="productImage"

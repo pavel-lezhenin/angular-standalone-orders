@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import type { FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -10,7 +11,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { ContactChannel } from './models';
+import type { ContactChannel } from './models';
 import { FormFieldComponent } from '@shared/ui';
 
 /**
@@ -42,10 +43,10 @@ export class LeadCaptureFormComponent {
   leadForm: FormGroup;
   selectedChannel: ContactChannel = 'email';
 
-  constructor(
-    private fb: FormBuilder,
-    private snackBar: MatSnackBar
-  ) {
+  private readonly fb = inject(FormBuilder);
+  private readonly snackBar = inject(MatSnackBar);
+
+  constructor() {
     this.leadForm = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -134,7 +135,7 @@ export class LeadCaptureFormComponent {
     this.leadForm.reset({ channel: 'email', consent: false });
   }
 
-  private submitEmailForm(data: unknown): void {
+  private submitEmailForm(_data: unknown): void {
     // TODO: Integrate with backend/CRM
     this.showSuccessMessage('Thank you! We will contact you via email soon.');
     this.leadForm.reset({ channel: 'email', consent: false });
@@ -151,4 +152,7 @@ export class LeadCaptureFormComponent {
   getControl(name: string): FormControl {
     return this.leadForm.get(name) as FormControl;
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  private _data(data: unknown): void {}
 }

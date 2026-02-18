@@ -7,9 +7,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { PermissionsByRole } from '../model';
-import { UserRole } from '@core/types';
-import { PermissionDTO } from '@core';
+import type { PermissionsByRole } from '../model';
+import type { UserRole } from '@core/types';
+import type { PermissionDTO } from '@core';
 
 /**
  * Permission matrix table component

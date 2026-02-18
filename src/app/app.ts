@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, signal, inject, PLATFORM_ID, OnInit } from '@angular/core';
+import type { OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal, inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 
@@ -25,7 +26,7 @@ export class App implements OnInit {
     const tablet = window.matchMedia('(min-width: 601px) and (max-width: 960px)');
     const desktop = window.matchMedia('(min-width: 961px)');
 
-    const updateClasses = () => {
+    const updateClasses = (): void => {
       const html = document.documentElement;
       html.classList.remove('mobile', 'tablet', 'desktop');
 
@@ -49,7 +50,7 @@ export class App implements OnInit {
   private initDarkMode(): void {
     const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
-    const updateDarkMode = () => {
+    const updateDarkMode = (): void => {
       document.documentElement.classList.toggle('dark-mode', darkQuery.matches);
     };
 

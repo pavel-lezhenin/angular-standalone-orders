@@ -1,3 +1,4 @@
+import { inject } from '@angular/core';
 import { DatabaseService } from '../database.service';
 
 /**
@@ -7,7 +8,7 @@ import { DatabaseService } from '../database.service';
 export abstract class BaseRepository<T extends { id: string }> {
   abstract storeName: string;
 
-  constructor(protected db: DatabaseService) {}
+  protected readonly db = inject(DatabaseService);
 
   async getAll(): Promise<T[]> {
     return this.db.getAll<T>(this.storeName);

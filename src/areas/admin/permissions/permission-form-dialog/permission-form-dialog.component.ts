@@ -1,6 +1,8 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, viewChild } from '@angular/core';
+import type { OnInit} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import type { FormGroup} from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -8,9 +10,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
-import { UserRole } from '@core/types';
-import { DialogComponent, DialogConfig } from '@shared/ui/dialog';
-import { PermissionDTO } from '@core';
+import type { UserRole } from '@core/types';
+import type { DialogConfig } from '@shared/ui/dialog';
+import { DialogComponent } from '@shared/ui/dialog';
+import type { PermissionDTO } from '@core';
 
 export interface PermissionFormDialogData extends DialogConfig {
   mode: 'create' | 'edit';

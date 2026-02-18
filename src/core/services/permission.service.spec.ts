@@ -1,3 +1,4 @@
+import { TestBed } from '@angular/core/testing';
 import { PermissionService } from './permission.service';
 import { AuthService } from './auth.service';
 import type { UserDTO } from '../models';
@@ -23,7 +24,14 @@ describe('PermissionService', () => {
       getCurrentUser: vi.fn(() => null),
     };
 
-    service = new PermissionService(authServiceMock as AuthService);
+    TestBed.configureTestingModule({
+      providers: [
+        PermissionService,
+        { provide: AuthService, useValue: authServiceMock }
+      ]
+    });
+
+    service = TestBed.inject(PermissionService);
   });
 
   afterEach(() => {

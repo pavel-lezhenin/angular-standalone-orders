@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/angular';
-import { OrderSummaryComponent, SummaryLine } from './order-summary.component';
+import type { SummaryLine } from './order-summary.component';
+import { OrderSummaryComponent } from './order-summary.component';
 
 const defaultLines: SummaryLine[] = [
   { label: 'Subtotal', value: 249.97 },

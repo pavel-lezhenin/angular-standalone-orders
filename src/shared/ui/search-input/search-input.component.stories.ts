@@ -26,9 +26,11 @@ const meta: Meta<SearchInputStoryArgs> = {
       debounceMs: args.debounceMs,
       searchControl: new FormControl<string | null>(args.initialValue),
       search: (value: string) => {
+        // eslint-disable-next-line no-console
         console.log('Search:', value);
       },
       clear: () => {
+        // eslint-disable-next-line no-console
         console.log('Clear');
       },
     },

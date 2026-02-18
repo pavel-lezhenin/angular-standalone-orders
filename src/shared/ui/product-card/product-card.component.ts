@@ -7,7 +7,7 @@ import {
 import { DecimalPipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { ProductWithCategoryDTO } from '@core';
+import type { ProductWithCategoryDTO } from '@core';
 import { DEFAULT_PRODUCT_IMAGE } from '@shared/constants/product.constants';
 
 /**

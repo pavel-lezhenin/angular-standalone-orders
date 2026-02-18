@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import type { OnInit} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,12 +13,13 @@ import { ConfirmDialogService } from '@shared/ui/dialog';
 import { createFormDialogConfig } from '@shared/ui/dialog/dialog.config';
 import { PermissionManagementService } from './services/permission-management.service';
 import { PermissionMatrixComponent } from './permission-matrix/permission-matrix.component';
+import type {
+  PermissionFormDialogData} from './permission-form-dialog/permission-form-dialog.component';
 import {
-  PermissionFormDialogComponent,
-  PermissionFormDialogData,
+  PermissionFormDialogComponent
 } from './permission-form-dialog/permission-form-dialog.component';
-import { PermissionsByRole } from './model';
-import { UserRole } from '@core/types';
+import type { PermissionsByRole } from './model';
+import type { UserRole } from '@core/types';
 
 /**
  * Permissions management page (Admin only)

@@ -22,8 +22,8 @@
               <app-order-card
                 [order]="order"
                 [canceling]="isCanceling(order.id)"
-                (click)="onOrderClick($event)"
-                (cancel)="onCancelOrder($event)"
+                (cardClick)="onOrderClick($event)"
+                (cancelOrder)="onCancelOrder($event)"
               />
             }
           </div>

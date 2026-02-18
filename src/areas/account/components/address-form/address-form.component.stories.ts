@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/angular';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import type { FormGroup} from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { AddressFormComponent } from './address-form.component';
 
 const meta: Meta<AddressFormComponent> = {
@@ -7,15 +8,15 @@ const meta: Meta<AddressFormComponent> = {
   component: AddressFormComponent,
   tags: ['autodocs'],
   argTypes: {
-    save: { action: 'save' },
-    cancel: { action: 'cancel' },
+    saveAddress: { action: 'saveAddress' },
+    cancelAddress: { action: 'cancelAddress' },
   },
 };
 
 export default meta;
 type Story = StoryObj<AddressFormComponent>;
 
-function createAddressForm(values?: Partial<any>): FormGroup {
+function createAddressForm(values?: Partial<Record<string, string>>): FormGroup {
   const fb = new FormBuilder();
   const defaults = {
     label: 'Home',

@@ -1,15 +1,15 @@
-import { Injectable } from '@angular/core';
-import { HttpRequest, HttpResponse } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import type { HttpRequest, HttpResponse } from '@angular/common/http';
 import { v4 as uuidv4 } from 'uuid';
 import { PaymentMethodRepository } from '../repositories/payment-method.repository';
-import { PaymentMethod } from '../models/payment-method';
+import type { PaymentMethod } from '../models/payment-method';
 import { BadRequestResponse, CreatedResponse, NoContentResponse, OkResponse, ServerErrorResponse } from './http-responses';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PaymentMethodHandlerService {
-  constructor(private paymentMethodRepo: PaymentMethodRepository) {}
+  private readonly paymentMethodRepo = inject(PaymentMethodRepository);
 
   async handleGetPaymentMethods(req: HttpRequest<unknown>): Promise<HttpResponse<unknown>> {
     try {
@@ -141,7 +141,7 @@ export class PaymentMethodHandlerService {
   }
 
   private findDuplicate(methods: PaymentMethod[], body: Partial<PaymentMethod>): PaymentMethod | undefined {
-    const normalize = (value?: string) => (value ?? '').trim().toLowerCase();
+    const normalize = (value?: string): string => (value ?? '').trim().toLowerCase();
 
     if (body.type === 'paypal') {
       return methods.find(method =>

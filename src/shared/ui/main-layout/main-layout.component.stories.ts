@@ -20,11 +20,17 @@ import { signal } from '@angular/core';
 })
 class MockPageComponent {}
 
-const createMockLayoutService = (title: string, navItems: NavItem[]) => ({
+const createMockLayoutService = (title: string, navItems: NavItem[]): {
+  title: ReturnType<typeof signal<string>>;
+  navItems: ReturnType<typeof signal<NavItem[]>>;
+  setTitle: (_newTitle: string) => void;
+  setNavItems: (_items: NavItem[]) => void;
+  reset: () => void;
+} => ({
   title: signal(title),
   navItems: signal(navItems),
-  setTitle: (newTitle: string) => {},
-  setNavItems: (items: NavItem[]) => {},
+  setTitle: (_newTitle: string) => {},
+  setNavItems: (_items: NavItem[]) => {},
   reset: () => {},
 });
 

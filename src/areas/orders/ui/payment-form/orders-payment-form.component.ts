@@ -1,12 +1,14 @@
-import { ChangeDetectionStrategy, Component, OnInit, inject, DestroyRef } from '@angular/core';
+import type { OnInit} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import type {
+  FormGroup,
+  AbstractControl,
+  ValidationErrors} from '@angular/forms';
 import {
   ReactiveFormsModule,
   FormBuilder,
-  FormGroup,
-  Validators,
-  AbstractControl,
-  ValidationErrors,
+  Validators
 } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatRadioModule } from '@angular/material/radio';

@@ -1,16 +1,19 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal, viewChild } from '@angular/core';
+import type { OnInit} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import type { FormControl, FormGroup} from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 
-import { UserDTO } from '@core';
-import { UserRole } from '@core/types';
-import { DialogComponent, DialogConfig } from '@shared/ui/dialog';
+import type { UserDTO } from '@core';
+import type { UserRole } from '@core/types';
+import type { DialogConfig } from '@shared/ui/dialog';
+import { DialogComponent } from '@shared/ui/dialog';
 import { FormFieldComponent, type SelectOption } from '@shared/ui';
-import { CustomerFormData } from '../model';
+import type { CustomerFormData } from '../model';
 
 export interface CustomerFormDialogData extends DialogConfig {
   mode: 'create' | 'edit';

@@ -1,4 +1,4 @@
-import { Routes } from '@angular/router';
+import type { Routes } from '@angular/router';
 import { adminGuard } from '@core/guards/admin.guard';
 import { AdminLayoutComponent } from './admin-layout.component';
 

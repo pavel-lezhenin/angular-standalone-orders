@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
+import type { FormGroup, FormControl } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { FormFieldComponent, type SelectOption } from '../form-field/form-field.component';
 
 /**

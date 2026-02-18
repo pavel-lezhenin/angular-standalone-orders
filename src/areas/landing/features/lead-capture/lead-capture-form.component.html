@@ -38,8 +38,8 @@
 
       <!-- Contact Channel Selection -->
       <div class="channel-selection">
-        <label class="section-label">Preferred Contact Method</label>
-        <mat-radio-group formControlName="channel">
+        <span id="channel-label" class="section-label">Preferred Contact Method</span>
+        <mat-radio-group formControlName="channel" aria-labelledby="channel-label">
           <mat-radio-button value="email">Email</mat-radio-button>
           <mat-radio-button value="telegram">Telegram</mat-radio-button>
           <mat-radio-button value="whatsapp">WhatsApp</mat-radio-button>

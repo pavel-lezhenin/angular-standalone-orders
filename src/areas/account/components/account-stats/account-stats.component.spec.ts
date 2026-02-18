@@ -1,5 +1,6 @@
 import { signal } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture} from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { AccountStatsComponent } from './account-stats.component';
 
 const setSignalInput = (component: AccountStatsComponent, inputName: string, value: unknown): void => {

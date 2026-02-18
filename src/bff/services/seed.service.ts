@@ -1,23 +1,21 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { v4 as uuidv4 } from 'uuid';
 import { UserRepository } from '../repositories/user.repository';
 import { ProductRepository } from '../repositories/product.repository';
 import { CategoryRepository } from '../repositories/category.repository';
 import { AddressRepository } from '../repositories/address.repository';
 import { PaymentMethodRepository } from '../repositories/payment-method.repository';
-import { User, Product, Category, Address, PaymentMethod } from '../models';
+import type { User, Product, Category, Address, PaymentMethod } from '../models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SeedService {
-  constructor(
-    private userRepo: UserRepository,
-    private productRepo: ProductRepository,
-    private categoryRepo: CategoryRepository,
-    private addressRepo: AddressRepository,
-    private paymentMethodRepo: PaymentMethodRepository,
-  ) {}
+  private readonly userRepo = inject(UserRepository);
+  private readonly productRepo = inject(ProductRepository);
+  private readonly categoryRepo = inject(CategoryRepository);
+  private readonly addressRepo = inject(AddressRepository);
+  private readonly paymentMethodRepo = inject(PaymentMethodRepository);
 
   async seedAll(): Promise<void> {
     try {
@@ -30,12 +28,12 @@ export class SeedService {
       await this.seedAddressesAndPaymentMethods();
 
       // Verify data was created
-      const userCount = await this.userRepo.count();
-      const categoryCount = await this.categoryRepo.count();
-      const productCount = await this.productRepo.count();
+      await this.userRepo.count(); // _userCount
+      await this.categoryRepo.count(); // _categoryCount
+      await this.productRepo.count(); // _productCount
       
       // Verify admin user exists
-      const adminUser = await this.userRepo.getByEmail('admin@demo');
+      await this.userRepo.getByEmail('admin@demo'); // _adminUser
     } catch (error) {
       console.error('❌ Seed failed:', error);
       throw error;

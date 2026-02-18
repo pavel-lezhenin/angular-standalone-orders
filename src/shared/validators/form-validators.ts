@@ -1,4 +1,4 @@
-import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import type { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 /**
  * Custom form validators
@@ -23,8 +23,8 @@ export class FormValidators {
       return null; // Don't validate empty values (use Validators.required for that)
     }
 
-    const phonePattern = /^[\d\s\-\+\(\)]+$/;
-    const digitsOnly = control.value.replace(/[\s\-\+\(\)]/g, '');
+    const phonePattern = /^[\d\s\-+()]+$/;
+    const digitsOnly = control.value.replace(/[\s\-+()]/g, '');
 
     // Check if contains only valid characters
     if (!phonePattern.test(control.value)) {

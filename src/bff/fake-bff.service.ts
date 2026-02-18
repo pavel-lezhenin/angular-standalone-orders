@@ -1,6 +1,6 @@
 import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { HttpRequest, HttpResponse } from '@angular/common/http';
+import type { HttpRequest, HttpResponse } from '@angular/common/http';
 import { DatabaseService } from './database.service';
 import { UserRepository } from './repositories/user.repository';
 import { ProductRepository } from './repositories/product.repository';
@@ -33,22 +33,20 @@ export class FakeBFFService {
   private initialized = false;
   private platformId = inject(PLATFORM_ID);
 
-  constructor(
-    private db: DatabaseService,
-    private userRepo: UserRepository,
-    private productRepo: ProductRepository,
-    private orderRepo: OrderRepository,
-    private addressRepo: AddressRepository,
-    private seedService: SeedService,
-    private authHandler: AuthHandlerService,
-    private productHandler: ProductHandlerService,
-    private categoryHandler: CategoryHandlerService,
-    private userHandler: UserHandlerService,
-    private orderHandler: OrderHandlerService,
-    private cartHandler: CartHandlerService,
-    private addressHandler: AddressHandlerService,
-    private paymentMethodHandler: PaymentMethodHandlerService,
-  ) {}
+  private readonly db = inject(DatabaseService);
+  private readonly userRepo = inject(UserRepository);
+  private readonly productRepo = inject(ProductRepository);
+  private readonly orderRepo = inject(OrderRepository);
+  private readonly addressRepo = inject(AddressRepository);
+  private readonly seedService = inject(SeedService);
+  private readonly authHandler = inject(AuthHandlerService);
+  private readonly productHandler = inject(ProductHandlerService);
+  private readonly categoryHandler = inject(CategoryHandlerService);
+  private readonly userHandler = inject(UserHandlerService);
+  private readonly orderHandler = inject(OrderHandlerService);
+  private readonly cartHandler = inject(CartHandlerService);
+  private readonly addressHandler = inject(AddressHandlerService);
+  private readonly paymentMethodHandler = inject(PaymentMethodHandlerService);
 
   async initialize(): Promise<void> {
     if (this.initialized) {

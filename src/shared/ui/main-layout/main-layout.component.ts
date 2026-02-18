@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { LayoutService } from '@/shared/services/layout.service';
 import { TopBarComponent } from '../top-bar/top-bar.component';
@@ -39,5 +39,5 @@ import { TopBarComponent } from '../top-bar/top-bar.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainLayoutComponent {
-  constructor(public layoutService: LayoutService) {}
+  readonly layoutService = inject(LayoutService);
 }

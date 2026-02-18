@@ -1,5 +1,5 @@
-import { MatDialogConfig } from '@angular/material/dialog';
-import { Type } from '@angular/core';
+import type { MatDialogConfig } from '@angular/material/dialog';
+import type { Type } from '@angular/core';
 
 /**
  * Dialog configuration interface

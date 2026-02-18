@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { FormControl, Validators } from '@angular/forms';
-import { FormFieldComponent, SelectOption } from './form-field.component';
+import type { SelectOption } from './form-field.component';
+import { FormFieldComponent } from './form-field.component';
 
 /**
  * Helper to create a render function that instantiates a FormControl with the given config.
@@ -8,6 +9,7 @@ import { FormFieldComponent, SelectOption } from './form-field.component';
  */
 function renderFormField(
   controlValue: unknown,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   controlValidators: any[] = [],
   touched = false,
 ) {

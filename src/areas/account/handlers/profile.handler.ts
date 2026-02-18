@@ -1,5 +1,6 @@
 import { Injectable, inject, signal, computed } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import type { FormGroup} from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '@core/services/auth.service';
 import { NotificationService } from '@shared/services/notification.service';
 

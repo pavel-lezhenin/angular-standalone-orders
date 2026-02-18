@@ -30,8 +30,8 @@
           [paymentMethodForm]="paymentMethodForm()"
           [selectedPaymentType]="selectedPaymentType()"
           (paymentTypeChange)="paymentTypeChange.emit($event)"
-          (save)="savePaymentMethod.emit()"
-          (cancel)="toggleForm.emit()"
+          (savePayment)="savePaymentMethod.emit()"
+          (cancelPayment)="toggleForm.emit()"
         />
       </mat-card-content>
     </mat-card>

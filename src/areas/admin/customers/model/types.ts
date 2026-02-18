@@ -1,4 +1,4 @@
-import { UserRole, UserProfileDTO, UserDTO } from '@core';
+import type { UserRole, UserProfileDTO, UserDTO } from '@core';
 
 /**
  * Customer permissions

@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, Input, OnChanges, computed, inject, signal } from '@angular/core';
+import type { OnChanges} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, computed, inject, signal } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -69,7 +70,7 @@ export class OrderDetailsDialogComponent implements OnChanges {
     }
 
     this.order.set(this.orderInput);
-    this.loadOrderProducts();
+    void this.loadOrderProducts();
   }
 
   protected readonly timeline = computed<OrderTimelineItem[]>(() => {

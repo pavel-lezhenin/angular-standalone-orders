@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/angular';
-import { ReactiveFormsModule } from '@angular/forms';
 import { AddressSelectorComponent } from './address-selector.component';
 import type { AddressDTO } from '@core/models';
 

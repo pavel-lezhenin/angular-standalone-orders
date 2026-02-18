@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import type { MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from './dialog.component';
 import { deleteDialogConfigFor, confirmDialogConfigFor } from './dialog.config';
 
@@ -64,7 +65,7 @@ export class ConfirmDialogService {
   ): void {
     const dialogComponent = dialogRef.componentInstance;
 
-    dialogComponent.submit.subscribe(async () => {
+    dialogComponent.submitDialog.subscribe(async () => {
       dialogComponent.startLoading();
       try {
         await onConfirm();

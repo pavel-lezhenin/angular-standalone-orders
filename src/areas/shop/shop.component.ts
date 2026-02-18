@@ -12,11 +12,12 @@ import { CategoryService } from '../admin/categories/services/category.service';
 import { CartService } from '@shared/services/cart.service';
 import { LayoutService } from '@/shared/services/layout.service';
 import { PageLoaderComponent } from '@shared/ui/page-loader';
-import { ProductWithCategoryDTO, CategoryDTO } from '@core';
+import type { ProductWithCategoryDTO, CategoryDTO } from '@core';
 import { NotificationService } from '@shared/services/notification.service';
+import type {
+  ShopFilters} from './shop-filters/shop-filters.component';
 import {
-  ShopFiltersComponent,
-  ShopFilters,
+  ShopFiltersComponent
 } from './shop-filters/shop-filters.component';
 import { ShopProductListComponent } from './shop-product-list/shop-product-list.component';
 

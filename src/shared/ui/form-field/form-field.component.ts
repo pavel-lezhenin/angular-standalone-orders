@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import type { FormControl} from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -228,6 +229,7 @@ export class FormFieldComponent {
   /**
    * Handle mat-select selection change
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onSelectionChange(value: any): void {
     const ctrl = this.control();
     if (ctrl) {

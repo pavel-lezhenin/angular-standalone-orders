@@ -1,12 +1,14 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import type { OnInit} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { PageEvent } from '@angular/material/paginator';
+import type { PageEvent } from '@angular/material/paginator';
 
-import { BaseComponent, CategoryDTO } from '@core';
+import type { CategoryDTO } from '@core';
+import { BaseComponent } from '@core';
 import { generateDeleteMessage } from '@shared/utils';
 import { ConfirmDialogService } from '@shared/ui/dialog';
 import { PageLoaderComponent } from '@shared/ui/page-loader';
@@ -16,9 +18,10 @@ import {
   editFormDialogConfig,
 } from '@shared/ui/dialog/dialog.config';
 import { CategoryService } from './services/category.service';
+import type {
+  CategoryFormDialogData} from './category-form-dialog/category-form-dialog.component';
 import {
-  CategoryFormDialogComponent,
-  CategoryFormDialogData,
+  CategoryFormDialogComponent
 } from './category-form-dialog/category-form-dialog.component';
 import { CategoryTableComponent } from './category-table/category-table.component';
 
@@ -111,7 +114,7 @@ export class CategoriesComponent extends BaseComponent implements OnInit {
   protected onPageChange(event: PageEvent): void {
     this.currentPage.set(event.pageIndex + 1);
     this.pageSize.set(event.pageSize);
-    this.loadCategories();
+    void this.loadCategories();
   }
 
   /**

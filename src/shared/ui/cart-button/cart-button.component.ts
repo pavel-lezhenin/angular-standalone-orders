@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -33,12 +33,10 @@ import { CartService } from '@shared/services/cart.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CartButtonComponent {
-  constructor(
-    public cartService: CartService,
-    private router: Router
-  ) {}
+  readonly cartService = inject(CartService);
+  private readonly router = inject(Router);
 
   navigateToCart(): void {
-    this.router.navigate(['/shop/cart']);
+    void this.router.navigate(['/shop/cart']);
   }
 }

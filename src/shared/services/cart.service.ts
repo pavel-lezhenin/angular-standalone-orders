@@ -40,10 +40,10 @@ export class CartService {
     this.cartItems().reduce((sum, item) => sum + item.quantity, 0)
   );
 
-  constructor(
-    private http: HttpClient,
-    private authService: AuthService
-  ) {
+  private readonly http = inject(HttpClient);
+  private readonly authService = inject(AuthService);
+
+  constructor() {
     // Restore cart on service initialization
     this.restorePromise = this.restoreCart();
     
@@ -63,7 +63,7 @@ export class CartService {
       
       if (currentUserId && !this.previousUserId) {
         // User logged in - merge guest cart to authenticated
-        this.mergeGuestCartOnLogin(currentUserId);
+        void this.mergeGuestCartOnLogin(currentUserId);
       } else if (!currentUserId && this.previousUserId) {
         // User logged out - migrate to guest cart
         this.migrateToGuestOnLogout();
@@ -206,9 +206,9 @@ export class CartService {
     const user = this.authService.currentUser();
     
     if (user) {
-      this.syncToIndexedDB(user.id);
+      void this.syncToIndexedDB(user.id);
     } else {
-      this.syncToLocalStorage();
+      void this.syncToLocalStorage();
     }
   }
 

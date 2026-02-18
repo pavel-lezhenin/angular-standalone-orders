@@ -1,8 +1,10 @@
-import { ChangeDetectionStrategy, Component, OnInit, signal, computed, inject, PLATFORM_ID, DestroyRef, OnDestroy } from '@angular/core';
+import type { OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal, computed, inject, PLATFORM_ID, DestroyRef } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router, RouterLink, NavigationEnd } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import type { FormGroup} from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, firstValueFrom, filter } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
@@ -94,7 +96,7 @@ interface CheckoutAddressFormValue {
   styleUrl: './checkout.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export default class CheckoutComponent implements OnInit, OnDestroy {
+export default class CheckoutComponent implements OnInit {
   private http = inject(HttpClient);
   private fb = inject(FormBuilder);
   private router = inject(Router);
@@ -193,9 +195,9 @@ export default class CheckoutComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.initializeForm();
-    this.initializeSavedAddresses();
-    this.loadCartItems();
+    void this.initializeForm();
+    void this.initializeSavedAddresses();
+    void this.loadCartItems();
 
     // Reload cart items when navigating back from payment
     this.router.events
@@ -205,11 +207,8 @@ export default class CheckoutComponent implements OnInit, OnDestroy {
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(() => {
-        this.loadCartItems();
+        void this.loadCartItems();
       });
-  }
-
-  ngOnDestroy(): void {
   }
 
   private async initializeSavedAddresses(): Promise<void> {
@@ -271,7 +270,7 @@ export default class CheckoutComponent implements OnInit, OnDestroy {
 
           if (emailValue && this.checkoutForm.get('email')?.valid) {
             this.emailCheckRequestId += 1;
-            this.checkEmailAvailability(emailValue, this.emailCheckRequestId);
+            void this.checkEmailAvailability(emailValue, this.emailCheckRequestId);
           } else {
             this.emailCheckRequestId += 1;
             this.emailChecking.set(false);
@@ -373,7 +372,7 @@ export default class CheckoutComponent implements OnInit, OnDestroy {
 
       if (items.length === 0) {
         this.notification.error('Your cart is empty');
-        this.router.navigate(['/shop']);
+        void this.router.navigate(['/shop']);
         return;
       }
 
@@ -482,7 +481,7 @@ export default class CheckoutComponent implements OnInit, OnDestroy {
       formValue.addressLine2,
       `${formValue.city}, ${formValue.postalCode}`,
     ].filter(Boolean);
-    const fullAddress = addressParts.join(', ');
+    void addressParts.join(', '); // _fullAddress - not used currently
 
     const userData = {
       email: formValue.email,
@@ -574,7 +573,7 @@ export default class CheckoutComponent implements OnInit, OnDestroy {
     });
 
     // Navigate to payment page
-    this.router.navigate(['/orders/payment']);
+    void this.router.navigate(['/orders/payment']);
   }
 
   /**
@@ -653,14 +652,14 @@ export default class CheckoutComponent implements OnInit, OnDestroy {
    * Navigate back to cart
    */
   protected backToCart(): void {
-    this.router.navigate(['/orders/cart']);
+    void this.router.navigate(['/orders/cart']);
   }
 
   /**
    * Navigate to shop
    */
   protected goToShop(): void {
-    this.router.navigate(['/shop']);
+    void this.router.navigate(['/shop']);
   }
 }
 

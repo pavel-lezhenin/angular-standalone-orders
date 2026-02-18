@@ -1,6 +1,8 @@
 import { signal } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { OrderSummaryComponent, SummaryLine } from './order-summary.component';
+import type { ComponentFixture} from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+import type { SummaryLine } from './order-summary.component';
+import { OrderSummaryComponent } from './order-summary.component';
 
 const setSignalInput = (component: OrderSummaryComponent, inputName: string, value: unknown): void => {
   (component as unknown as Record<string, unknown>)[inputName] = signal(value);

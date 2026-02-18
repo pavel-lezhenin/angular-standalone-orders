@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
+import type { FormGroup} from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { FormFieldComponent } from '@shared/ui/form-field/form-field.component';
 
@@ -29,12 +30,12 @@ export class AddressFormComponent {
   /**
    * Event emitted when form is submitted
    */
-  readonly save = output<void>();
+  readonly saveAddress = output<void>();
 
   /**
    * Event emitted when form is cancelled
    */
-  readonly cancel = output<void>();
+  readonly cancelAddress = output<void>();
 
   /**
    * Helper method to get typed FormControl from form group

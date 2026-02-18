@@ -5,8 +5,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { ProductDTO, ProductWithCategoryDTO } from '@core';
+import type { PageEvent } from '@angular/material/paginator';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import type { ProductWithCategoryDTO } from '@core';
 import { TableActionButtonsComponent, StatusBadgeComponent } from '@shared/ui';
 import type { StatusBadgeVariant } from '@shared/ui';
 

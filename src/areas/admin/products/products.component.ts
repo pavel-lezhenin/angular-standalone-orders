@@ -1,13 +1,14 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import type { OnInit} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { PageEvent } from '@angular/material/paginator';
+import type { PageEvent } from '@angular/material/paginator';
 
 import { BaseComponent } from '@core';
-import { CategoryDTO, ProductWithCategoryDTO } from '@core';
+import type { CategoryDTO, ProductWithCategoryDTO } from '@core';
 import { generateDeleteMessage } from '@shared/utils';
 import { ConfirmDialogService } from '@shared/ui/dialog';
 import { PageLoaderComponent } from '@shared/ui/page-loader';
@@ -15,16 +16,18 @@ import { NotificationService } from '@shared/services/notification.service';
 import { ProductService } from './services/product.service';
 import { CategoryService } from '../categories/services/category.service';
 import { ProductTableComponent } from './product-table/product-table.component';
+import type {
+  ProductFilters} from './product-filters/product-filters.component';
 import {
-  ProductFiltersComponent,
-  ProductFilters,
+  ProductFiltersComponent
 } from './product-filters/product-filters.component';
-import {
-  ProductFormDialogComponent,
+import type {
   ProductFormDialogData,
-  ProductFormResult,
+  ProductFormResult} from './product-form-dialog/product-form-dialog.component';
+import {
+  ProductFormDialogComponent
 } from './product-form-dialog/product-form-dialog.component';
-import { CreateProductDTO, UpdateProductDTO } from './model/types';
+import type { CreateProductDTO, UpdateProductDTO } from './model/types';
 
 /**
  * Products management page (Admin only)

@@ -1,15 +1,15 @@
-import { Injectable } from '@angular/core';
-import { HttpRequest, HttpResponse } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import type { HttpRequest, HttpResponse } from '@angular/common/http';
 import { v4 as uuidv4 } from 'uuid';
 import { AddressRepository } from '../repositories/address.repository';
-import { Address } from '../models/address';
+import type { Address } from '../models/address';
 import { BadRequestResponse, CreatedResponse, NoContentResponse, OkResponse, ServerErrorResponse } from './http-responses';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AddressHandlerService {
-  constructor(private addressRepo: AddressRepository) {}
+  private readonly addressRepo = inject(AddressRepository);
 
   async handleGetAddresses(req: HttpRequest<unknown>): Promise<HttpResponse<unknown>> {
     try {
@@ -143,7 +143,7 @@ export class AddressHandlerService {
   }
 
   private findDuplicate(addresses: Address[], body: Partial<Address>): Address | undefined {
-    const normalize = (value?: string) => (value ?? '').trim().toLowerCase();
+    const normalize = (value?: string): string => (value ?? '').trim().toLowerCase();
     return addresses.find(address =>
       normalize(address.recipientName) === normalize(body.recipientName) &&
       normalize(address.addressLine1) === normalize(body.addressLine1) &&

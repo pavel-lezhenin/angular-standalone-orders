@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DatabaseService } from '../database.service';
-import { StoredFile } from '../models/file';
+import type { StoredFile } from '../models/file';
 import { BaseRepository } from './base.repository';
 
 /**
@@ -12,10 +11,6 @@ import { BaseRepository } from './base.repository';
 })
 export class FileRepository extends BaseRepository<StoredFile> {
   storeName = 'files';
-
-  constructor(db: DatabaseService) {
-    super(db);
-  }
 
   /**
    * Get file blob URL for display

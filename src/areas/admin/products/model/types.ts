@@ -1,4 +1,4 @@
-import { ProductDTO, ProductSpecificationDTO } from '@core';
+import type { ProductDTO, ProductSpecificationDTO } from '@core';
 
 /**
  * Product permissions

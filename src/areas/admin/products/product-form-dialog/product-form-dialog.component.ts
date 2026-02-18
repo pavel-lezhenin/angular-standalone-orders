@@ -1,10 +1,12 @@
-import { ChangeDetectionStrategy, Component, inject, signal, OnInit } from '@angular/core';
+import type { OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormBuilder,
+import type {
   FormGroup,
   FormArray,
-  FormControl,
+  FormControl} from '@angular/forms';
+import {
+  FormBuilder,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -20,14 +22,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
+import type {
+  ImageItem} from '@shared/ui/image-gallery/image-gallery.component';
 import {
-  ImageGalleryComponent,
-  ImageItem,
+  ImageGalleryComponent
 } from '@shared/ui/image-gallery/image-gallery.component';
 import { FormFieldComponent, type SelectOption } from '@shared/ui';
-import { CategoryDTO, ProductDTO, ProductSpecificationDTO } from '@core';
+import type { CategoryDTO, ProductDTO, ProductSpecificationDTO } from '@core';
 import { FileStorageService } from '@core';
-import { DEFAULT_PRODUCT_IMAGE } from '@shared/constants/product.constants';
+// (DEFAULT_PRODUCT_IMAGE available via @shared/constants/product.constants if needed)
 
 /**
  * Product form dialog data

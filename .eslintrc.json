@@ -60,7 +60,13 @@
         "allowTypedFunctionExpressions": true
       }
     ],
-    "@typescript-eslint/no-floating-promises": "warn",
+    "@typescript-eslint/no-floating-promises": [
+      "error",
+      {
+        "ignoreVoid": true,
+        "ignoreIIFE": false
+      }
+    ],
     "@typescript-eslint/consistent-type-imports": "error",
 
     // General

@@ -1,11 +1,9 @@
-import { Injectable } from '@angular/core';
-import {
+import { Injectable, inject } from '@angular/core';
+import type {
   HttpRequest,
   HttpHandler,
   HttpEvent,
-  HttpInterceptor,
-  HttpResponse,
-} from '@angular/common/http';
+  HttpInterceptor} from '@angular/common/http';
 import { Observable, from } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { FakeBFFService } from '@bff';
@@ -23,7 +21,7 @@ import { FakeBFFService } from '@bff';
  */
 @Injectable()
 export class APIInterceptor implements HttpInterceptor {
-  constructor(private fakeBFF: FakeBFFService) {}
+  private readonly fakeBFF = inject(FakeBFFService);
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     // In development, route /api/* to FakeBFF

@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, OnInit, signal, computed, inject, PLATFORM_ID } from '@angular/core';
+import type { OnInit} from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal, computed, inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -11,7 +12,7 @@ import { EmptyStateComponent, OrderSummaryComponent } from '@shared/ui';
 import type { SummaryLine } from '@shared/ui/order-summary/order-summary.component';
 import { CartService } from '@shared/services/cart.service';
 import { NotificationService } from '@shared/services/notification.service';
-import type { CartItemDTO, ProductDTO } from '@core/models';
+import type { ProductDTO } from '@core/models';
 import { CartItemsTableComponent, type CartItemWithDetails } from '../ui';
 
 /**
@@ -247,7 +248,7 @@ export default class CartComponent implements OnInit {
    * Navigate to shop
    */
   protected continueShopping(): void {
-    this.router.navigate(['/shop']);
+    void this.router.navigate(['/shop']);
   }
 
   /**
@@ -258,6 +259,6 @@ export default class CartComponent implements OnInit {
       this.notification.error('Please select items to checkout');
       return;
     }
-    this.router.navigate(['/orders/checkout']);
+    void this.router.navigate(['/orders/checkout']);
   }
 }

@@ -65,7 +65,7 @@
 
   <!-- Action Buttons -->
   <div class="form-actions">
-    <button mat-stroked-button type="button" (click)="cancel.emit()">
+    <button mat-stroked-button type="button" (click)="cancelPayment.emit()">
       Cancel
     </button>
     <button
@@ -73,7 +73,7 @@
       color="primary"
       type="button"
       [disabled]="paymentMethodForm().invalid"
-      (click)="save.emit()"
+      (click)="savePayment.emit()"
     >
       Save Payment Method
     </button>

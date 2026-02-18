@@ -1,12 +1,14 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import type { OnInit} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { PageEvent } from '@angular/material/paginator';
+import type { PageEvent } from '@angular/material/paginator';
 
-import { UserDTO, BaseComponent } from '@core';
+import type { UserDTO} from '@core';
+import { BaseComponent } from '@core';
 import { generateDeleteMessage } from '@shared/utils';
 import { ConfirmDialogService } from '@shared/ui/dialog';
 import { PageLoaderComponent } from '@shared/ui/page-loader';
@@ -16,16 +18,18 @@ import {
   editFormDialogConfig,
 } from '@shared/ui/dialog/dialog.config';
 import { CustomerService } from './services/customer.service';
+import type {
+  CustomerFormDialogData} from './customer-form-dialog/customer-form-dialog.component';
 import {
-  CustomerFormDialogComponent,
-  CustomerFormDialogData,
+  CustomerFormDialogComponent
 } from './customer-form-dialog/customer-form-dialog.component';
 import { CustomerTableComponent } from './customer-table/customer-table.component';
+import type {
+  CustomerFilters} from './customer-filters/customer-filters.component';
 import {
-  CustomerFiltersComponent,
-  CustomerFilters,
+  CustomerFiltersComponent
 } from './customer-filters/customer-filters.component';
-import { CustomerFormData } from './model';
+import type { CustomerFormData } from './model';
 
 /**
  * Customers management page (Admin only)
@@ -125,7 +129,7 @@ export class CustomersComponent extends BaseComponent implements OnInit {
   protected onFiltersChange(filters: CustomerFilters): void {
     this.currentFilters.set(filters);
     this.currentPage.set(1);
-    this.loadUsers();
+    void this.loadUsers();
   }
 
   /**
@@ -134,7 +138,7 @@ export class CustomersComponent extends BaseComponent implements OnInit {
   protected onPageChange(event: PageEvent): void {
     this.currentPage.set(event.pageIndex + 1);
     this.pageSize.set(event.pageSize);
-    this.loadUsers();
+    void this.loadUsers();
   }
 
   /**

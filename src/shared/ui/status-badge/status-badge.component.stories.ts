@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/angular';
-import { StatusBadgeComponent, StatusBadgeVariant } from './status-badge.component';
+import type { StatusBadgeVariant } from './status-badge.component';
+import { StatusBadgeComponent } from './status-badge.component';
 
 const meta: Meta<StatusBadgeComponent> = {
   title: 'Shared/UI/StatusBadge',

@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { CategoryDTO } from '@core';
+import type { PageEvent } from '@angular/material/paginator';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import type { CategoryDTO } from '@core';
 import { TableActionButtonsComponent } from '@shared/ui';
 
 /**

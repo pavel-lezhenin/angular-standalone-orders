@@ -1,10 +1,13 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, viewChild } from '@angular/core';
+import type { OnInit} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import type { FormControl, FormGroup} from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
-import { CategoryDTO } from '@core';
-import { DialogComponent, DialogConfig } from '@shared/ui/dialog';
+import type { CategoryDTO } from '@core';
+import type { DialogConfig } from '@shared/ui/dialog';
+import { DialogComponent } from '@shared/ui/dialog';
 import { FormFieldComponent } from '@shared/ui';
 
 export interface CategoryFormDialogData extends DialogConfig {

@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import type { OnInit } from '@angular/core';
 import { LayoutService } from '@/shared/services/layout.service';
 import { ScrollService } from '@/shared/services/scroll.service';
 import { FooterComponent } from '@/shared/ui/footer/footer.component';
@@ -27,12 +28,11 @@ import { FaqSectionComponent } from './faq-section/faq-section.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LandingComponent implements OnInit {
-  constructor(
-    private layoutService: LayoutService,
-    private scrollService: ScrollService
-  ) {}
+  private readonly layoutService = inject(LayoutService);
+  private readonly scrollService = inject(ScrollService);
 
   ngOnInit(): void {
+
     this.layoutService.setTitle('Orders Platform');
     this.layoutService.setNavItems([
       { label: 'Shop', route: '/shop', icon: 'storefront' },

@@ -1,4 +1,4 @@
-import { CategoryDTO } from '@core';
+import type { CategoryDTO } from '@core';
 
 /**
  * Category permissions

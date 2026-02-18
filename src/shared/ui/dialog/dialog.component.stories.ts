@@ -28,6 +28,7 @@ const mockDialogRef = {
     <p>You can add forms, lists, or any other content here.</p>
   `,
 })
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 class MockFormContentComponent {}
 
 const meta: Meta<DialogComponent> = {

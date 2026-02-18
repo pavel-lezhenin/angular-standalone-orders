@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, OnInit, signal, computed, inject, PLATFORM_ID } from '@angular/core';
+import type { OnInit} from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal, computed, inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -56,7 +57,9 @@ export class AccountComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly platformId = inject(PLATFORM_ID);
 
-  constructor(private layoutService: LayoutService) {
+  private readonly layoutService = inject(LayoutService);
+
+  constructor() {
     this.layoutService.setTitle('My Account - Orders Platform');
     this.layoutService.setNavItems([]);
   }
@@ -68,7 +71,7 @@ export class AccountComponent implements OnInit {
 
     try {
       if (!this.user()) {
-        this.router.navigate(['/auth/login'], { queryParams: { returnUrl: '/account' } });
+        void this.router.navigate(['/auth/login'], { queryParams: { returnUrl: '/account' } });
         return;
       }
 

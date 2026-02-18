@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, OnInit, signal, computed, inject, PLATFORM_ID } from '@angular/core';
+import type { OnInit} from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal, computed, inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -77,7 +78,7 @@ export default class OrderConfirmationComponent implements OnInit {
 
     if (!orderId) {
       this.notification.error('Order not found');
-      this.router.navigate(['/shop']);
+      void this.router.navigate(['/shop']);
       return;
     }
 
@@ -121,13 +122,13 @@ export default class OrderConfirmationComponent implements OnInit {
    * Navigate to shop
    */
   protected continueShopping(): void {
-    this.router.navigate(['/shop']);
+    void this.router.navigate(['/shop']);
   }
 
   /**
    * Navigate to orders page
    */
   protected viewOrders(): void {
-    this.router.navigate(['/orders']);
+    void this.router.navigate(['/orders']);
   }
 }
