@@ -110,4 +110,72 @@ describe('PermissionService', () => {
     expect(removed).toBe(true);
     expect(service.getCustomPermissions()).toHaveLength(0);
   });
+
+  it('deletePermission returns false when id does not exist', () => {
+    const removed = service.deletePermission('non-existent-id');
+
+    expect(removed).toBe(false);
+  });
+
+  it('updatePermissionStatus returns false when id does not exist', () => {
+    const updated = service.updatePermissionStatus('non-existent-id', false);
+
+    expect(updated).toBe(false);
+  });
+
+  it('grants built-in permissions for manager role', () => {
+    vi.mocked(authServiceMock.getCurrentUser).mockReturnValue({
+      ...baseUser,
+      role: 'manager',
+    });
+
+    expect(service.hasAccess('orders_all', 'view')).toBe(true);
+    expect(service.hasAccess('orders_all', 'edit')).toBe(true);
+    expect(service.hasAccess('cancelled_orders', 'view')).toBe(true);
+    expect(service.hasAccess('products', 'crud')).toBe(true);
+    expect(service.hasAccess('categories', 'crud')).toBe(true);
+    // Manager doesn't have cart access
+    expect(service.hasAccess('cart', 'crud')).toBe(false);
+  });
+
+  it('getPermissions returns empty array for unknown role', () => {
+    const permissions = service.getPermissions('superuser');
+
+    expect(permissions).toEqual([]);
+  });
+
+  it('getPermissions returns empty array for admin role (admin uses hasAccess shortcut)', () => {
+    const permissions = service.getPermissions('admin');
+
+    expect(permissions).toEqual([]);
+  });
+
+  it('getPermissions returns cached result on subsequent calls', () => {
+    vi.mocked(authServiceMock.getCurrentUser).mockReturnValue(baseUser);
+
+    const first = service.getPermissions('user');
+    const second = service.getPermissions('user');
+
+    expect(first).toBe(second);
+  });
+
+  it('clearCache causes getPermissions to rebuild on next call', () => {
+    const first = service.getPermissions('user');
+
+    service.clearCache();
+
+    const second = service.getPermissions('user');
+
+    expect(first).not.toBe(second);
+    expect(first).toEqual(second);
+  });
+
+  it('getCustomPermissions returns a copy of custom permissions', () => {
+    service.addPermission({ role: 'user', section: 'wishlist', action: 'view', granted: true });
+
+    const copy = service.getCustomPermissions();
+    copy.pop();
+
+    expect(service.getCustomPermissions()).toHaveLength(1);
+  });
 });
