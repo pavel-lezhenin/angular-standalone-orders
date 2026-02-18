@@ -896,25 +896,47 @@ Files to refactor:
 
 ## Implementation Priority
 
+> **Статус проверен:** 2026-02-18  
+> Компоненты созданы, но **adoption** (реальное использование в шаблонах) не завершён.
+
 ### Phase 1: Critical (Week 1)
-1. ✅ **Form Field Component** - Highest impact (400+ lines)
-2. ✅ **Data Table Component** - Critical for admin (150+ lines)
-3. ✅ **Table Action Buttons** - Quick win (50+ lines)
-4. ✅ **Order Summary Component** - High reuse (60+ lines)
+1. ✅ **Form Field Component** — создан, используется (6 мест)
+2. ⬜ **Data Table Component** — НЕ создан (`src/shared/ui/data-table` отсутствует), 4 файла всё ещё используют сырой `mat-table`
+3. ✅ **Table Action Buttons** — создан, используется (3 места)
+4. ✅ **Order Summary Component** — создан, используется (6 мест)
 
 ### Phase 2: High Priority (Week 2)
-5. ✅ **Empty State Component** - Good UX consistency (80+ lines)
-6. ✅ **Quantity Control** - Reusable widget (15+ lines)
-7. ✅ **Refactor Dialog Usage** - Use existing app-dialog (30+ lines)
-8. ✅ **Expand Page Loader** - Enhance existing component (100+ lines)
+5. ✅ **Empty State Component** — создан, используется (6 мест)
+6. ✅ **Quantity Control** — создан, используется (1 место — нужно расширить)
+7. ⬜ **Refactor Dialog Usage** — `app-dialog` существует, но не все диалоги его используют (проверить)
+8. ✅ **Page Loader** — создан, используется (11 мест — хорошее покрытие)
 
 ### Phase 3: Medium Priority (Week 3)
-9. ✅ **Status Badge Component** - Visual consistency (40+ lines)
-10. ✅ **Section Header Component** - Minor improvement (30+ lines)
+9. ✅ **Status Badge Component** — создан, используется (2 места — нужно расширить)
+10. ⬜ **Section Header Component** — НЕ создан (`src/shared/ui/section-header` отсутствует)
 
 ### Phase 4: Low Priority (Week 4)
-11. ✅ **Icon Button Component** - Nice to have (100+ lines)
-12. ✅ **Icon Card Component** - Minor improvement (40+ lines)
+11. ⬜ **Icon Button Component** — НЕ создан (`src/shared/ui/icon-button` отсутствует)
+12. ⬜ **Icon Card Component** — НЕ создан
+
+---
+
+## 🔴 Открытые задачи (не закрыто)
+
+### Не созданы компоненты:
+- `shared/ui/data-table` — 4 файла всё ещё имеют сырой `mat-table`: `product-table`, `customer-table`, `category-table`, `permission-matrix`
+- `shared/ui/section-header`
+- `shared/ui/icon-button`
+- `shared/ui/icon-card`
+
+### Слабое adoption существующих компонентов:
+- `app-quantity-control` — только 1 использование (ожидалось 3+)
+- `app-status-badge` — только 2 использования (ожидалось 5+)
+- `app-table-action-buttons` — только 3 использования (ожидалось 5+)
+
+### Не проверено:
+- Adoption `app-dialog` — нужно проверить сколько диалогов используют его vs сырой `MatDialog`
+
 
 ---
 
