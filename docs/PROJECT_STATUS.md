@@ -240,20 +240,20 @@
 **Estimated Effort:** 8-12 hours
 
 **Problem:**
-- Orders domain lacks proper FSD decomposition
+- Orders domain lacks proper layered decomposition
 - Mixed concerns and responsibilities
 - `PaymentFormComponent` in `shared/ui/` should be in `areas/orders/ui/`
 
 **Impact:**
 - Harder to maintain and extend
-- Violates FSD layer boundaries
+- Violates layered architecture boundaries (Areas → Shared → Core → BFF)
 - Confusing for new developers
 
 **Proposed Solution:**
 1. Analyze orders flow and components
-2. Create proper FSD structure in `areas/orders/`
-3. Move checkout-specific components from `shared/` to `orders/`
-4. Separate concerns: widgets, features, entities
+2. Refactor into proper layered structure within `areas/orders/`
+3. Move checkout-specific components from `shared/` to `areas/orders/`
+4. Separate concerns: layout, components, services
 
 **Blocker:** Requires architectural planning  
 **Recommendation:** Complete BEFORE payment forms refactoring

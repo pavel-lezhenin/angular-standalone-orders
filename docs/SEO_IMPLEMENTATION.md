@@ -1,14 +1,13 @@
 # SEO Implementation Guide
 
-This guide explains how to implement SEO optimization across your application pages.
+This guide explains how to implement SEO optimization in the `angular-standalone-orders` application.
 
 ## Files Added
 
 ### 1. Meta Tags in HTML Head
-- **Angular**: [src/index.html](src/index.html)
-- **React**: [index.html](../react-fsd-starter/index.html)
+- [src/index.html](src/index.html)
 
-Both HTML files now include:
+Includes:
 - ✅ Meta description tag
 - ✅ Keywords meta tag
 - ✅ Open Graph tags (for social sharing)
@@ -18,8 +17,7 @@ Both HTML files now include:
 - ✅ JSON-LD structured data (Organization + Website schema)
 
 ### 2. robots.txt
-- **Angular**: [public/robots.txt](public/robots.txt)
-- **React**: [public/robots.txt](../react-fsd-starter/public/robots.txt)
+- [public/robots.txt](public/robots.txt)
 
 Properly formatted robots.txt with:
 - Allow/disallow directives
@@ -27,14 +25,13 @@ Properly formatted robots.txt with:
 - Rate limiting for aggressive crawlers
 
 ### 3. sitemap.xml
-- **Angular**: [public/sitemap.xml](public/sitemap.xml)
-- **React**: [public/sitemap.xml](../react-fsd-starter/public/sitemap.xml)
+- [public/sitemap.xml](public/sitemap.xml)
 
 XML Sitemap with all main pages and update frequency.
 
-### 4. SEO Services for Dynamic Meta Tags
+### 4. SEO Service for Dynamic Meta Tags
 
-#### Angular - SeoService
+#### SeoService
 **File**: `src/core/services/seo.service.ts`
 
 Usage in components:
@@ -82,48 +79,6 @@ export class ProductPageComponent implements OnInit {
 }
 ```
 
-#### React - useSeoMeta Hook
-**File**: `src/shared/lib/seo/use-seo-meta.ts`
-
-Usage in components:
-
-```typescript
-import { useSeoMeta, setProductSchema, setBreadcrumbSchema } from '@/shared/lib/seo/use-seo-meta';
-
-export function ProductPage() {
-  useSeoMeta({
-    title: 'Product Name | Shop',
-    description: 'Product description for SEO',
-    keywords: 'product, category, keywords',
-    ogTitle: 'Product Name',
-    ogDescription: 'Product description for social sharing',
-    ogUrl: 'https://example.com/products/product-name',
-    canonical: 'https://example.com/products/product-name',
-    ogImage: 'https://example.com/product-image.jpg',
-  });
-
-  // Set product schema
-  setProductSchema({
-    name: 'Product Name',
-    description: 'Product description',
-    price: 99.99,
-    currency: 'USD',
-    rating: 4.5,
-    url: 'https://example.com/products/product-name',
-    image: 'https://example.com/product-image.jpg',
-  });
-
-  // Set breadcrumbs
-  setBreadcrumbSchema([
-    { name: 'Home', url: 'https://example.com' },
-    { name: 'Shop', url: 'https://example.com/shop' },
-    { name: 'Product Name', url: 'https://example.com/products/product-name' },
-  ]);
-
-  return <div>Product Page</div>;
-}
-```
-
 ## SEO Best Practices Implemented
 
 ### 1. Page Meta Tags ✅
@@ -161,7 +116,7 @@ export function ProductPage() {
 - [ ] Update canonical URLs to your production domain
 - [ ] Update sitemap.xml with all relevant pages
 - [ ] Update robots.txt with your actual production domain
-- [ ] Implement useSeoMeta/SeoService on all dynamic pages
+- [ ] Implement SeoService on all dynamic pages
 - [ ] Add product schema to product detail pages
 - [ ] Add breadcrumb schema to category/product pages
 - [ ] Test with Google Search Console
@@ -188,6 +143,6 @@ Update these values in your pages:
 
 ```
 - Domain: https://example.com (replace with your actual domain)
-- Brand: Angular Standalone Orders / React FSD Starter
+- Brand: Angular Standalone Orders
 - Social media URLs: Update in JSON-LD schemas
 ```
