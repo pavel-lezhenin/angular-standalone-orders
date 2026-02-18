@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -22,6 +22,7 @@ import { FormFieldComponent } from '@shared/ui/form-field/form-field.component';
   ],
   templateUrl: './profile-info.component.html',
   styleUrl: './profile-info.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileInfoComponent {
   /**

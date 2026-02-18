@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -45,6 +45,7 @@ import { CategoryTableComponent } from './category-table/category-table.componen
   providers: [CategoryService],
   templateUrl: './categories.component.html',
   styleUrl: './categories.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CategoriesComponent extends BaseComponent implements OnInit {
   private readonly categoryService = inject(CategoryService);
@@ -185,7 +186,6 @@ export class CategoriesComponent extends BaseComponent implements OnInit {
         this.notificationService.success('Category deleted successfully');
       },
       () => {
-        console.log('Delete cancelled');
       }
     );
   }

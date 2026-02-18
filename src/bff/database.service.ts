@@ -23,27 +23,20 @@ export class DatabaseService {
    * Creates 7 object stores on first load
    */
   async initialize(): Promise<void> {
-    console.log('🗄️ DatabaseService.initialize() called');
-    
     // Skip initialization on server
     if (!this.isBrowser) {
-      console.log('DatabaseService: Skipping initialization (SSR)');
       return Promise.resolve();
     }
 
     // Return existing promise if already initializing
     if (this.initPromise) {
-      console.log('⏳ DatabaseService: Already initializing, waiting...');
       return this.initPromise;
     }
 
     // Already initialized
     if (this.db) {
-      console.log('✅ DatabaseService: Already initialized');
       return Promise.resolve();
     }
-
-    console.log(`🔧 Opening IndexedDB: ${this.DB_NAME} v${this.DB_VERSION}`);
 
     this.initPromise = new Promise((resolve, reject) => {
       const request = indexedDB.open(this.DB_NAME, this.DB_VERSION);
@@ -55,28 +48,24 @@ export class DatabaseService {
       };
 
       request.onsuccess = () => {
-        console.log('✅ Database opened successfully (onsuccess event)');
         this.db = request.result;
         this.initPromise = null;
         resolve();
       };
 
       request.onupgradeneeded = (event) => {
-        console.log('🔄 Database upgrade needed');
         const db = (event.target as IDBOpenDBRequest).result;
 
         // Users store
         if (!db.objectStoreNames.contains('users')) {
           const usersStore = db.createObjectStore('users', { keyPath: 'id' });
           usersStore.createIndex('email', 'email', { unique: true });
-          console.log('Users store created');
         }
 
         // Products store
         if (!db.objectStoreNames.contains('products')) {
           const productsStore = db.createObjectStore('products', { keyPath: 'id' });
           productsStore.createIndex('categoryId', 'categoryId');
-          console.log('Products store created');
         }
 
         // Orders store
@@ -84,7 +73,6 @@ export class DatabaseService {
           const ordersStore = db.createObjectStore('orders', { keyPath: 'id' });
           ordersStore.createIndex('userId', 'userId');
           ordersStore.createIndex('status', 'status');
-          console.log('Orders store created');
         }
 
         // Order items store
@@ -93,19 +81,16 @@ export class DatabaseService {
             keyPath: 'id',
           });
           orderItemsStore.createIndex('orderId', 'orderId');
-          console.log('Order items store created');
         }
 
         // Categories store
         if (!db.objectStoreNames.contains('categories')) {
           db.createObjectStore('categories', { keyPath: 'id' });
-          console.log('Categories store created');
         }
 
         // Cart store (one per user)
         if (!db.objectStoreNames.contains('cart')) {
           db.createObjectStore('cart', { keyPath: 'userId' });
-          console.log('Cart store created');
         }
 
         // Addresses store
@@ -113,7 +98,6 @@ export class DatabaseService {
           const addressesStore = db.createObjectStore('addresses', { keyPath: 'id' });
           addressesStore.createIndex('userId', 'userId');
           addressesStore.createIndex('isDefault', 'isDefault');
-          console.log('Addresses store created');
         }
 
         // Payment methods store
@@ -121,7 +105,6 @@ export class DatabaseService {
           const paymentMethodsStore = db.createObjectStore('payment_methods', { keyPath: 'id' });
           paymentMethodsStore.createIndex('userId', 'userId');
           paymentMethodsStore.createIndex('isDefault', 'isDefault');
-          console.log('Payment methods store created');
         }
 
         // Permissions store
@@ -130,7 +113,6 @@ export class DatabaseService {
             keyPath: 'id',
           });
           permissionsStore.createIndex('role', 'role');
-          console.log('Permissions store created');
         }
 
         // Files store (S3 emulation)
@@ -138,7 +120,6 @@ export class DatabaseService {
           const filesStore = db.createObjectStore('files', { keyPath: 'id' });
           filesStore.createIndex('uploadedBy', 'uploadedBy');
           filesStore.createIndex('uploadedAt', 'uploadedAt');
-          console.log('Files store created');
         }
       };
     });
@@ -178,7 +159,6 @@ export class DatabaseService {
    */
   async write<T>(storeName: string, data: T, mode: 'add' | 'put' = 'put'): Promise<void> {
     if (!this.isBrowser) {
-      console.warn(`⚠️ write: Not in browser, skipping database operation`);
       return Promise.resolve();
     }
     
@@ -198,7 +178,6 @@ export class DatabaseService {
         reject(request.error);
       };
       request.onsuccess = () => {
-        console.log(`✅ write success in ${storeName} (${mode})`);
         resolve();
       };
     });
@@ -291,7 +270,6 @@ export class DatabaseService {
       // Check if index exists
       if (!store.indexNames.contains(indexName)) {
         console.error(`❌ Index '${indexName}' does not exist in store '${storeName}'`);
-        console.log(`Available indexes:`, Array.from(store.indexNames));
         resolve(undefined);
         return;
       }

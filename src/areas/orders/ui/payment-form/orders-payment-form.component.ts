@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, DestroyRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ReactiveFormsModule,
@@ -63,6 +63,7 @@ export interface PaymentFormData {
   ],
   templateUrl: './orders-payment-form.component.html',
   styleUrl: './orders-payment-form.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OrdersPaymentFormComponent implements OnInit {
   private fb = inject(FormBuilder);

@@ -79,8 +79,6 @@ export class PermissionManagementService {
   ): Promise<void> {
     // TODO: Implement actual persistence via BFF/repository
     // For now, this is a placeholder
-    console.log(`[PermissionManagement] Toggle: ${role}.${section}.${action} = ${granted}`);
-    
     // Simulate async operation
     return Promise.resolve();
   }

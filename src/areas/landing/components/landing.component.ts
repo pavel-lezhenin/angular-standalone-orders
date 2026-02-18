@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { LayoutService } from '@/shared/services/layout.service';
 import { ScrollService } from '@/shared/services/scroll.service';
 import { FooterComponent } from '@/shared/ui/footer/footer.component';
@@ -24,6 +24,7 @@ import { FaqSectionComponent } from './faq-section/faq-section.component';
   ],
   templateUrl: './landing.component.html',
   styleUrl: './landing.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LandingComponent implements OnInit {
   constructor(

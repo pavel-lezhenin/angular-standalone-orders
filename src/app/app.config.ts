@@ -73,15 +73,11 @@ function getSsrApiBody(req: HttpRequest<unknown>): unknown {
  */
 function restoreAuthSession(authService: AuthService, fakeBFF: FakeBFFService, platformId: Object): () => Promise<void> {
   return async () => {
-    console.log('🔐 Auth session initializer executed');
-    
     if (!isPlatformBrowser(platformId)) {
-      console.log('⏭️ Skipping auth session restore (SSR)');
       return Promise.resolve();
     }
 
     // Ensure BFF is initialized first
-    console.log('⏳ Waiting for BFF initialization before restoring session...');
     try {
       // BFF should already be initializing, but make sure it's ready
       // If it hasn't started, this will be very fast
@@ -89,12 +85,9 @@ function restoreAuthSession(authService: AuthService, fakeBFF: FakeBFFService, p
         await fakeBFF.initialize();
       }
     } catch (error) {
-      console.warn('⚠️ BFF initialization blocking session restore:', error);
     }
     
-    console.log('🔄 Attempting to restore user session...');
     return authService.restoreSession().catch((error) => {
-      console.warn('⚠️ Auth session restore failed:', error);
       // Don't throw - allow app to continue even if restore fails
     });
   };
@@ -131,16 +124,11 @@ const apiInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, next: Http
  */
 function initializeBFF(fakeBFF: FakeBFFService, platformId: Object): () => Promise<void> {
   return () => {
-    console.log('🎯 BFF initializer factory executed');
-    
     if (!isPlatformBrowser(platformId)) {
-      console.log('⏭️ Skipping BFF init (SSR)');
       return Promise.resolve();
     }
     
-    console.log('🚀 Starting BFF initialization (browser)');
     return fakeBFF.initialize().then(() => {
-      console.log('✅ BFF initialization complete');
     }).catch((error) => {
       console.error('❌ BFF initialization failed:', error);
       throw error;

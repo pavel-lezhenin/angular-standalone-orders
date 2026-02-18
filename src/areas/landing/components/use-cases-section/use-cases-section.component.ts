@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { SectionWrapperComponent } from '../ui/section-wrapper/section-wrapper.component';
 
@@ -11,5 +11,6 @@ import { SectionWrapperComponent } from '../ui/section-wrapper/section-wrapper.c
   imports: [MatIconModule, SectionWrapperComponent],
   templateUrl: './use-cases-section.component.html',
   styleUrl: './use-cases-section.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UseCasesSectionComponent {}

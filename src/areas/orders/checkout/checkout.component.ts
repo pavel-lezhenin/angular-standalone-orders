@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, computed, inject, PLATFORM_ID, DestroyRef, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, signal, computed, inject, PLATFORM_ID, DestroyRef, OnDestroy } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router, RouterLink, NavigationEnd } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -18,7 +18,7 @@ import { EmptyStateComponent, OrderSummaryComponent } from '@shared/ui';
 import type { SummaryLine } from '@shared/ui/order-summary/order-summary.component';
 import { FormFieldComponent } from '@shared/ui/form-field/form-field.component';
 import { CartService } from '@shared/services/cart.service';
-import { PaymentStateService } from '@shared/services/payment-state.service';
+import { PaymentStateService } from '@areas/orders/services/payment-state.service';
 import { UserPreferencesService } from '@shared/services/user-preferences.service';
 import { NotificationService } from '@shared/services/notification.service';
 import { AuthService } from '@core/services/auth.service';
@@ -92,6 +92,7 @@ interface CheckoutAddressFormValue {
   ],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class CheckoutComponent implements OnInit, OnDestroy {
   private http = inject(HttpClient);
@@ -204,13 +205,11 @@ export default class CheckoutComponent implements OnInit, OnDestroy {
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(() => {
-        console.log('🔄 Navigated back to checkout, reloading cart items');
         this.loadCartItems();
       });
   }
 
   ngOnDestroy(): void {
-    console.log('🧹 CheckoutComponent destroyed');
   }
 
   private async initializeSavedAddresses(): Promise<void> {
@@ -499,8 +498,6 @@ export default class CheckoutComponent implements OnInit, OnDestroy {
     const response = await firstValueFrom(
       this.http.post<{ id: string }>('/api/users', userData)
     );
-
-    console.log('User created, response:', response);
 
     if (!response || !response.id) {
       console.error('Invalid response from user creation:', response);

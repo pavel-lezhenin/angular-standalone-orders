@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, computed, inject, PLATFORM_ID } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, signal, computed, inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -6,7 +6,7 @@ import { firstValueFrom } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { PageLoaderComponent } from '@shared/ui/page-loader/page-loader.component';
-import { OrderService } from '@shared/services/order.service';
+import { OrderService } from '@areas/orders/services/order.service';
 import { NotificationService } from '@shared/services/notification.service';
 import type { OrderDTO, ProductDTO } from '@core/models';
 
@@ -39,6 +39,7 @@ interface OrderItemWithProduct {
   ],
   templateUrl: './order-confirmation.component.html',
   styleUrl: './order-confirmation.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class OrderConfirmationComponent implements OnInit {
   private route = inject(ActivatedRoute);

@@ -144,12 +144,23 @@
   font-size: var(--font-size-sm);
 }
 
-:host-context(.tablet) .orders-card,
-:host-context(.mobile) .orders-card {
-  padding: var(--spacing-md);
+/* ============================================
+ * Responsive Styles
+ * ============================================ */
+
+/* Tablet Styles */
+:host-context(.tablet) {
+  .orders-card {
+    padding: var(--spacing-md);
+  }
 }
 
+/* Mobile Styles */
 :host-context(.mobile) {
+  .orders-card {
+    padding: var(--spacing-md);
+  }
+
   .orders-table {
     min-width: calc(var(--app-spacing) * 44);
     font-size: var(--font-size-xs);

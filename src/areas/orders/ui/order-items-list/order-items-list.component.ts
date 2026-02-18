@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { OrderItemRowComponent, type OrderItem } from '../order-item-row/order-item-row.component';
 
@@ -19,6 +19,7 @@ import { OrderItemRowComponent, type OrderItem } from '../order-item-row/order-i
   imports: [CommonModule, OrderItemRowComponent],
   templateUrl: './order-items-list.component.html',
   styleUrl: './order-items-list.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OrderItemsListComponent {
   items = input.required<OrderItem[]>();

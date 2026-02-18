@@ -131,26 +131,30 @@
  * ============================================ */
 
 /* Tablet Styles */
-:host-context(.tablet) .footer-columns {
-  grid-template-columns: repeat(2, 1fr);
+:host-context(.tablet) {
+  .footer-columns {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 /* Mobile Styles */
-:host-context(.mobile) .footer {
-  padding: var(--spacing-2xl) var(--spacing-md) var(--spacing-md);
-}
+:host-context(.mobile) {
+  .footer {
+    padding: var(--spacing-2xl) var(--spacing-md) var(--spacing-md);
+  }
 
-:host-context(.mobile) .footer-columns {
-  grid-template-columns: 1fr;
-  gap: var(--spacing-xl);
-}
+  .footer-columns {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-xl);
+  }
 
-:host-context(.mobile) .footer-bottom {
-  flex-direction: column;
-  text-align: center;
-}
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+  }
 
-:host-context(.mobile) .legal-links {
-  flex-wrap: wrap;
-  justify-content: center;
+  .legal-links {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 }

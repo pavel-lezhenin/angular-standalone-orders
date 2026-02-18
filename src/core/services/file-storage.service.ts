@@ -32,12 +32,6 @@ export class FileStorageService {
     uploadedBy?: string
   ): Promise<UploadResultDTO> {
     try {
-      console.log('📤 FileStorageService: Uploading file:', {
-        name: file.name,
-        type: file.type,
-        size: file.size,
-      });
-
       const fileId = uuidv4();
       const now = Date.now();
 
@@ -51,17 +45,13 @@ export class FileStorageService {
         uploadedBy,
       };
 
-      console.log('💾 FileStorageService: Saving to repository, fileId:', fileId);
       await this.fileRepo.create(storedFile);
 
-      console.log('🔗 FileStorageService: Creating object URL');
       const url = await this.fileRepo.getFileUrl(fileId);
 
       if (!url) {
         throw new Error('Failed to create object URL for uploaded file');
       }
-
-      console.log('✅ FileStorageService: Upload successful', { fileId, url });
 
       return {
         fileId,

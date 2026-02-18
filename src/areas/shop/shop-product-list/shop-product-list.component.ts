@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { ProductWithCategoryDTO } from '@core';
 import { ProductCardComponent } from '@shared/ui/product-card/product-card.component';
 import { PaginationComponent } from '@shared/ui/pagination/pagination.component';
@@ -20,6 +20,7 @@ import { EmptyStateComponent } from '@shared/ui';
   ],
   templateUrl: './shop-product-list.component.html',
   styleUrl: './shop-product-list.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShopProductListComponent {
   readonly products = input.required<ProductWithCategoryDTO[]>();

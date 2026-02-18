@@ -67,11 +67,8 @@ export class AuthService {
 
     const userId = localStorage.getItem('currentUserId');
     if (!userId) {
-      console.log('⏭️ No userId in localStorage, skipping session restore');
       return;
     }
-
-    console.log('🔍 Found userId in storage:', userId, '- fetching user data...');
 
     try {
       const response = await firstValueFrom(
@@ -79,12 +76,9 @@ export class AuthService {
       );
       if (response?.user) {
         this.currentUser.set(response.user);
-        console.log('✅ User session restored:', response.user.email);
       } else {
-        console.warn('⚠️ /api/auth/me returned empty response');
       }
     } catch (error) {
-      console.warn('⚠️ Failed to restore session, clearing auth data', error);
       localStorage.removeItem('authToken');
       localStorage.removeItem('currentUserId');
     }

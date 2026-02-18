@@ -1,4 +1,4 @@
-import { Component, signal, inject, PLATFORM_ID, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal, inject, PLATFORM_ID, OnInit } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 
@@ -6,6 +6,7 @@ import { RouterOutlet } from '@angular/router';
   selector: 'app-root',
   imports: [RouterOutlet],
   template: '<router-outlet />',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 // eslint-disable-next-line @angular-eslint/component-class-suffix
 export class App implements OnInit {
@@ -15,6 +16,7 @@ export class App implements OnInit {
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
       this.initBreakpoints();
+      this.initDarkMode();
     }
   }
 
@@ -42,5 +44,18 @@ export class App implements OnInit {
 
     // Initial
     updateClasses();
+  }
+
+  private initDarkMode(): void {
+    const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+    const updateDarkMode = () => {
+      document.documentElement.classList.toggle('dark-mode', darkQuery.matches);
+    };
+
+    darkQuery.addEventListener('change', updateDarkMode);
+
+    // Initial
+    updateDarkMode();
   }
 }

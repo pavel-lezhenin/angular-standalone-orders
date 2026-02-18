@@ -56,14 +56,24 @@ mat-nav-list {
   box-sizing: border-box;
 }
 
-:host-context(.tablet) .content-wrapper {
-  padding: var(--spacing-md);
+/* ============================================
+ * Responsive Styles
+ * ============================================ */
+
+/* Tablet Styles */
+:host-context(.tablet) {
+  .content-wrapper {
+    padding: var(--spacing-md);
+  }
 }
 
-:host-context(.mobile) .content-wrapper {
-  padding: var(--spacing-sm);
-}
+/* Mobile Styles */
+:host-context(.mobile) {
+  .content-wrapper {
+    padding: var(--spacing-sm);
+  }
 
-:host-context(.mobile) .admin-sidenav {
-  width: calc(var(--app-spacing) * 16);
+  .admin-sidenav {
+    width: calc(var(--app-spacing) * 16);
+  }
 }

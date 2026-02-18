@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -30,6 +30,7 @@ import { CartService } from '@shared/services/cart.service';
       display: inline-flex;
     }
   `],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CartButtonComponent {
   constructor(

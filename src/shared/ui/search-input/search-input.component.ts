@@ -1,4 +1,4 @@
-import { Component, input, output, effect } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -33,6 +33,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
   ],
   templateUrl: './search-input.component.html',
   styleUrl: './search-input.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchInputComponent {
   /**

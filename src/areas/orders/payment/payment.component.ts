@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, signal, computed, inject, PLATFORM_ID, effect } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewChild, signal, computed, inject, PLATFORM_ID, effect } from '@angular/core';
 import { CommonModule, isPlatformBrowser, CurrencyPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -14,10 +14,10 @@ import { OrdersPaymentFormComponent, PaymentFormData } from '../ui/payment-form/
 import { PageLoaderComponent } from '@shared/ui/page-loader/page-loader.component';
 import { OrderSummaryComponent } from '@shared/ui';
 import { FormFieldComponent, type SelectOption } from '@shared/ui/form-field/form-field.component';
-import { PaymentService, PaymentRequest, PaymentResult } from '@shared/services/payment.service';
-import { PaymentStateService } from '@shared/services/payment-state.service';
+import { PaymentService, PaymentRequest, PaymentResult } from '@areas/orders/services/payment.service';
+import { PaymentStateService } from '@areas/orders/services/payment-state.service';
 import { UserPreferencesService } from '@shared/services/user-preferences.service';
-import { OrderService } from '@shared/services/order.service';
+import { OrderService } from '@areas/orders/services/order.service';
 import { CartService } from '@shared/services/cart.service';
 import { NotificationService } from '@shared/services/notification.service';
 import type { CreateOrderDTO, SavedPaymentMethodDTO } from '@core/models';
@@ -54,6 +54,7 @@ type PaymentState = 'form' | 'processing' | 'success' | 'failure';
   ],
   templateUrl: './payment.component.html',
   styleUrl: './payment.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class PaymentComponent implements OnInit {
   private router = inject(Router);

@@ -1,4 +1,4 @@
-import { Component, input, output, computed, effect } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output, computed, effect } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
@@ -24,6 +24,7 @@ import type { AddressDTO } from '@core/models';
   ],
   templateUrl: './address-selector.component.html',
   styleUrl: './address-selector.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddressSelectorComponent {
   /**

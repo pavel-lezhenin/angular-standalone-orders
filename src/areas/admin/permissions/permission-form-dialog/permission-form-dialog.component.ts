@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -43,6 +43,7 @@ export interface PermissionFormDialogData extends DialogConfig {
   ],
   templateUrl: './permission-form-dialog.component.html',
   styleUrl: './permission-form-dialog.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PermissionFormDialogComponent implements OnInit {
   private readonly fb = inject(FormBuilder);

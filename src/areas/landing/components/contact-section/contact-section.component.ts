@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { LeadCaptureFormComponent } from '@/areas/landing/features/lead-capture/lead-capture-form.component';
 import { SectionWrapperComponent } from '../ui/section-wrapper/section-wrapper.component';
 
@@ -11,5 +11,6 @@ import { SectionWrapperComponent } from '../ui/section-wrapper/section-wrapper.c
   imports: [LeadCaptureFormComponent, SectionWrapperComponent],
   templateUrl: './contact-section.component.html',
   styleUrl: './contact-section.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ContactSectionComponent {}

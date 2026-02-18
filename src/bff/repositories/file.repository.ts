@@ -22,20 +22,13 @@ export class FileRepository extends BaseRepository<StoredFile> {
    * Creates object URL from stored blob
    */
   async getFileUrl(fileId: string): Promise<string | null> {
-    console.log('🔍 FileRepository: Getting file URL for:', fileId);
-    
     const file = await this.getById(fileId);
     if (!file) {
-      console.warn('⚠️ FileRepository: File not found:', fileId);
       return null;
     }
     
-    console.log('✅ FileRepository: File found, creating object URL');
-    
     // Create object URL from blob
     const url = URL.createObjectURL(file.blob);
-    console.log('🔗 FileRepository: Object URL created:', url);
-    
     return url;
   }
 

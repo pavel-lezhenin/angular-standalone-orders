@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, computed, inject, PLATFORM_ID } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, signal, computed, inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -37,6 +37,7 @@ import { ProfileHandler, AddressHandler, PaymentMethodHandler } from './handlers
   providers: [ProfileHandler, AddressHandler, PaymentMethodHandler],
   templateUrl: './account.component.html',
   styleUrl: './account.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountComponent implements OnInit {
 
@@ -67,7 +68,6 @@ export class AccountComponent implements OnInit {
 
     try {
       if (!this.user()) {
-        console.warn('⚠️ Account page loaded without authenticated user - redirecting to login');
         this.router.navigate(['/auth/login'], { queryParams: { returnUrl: '/account' } });
         return;
       }

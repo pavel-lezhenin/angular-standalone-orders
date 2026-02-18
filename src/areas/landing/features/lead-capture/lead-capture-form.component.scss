@@ -86,24 +86,26 @@ mat-form-field {
  * ============================================ */
 
 /* Mobile Styles */
-:host-context(.mobile) .lead-form-card {
-  padding: var(--spacing-xxs);
-}
+:host-context(.mobile) {
+  .lead-form-card {
+    padding: var(--spacing-xxs);
+  }
 
-:host-context(.mobile) ::ng-deep .lead-form-card .mat-mdc-card-title {
-  font-size: var(--font-size-xl);
-}
+  ::ng-deep .lead-form-card .mat-mdc-card-title {
+    font-size: var(--font-size-xl);
+  }
 
-:host-context(.mobile) .channel-selection mat-radio-group {
-  gap: var(--spacing-xxs);
+  .channel-selection mat-radio-group {
+    gap: var(--spacing-xxs);
+  }
 }
 
 /* ============================================
- * Theme Support
+ * Theme Styles
  * ============================================ */
 
-/* Dark mode */
-@media (prefers-color-scheme: dark) {
+/* Dark Mode */
+:host-context(.dark-mode) {
   .channel-selection .section-label {
     color: var(--text-secondary);
   }

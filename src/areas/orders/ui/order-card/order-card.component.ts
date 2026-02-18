@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -27,6 +27,7 @@ import type { OrderStatus } from '@core/types';
   imports: [CommonModule, CurrencyPipe, DatePipe, MatButtonModule, MatIconModule],
   templateUrl: './order-card.component.html',
   styleUrl: './order-card.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OrderCardComponent {
   order = input.required<OrderDTO>();

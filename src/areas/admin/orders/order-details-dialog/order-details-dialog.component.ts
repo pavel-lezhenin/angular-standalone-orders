@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, computed, inject, signal } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -41,6 +41,7 @@ interface ProductLineItem {
   ],
   templateUrl: './order-details-dialog.component.html',
   styleUrl: './order-details-dialog.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OrderDetailsDialogComponent implements OnChanges {
   private readonly http = inject(HttpClient);

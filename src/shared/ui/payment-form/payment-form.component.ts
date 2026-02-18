@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { FormFieldComponent, type SelectOption } from '../form-field/form-field.component';
@@ -28,6 +28,7 @@ import { FormFieldComponent, type SelectOption } from '../form-field/form-field.
   imports: [CommonModule, ReactiveFormsModule, FormFieldComponent],
   templateUrl: './payment-form.component.html',
   styleUrl: './payment-form.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PaymentFormComponent {
   // ============================================

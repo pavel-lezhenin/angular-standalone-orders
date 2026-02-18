@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 /**
  * Container wrapper for landing sections
@@ -18,5 +18,6 @@ import { Component } from '@angular/core';
       padding: 0 1rem;
     }
   `],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SectionWrapperComponent {}

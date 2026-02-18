@@ -1,4 +1,4 @@
-import { Component, DestroyRef, computed, inject, input, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, computed, inject, input, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -38,6 +38,7 @@ export interface ShopFilters {
   ],
   templateUrl: './shop-filters.component.html',
   styleUrl: './shop-filters.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShopFiltersComponent {
   private readonly destroyRef = inject(DestroyRef);

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -42,6 +42,7 @@ import { UserRole } from '@core/types';
   providers: [PermissionManagementService],
   templateUrl: './permissions.component.html',
   styleUrl: './permissions.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PermissionsComponent extends BaseComponent implements OnInit {
   private readonly permissionManagementService = inject(PermissionManagementService);

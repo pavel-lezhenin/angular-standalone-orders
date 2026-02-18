@@ -45,7 +45,6 @@ export class ProfileHandler {
       return;
     }
     // TODO: Implement save functionality via service
-    console.log('Saving profile:', this.form.value);
     this.notification.success('Profile updated');
     this.isEditMode.set(false);
   }

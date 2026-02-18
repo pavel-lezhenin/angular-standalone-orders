@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { SectionWrapperComponent } from '../ui/section-wrapper/section-wrapper.component';
 
@@ -11,5 +11,6 @@ import { SectionWrapperComponent } from '../ui/section-wrapper/section-wrapper.c
   imports: [MatExpansionModule, SectionWrapperComponent],
   templateUrl: './faq-section.component.html',
   styleUrl: './faq-section.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FaqSectionComponent {}

@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -24,6 +24,7 @@ import type { AddressDTO } from '@core/models';
   ],
   templateUrl: './saved-addresses-manager.component.html',
   styleUrl: './saved-addresses-manager.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SavedAddressesManagerComponent {
   /**

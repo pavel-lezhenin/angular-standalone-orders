@@ -109,64 +109,69 @@
   flex-shrink: 0;
 }
 
-:host-context(.tablet) .top-bar {
-  padding: 0 var(--spacing-xs);
-}
-
-:host-context(.tablet) .left-section {
-  gap: var(--spacing-xs);
-}
-
-:host-context(.tablet) .title {
-  font-size: var(--font-size-md);
-  max-width: var(--spacing-6xl);
-}
-
-:host-context(.tablet) .desktop-nav {
-  display: none;
-}
-
-:host-context(.tablet) .mobile-menu-button {
-  display: flex;
-}
-
 /* ============================================
  * Responsive Styles
  * ============================================ */
 
+/* Tablet Styles */
+:host-context(.tablet) {
+  .top-bar {
+    padding: 0 var(--spacing-xs);
+  }
+
+  .left-section {
+    gap: var(--spacing-xs);
+  }
+
+  .title {
+    font-size: var(--font-size-md);
+    max-width: var(--spacing-6xl);
+  }
+
+  .desktop-nav {
+    display: none;
+  }
+
+  .mobile-menu-button {
+    display: flex;
+  }
+}
+
 /* Mobile Styles */
-:host-context(.mobile) .top-bar {
-  padding: 0 var(--spacing-xxs);
-}
+:host-context(.mobile) {
+  .top-bar {
+    padding: 0 var(--spacing-xxs);
+  }
 
-:host-context(.mobile) .left-section {
-  gap: var(--spacing-xxs);
-}
+  .left-section {
+    gap: var(--spacing-xxs);
+  }
 
-:host-context(.mobile) .sidenav-toggle-button {
-  width: var(--spacing-3xl);
-  height: var(--spacing-3xl);
-}
+  .sidenav-toggle-button {
+    width: var(--spacing-3xl);
+    height: var(--spacing-3xl);
+  }
 
-:host-context(.mobile) .title {
-  font-size: var(--font-size-md);
-  display: none;
-}
+  .title {
+    font-size: var(--font-size-md);
+    display: none;
+  }
 
-:host-context(.mobile) .desktop-nav {
-  display: none;
-}
+  .desktop-nav {
+    display: none;
+  }
 
-:host-context(.mobile) .mobile-menu-button {
-  display: flex;
+  .mobile-menu-button {
+    display: flex;
+  }
 }
 
 /* ============================================
- * Theme Support
+ * Theme Styles
  * ============================================ */
 
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
+/* Dark Mode */
+:host-context(.dark-mode) {
   .top-bar {
     background: var(--color-dark-95);
     box-shadow: 0 var(--spacing-2px) var(--spacing-xs) var(--color-black-30);

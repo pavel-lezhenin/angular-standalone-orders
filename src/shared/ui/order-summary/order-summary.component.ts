@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 
 /**
@@ -46,6 +46,7 @@ export interface SummaryLine {
   ],
   templateUrl: './order-summary.component.html',
   styleUrl: './order-summary.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OrderSummaryComponent {
   /**

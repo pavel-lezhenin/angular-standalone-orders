@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -34,6 +34,7 @@ import { FormFieldComponent } from '@shared/ui';
   ],
   templateUrl: './lead-capture-form.component.html',
   styleUrl: './lead-capture-form.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LeadCaptureFormComponent {
   private readonly destroyRef = inject(DestroyRef);
@@ -135,7 +136,6 @@ export class LeadCaptureFormComponent {
 
   private submitEmailForm(data: unknown): void {
     // TODO: Integrate with backend/CRM
-    console.log('Form submitted:', data);
     this.showSuccessMessage('Thank you! We will contact you via email soon.');
     this.leadForm.reset({ channel: 'email', consent: false });
   }

@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { FormFieldComponent, type SelectOption } from '@shared/ui/form-field/form-field.component';
@@ -30,6 +30,7 @@ import { FormFieldComponent, type SelectOption } from '@shared/ui/form-field/for
   ],
   templateUrl: './account-payment-form.component.html',
   styleUrl: './account-payment-form.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountPaymentFormComponent {
   /**

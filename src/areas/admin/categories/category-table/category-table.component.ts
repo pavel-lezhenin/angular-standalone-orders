@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
@@ -22,6 +22,7 @@ import { TableActionButtonsComponent } from '@shared/ui';
   ],
   templateUrl: './category-table.component.html',
   styleUrl: './category-table.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CategoryTableComponent {
   readonly categories = input.required<CategoryDTO[]>();

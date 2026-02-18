@@ -31,12 +31,19 @@
   min-width: var(--size-min-width-sm);
 }
 
-:host-context(.mobile) .filters-container {
-  flex-direction: column;
-  gap: var(--spacing-sm);
-}
+/* ============================================
+ * Responsive Styles
+ * ============================================ */
 
-:host-context(.mobile) .search-field,
-:host-context(.mobile) .role-field {
-  width: 100%;
+/* Mobile Styles */
+:host-context(.mobile) {
+  .filters-container {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  .search-field,
+  .role-field {
+    width: 100%;
+  }
 }

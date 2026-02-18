@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -33,6 +33,7 @@ import type { StatusBadgeVariant } from '@shared/ui';
   ],
   templateUrl: './product-table.component.html',
   styleUrl: './product-table.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductTableComponent {
   readonly products = input.required<ProductWithCategoryDTO[]>();

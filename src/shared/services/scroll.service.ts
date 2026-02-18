@@ -16,7 +16,6 @@ export class ScrollService {
   scrollToSection(sectionId: string): void {
     const element = document.getElementById(sectionId);
     if (!element) {
-      console.warn(`Section with ID "${sectionId}" not found`);
       return;
     }
 

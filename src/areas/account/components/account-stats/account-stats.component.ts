@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 
@@ -13,6 +13,7 @@ import { MatCardModule } from '@angular/material/card';
   imports: [MatCardModule, DecimalPipe],
   templateUrl: './account-stats.component.html',
   styleUrl: './account-stats.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountStatsComponent {
   /**

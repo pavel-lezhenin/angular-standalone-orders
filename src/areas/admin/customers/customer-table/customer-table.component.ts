@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -34,6 +34,7 @@ import type { StatusBadgeVariant } from '@shared/ui';
   ],
   templateUrl: './customer-table.component.html',
   styleUrl: './customer-table.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomerTableComponent {
   readonly users = input.required<UserDTO[]>();

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -37,6 +37,7 @@ export interface CustomerFormDialogData extends DialogConfig {
   ],
   templateUrl: './customer-form-dialog.component.html',
   styleUrl: './customer-form-dialog.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomerFormDialogComponent implements OnInit {
   private readonly fb = inject(FormBuilder);

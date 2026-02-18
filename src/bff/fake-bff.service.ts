@@ -69,7 +69,6 @@ export class FakeBFFService {
     const productCount = await this.productRepo.count();
     const addressCount = await this.addressRepo.count();
     if (productCount < 40 || addressCount === 0) {
-      console.log(`⚠️  Found ${productCount} products, ${addressCount} addresses. Reseeding...`);
       await this.seedService.seedAll();
     }
 

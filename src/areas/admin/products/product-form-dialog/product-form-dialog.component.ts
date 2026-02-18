@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -87,6 +87,7 @@ export interface ProductFormResult {
   ],
   templateUrl: './product-form-dialog.component.html',
   styleUrl: './product-form-dialog.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductFormDialogComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
@@ -188,20 +189,11 @@ export class ProductFormDialogComponent implements OnInit {
    * Handle file upload from gallery
    */
   protected async onFileUpload(file: File): Promise<void> {
-    console.log('📤 ProductFormDialog: Starting file upload', {
-      name: file.name,
-      type: file.type,
-      size: file.size,
-    });
-    
     this.isUploadingImage.set(true);
     try {
       // Upload to file storage
-      console.log('💾 ProductFormDialog: Calling FileStorageService.uploadFile()');
       const result = await this.fileStorage.uploadFile(file);
       
-      console.log('✅ ProductFormDialog: Upload successful', result);
-
       // Add to images
       const newImages = [
         ...this.images(),
@@ -213,7 +205,6 @@ export class ProductFormDialogComponent implements OnInit {
       ];
       this.images.set(newImages);
       
-      console.log('🖼️ ProductFormDialog: Image added to gallery, total:', newImages.length);
     } catch (error) {
       console.error('❌ ProductFormDialog: Failed to upload image:', error);
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';

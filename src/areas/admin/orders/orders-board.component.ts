@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
@@ -9,7 +9,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { firstValueFrom } from 'rxjs';
 import { NotificationService } from '@shared/services/notification.service';
-import { OrderService } from '@shared/services/order.service';
+import { OrderService } from '@areas/orders/services/order.service';
 import { DialogComponent } from '@shared/ui/dialog';
 import { EmptyStateComponent } from '@shared/ui';
 import type { AddOrderCommentDTO, OrderDTO, OrderStatusChangeActorDTO, UserDTO } from '@core/models';
@@ -76,6 +76,7 @@ const BOARD_COLUMNS: BoardColumnConfig[] = [
   ],
   templateUrl: './orders-board.component.html',
   styleUrl: './orders-board.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OrdersBoardComponent implements OnInit, OnDestroy {
   private readonly document = inject(DOCUMENT);

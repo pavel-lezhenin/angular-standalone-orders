@@ -74,22 +74,42 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 
 - **NEVER**: No `@media` queries - ONLY use `:host-context()` CSS classes
 - **REQUIRED**: Only three responsive classes exist: `.mobile`, `.tablet`, `.desktop`
-- **REQUIRED**: These classes are managed by `app.ts` initBreakpoints() method
-- **PATTERN**: Organize responsive styles by device grouping:
+- **REQUIRED**: These classes are managed by `app.ts` `initBreakpoints()` method
+- **REQUIRED**: Dark mode class `.dark-mode` is managed by `app.ts` `initDarkMode()` method
+- **PATTERN**: Organize styles with section headers:
   ```scss
   .element {
-    /* Base styles */
+    /* Base styles for all devices */
   }
-  
+
+  /* ============================================
+   * Responsive Styles
+   * ============================================ */
+
   /* Tablet & Desktop Styles */
-  :host-context(.tablet) .element,
-  :host-context(.desktop) .element {
-    /* Overrides for larger screens */
+  :host-context(.tablet),
+  :host-context(.desktop) {
+    .element {
+      /* Tablet/desktop overrides */
+    }
   }
-  
+
   /* Mobile Styles */
-  :host-context(.mobile) .element {
-    /* Mobile overrides */
+  :host-context(.mobile) {
+    .element {
+      /* Mobile overrides */
+    }
+  }
+
+  /* ============================================
+   * Theme Styles
+   * ============================================ */
+
+  /* Dark Mode */
+  :host-context(.dark-mode) {
+    .element {
+      /* Dark mode overrides */
+    }
   }
   ```
 

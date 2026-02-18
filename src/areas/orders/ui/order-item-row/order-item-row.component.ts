@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import type { ProductDTO } from '@core/models';
 
@@ -26,6 +26,7 @@ export interface OrderItem {
   imports: [CommonModule, CurrencyPipe],
   templateUrl: './order-item-row.component.html',
   styleUrl: './order-item-row.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OrderItemRowComponent {
   item = input.required<OrderItem>();

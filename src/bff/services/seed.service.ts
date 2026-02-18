@@ -20,7 +20,6 @@ export class SeedService {
   ) {}
 
   async seedAll(): Promise<void> {
-    console.log('🌱 Starting database seed...');
     try {
       // Clear existing data for fresh seed
       await this.clearAll();
@@ -35,12 +34,8 @@ export class SeedService {
       const categoryCount = await this.categoryRepo.count();
       const productCount = await this.productRepo.count();
       
-      console.log('✅ Database seeded with demo data');
-      console.log(`   Users: ${userCount}, Categories: ${categoryCount}, Products: ${productCount}`);
-      
       // Verify admin user exists
       const adminUser = await this.userRepo.getByEmail('admin@demo');
-      console.log(`   Admin user check: ${adminUser ? '✅ EXISTS' : '❌ NOT FOUND'}`);
     } catch (error) {
       console.error('❌ Seed failed:', error);
       throw error;
@@ -48,7 +43,6 @@ export class SeedService {
   }
 
   private async clearAll(): Promise<void> {
-    console.log('🗑️  Clearing existing data...');
     try {
       // Clear all repositories
       const allProducts = await this.productRepo.getAll();
@@ -66,7 +60,6 @@ export class SeedService {
         await this.userRepo.delete(user.id);
       }
       
-      console.log('✅ Data cleared');
     } catch (error) {
       console.error('⚠️  Clear data warning:', error);
       // Continue even if clear fails (might be first run)
@@ -74,7 +67,6 @@ export class SeedService {
   }
 
   private async seedUsers(): Promise<void> {
-    console.log('👥 Creating demo users...');
     const now = Date.now();
     const users: User[] = [
       {
@@ -121,13 +113,11 @@ export class SeedService {
     for (const user of users) {
       try {
         await this.userRepo.create(user);
-        console.log(`  ✓ Created user: ${user.email}`);
       } catch (error) {
         console.error(`  ✗ Failed to create user ${user.email}:`, error);
         throw error;
       }
     }
-    console.log('✅ Demo users created (3)');
   }
 
   private async seedAddressesAndPaymentMethods(): Promise<void> {
@@ -200,7 +190,6 @@ export class SeedService {
       }
     }
 
-    console.log(`✅ Demo addresses & payment methods seeded for ${users.length} users`);
   }
 
   private async seedCategories(): Promise<Category[]> {
@@ -230,7 +219,6 @@ export class SeedService {
     for (const category of categories) {
       await this.categoryRepo.create(category);
     }
-    console.log('✅ Demo categories created (4)');
     return categories;
   }
 
@@ -323,7 +311,6 @@ export class SeedService {
     for (const product of products) {
       await this.productRepo.create(product);
     }
-    console.log(`✅ Demo products created (${products.length})`);
   }
 
   /**

@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -68,6 +68,7 @@ export interface SelectOption {
   ],
   templateUrl: './form-field.component.html',
   styleUrl: './form-field.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FormFieldComponent {
   /**

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { SectionWrapperComponent } from '../ui/section-wrapper/section-wrapper.component';
@@ -12,5 +12,6 @@ import { SectionWrapperComponent } from '../ui/section-wrapper/section-wrapper.c
   imports: [MatCardModule, MatIconModule, SectionWrapperComponent],
   templateUrl: './features-section.component.html',
   styleUrl: './features-section.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FeaturesSectionComponent {}

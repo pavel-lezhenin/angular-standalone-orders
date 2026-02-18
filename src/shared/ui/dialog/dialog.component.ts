@@ -1,4 +1,4 @@
-import { Component, output, computed, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, output, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -51,6 +51,7 @@ import { DialogConfig } from './dialog.config';
   ],
   templateUrl: './dialog.component.html',
   styleUrl: './dialog.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DialogComponent extends BaseComponent implements OnInit {
   /**

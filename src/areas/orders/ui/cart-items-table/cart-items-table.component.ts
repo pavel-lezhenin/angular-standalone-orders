@@ -1,4 +1,4 @@
-import { Component, input, output, computed } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output, computed } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
@@ -44,6 +44,7 @@ export interface CartItemWithDetails extends CartItemDTO {
   ],
   templateUrl: './cart-items-table.component.html',
   styleUrl: './cart-items-table.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CartItemsTableComponent {
   items = input.required<CartItemWithDetails[]>();

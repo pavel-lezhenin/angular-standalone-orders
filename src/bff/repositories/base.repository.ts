@@ -20,21 +20,17 @@ export abstract class BaseRepository<T extends { id: string }> {
 
   async create(item: T): Promise<void> {
     try {
-      console.log(`📝 BaseRepository: Creating item in ${this.storeName}`, item.id);
-      
       // Ensure DB is initialized
       await this.db.initialize();
       
       await this.db.write(this.storeName, item, 'add');
       
-      console.log(`✅ BaseRepository: Item created in ${this.storeName}`, item.id);
     } catch (error: unknown) {
       // If item already exists, log and skip (don't throw)
       if (
         error instanceof DOMException
         && error.name === 'ConstraintError'
       ) {
-        console.warn(`⚠️ Item with id ${item.id} already exists in ${this.storeName}, skipping`);
         return;
       }
       console.error(`❌ Failed to create item in ${this.storeName}:`, error);

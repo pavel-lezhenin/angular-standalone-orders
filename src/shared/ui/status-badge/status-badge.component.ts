@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -29,6 +29,7 @@ export type StatusBadgeVariant = 'success' | 'warning' | 'error' | 'info' | 'neu
   ],
   templateUrl: './status-badge.component.html',
   styleUrl: './status-badge.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StatusBadgeComponent {
   /**

@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
@@ -53,6 +53,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
       border: 0;
     }
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageLoaderComponent {
   /** Loading state */

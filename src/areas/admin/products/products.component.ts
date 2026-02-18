@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -50,6 +50,7 @@ import { CreateProductDTO, UpdateProductDTO } from './model/types';
   providers: [ProductService, CategoryService],
   templateUrl: './products.component.html',
   styleUrl: './products.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductsComponent extends BaseComponent implements OnInit {
   private readonly productService = inject(ProductService);

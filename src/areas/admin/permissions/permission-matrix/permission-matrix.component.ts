@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -32,6 +32,7 @@ import { PermissionDTO } from '@core';
   ],
   templateUrl: './permission-matrix.component.html',
   styleUrl: './permission-matrix.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PermissionMatrixComponent {
   readonly permissionsByRole = input.required<PermissionsByRole[]>();

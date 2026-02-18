@@ -1,4 +1,4 @@
-import { Component, input, output, computed, effect } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output, computed, effect } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -28,6 +28,7 @@ import type { PaymentMethodDTO } from '@core/models';
   ],
   templateUrl: './payment-method-selector.component.html',
   styleUrl: './payment-method-selector.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PaymentMethodSelectorComponent {
   /**
