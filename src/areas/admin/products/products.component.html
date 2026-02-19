@@ -2,22 +2,14 @@
   <div class="page-header">
     <h1>Products Management</h1>
     @if (canCreate()) {
-      <button 
-        mat-raised-button 
-        color="primary"
-        (click)="openCreateDialog()"
-        [disabled]="isLoading()"
-      >
+      <button mat-raised-button color="primary" (click)="openCreateDialog()" [disabled]="isLoading()">
         <mat-icon>add</mat-icon>
         Add Product
       </button>
     }
   </div>
 
-  <app-product-filters 
-    [categories]="categories()"
-    (filtersChange)="onFiltersChange($event)" 
-  />
+  <app-product-filters [categories]="categories()" (filtersChange)="onFiltersChange($event)" />
 
   <app-product-table
     [products]="products()"
@@ -34,4 +26,3 @@
 
   <app-page-loader [isLoading]="isLoading()" />
 </div>
-

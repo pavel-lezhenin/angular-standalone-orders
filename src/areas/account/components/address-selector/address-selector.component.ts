@@ -9,7 +9,7 @@ import type { AddressDTO } from '@core/models';
 
 /**
  * Address Selector Component
- * 
+ *
  * Handles address selection, display, and management actions
  */
 @Component({
@@ -67,14 +67,14 @@ export class AddressSelectorComponent {
    */
   readonly selectedAddress = computed(() => {
     const addresses = this.savedAddresses();
-    return addresses.find(address => address.id === this.selectedAddressId()) ?? null;
+    return addresses.find((address) => address.id === this.selectedAddressId()) ?? null;
   });
 
   /**
    * Select options computed from saved addresses
    */
   readonly addressOptions = computed<SelectOption[]>(() =>
-    this.savedAddresses().map(address => ({
+    this.savedAddresses().map((address) => ({
       value: address.id,
       label: address.isDefault ? `${address.label} (Default)` : address.label,
     }))

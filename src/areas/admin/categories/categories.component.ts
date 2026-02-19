@@ -1,4 +1,4 @@
-import type { OnInit} from '@angular/core';
+import type { OnInit } from '@angular/core';
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,16 +13,10 @@ import { generateDeleteMessage } from '@shared/utils';
 import { ConfirmDialogService } from '@shared/ui/dialog';
 import { PageLoaderComponent } from '@shared/ui/page-loader';
 import { NotificationService } from '@shared/services/notification.service';
-import {
-  createFormDialogConfig,
-  editFormDialogConfig,
-} from '@shared/ui/dialog/dialog.config';
+import { createFormDialogConfig, editFormDialogConfig } from '@shared/ui/dialog/dialog.config';
 import { CategoryService } from './services/category.service';
-import type {
-  CategoryFormDialogData} from './category-form-dialog/category-form-dialog.component';
-import {
-  CategoryFormDialogComponent
-} from './category-form-dialog/category-form-dialog.component';
+import type { CategoryFormDialogData } from './category-form-dialog/category-form-dialog.component';
+import { CategoryFormDialogComponent } from './category-form-dialog/category-form-dialog.component';
 import { CategoryTableComponent } from './category-table/category-table.component';
 
 /**
@@ -180,7 +174,7 @@ export class CategoriesComponent extends BaseComponent implements OnInit {
    */
   protected deleteCategory(category: CategoryDTO): void {
     const message = generateDeleteMessage(category.name);
-    
+
     this.confirmDialogService.openDeleteConfirm(
       message,
       async () => {
@@ -188,8 +182,7 @@ export class CategoriesComponent extends BaseComponent implements OnInit {
         await this.loadCategories();
         this.notificationService.success('Category deleted successfully');
       },
-      () => {
-      }
+      () => {}
     );
   }
 }

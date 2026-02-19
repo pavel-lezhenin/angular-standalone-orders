@@ -34,7 +34,7 @@ export function createPaginatedResponse<T>(
   data: T[],
   total: number,
   page: number,
-  limit: number,
+  limit: number
 ): PaginatedResponse<T> {
   return {
     data,
@@ -60,13 +60,8 @@ export function parsePaginationParams(params: {
 /**
  * Apply pagination to array
  */
-export function applyPagination<T>(
-  items: T[],
-  page: number,
-  limit: number,
-): T[] {
+export function applyPagination<T>(items: T[], page: number, limit: number): T[] {
   const startIndex = (page - 1) * limit;
   const endIndex = startIndex + limit;
   return items.slice(startIndex, endIndex);
 }
-

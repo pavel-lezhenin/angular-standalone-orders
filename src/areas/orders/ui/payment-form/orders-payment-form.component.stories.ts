@@ -3,7 +3,7 @@ import { OrdersPaymentFormComponent } from './orders-payment-form.component';
 
 /**
  * OrdersPaymentFormComponent Stories
- * 
+ *
  * Demonstrates the smart checkout payment form.
  * Creates its own FormGroup and manages validation.
  */
@@ -35,8 +35,8 @@ export const CardSelected: Story = {
   }),
   play: async ({ canvasElement }) => {
     // Wait for component to initialize
-    await new Promise(resolve => setTimeout(resolve, 100));
-    
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
     const cardRadio = canvasElement.querySelector('input[value="card"]') as HTMLInputElement;
     if (cardRadio && !cardRadio.checked) {
       cardRadio.click();
@@ -52,8 +52,8 @@ export const PayPalSelected: Story = {
     template: '<app-orders-payment-form />',
   }),
   play: async ({ canvasElement }) => {
-    await new Promise(resolve => setTimeout(resolve, 100));
-    
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
     const paypalRadio = canvasElement.querySelector('input[value="paypal"]') as HTMLInputElement;
     if (paypalRadio) {
       paypalRadio.click();
@@ -69,9 +69,11 @@ export const CashOnDeliverySelected: Story = {
     template: '<app-orders-payment-form />',
   }),
   play: async ({ canvasElement }) => {
-    await new Promise(resolve => setTimeout(resolve, 100));
-    
-    const codRadio = canvasElement.querySelector('input[value="cash_on_delivery"]') as HTMLInputElement;
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    const codRadio = canvasElement.querySelector(
+      'input[value="cash_on_delivery"]'
+    ) as HTMLInputElement;
     if (codRadio) {
       codRadio.click();
     }

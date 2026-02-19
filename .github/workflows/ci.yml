@@ -127,9 +127,6 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: Build SSR
-        run: pnpm build --configuration=ssr
-
       - uses: actions/upload-artifact@v4
         with:
           name: build

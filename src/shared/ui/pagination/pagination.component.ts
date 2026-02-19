@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  input,
-  output,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 
 /**
  * Pagination Component
@@ -27,12 +22,8 @@ export class PaginationComponent {
     const current = this.currentPage();
     const delta = 2;
     const range: number[] = [];
-    
-    for (
-      let i = Math.max(2, current - delta);
-      i <= Math.min(total - 1, current + delta);
-      i++
-    ) {
+
+    for (let i = Math.max(2, current - delta); i <= Math.min(total - 1, current + delta); i++) {
       range.push(i);
     }
 

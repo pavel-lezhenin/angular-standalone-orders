@@ -9,7 +9,7 @@ import type { AddressDTO, SavedPaymentMethodDTO } from '@core/models';
 const USER_ID = 'user-42';
 const authUser = { id: USER_ID, role: 'user' };
 
-const tick = (): Promise<void> => new Promise<void>(r => setTimeout(r, 0));
+const tick = (): Promise<void> => new Promise<void>((r) => setTimeout(r, 0));
 
 const API = {
   addresses: `/api/users/${USER_ID}/addresses`,
@@ -173,9 +173,7 @@ describe('UserPreferencesService', () => {
     it('patches the correct address endpoint', async () => {
       const updated = makeAddress({ id: 'addr-1', city: 'Newtown' });
       const p = service.updateAddress('addr-1', { city: 'Newtown' });
-      httpMock
-        .expectOne(API.address('addr-1'))
-        .flush({ address: updated });
+      httpMock.expectOne(API.address('addr-1')).flush({ address: updated });
       expect((await p).city).toBe('Newtown');
     });
   });
@@ -190,9 +188,7 @@ describe('UserPreferencesService', () => {
 
     it('throws when address not found', async () => {
       const p = service.deleteAddress('non-existent');
-      httpMock
-        .expectOne(API.addresses)
-        .flush({ addresses: [makeAddress({ id: 'addr-1' })] });
+      httpMock.expectOne(API.addresses).flush({ addresses: [makeAddress({ id: 'addr-1' })] });
       await expect(p).rejects.toThrow('Address not found');
     });
 
@@ -289,9 +285,9 @@ describe('UserPreferencesService', () => {
   describe('addPaymentMethod()', () => {
     it('throws when user is not authenticated', async () => {
       currentUserSignal.set(null);
-      await expect(
-        service.addPaymentMethod({ type: 'card', last4Digits: '4242' })
-      ).rejects.toThrow('Authentication required');
+      await expect(service.addPaymentMethod({ type: 'card', last4Digits: '4242' })).rejects.toThrow(
+        'Authentication required'
+      );
     });
 
     it('returns existing duplicate card method without creating a new one', async () => {
@@ -384,7 +380,9 @@ describe('UserPreferencesService', () => {
 
     it('throws when trying to delete the only default payment method', async () => {
       const p = service.deletePaymentMethod('pm-1');
-      httpMock.expectOne(API.paymentMethods).flush({ paymentMethods: [makeCard({ id: 'pm-1', isDefault: true })] });
+      httpMock
+        .expectOne(API.paymentMethods)
+        .flush({ paymentMethods: [makeCard({ id: 'pm-1', isDefault: true })] });
       await expect(p).rejects.toThrow('Cannot delete the only default payment method');
     });
 

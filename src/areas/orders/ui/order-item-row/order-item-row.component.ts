@@ -13,7 +13,7 @@ export interface OrderItem {
  * Order Item Row Component
  *
  * Displays a single order item (read-only) with:
- * - Product image and details  
+ * - Product image and details
  * - Quantity
  * - Unit price
  * - Subtotal
@@ -30,7 +30,7 @@ export interface OrderItem {
 })
 export class OrderItemRowComponent {
   item = input.required<OrderItem>();
-  
+
   /**
    * Calculate subtotal for this item
    */

@@ -1,7 +1,7 @@
-import type { OnInit} from '@angular/core';
+import type { OnInit } from '@angular/core';
 import { ChangeDetectionStrategy, Component, inject, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import type { FormControl, FormGroup} from '@angular/forms';
+import type { FormControl, FormGroup } from '@angular/forms';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
@@ -13,10 +13,7 @@ import { FormFieldComponent } from '@shared/ui';
 export interface CategoryFormDialogData extends DialogConfig {
   mode: 'create' | 'edit';
   category?: CategoryDTO;
-  onSave?: (formValue: {
-    name: string;
-    description: string;
-  }) => Promise<void>;
+  onSave?: (formValue: { name: string; description: string }) => Promise<void>;
 }
 
 /**
@@ -27,12 +24,7 @@ export interface CategoryFormDialogData extends DialogConfig {
 @Component({
   selector: 'app-category-form-dialog',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    DialogComponent,
-    FormFieldComponent,
-  ],
+  imports: [CommonModule, ReactiveFormsModule, DialogComponent, FormFieldComponent],
   templateUrl: './category-form-dialog.component.html',
   styleUrl: './category-form-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -41,7 +33,7 @@ export class CategoryFormDialogComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly dialogRef = inject(MatDialogRef<CategoryFormDialogComponent>);
   protected readonly data = inject<CategoryFormDialogData>(MAT_DIALOG_DATA);
-  
+
   /**
    * Reference to the dialog component
    */
@@ -61,13 +53,10 @@ export class CategoryFormDialogComponent implements OnInit {
    */
   private initForm(): void {
     this.form = this.fb.group({
-      name: [
-        this.data.category?.name || '',
-        [Validators.required, Validators.maxLength(32)]
-      ],
+      name: [this.data.category?.name || '', [Validators.required, Validators.maxLength(32)]],
       description: [
         this.data.category?.description || '',
-        [Validators.required, Validators.maxLength(128)]
+        [Validators.required, Validators.maxLength(128)],
       ],
     });
   }

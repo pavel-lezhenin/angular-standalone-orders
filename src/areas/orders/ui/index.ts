@@ -1,5 +1,8 @@
 // Cart UI Components
-export { CartItemsTableComponent, type CartItemWithDetails } from './cart-items-table/cart-items-table.component';
+export {
+  CartItemsTableComponent,
+  type CartItemWithDetails,
+} from './cart-items-table/cart-items-table.component';
 
 // Order UI Components
 export { OrderItemRowComponent, type OrderItem } from './order-item-row/order-item-row.component';

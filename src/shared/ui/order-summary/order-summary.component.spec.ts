@@ -1,4 +1,4 @@
-import type { ComponentFixture} from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import type { SummaryLine } from './order-summary.component';
 import { OrderSummaryComponent } from './order-summary.component';
@@ -67,9 +67,7 @@ describe('OrderSummaryComponent', () => {
     });
 
     it('should apply custom classes to summary lines', () => {
-      const lines: SummaryLine[] = [
-        { label: 'Discount', value: -10, class: 'discount' },
-      ];
+      const lines: SummaryLine[] = [{ label: 'Discount', value: -10, class: 'discount' }];
       fixture.componentRef.setInput('summaryLines', lines);
       fixture.detectChanges();
 

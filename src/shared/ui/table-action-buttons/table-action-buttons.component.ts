@@ -6,10 +6,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
 /**
  * Reusable table action buttons component
- * 
+ *
  * Provides consistent action buttons for table rows with customizable permissions.
  * Common actions: edit, delete, view
- * 
+ *
  * @example
  * <app-table-action-buttons
  *   [canEdit]="true"
@@ -21,12 +21,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 @Component({
   selector: 'app-table-action-buttons',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    MatIconModule,
-    MatTooltipModule,
-  ],
+  imports: [CommonModule, MatButtonModule, MatIconModule, MatTooltipModule],
   templateUrl: './table-action-buttons.component.html',
   styleUrl: './table-action-buttons.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -49,7 +49,7 @@ export interface CartItemWithDetails extends CartItemDTO {
 export class CartItemsTableComponent {
   items = input.required<CartItemWithDetails[]>();
   selectedItemIds = input<Set<string>>(new Set());
-  
+
   itemSelectionChange = output<{ productId: string; selected: boolean }>();
   allSelectionChange = output<boolean>();
   quantityChange = output<{ productId: string; quantity: number }>();
@@ -61,7 +61,7 @@ export class CartItemsTableComponent {
   protected allSelected = computed(() => {
     const items = this.items();
     const selected = this.selectedItemIds();
-    return items.length > 0 && items.every(item => selected.has(item.productId));
+    return items.length > 0 && items.every((item) => selected.has(item.productId));
   });
 
   /**
@@ -70,7 +70,7 @@ export class CartItemsTableComponent {
   protected someSelected = computed(() => {
     const items = this.items();
     const selected = this.selectedItemIds();
-    const selectedCount = items.filter(item => selected.has(item.productId)).length;
+    const selectedCount = items.filter((item) => selected.has(item.productId)).length;
     return selectedCount > 0 && selectedCount < items.length;
   });
 

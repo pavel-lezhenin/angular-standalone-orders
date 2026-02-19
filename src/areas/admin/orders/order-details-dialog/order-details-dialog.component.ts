@@ -1,4 +1,4 @@
-import type { OnChanges} from '@angular/core';
+import type { OnChanges } from '@angular/core';
 import { ChangeDetectionStrategy, Component, Input, computed, inject, signal } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
@@ -9,7 +9,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { FormFieldComponent } from '@shared/ui/form-field/form-field.component';
 import { firstValueFrom } from 'rxjs';
-import type { OrderDTO, AddOrderCommentDTO, OrderStatusChangeActorDTO, ProductDTO } from '@core/models';
+import type {
+  OrderDTO,
+  AddOrderCommentDTO,
+  OrderStatusChangeActorDTO,
+  ProductDTO,
+} from '@core/models';
 
 interface OrderTimelineItem {
   id: string;
@@ -49,7 +54,10 @@ export class OrderDetailsDialogComponent implements OnChanges {
 
   @Input({ required: true }) orderInput!: OrderDTO;
   @Input({ required: true }) actor!: OrderStatusChangeActorDTO;
-  @Input({ required: true }) onAddComment!: (orderId: string, payload: AddOrderCommentDTO) => Promise<OrderDTO>;
+  @Input({ required: true }) onAddComment!: (
+    orderId: string,
+    payload: AddOrderCommentDTO
+  ) => Promise<OrderDTO>;
   @Input() onOrderUpdated?: (order: OrderDTO) => void;
 
   protected readonly order = signal<OrderDTO | null>(null);
@@ -57,7 +65,10 @@ export class OrderDetailsDialogComponent implements OnChanges {
   protected readonly loadingProducts = signal(false);
   protected readonly productsError = signal<string | null>(null);
   protected readonly productLines = signal<readonly ProductLineItem[]>([]);
-  protected readonly commentControl = new FormControl('', [Validators.required, Validators.minLength(3)]);
+  protected readonly commentControl = new FormControl('', [
+    Validators.required,
+    Validators.minLength(3),
+  ]);
   protected readonly quickActionNotes = [
     'Out of stock: initiate customer refund',
     'Address requires clarification from customer',
@@ -88,16 +99,18 @@ export class OrderDetailsDialogComponent implements OnChanges {
       type: 'status',
     };
 
-    const statusEvents: OrderTimelineItem[] = (currentOrder.statusHistory ?? []).map((entry, index) => ({
-      id: `status-${index}-${entry.changedAt}`,
-      createdAt: entry.changedAt,
-      title: 'Status changed',
-      description: `${entry.fromStatus} → ${entry.toStatus}`,
-      actor: entry.actor.email ?? `${entry.actor.role}:${entry.actor.id}`,
-      type: 'status',
-    }));
+    const statusEvents: OrderTimelineItem[] = (currentOrder.statusHistory ?? []).map(
+      (entry, index) => ({
+        id: `status-${index}-${entry.changedAt}`,
+        createdAt: entry.changedAt,
+        title: 'Status changed',
+        description: `${entry.fromStatus} → ${entry.toStatus}`,
+        actor: entry.actor.email ?? `${entry.actor.role}:${entry.actor.id}`,
+        type: 'status',
+      })
+    );
 
-    const commentEvents: OrderTimelineItem[] = (currentOrder.comments ?? []).map(comment => ({
+    const commentEvents: OrderTimelineItem[] = (currentOrder.comments ?? []).map((comment) => ({
       id: `comment-${comment.id}`,
       createdAt: comment.createdAt,
       title: comment.isSystem ? 'System note' : 'Manager comment',
@@ -106,8 +119,9 @@ export class OrderDetailsDialogComponent implements OnChanges {
       type: comment.isSystem ? 'system' : 'comment',
     }));
 
-    return [createdEvent, ...statusEvents, ...commentEvents]
-      .sort((left, right) => right.createdAt - left.createdAt);
+    return [createdEvent, ...statusEvents, ...commentEvents].sort(
+      (left, right) => right.createdAt - left.createdAt
+    );
   });
 
   protected async addComment(): Promise<void> {
@@ -139,18 +153,21 @@ export class OrderDetailsDialogComponent implements OnChanges {
     this.productsError.set(null);
 
     try {
-      const productIds = [...new Set(currentOrder.items.map(item => item.productId))];
+      const productIds = [...new Set(currentOrder.items.map((item) => item.productId))];
       const response = await firstValueFrom(
         this.http.post<{ products: ProductDTO[] }>('/api/products/batch', { productIds })
       );
-      const productsById = new Map(response.products.map(product => [product.id, product]));
+      const productsById = new Map(response.products.map((product) => [product.id, product]));
 
-      const lines = currentOrder.items.map(item => ({
-        productId: item.productId,
-        quantity: item.quantity,
-        orderPrice: item.price,
-        product: productsById.get(item.productId),
-      } satisfies ProductLineItem));
+      const lines = currentOrder.items.map(
+        (item) =>
+          ({
+            productId: item.productId,
+            quantity: item.quantity,
+            orderPrice: item.price,
+            product: productsById.get(item.productId),
+          }) satisfies ProductLineItem
+      );
 
       this.productLines.set(lines);
     } catch {

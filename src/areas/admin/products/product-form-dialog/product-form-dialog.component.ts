@@ -1,20 +1,9 @@
 import type { OnInit } from '@angular/core';
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import type {
-  FormGroup,
-  FormArray,
-  FormControl} from '@angular/forms';
-import {
-  FormBuilder,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
-import {
-  MAT_DIALOG_DATA,
-  MatDialogModule,
-  MatDialogRef,
-} from '@angular/material/dialog';
+import type { FormGroup, FormArray, FormControl } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -22,11 +11,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-import type {
-  ImageItem} from '@shared/ui/image-gallery/image-gallery.component';
-import {
-  ImageGalleryComponent
-} from '@shared/ui/image-gallery/image-gallery.component';
+import type { ImageItem } from '@shared/ui/image-gallery/image-gallery.component';
+import { ImageGalleryComponent } from '@shared/ui/image-gallery/image-gallery.component';
 import { FormFieldComponent, type SelectOption } from '@shared/ui';
 import type { CategoryDTO, ProductDTO, ProductSpecificationDTO } from '@core';
 import { FileStorageService } from '@core';
@@ -94,14 +80,12 @@ export interface ProductFormResult {
 })
 export class ProductFormDialogComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
-  private readonly dialogRef = inject(
-    MatDialogRef<ProductFormDialogComponent>
-  );
+  private readonly dialogRef = inject(MatDialogRef<ProductFormDialogComponent>);
   private readonly fileStorage = inject(FileStorageService);
   readonly data = inject<ProductFormDialogData>(MAT_DIALOG_DATA);
 
   protected readonly isEditMode = !!this.data.product;
-  protected readonly categorySelectOptions: SelectOption[] = this.data.categories.map(c => ({
+  protected readonly categorySelectOptions: SelectOption[] = this.data.categories.map((c) => ({
     value: c.id,
     label: c.name,
   }));
@@ -196,7 +180,7 @@ export class ProductFormDialogComponent implements OnInit {
     try {
       // Upload to file storage
       const result = await this.fileStorage.uploadFile(file);
-      
+
       // Add to images
       const newImages = [
         ...this.images(),
@@ -207,7 +191,6 @@ export class ProductFormDialogComponent implements OnInit {
         },
       ];
       this.images.set(newImages);
-      
     } catch (error) {
       console.error('❌ ProductFormDialog: Failed to upload image:', error);
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
@@ -252,7 +235,7 @@ export class ProductFormDialogComponent implements OnInit {
   protected onSetPrimary(fileId: string): void {
     const currentImages = this.images();
     const imageIndex = currentImages.findIndex((img) => img.fileId === fileId);
-    
+
     if (imageIndex === -1 || imageIndex === 0) {
       return; // Already primary or not found
     }

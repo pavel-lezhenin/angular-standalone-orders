@@ -4,10 +4,7 @@
     <p>Discover our amazing products</p>
   </div>
 
-  <app-shop-filters
-    [categories]="categories()"
-    (filtersChange)="onFiltersChange($event)"
-  />
+  <app-shop-filters [categories]="categories()" (filtersChange)="onFiltersChange($event)" />
 
   <app-shop-product-list
     [products]="products()"

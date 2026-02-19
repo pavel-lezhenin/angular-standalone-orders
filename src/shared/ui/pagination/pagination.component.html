@@ -1,10 +1,5 @@
-<div class="pagination flex gap-xs items-center justify-center">
-  <button
-    class="pagination__btn"
-    [disabled]="currentPage() === 1"
-    (click)="goToPrevious()"
-    aria-label="Previous page"
-  >
+<div class="pagination gap-xs flex items-center justify-center">
+  <button class="pagination__btn" [disabled]="currentPage() === 1" (click)="goToPrevious()" aria-label="Previous page">
     ←
   </button>
 

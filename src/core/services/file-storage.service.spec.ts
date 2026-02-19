@@ -25,10 +25,7 @@ describe('FileStorageService', () => {
     };
 
     TestBed.configureTestingModule({
-      providers: [
-        FileStorageService,
-        { provide: FileRepository, useValue: fileRepoMock },
-      ],
+      providers: [FileStorageService, { provide: FileRepository, useValue: fileRepoMock }],
     });
 
     service = TestBed.inject(FileStorageService);
@@ -103,7 +100,10 @@ describe('FileStorageService', () => {
   // ─── getFileUrls ──────────────────────────────────────────────────────────
 
   it('getFileUrls delegates to FileRepository and returns map', async () => {
-    const urlMap = new Map([['id-1', 'blob:1'], ['id-2', 'blob:2']]);
+    const urlMap = new Map([
+      ['id-1', 'blob:1'],
+      ['id-2', 'blob:2'],
+    ]);
     vi.mocked(fileRepoMock.getFileUrls).mockResolvedValue(urlMap);
 
     const result = await service.getFileUrls(['id-1', 'id-2']);

@@ -2,7 +2,7 @@
   <!-- Dialog Header -->
   <div class="dialog-header">
     <h2 mat-dialog-title>{{ config.title }}</h2>
-    
+
     <!-- Close button -->
     <button
       mat-icon-button
@@ -32,12 +32,7 @@
   @if (isForm()) {
     <mat-dialog-actions class="dialog-actions">
       <!-- Cancel button -->
-      <button
-        mat-stroked-button
-        (click)="handleCancel()"
-        [disabled]="!canClose()"
-        type="button"
-      >
+      <button mat-stroked-button (click)="handleCancel()" [disabled]="!canClose()" type="button">
         {{ cancelLabel() }}
       </button>
 

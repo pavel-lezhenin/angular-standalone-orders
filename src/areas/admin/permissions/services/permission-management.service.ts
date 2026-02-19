@@ -2,10 +2,10 @@ import { Injectable, inject } from '@angular/core';
 import { PermissionService } from '@core/services/permission.service';
 import type { PermissionDTO } from '@core';
 import type { UserRole } from '@core/types';
-import type { 
-  PermissionManagementPermissions, 
-  PermissionsByRole, 
-  PermissionMatrixCell 
+import type {
+  PermissionManagementPermissions,
+  PermissionsByRole,
+  PermissionMatrixCell,
 } from '../model';
 
 /**
@@ -17,7 +17,7 @@ import type {
 @Injectable()
 export class PermissionManagementService {
   private readonly permissionService = inject(PermissionService);
-  
+
   private readonly roles: UserRole[] = ['user', 'manager', 'admin'];
 
   /**
@@ -36,7 +36,7 @@ export class PermissionManagementService {
   async loadPermissions(): Promise<PermissionsByRole[]> {
     // Simulate async operation
     return Promise.resolve(
-      this.roles.map(role => ({
+      this.roles.map((role) => ({
         role,
         permissions: this.permissionService.getPermissions(role),
       }))
@@ -52,7 +52,7 @@ export class PermissionManagementService {
     const matrix: PermissionMatrixCell[] = [];
 
     permissionsByRole.forEach(({ role, permissions }) => {
-      permissions.forEach(permission => {
+      permissions.forEach((permission) => {
         matrix.push({
           role,
           section: permission.section,
@@ -99,8 +99,8 @@ export class PermissionManagementService {
     denied: number;
   }> {
     const permissions = this.permissionService.getPermissions(role);
-    const granted = permissions.filter(p => p.granted).length;
-    
+    const granted = permissions.filter((p) => p.granted).length;
+
     return {
       total: permissions.length,
       granted,
@@ -118,9 +118,7 @@ export class PermissionManagementService {
     granted: boolean;
   }): Promise<PermissionDTO> {
     // Simulate async operation
-    return Promise.resolve(
-      this.permissionService.addPermission(permissionData)
-    );
+    return Promise.resolve(this.permissionService.addPermission(permissionData));
   }
 
   /**
@@ -128,8 +126,6 @@ export class PermissionManagementService {
    */
   async deletePermission(permissionId: string): Promise<boolean> {
     // Simulate async operation
-    return Promise.resolve(
-      this.permissionService.deletePermission(permissionId)
-    );
+    return Promise.resolve(this.permissionService.deletePermission(permissionId));
   }
 }

@@ -1,9 +1,9 @@
-import type { ApplicationConfig} from '@angular/core';
+import type { ApplicationConfig } from '@angular/core';
 import { APP_INITIALIZER, PLATFORM_ID, inject } from '@angular/core';
 import { provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import type { HttpInterceptorFn} from '@angular/common/http';
+import type { HttpInterceptorFn } from '@angular/common/http';
 import { HttpResponse } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
 import { provideAnimations } from '@angular/platform-browser/animations';
@@ -13,7 +13,7 @@ import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { FakeBFFService } from '@bff';
 import { AuthService } from '@core';
-import type { Observable} from 'rxjs';
+import type { Observable } from 'rxjs';
 import { from, of } from 'rxjs';
 import type { HttpRequest, HttpHandlerFn, HttpEvent } from '@angular/common/http';
 
@@ -48,7 +48,11 @@ function getSsrApiBody(req: HttpRequest<unknown>): unknown {
     return { products: [] };
   }
 
-  if (req.url.endsWith('/api/products') || req.url.endsWith('/api/categories') || req.url.endsWith('/api/users')) {
+  if (
+    req.url.endsWith('/api/products') ||
+    req.url.endsWith('/api/categories') ||
+    req.url.endsWith('/api/users')
+  ) {
     return emptyPaginated;
   }
 
@@ -66,15 +70,19 @@ function getSsrApiBody(req: HttpRequest<unknown>): unknown {
 /**
  * Restore authentication session on app startup
  * Called AFTER BFF is initialized (required for HTTP requests to work)
- * 
+ *
  * If user was previously authenticated:
  * - Fetches fresh user data from /api/auth/me
  * - Restores currentUser signal
  * - CartService will auto-restore cart via effect
- * 
+ *
  * Runs only in browser, not during SSR
  */
-function restoreAuthSession(authService: AuthService, fakeBFF: FakeBFFService, platformId: object): () => Promise<void> {
+function restoreAuthSession(
+  authService: AuthService,
+  fakeBFF: FakeBFFService,
+  platformId: object
+): () => Promise<void> {
   return async () => {
     if (!isPlatformBrowser(platformId)) {
       return Promise.resolve();
@@ -90,7 +98,7 @@ function restoreAuthSession(authService: AuthService, fakeBFF: FakeBFFService, p
     } catch {
       // ignore BFF initialization errors
     }
-    
+
     return authService.restoreSession().catch(() => {
       // Don't throw - allow app to continue even if restore fails
     });
@@ -101,9 +109,12 @@ function restoreAuthSession(authService: AuthService, fakeBFF: FakeBFFService, p
  * API Interceptor (functional style for Angular 21+)
  * Only intercepts in browser, not in SSR
  */
-const apiInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> => {
+const apiInterceptor: HttpInterceptorFn = (
+  req: HttpRequest<unknown>,
+  next: HttpHandlerFn
+): Observable<HttpEvent<unknown>> => {
   const platformId = inject(PLATFORM_ID);
-  
+
   // During SSR: return empty responses for /api/ — no real backend exists
   if (!isPlatformBrowser(platformId)) {
     if (req.url.startsWith('/api/')) {
@@ -111,13 +122,13 @@ const apiInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, next: Http
     }
     return next(req);
   }
-  
+
   const fakeBFF = inject(FakeBFFService);
-  
+
   if (req.url.startsWith('/api/')) {
     return from(fakeBFF.handleRequest(req));
   }
-  
+
   return next(req);
 };
 
@@ -131,12 +142,14 @@ function initializeBFF(fakeBFF: FakeBFFService, platformId: object): () => Promi
     if (!isPlatformBrowser(platformId)) {
       return Promise.resolve();
     }
-    
-    return fakeBFF.initialize().then(() => {
-    }).catch((error) => {
-      console.error('❌ BFF initialization failed:', error);
-      throw error;
-    });
+
+    return fakeBFF
+      .initialize()
+      .then(() => {})
+      .catch((error) => {
+        console.error('❌ BFF initialization failed:', error);
+        throw error;
+      });
   };
 }
 

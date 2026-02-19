@@ -8,11 +8,7 @@ const mockDialogRef = {
   close: () => {},
 };
 
-const mockImages = [
-  '/products/headphones.svg',
-  '/products/laptop.svg',
-  '/products/smartphone.svg',
-];
+const mockImages = ['/products/headphones.svg', '/products/laptop.svg', '/products/smartphone.svg'];
 
 const meta: Meta<ImageZoomDialogComponent> = {
   title: 'Shared/UI/ImageZoomDialog',

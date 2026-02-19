@@ -13,7 +13,7 @@ export interface OrderItem {
  * Payment information
  */
 export interface PaymentInfo {
-  cardNumber: string;      // Last 4 digits only (e.g., "**** 4242")
+  cardNumber: string; // Last 4 digits only (e.g., "**** 4242")
   cardHolder: string;
   expiryMonth: number;
   expiryYear: number;
@@ -43,7 +43,7 @@ export interface OrderComment {
 
 /**
  * Order entity
- * 
+ *
  * DESIGN NOTES:
  * - deliveryAddress is required and stores snapshot of address at order time
  * - This ensures order history remains accurate even if user changes saved addresses later
@@ -58,9 +58,9 @@ export interface Order {
   paymentStatus: PaymentStatus;
   items: OrderItem[];
   total: number;
-  deliveryAddress: string;       // Required - snapshot of delivery address for this order
-  paymentInfo?: PaymentInfo;     // Optional - payment details (sanitized)
-  supplierId?: string;            // Optional - assigned supplier
+  deliveryAddress: string; // Required - snapshot of delivery address for this order
+  paymentInfo?: PaymentInfo; // Optional - payment details (sanitized)
+  supplierId?: string; // Optional - assigned supplier
   estimatedDeliveryDate?: number; // Optional - timestamp
   statusHistory?: readonly OrderStatusChange[];
   comments?: readonly OrderComment[];

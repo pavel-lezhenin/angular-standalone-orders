@@ -3,20 +3,12 @@
     <h3>Shipping Addresses</h3>
     <div class="header-actions">
       @if (!showAddressForm() && isEditMode()) {
-        <button
-          mat-raised-button
-          color="primary"
-          (click)="toggleForm.emit()"
-        >
+        <button mat-raised-button color="primary" (click)="toggleForm.emit()">
           <mat-icon>add</mat-icon>
           Add Address
         </button>
       }
-      <button
-        mat-raised-button
-        [color]="isEditMode() ? 'accent' : 'primary'"
-        (click)="toggleEditMode.emit()"
-      >
+      <button mat-raised-button [color]="isEditMode() ? 'accent' : 'primary'" (click)="toggleEditMode.emit()">
         <mat-icon>{{ isEditMode() ? 'check' : 'edit' }}</mat-icon>
         {{ isEditMode() ? 'Done' : 'Edit' }}
       </button>

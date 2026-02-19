@@ -2,7 +2,13 @@
  * Core DTOs for application layer
  * Used by services, guards, interceptors, components
  */
-export type { UserDTO, UserProfileDTO, AddressDTO, SavedPaymentMethodDTO, PaymentMethodDTO } from './user.dto';
+export type {
+  UserDTO,
+  UserProfileDTO,
+  AddressDTO,
+  SavedPaymentMethodDTO,
+  PaymentMethodDTO,
+} from './user.dto';
 export type { PermissionDTO } from './permission.dto';
 export type { CartItemDTO, CartDTO } from './cart.dto';
 export type { CategoryDTO } from './category.dto';
@@ -18,9 +24,5 @@ export type {
   OrderCommentDTO,
   AddOrderCommentDTO,
 } from './order.dto';
-export type {
-  ProductDTO,
-  ProductWithCategoryDTO,
-  ProductSpecificationDTO,
-} from './product.dto';
+export type { ProductDTO, ProductWithCategoryDTO, ProductSpecificationDTO } from './product.dto';
 export type { FileMetadataDTO, UploadResultDTO } from './file.dto';

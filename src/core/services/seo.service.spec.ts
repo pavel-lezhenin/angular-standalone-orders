@@ -43,7 +43,10 @@ describe('SeoService', () => {
     service.setPageMeta(tags);
 
     expect(titleMock.setTitle).toHaveBeenCalledWith('Products');
-    expect(metaMock.updateTag).toHaveBeenCalledWith({ name: 'description', content: 'Browse products' });
+    expect(metaMock.updateTag).toHaveBeenCalledWith({
+      name: 'description',
+      content: 'Browse products',
+    });
   });
 
   it('sets keywords when provided', () => {
@@ -55,7 +58,10 @@ describe('SeoService', () => {
 
     service.setPageMeta(tags);
 
-    expect(metaMock.updateTag).toHaveBeenCalledWith({ name: 'keywords', content: 'shoes, clothes' });
+    expect(metaMock.updateTag).toHaveBeenCalledWith({
+      name: 'keywords',
+      content: 'shoes, clothes',
+    });
   });
 
   it('does not set keywords when not provided', () => {
@@ -115,7 +121,11 @@ describe('SeoService', () => {
   });
 
   it('sets canonical link when provided', () => {
-    service.setPageMeta({ title: 'T', description: 'D', canonical: 'https://example.com/canonical' });
+    service.setPageMeta({
+      title: 'T',
+      description: 'D',
+      canonical: 'https://example.com/canonical',
+    });
 
     expect(metaMock.updateTag).toHaveBeenCalledWith({
       rel: 'canonical',
@@ -155,7 +165,8 @@ describe('SeoService', () => {
     expect(titleMock.setTitle).toHaveBeenCalledWith('Angular Standalone Orders');
     expect(metaMock.updateTag).toHaveBeenCalledWith({
       name: 'description',
-      content: 'Discover our curated collection of products. Browse, compare, and order with ease using our modern shopping platform.',
+      content:
+        'Discover our curated collection of products. Browse, compare, and order with ease using our modern shopping platform.',
     });
   });
 

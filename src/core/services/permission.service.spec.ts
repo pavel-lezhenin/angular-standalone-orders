@@ -25,10 +25,7 @@ describe('PermissionService', () => {
     };
 
     TestBed.configureTestingModule({
-      providers: [
-        PermissionService,
-        { provide: AuthService, useValue: authServiceMock }
-      ]
+      providers: [PermissionService, { provide: AuthService, useValue: authServiceMock }],
     });
 
     service = TestBed.inject(PermissionService);
@@ -91,9 +88,7 @@ describe('PermissionService', () => {
 
     expect(updated).toBe(true);
     expect(service.getCustomPermissions()).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ id: permission.id, granted: false }),
-      ])
+      expect.arrayContaining([expect.objectContaining({ id: permission.id, granted: false })])
     );
   });
 

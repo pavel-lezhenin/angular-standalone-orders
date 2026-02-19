@@ -11,7 +11,7 @@ function renderFormField(
   controlValue: unknown,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   controlValidators: any[] = [],
-  touched = false,
+  touched = false
 ) {
   return (args: Record<string, unknown>) => {
     const control = new FormControl(controlValue, controlValidators);

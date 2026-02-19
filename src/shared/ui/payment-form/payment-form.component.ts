@@ -6,17 +6,17 @@ import { FormFieldComponent, type SelectOption } from '../form-field/form-field.
 
 /**
  * Payment Form Component (Dumb UI)
- * 
+ *
  * Pure presentation component for card payment fields.
  * Reusable across different payment contexts (checkout, account settings).
- * 
+ *
  * Features:
  * - Card number formatting (4-4-4-4)
  * - Cardholder name input
  * - Expiry month/year selectors
  * - Optional CVV field (checkout)
  * - Optional Label field (account settings)
- * 
+ *
  * This is a DUMB component:
  * - Receives FormGroup via input
  * - NO validation logic (parent responsibility)

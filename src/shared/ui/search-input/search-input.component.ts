@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, output, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import type { FormControl} from '@angular/forms';
+import type { FormControl } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -10,10 +10,10 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 /**
  * Reusable search input component with Material Design and debounce
- * 
+ *
  * Provides consistent search experience across the application
  * with 300ms debounce by default to prevent excessive API calls
- * 
+ *
  * @example
  * <app-search-input
  *   [placeholder]="'Search products...'"

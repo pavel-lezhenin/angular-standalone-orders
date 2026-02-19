@@ -12,7 +12,8 @@
           [summaryLines]="[{ label: 'Items', value: itemCount() }]"
           [total]="total()"
           [showDivider]="false"
-          [variant]="'compact'">
+          [variant]="'compact'"
+        >
         </app-order-summary>
       </mat-card-content>
     </mat-card>
@@ -21,9 +22,9 @@
     @if (state() === 'form') {
       <mat-card>
         <mat-card-content>
-          <div class="payment-form-section flex-col gap-xl">
+          <div class="payment-form-section gap-xl flex-col">
             @if (usingSavedPaymentMethod()) {
-              <div class="saved-payment-controls flex-col gap-md">
+              <div class="saved-payment-controls gap-md flex-col">
                 <app-form-field
                   [label]="'Payment Method'"
                   [control]="savedMethodSelectControl"
@@ -45,10 +46,7 @@
                   />
                 }
 
-                <button
-                  mat-stroked-button
-                  type="button"
-                  (click)="toggleNewPaymentForm()">
+                <button mat-stroked-button type="button" (click)="toggleNewPaymentForm()">
                   Add New Payment Method
                 </button>
 
@@ -57,7 +55,8 @@
                   color="warn"
                   type="button"
                   [disabled]="!canDeleteSelectedSavedMethod()"
-                  (click)="deleteSelectedSavedMethod()">
+                  (click)="deleteSelectedSavedMethod()"
+                >
                   Delete Selected Method
                 </button>
               </div>
@@ -65,29 +64,18 @@
               <app-orders-payment-form />
 
               @if (hasSavedPaymentMethods()) {
-                <button
-                  mat-stroked-button
-                  type="button"
-                  class="use-saved-btn"
-                  (click)="toggleNewPaymentForm()">
+                <button mat-stroked-button type="button" class="use-saved-btn" (click)="toggleNewPaymentForm()">
                   Back to Saved Methods
                 </button>
               }
             }
 
-            <div class="payment-actions flex justify-between gap-md">
-              <button 
-                mat-stroked-button 
-                (click)="cancelPayment()"
-                class="cancel-btn">
+            <div class="payment-actions gap-md flex justify-between">
+              <button mat-stroked-button (click)="cancelPayment()" class="cancel-btn">
                 <mat-icon>arrow_back</mat-icon>
                 Back to Cart
               </button>
-              <button 
-                mat-raised-button 
-                color="primary"
-                (click)="processPayment()"
-                class="pay-btn">
+              <button mat-raised-button color="primary" (click)="processPayment()" class="pay-btn">
                 <mat-icon>payment</mat-icon>
                 Pay Now
               </button>
@@ -118,10 +106,7 @@
         </div>
         <h2>Payment Successful!</h2>
         <p class="transaction-id">Transaction ID: {{ transactionId() }}</p>
-        <p class="success-message">
-          Your payment has been processed successfully. 
-          We're creating your order now...
-        </p>
+        <p class="success-message">Your payment has been processed successfully. We're creating your order now...</p>
         <div class="processing-indicator">
           <mat-spinner diameter="30"></mat-spinner>
           <span>Processing order...</span>
@@ -138,23 +123,16 @@
         <h2>Payment Failed</h2>
         <p class="error-message">{{ errorMessage() }}</p>
         <p class="help-text">
-          Please check your payment details and try again.
-          If the problem persists, contact your bank or try a different payment method.
+          Please check your payment details and try again. If the problem persists, contact your bank or try a different
+          payment method.
         </p>
 
         <div class="failure-actions">
-          <button 
-            mat-stroked-button 
-            (click)="cancelPayment()"
-            class="cancel-btn">
+          <button mat-stroked-button (click)="cancelPayment()" class="cancel-btn">
             <mat-icon>arrow_back</mat-icon>
             Back to Cart
           </button>
-          <button 
-            mat-raised-button 
-            color="primary"
-            (click)="retryPayment()"
-            class="retry-btn">
+          <button mat-raised-button color="primary" (click)="retryPayment()" class="retry-btn">
             <mat-icon>refresh</mat-icon>
             Try Again
           </button>

@@ -1,10 +1,4 @@
-import {
-  Component,
-  input,
-  output,
-  signal,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, input, output, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -21,7 +15,7 @@ export interface ImageItem {
 
 /**
  * Image Gallery Component
- * 
+ *
  * Features:
  * - Drag & drop file upload
  * - Click to upload
@@ -32,7 +26,7 @@ export interface ImageItem {
  * - Borders for transparent images visibility
  * - Maximum file size validation
  * - Image format validation (jpg, png, webp)
- * 
+ *
  * Emits:
  * - fileUpload: when user selects file for upload
  * - fileDelete: when user deletes image
@@ -42,12 +36,7 @@ export interface ImageItem {
 @Component({
   selector: 'app-image-gallery',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    MatIconModule,
-    MatProgressSpinnerModule,
-  ],
+  imports: [CommonModule, MatButtonModule, MatIconModule, MatProgressSpinnerModule],
   templateUrl: './image-gallery.component.html',
   styleUrl: './image-gallery.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

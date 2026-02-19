@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import type { FormControl} from '@angular/forms';
+import type { FormControl } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -20,15 +20,15 @@ export interface SelectOption {
 
 /**
  * Reusable form field component with validation support
- * 
+ *
  * Provides consistent form field experience across the application
  * with automatic error message display and character counting.
- * 
+ *
  * Supports multiple input types:
  * - text, email, password, number, tel, url
  * - textarea for multiline input
  * - select for dropdown options
- * 
+ *
  * @example
  * <app-form-field
  *   [label]="'Email'"
@@ -38,13 +38,13 @@ export interface SelectOption {
  *   [prefixIcon]="'email'"
  *   [required]="true"
  * />
- * 
+ *
  * @example
  * <app-form-field
  *   [label]="'Name'"
  *   [control]="myForm.controls['name']"
  * />
- * 
+ *
  * @example
  * <app-form-field
  *   [label]="'Description'"
@@ -78,7 +78,7 @@ export class FormFieldComponent {
   readonly label = input.required<string>();
 
   /**
-  * Form control for the input (required)
+   * Form control for the input (required)
    */
   readonly control = input.required<FormControl>();
 
@@ -86,7 +86,9 @@ export class FormFieldComponent {
    * Input type
    * @default 'text'
    */
-  readonly type = input<'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'textarea' | 'select'>('text');
+  readonly type = input<
+    'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'textarea' | 'select'
+  >('text');
 
   /**
    * Placeholder text

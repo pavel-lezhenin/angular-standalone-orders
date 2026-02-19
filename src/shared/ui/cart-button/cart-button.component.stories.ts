@@ -29,10 +29,7 @@ type Story = StoryObj<CartButtonComponent>;
 export const Empty: Story = {
   decorators: [
     applicationConfig({
-      providers: [
-        provideRouter([]),
-        { provide: CartService, useValue: createMockCartService(0) },
-      ],
+      providers: [provideRouter([]), { provide: CartService, useValue: createMockCartService(0) }],
     }),
   ],
 };
@@ -43,10 +40,7 @@ export const Empty: Story = {
 export const WithItems: Story = {
   decorators: [
     applicationConfig({
-      providers: [
-        provideRouter([]),
-        { provide: CartService, useValue: createMockCartService(3) },
-      ],
+      providers: [provideRouter([]), { provide: CartService, useValue: createMockCartService(3) }],
     }),
   ],
 };
@@ -57,10 +51,7 @@ export const WithItems: Story = {
 export const WithManyItems: Story = {
   decorators: [
     applicationConfig({
-      providers: [
-        provideRouter([]),
-        { provide: CartService, useValue: createMockCartService(99) },
-      ],
+      providers: [provideRouter([]), { provide: CartService, useValue: createMockCartService(99) }],
     }),
   ],
 };

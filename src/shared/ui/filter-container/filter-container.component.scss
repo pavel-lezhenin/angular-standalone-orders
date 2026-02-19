@@ -15,7 +15,7 @@
 }
 
 .filter-actions {
-  }
+}
 
 .action-button {
   transition: all 0.2s ease-in-out;
@@ -52,4 +52,3 @@
 :host-context(.mobile) .filter-fields {
   grid-template-columns: 1fr;
 }
-

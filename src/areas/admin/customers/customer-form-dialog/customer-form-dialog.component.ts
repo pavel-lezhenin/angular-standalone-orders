@@ -1,7 +1,7 @@
-import type { OnInit} from '@angular/core';
+import type { OnInit } from '@angular/core';
 import { ChangeDetectionStrategy, Component, inject, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import type { FormControl, FormGroup} from '@angular/forms';
+import type { FormControl, FormGroup } from '@angular/forms';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -46,7 +46,7 @@ export class CustomerFormDialogComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly dialogRef = inject(MatDialogRef<CustomerFormDialogComponent>);
   protected readonly data = inject<CustomerFormDialogData>(MAT_DIALOG_DATA);
-  
+
   /**
    * Reference to the dialog component
    */
@@ -61,7 +61,10 @@ export class CustomerFormDialogComponent implements OnInit {
    * Available roles
    */
   protected readonly roles: UserRole[] = ['user', 'manager', 'admin'];
-  protected readonly roleSelectOptions: SelectOption[] = this.roles.map(r => ({ value: r, label: r }));
+  protected readonly roleSelectOptions: SelectOption[] = this.roles.map((r) => ({
+    value: r,
+    label: r,
+  }));
 
   ngOnInit(): void {
     this.initForm();

@@ -35,9 +35,7 @@ const meta: Meta<UserMenuComponent> = {
   tags: ['autodocs'],
   decorators: [
     applicationConfig({
-      providers: [
-        provideRouter([]),
-      ],
+      providers: [provideRouter([])],
     }),
   ],
 };
@@ -48,10 +46,7 @@ type Story = StoryObj<UserMenuComponent>;
 export const Guest: Story = {
   decorators: [
     applicationConfig({
-      providers: [
-        provideRouter([]),
-        { provide: AuthService, useValue: mockAuthServiceGuest },
-      ],
+      providers: [provideRouter([]), { provide: AuthService, useValue: mockAuthServiceGuest }],
     }),
   ],
 };
@@ -59,10 +54,7 @@ export const Guest: Story = {
 export const AuthenticatedUser: Story = {
   decorators: [
     applicationConfig({
-      providers: [
-        provideRouter([]),
-        { provide: AuthService, useValue: mockAuthServiceUser },
-      ],
+      providers: [provideRouter([]), { provide: AuthService, useValue: mockAuthServiceUser }],
     }),
   ],
 };
@@ -70,10 +62,7 @@ export const AuthenticatedUser: Story = {
 export const AuthenticatedAdmin: Story = {
   decorators: [
     applicationConfig({
-      providers: [
-        provideRouter([]),
-        { provide: AuthService, useValue: mockAuthServiceAdmin },
-      ],
+      providers: [provideRouter([]), { provide: AuthService, useValue: mockAuthServiceAdmin }],
     }),
   ],
 };
@@ -81,10 +70,7 @@ export const AuthenticatedAdmin: Story = {
 export const AuthenticatedManager: Story = {
   decorators: [
     applicationConfig({
-      providers: [
-        provideRouter([]),
-        { provide: AuthService, useValue: mockAuthServiceManager },
-      ],
+      providers: [provideRouter([]), { provide: AuthService, useValue: mockAuthServiceManager }],
     }),
   ],
 };

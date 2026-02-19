@@ -15,12 +15,7 @@ import { TableActionButtonsComponent } from '@shared/ui';
 @Component({
   selector: 'app-category-table',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatTableModule,
-    MatPaginatorModule,
-    TableActionButtonsComponent,
-  ],
+  imports: [CommonModule, MatTableModule, MatPaginatorModule, TableActionButtonsComponent],
   templateUrl: './category-table.component.html',
   styleUrl: './category-table.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

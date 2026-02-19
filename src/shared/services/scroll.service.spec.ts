@@ -30,9 +30,7 @@ describe('ScrollService', () => {
 
       service.scrollToSection('hero-section');
 
-      expect(window.scrollTo).toHaveBeenCalledWith(
-        expect.objectContaining({ behavior: 'smooth' })
-      );
+      expect(window.scrollTo).toHaveBeenCalledWith(expect.objectContaining({ behavior: 'smooth' }));
     });
 
     it('compensates for top-bar height when .top-bar element exists', () => {

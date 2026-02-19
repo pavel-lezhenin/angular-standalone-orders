@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, input, output, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  inject,
+  input,
+  output,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -18,7 +26,7 @@ export interface CustomerFilters {
 
 /**
  * Customer filters component
- * 
+ *
  * Handles search and role filtering
  * Uses reusable SearchInputComponent with 300ms debounce
  * Uses FilterContainerComponent for responsive layout

@@ -32,10 +32,10 @@ import type { OrderStatus } from '@core/types';
 export class OrderCardComponent {
   order = input.required<OrderDTO>();
   canceling = input<boolean>(false);
-  
+
   cardClick = output<string>();
   cancelOrder = output<OrderDTO>();
-  
+
   private readonly cancellableStatuses: readonly OrderStatus[] = ['pending_payment', 'paid'];
 
   protected canCancel(): boolean {

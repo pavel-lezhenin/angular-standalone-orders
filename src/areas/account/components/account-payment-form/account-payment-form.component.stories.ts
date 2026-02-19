@@ -5,7 +5,7 @@ import { AccountPaymentFormComponent } from './account-payment-form.component';
 
 /**
  * AccountPaymentFormComponent Stories
- * 
+ *
  * Demonstrates the account settings payment form wrapper.
  * Uses shared PaymentFormComponent internally.
  */

@@ -52,12 +52,12 @@ export class AuthService {
   /**
    * Restores user session from storage.
    * Called on app initialization before route guards are checked.
-   * 
+   *
    * If user was previously authenticated:
    * - Fetches fresh user data from /api/auth/me
    * - Restores currentUser signal
    * - CartService will auto-restore cart via effect
-   * 
+   *
    * If no user in storage, does nothing (user stays null)
    */
   async restoreSession(): Promise<void> {
@@ -71,9 +71,7 @@ export class AuthService {
     }
 
     try {
-      const response = await firstValueFrom(
-        this.http.get<{ user: UserDTO }>('/api/auth/me')
-      );
+      const response = await firstValueFrom(this.http.get<{ user: UserDTO }>('/api/auth/me'));
       if (response?.user) {
         this.currentUser.set(response.user);
       }

@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  input,
-  output,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -13,7 +8,7 @@ import { DEFAULT_PRODUCT_IMAGE } from '@shared/constants/product.constants';
 /**
  * Product Card Component
  * Displays product information in a card layout
- * 
+ *
  * Features:
  * - Shows product image, name, price, category, stock status
  * - Optional "Add to Cart" button (via showAddToCart flag)
@@ -31,7 +26,7 @@ import { DEFAULT_PRODUCT_IMAGE } from '@shared/constants/product.constants';
 export class ProductCardComponent {
   product = input.required<ProductWithCategoryDTO>();
   showAddToCart = input<boolean>(false);
-  
+
   cardClick = output<string>();
   addToCart = output<ProductWithCategoryDTO>();
 

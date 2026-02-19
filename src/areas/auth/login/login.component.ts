@@ -2,14 +2,8 @@ import type { OnInit } from '@angular/core';
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
-import type {
-  FormControl,
-  FormGroup} from '@angular/forms';
-import {
-  FormBuilder,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import type { FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -57,21 +51,16 @@ export class LoginComponent extends BaseComponent implements OnInit {
    */
   ngOnInit(): void {
     if (this.authService.isAuthenticated()) {
-      const returnUrl = this.route.snapshot.queryParams['returnUrl'] || this.authService.getRedirectPath();
+      const returnUrl =
+        this.route.snapshot.queryParams['returnUrl'] || this.authService.getRedirectPath();
       void this.router.navigateByUrl(returnUrl);
     }
   }
 
   /** Form group with email, password, and rememberMe fields */
   readonly loginForm: FormGroup = this.fb.group({
-    email: [
-      '',
-      [Validators.required, Validators.email],
-    ],
-    password: [
-      '',
-      [Validators.required, Validators.minLength(6)],
-    ],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(6)]],
     rememberMe: [false],
   });
 
@@ -109,12 +98,11 @@ export class LoginComponent extends BaseComponent implements OnInit {
       await this.authService.login(email, password);
 
       // Get return URL from query params or use role-based redirect
-      const returnUrl = this.route.snapshot.queryParams['returnUrl'] || this.authService.getRedirectPath();
+      const returnUrl =
+        this.route.snapshot.queryParams['returnUrl'] || this.authService.getRedirectPath();
       await this.router.navigateByUrl(returnUrl);
     } catch {
-      this.errorMessage.set(
-        'Invalid email or password. Please try again.'
-      );
+      this.errorMessage.set('Invalid email or password. Please try again.');
       this.stopLoading();
     }
   }

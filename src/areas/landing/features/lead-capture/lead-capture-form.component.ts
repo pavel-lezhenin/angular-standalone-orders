@@ -58,8 +58,9 @@ export class LeadCaptureFormComponent {
     });
 
     // Watch channel changes to update validation
-    this.leadForm.get('channel')?.valueChanges
-      .pipe(takeUntilDestroyed(this.destroyRef))
+    this.leadForm
+      .get('channel')
+      ?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((channel: ContactChannel) => {
         this.selectedChannel = channel;
         this.updateChannelValidation(channel);
@@ -73,7 +74,7 @@ export class LeadCaptureFormComponent {
     }
 
     const formData = this.leadForm.value;
-    
+
     // Handle different contact channels
     switch (formData.channel) {
       case 'telegram':
@@ -92,13 +93,13 @@ export class LeadCaptureFormComponent {
 
   private updateChannelValidation(channel: ContactChannel): void {
     const channelValueControl = this.leadForm.get('channelValue');
-    
+
     if (channel === 'telegram' || channel === 'whatsapp' || channel === 'phone') {
       channelValueControl?.setValidators([Validators.required]);
     } else {
       channelValueControl?.clearValidators();
     }
-    
+
     channelValueControl?.updateValueAndValidity();
   }
 
@@ -108,7 +109,7 @@ export class LeadCaptureFormComponent {
     const encodedMessage = encodeURIComponent(
       `Hi! I'm ${this.leadForm.get('name')?.value}. ${message || 'I am interested in your order management platform.'}`
     );
-    
+
     window.open(`https://t.me/${cleanUsername}?text=${encodedMessage}`, '_blank');
     this.showSuccessMessage('Opening Telegram...');
     this.leadForm.reset({ channel: 'email', consent: false });
@@ -120,18 +121,16 @@ export class LeadCaptureFormComponent {
     const encodedMessage = encodeURIComponent(
       `Hi! I'm ${this.leadForm.get('name')?.value} from ${this.leadForm.get('company')?.value || 'my company'}. ${message || 'I am interested in your order management platform.'}`
     );
-    
+
     window.open(`https://wa.me/${cleanPhone}?text=${encodedMessage}`, '_blank');
     this.showSuccessMessage('Opening WhatsApp...');
     this.leadForm.reset({ channel: 'email', consent: false });
   }
 
   private showPhoneMessage(phone: string): void {
-    this.snackBar.open(
-      `Thank you! We'll call you at ${phone} within 24 hours.`,
-      'Close',
-      { duration: 6000 }
-    );
+    this.snackBar.open(`Thank you! We'll call you at ${phone} within 24 hours.`, 'Close', {
+      duration: 6000,
+    });
     this.leadForm.reset({ channel: 'email', consent: false });
   }
 

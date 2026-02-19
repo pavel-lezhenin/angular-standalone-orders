@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/angular';
-import type { FormGroup} from '@angular/forms';
+import type { FormGroup } from '@angular/forms';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { applicationConfig } from '@storybook/angular';
 import { PaymentFormComponent } from './payment-form.component';
 
 /**
  * PaymentFormComponent Stories
- * 
+ *
  * Demonstrates the Dumb UI component for card payment fields.
  * Parent components must create and provide the FormGroup.
  */
@@ -44,7 +44,7 @@ export const Default: Story = {
   render: () => {
     const fb = new FormBuilder();
     const formGroup = createCardFormGroup(fb);
-    
+
     return {
       props: { formGroup },
       template: '<app-payment-form [formGroup]="formGroup" />',
@@ -68,7 +68,7 @@ export const WithCVV: Story = {
       expiryYear: ['', Validators.required],
       cvv: ['', [Validators.required, Validators.pattern(/^\d{3,4}$/)]],
     });
-    
+
     return {
       props: { formGroup, showCvv: true },
       template: '<app-payment-form [formGroup]="formGroup" [showCvv]="showCvv" />',
@@ -92,7 +92,7 @@ export const WithLabel: Story = {
       expiryMonth: ['', Validators.required],
       expiryYear: ['', Validators.required],
     });
-    
+
     return {
       props: { formGroup, showLabel: true },
       template: '<app-payment-form [formGroup]="formGroup" [showLabel]="showLabel" />',
@@ -116,7 +116,7 @@ export const PreFilled: Story = {
       expiryMonth: ['12'],
       expiryYear: ['2026'],
     });
-    
+
     return {
       props: { formGroup, showLabel: true },
       template: '<app-payment-form [formGroup]="formGroup" [showLabel]="showLabel" />',
@@ -134,10 +134,11 @@ export const NoFormatting: Story = {
   render: () => {
     const fb = new FormBuilder();
     const formGroup = createCardFormGroup(fb);
-    
+
     return {
       props: { formGroup, enableFormatting: false },
-      template: '<app-payment-form [formGroup]="formGroup" [enableFormatting]="enableFormatting" />',
+      template:
+        '<app-payment-form [formGroup]="formGroup" [enableFormatting]="enableFormatting" />',
       moduleMetadata: {
         imports: [ReactiveFormsModule],
       },

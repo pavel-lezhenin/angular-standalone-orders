@@ -33,21 +33,14 @@ export const PERMISSION_SECTIONS = [
   'dashboard',
 ] as const;
 
-export type PermissionSection = typeof PERMISSION_SECTIONS[number];
+export type PermissionSection = (typeof PERMISSION_SECTIONS)[number];
 
 /**
  * All available actions in the system
  */
-export const PERMISSION_ACTIONS = [
-  'view',
-  'create',
-  'edit',
-  'delete',
-  'crud',
-  'cancel',
-] as const;
+export const PERMISSION_ACTIONS = ['view', 'create', 'edit', 'delete', 'crud', 'cancel'] as const;
 
-export type PermissionAction = typeof PERMISSION_ACTIONS[number];
+export type PermissionAction = (typeof PERMISSION_ACTIONS)[number];
 
 /**
  * Permission matrix cell for UI

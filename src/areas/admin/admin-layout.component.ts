@@ -1,5 +1,12 @@
-import type { OnDestroy, OnInit} from '@angular/core';
-import { ChangeDetectionStrategy, Component, PLATFORM_ID, computed, inject, signal } from '@angular/core';
+import type { OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  PLATFORM_ID,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -40,11 +47,31 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
 
   private menuItems: MenuItem[] = [
     { label: 'Dashboard', icon: 'dashboard', route: '/admin', roles: ['admin', 'manager'] },
-    { label: 'Orders Board', icon: 'view_kanban', route: '/admin/orders', roles: ['admin', 'manager'] },
-    { label: 'Products', icon: 'inventory_2', route: '/admin/products', roles: ['admin', 'manager'] },
-    { label: 'Categories', icon: 'category', route: '/admin/categories', roles: ['admin', 'manager'] },
+    {
+      label: 'Orders Board',
+      icon: 'view_kanban',
+      route: '/admin/orders',
+      roles: ['admin', 'manager'],
+    },
+    {
+      label: 'Products',
+      icon: 'inventory_2',
+      route: '/admin/products',
+      roles: ['admin', 'manager'],
+    },
+    {
+      label: 'Categories',
+      icon: 'category',
+      route: '/admin/categories',
+      roles: ['admin', 'manager'],
+    },
     { label: 'Customers', icon: 'people', route: '/admin/customers', roles: ['admin'] },
-    { label: 'Permissions', icon: 'admin_panel_settings', route: '/admin/permissions', roles: ['admin'] },
+    {
+      label: 'Permissions',
+      icon: 'admin_panel_settings',
+      route: '/admin/permissions',
+      roles: ['admin'],
+    },
   ];
 
   currentUser = this.authService.currentUser;
@@ -56,7 +83,7 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
     const user = this.currentUser();
     if (!user) return [];
 
-    return this.menuItems.filter(item => item.roles.includes(user.role as 'admin' | 'manager'));
+    return this.menuItems.filter((item) => item.roles.includes(user.role as 'admin' | 'manager'));
   });
 
   ngOnInit(): void {
@@ -74,7 +101,7 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
   }
 
   protected toggleSidenav(): void {
-    this.isSidenavOpened.update(opened => !opened);
+    this.isSidenavOpened.update((opened) => !opened);
   }
 
   protected closeSidenavOnMobile(): void {

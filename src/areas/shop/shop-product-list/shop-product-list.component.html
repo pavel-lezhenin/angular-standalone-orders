@@ -3,7 +3,8 @@
     [icon]="'inventory_2'"
     [title]="'No products found'"
     [message]="'Try adjusting your search or filters to find what you are looking for.'"
-    [size]="'default'" />
+    [size]="'default'"
+  />
 } @else {
   <div class="products-grid">
     @for (product of products(); track product.id) {
@@ -17,10 +18,6 @@
   </div>
 
   @if (totalPages() > 1) {
-    <app-pagination
-      [currentPage]="currentPage()"
-      [totalPages]="totalPages()"
-      (pageChange)="pageChange.emit($event)"
-    />
+    <app-pagination [currentPage]="currentPage()" [totalPages]="totalPages()" (pageChange)="pageChange.emit($event)" />
   }
 }

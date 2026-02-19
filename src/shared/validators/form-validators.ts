@@ -2,20 +2,20 @@ import type { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/fo
 
 /**
  * Custom form validators
- * 
+ *
  * Provides reusable validation logic for common form fields
  */
 export class FormValidators {
   /**
    * Validates phone number format
-   * 
+   *
    * Accepts formats:
    * - +1 (555) 123-4567
    * - 555-123-4567
    * - (555) 123-4567
    * - 5551234567
    * - +15551234567
-   * 
+   *
    * @returns ValidationErrors if invalid, null if valid
    */
   static phone(control: AbstractControl): ValidationErrors | null {
@@ -46,11 +46,11 @@ export class FormValidators {
 
   /**
    * Validates US postal code format
-   * 
+   *
    * Accepts formats:
    * - 12345 (5-digit ZIP)
    * - 12345-6789 (ZIP+4)
-   * 
+   *
    * @returns ValidationErrors if invalid, null if valid
    */
   static postalCode(control: AbstractControl): ValidationErrors | null {
@@ -61,11 +61,11 @@ export class FormValidators {
     const postalCodePattern = /^\d{5}(-\d{4})?$/;
 
     if (!postalCodePattern.test(control.value)) {
-      return { 
-        postalCode: { 
-          value: control.value, 
-          message: 'Postal code must be in format 12345 or 12345-6789' 
-        } 
+      return {
+        postalCode: {
+          value: control.value,
+          message: 'Postal code must be in format 12345 or 12345-6789',
+        },
       };
     }
 

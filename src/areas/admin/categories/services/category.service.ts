@@ -4,7 +4,12 @@ import { firstValueFrom } from 'rxjs';
 import { PermissionService } from '@core/services/permission.service';
 import type { CategoryDTO } from '@core';
 import type { PaginationParams, PaginatedResponse } from '@core/types';
-import type { CategoryPermissions, CategoryFormData, CreateCategoryDto, UpdateCategoryDto } from '../model';
+import type {
+  CategoryPermissions,
+  CategoryFormData,
+  CreateCategoryDto,
+  UpdateCategoryDto,
+} from '../model';
 
 /**
  * Category service (admin area)

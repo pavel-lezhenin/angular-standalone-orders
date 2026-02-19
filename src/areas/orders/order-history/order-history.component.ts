@@ -1,5 +1,12 @@
-import type { OnInit} from '@angular/core';
-import { ChangeDetectionStrategy, Component, computed, inject, PLATFORM_ID, signal } from '@angular/core';
+import type { OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  PLATFORM_ID,
+  signal,
+} from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,7 +22,14 @@ import { OrderCardComponent } from '../ui';
 @Component({
   selector: 'app-order-history',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatIconModule, PaginationComponent, EmptyStateComponent, OrderCardComponent],
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatIconModule,
+    PaginationComponent,
+    EmptyStateComponent,
+    OrderCardComponent,
+  ],
   templateUrl: './order-history.component.html',
   styleUrl: './order-history.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -105,7 +119,7 @@ export class OrderHistoryComponent implements OnInit {
       return;
     }
 
-    this.cancelingOrderIds.update(ids => [...ids, order.id]);
+    this.cancelingOrderIds.update((ids) => [...ids, order.id]);
 
     try {
       const updatedOrder = await this.orderService.updateOrderStatus(order.id, {
@@ -117,14 +131,14 @@ export class OrderHistoryComponent implements OnInit {
         },
       });
 
-      this.orders.update(currentOrders =>
-        currentOrders.map(item => (item.id === updatedOrder.id ? updatedOrder : item))
+      this.orders.update((currentOrders) =>
+        currentOrders.map((item) => (item.id === updatedOrder.id ? updatedOrder : item))
       );
     } catch (err) {
       console.error('Failed to cancel order:', err);
       this.error.set('Failed to cancel order. Please try again.');
     } finally {
-      this.cancelingOrderIds.update(ids => ids.filter(id => id !== order.id));
+      this.cancelingOrderIds.update((ids) => ids.filter((id) => id !== order.id));
     }
   }
 

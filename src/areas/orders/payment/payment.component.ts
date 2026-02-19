@@ -1,5 +1,14 @@
-import type { OnInit} from '@angular/core';
-import { ChangeDetectionStrategy, Component, ViewChild, signal, computed, inject, PLATFORM_ID, effect } from '@angular/core';
+import type { OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ViewChild,
+  signal,
+  computed,
+  inject,
+  PLATFORM_ID,
+  effect,
+} from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -29,7 +38,7 @@ type PaymentState = 'form' | 'processing' | 'success' | 'failure';
 
 /**
  * Payment Page Component
- * 
+ *
  * Handles payment processing for orders:
  * 1. Shows order summary
  * 2. Collects payment information
@@ -77,10 +86,13 @@ export default class PaymentComponent implements OnInit {
   protected total = signal<number>(0);
   protected itemCount = signal<number>(0);
   protected savedPaymentMethods = signal<SavedPaymentMethodDTO[]>([]);
-  protected selectedSavedMethodId = signal<string>('');  
+  protected selectedSavedMethodId = signal<string>('');
   protected savedMethodSelectControl = new FormControl('');
   protected showNewPaymentForm = signal(false);
-  protected savedMethodCvv = new FormControl('', [Validators.required, Validators.pattern(/^\d{3,4}$/)]);
+  protected savedMethodCvv = new FormControl('', [
+    Validators.required,
+    Validators.pattern(/^\d{3,4}$/),
+  ]);
   protected errorMessage = signal<string>('');
   protected transactionId = signal<string>('');
   protected processingTime = signal<number>(0);
@@ -89,7 +101,9 @@ export default class PaymentComponent implements OnInit {
   protected isSuccess = computed(() => this.state() === 'success');
   protected isFailure = computed(() => this.state() === 'failure');
   protected hasSavedPaymentMethods = computed(() => this.savedPaymentMethods().length > 0);
-  protected usingSavedPaymentMethod = computed(() => this.hasSavedPaymentMethods() && !this.showNewPaymentForm());
+  protected usingSavedPaymentMethod = computed(
+    () => this.hasSavedPaymentMethods() && !this.showNewPaymentForm()
+  );
   protected canDeleteSelectedSavedMethod = computed(() => {
     const selectedMethod = this.getSelectedSavedMethod();
     if (!selectedMethod) {
@@ -104,11 +118,12 @@ export default class PaymentComponent implements OnInit {
   });
   protected selectedSavedMethodType = computed(() => this.getSelectedSavedMethod()?.type ?? null);
   protected paymentMethodSelectOptions = computed<SelectOption[]>(() =>
-    this.savedPaymentMethods().map(method => ({
+    this.savedPaymentMethods().map((method) => ({
       value: method.id,
-      label: method.type === 'card'
-        ? `Card ending in ${method.last4Digits}${method.isDefault ? ' (Default)' : ''}`
-        : `PayPal${method.paypalEmail ? ' (' + method.paypalEmail + ')' : ''}${method.isDefault ? ' (Default)' : ''}`,
+      label:
+        method.type === 'card'
+          ? `Card ending in ${method.last4Digits}${method.isDefault ? ' (Default)' : ''}`
+          : `PayPal${method.paypalEmail ? ' (' + method.paypalEmail + ')' : ''}${method.isDefault ? ' (Default)' : ''}`,
     }))
   );
 
@@ -122,13 +137,11 @@ export default class PaymentComponent implements OnInit {
     });
 
     // Subscribe to savedMethodSelectControl changes to trigger onSavedMethodChange
-    this.savedMethodSelectControl.valueChanges
-      .pipe(takeUntilDestroyed())
-      .subscribe(methodId => {
-        if (methodId && methodId !== this.selectedSavedMethodId()) {
-          this.onSavedMethodChange(methodId);
-        }
-      });
+    this.savedMethodSelectControl.valueChanges.pipe(takeUntilDestroyed()).subscribe((methodId) => {
+      if (methodId && methodId !== this.selectedSavedMethodId()) {
+        this.onSavedMethodChange(methodId);
+      }
+    });
   }
 
   ngOnInit(): void {
@@ -162,7 +175,7 @@ export default class PaymentComponent implements OnInit {
       const methods = await this.userPreferencesService.getSavedPaymentMethods();
       this.savedPaymentMethods.set(methods);
 
-      const defaultMethod = methods.find(method => method.isDefault) ?? methods[0];
+      const defaultMethod = methods.find((method) => method.isDefault) ?? methods[0];
       this.selectedSavedMethodId.set(defaultMethod?.id ?? '');
       this.showNewPaymentForm.set(methods.length === 0);
       this.updateSavedMethodCvvValidators();
@@ -224,16 +237,15 @@ export default class PaymentComponent implements OnInit {
       this.savedMethodCvv.reset('');
     } catch (error) {
       console.error('Failed to delete payment method:', error);
-      const errorMessage = error instanceof Error
-        ? error.message
-        : 'Failed to delete payment method';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Failed to delete payment method';
       this.notification.error(errorMessage);
     }
   }
 
   private getSelectedSavedMethod(): SavedPaymentMethodDTO | null {
     const selectedMethod = this.savedPaymentMethods().find(
-      method => method.id === this.selectedSavedMethodId()
+      (method) => method.id === this.selectedSavedMethodId()
     );
 
     return selectedMethod ?? null;
@@ -319,7 +331,11 @@ export default class PaymentComponent implements OnInit {
         this.state.set('success');
 
         // Save payment method if requested
-        if (!this.usingSavedPaymentMethod() && formData!.shouldSaveMethod && !formData!.useSavedMethod) {
+        if (
+          !this.usingSavedPaymentMethod() &&
+          formData!.shouldSaveMethod &&
+          !formData!.useSavedMethod
+        ) {
           try {
             await this.savePaymentMethod(formData!);
           } catch {
@@ -329,13 +345,11 @@ export default class PaymentComponent implements OnInit {
 
         // Create order
         await this.createOrder(result.transactionId || '', formData!.method);
-
       } else {
         // Payment failed
         this.errorMessage.set(result.errorMessage || 'Payment declined');
         this.state.set('failure');
       }
-
     } catch (error) {
       console.error('Payment processing error:', error);
       this.errorMessage.set('An unexpected error occurred. Please try again.');
@@ -346,7 +360,10 @@ export default class PaymentComponent implements OnInit {
   /**
    * Create order after successful payment
    */
-  private async createOrder(transactionId: string, _paymentMethod: PaymentFormData['method']): Promise<void> {
+  private async createOrder(
+    transactionId: string,
+    _paymentMethod: PaymentFormData['method']
+  ): Promise<void> {
     const orderData = this.orderData();
     if (!orderData) {
       this.notification.error('Order data not found');
@@ -375,7 +392,6 @@ export default class PaymentComponent implements OnInit {
       setTimeout(() => {
         void this.router.navigate(['/orders/confirmation', createdOrder.id]);
       }, 1500); // Small delay to show success state
-
     } catch (error) {
       console.error('Order creation error:', error);
       this.notification.error('Failed to create order. Please contact support.');

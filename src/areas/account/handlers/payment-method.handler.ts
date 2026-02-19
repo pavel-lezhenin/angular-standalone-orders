@@ -1,5 +1,5 @@
 import { Injectable, inject, signal, effect } from '@angular/core';
-import type { FormGroup} from '@angular/forms';
+import type { FormGroup } from '@angular/forms';
 import { FormBuilder, Validators } from '@angular/forms';
 import { UserPreferencesService } from '@shared/services/user-preferences.service';
 import { NotificationService } from '@shared/services/notification.service';
@@ -40,28 +40,28 @@ export class PaymentMethodHandler {
   /** Loads payment methods from API, maps to display format, selects the default. */
   async load(): Promise<void> {
     const methods = await this.preferencesService.getSavedPaymentMethods();
-    const mapped: PaymentMethodDTO[] = methods.map(m => ({
+    const mapped: PaymentMethodDTO[] = methods.map((m) => ({
       id: m.id,
-      label: m.type === 'card'
-        ? `Card •••• ${m.last4Digits}`
-        : `PayPal (${m.paypalEmail})`,
+      label: m.type === 'card' ? `Card •••• ${m.last4Digits}` : `PayPal (${m.paypalEmail})`,
       type: m.type,
       isDefault: m.isDefault,
-      ...(m.type === 'card' && m.last4Digits && {
-        cardDetails: {
-          lastFourDigits: m.last4Digits,
-          expiryMonth: Number(m.expiryMonth) || 1,
-          expiryYear: Number(m.expiryYear) || 2024,
-        },
-      }),
-      ...(m.type === 'paypal' && m.paypalEmail && {
-        paypalEmail: m.paypalEmail,
-      }),
+      ...(m.type === 'card' &&
+        m.last4Digits && {
+          cardDetails: {
+            lastFourDigits: m.last4Digits,
+            expiryMonth: Number(m.expiryMonth) || 1,
+            expiryYear: Number(m.expiryYear) || 2024,
+          },
+        }),
+      ...(m.type === 'paypal' &&
+        m.paypalEmail && {
+          paypalEmail: m.paypalEmail,
+        }),
     }));
 
     this.items.set(mapped);
 
-    const defaultItem = methods.find(m => m.isDefault) ?? methods[0] ?? null;
+    const defaultItem = methods.find((m) => m.isDefault) ?? methods[0] ?? null;
     this.selectedId.set(defaultItem?.id ?? '');
     this.showForm.set(false);
   }
@@ -75,7 +75,7 @@ export class PaymentMethodHandler {
   }
 
   toggleForm(): void {
-    this.showForm.update(v => !v);
+    this.showForm.update((v) => !v);
 
     if (this.showForm()) {
       this.selectedType.set('card');
@@ -84,7 +84,7 @@ export class PaymentMethodHandler {
   }
 
   toggleEditMode(): void {
-    this.isEditMode.update(v => !v);
+    this.isEditMode.update((v) => !v);
 
     if (!this.isEditMode()) {
       this.showForm.set(false);
@@ -134,7 +134,7 @@ export class PaymentMethodHandler {
     await this.withNotification(
       () => this.preferencesService.deletePaymentMethod(id),
       'Payment method deleted',
-      'Failed to delete payment method',
+      'Failed to delete payment method'
     );
   }
 
@@ -147,7 +147,7 @@ export class PaymentMethodHandler {
     await this.withNotification(
       () => this.preferencesService.setDefaultPaymentMethod(id),
       'Default payment method updated',
-      'Failed to set default payment method',
+      'Failed to set default payment method'
     );
   }
 
@@ -156,7 +156,7 @@ export class PaymentMethodHandler {
   private async withNotification(
     action: () => Promise<unknown>,
     successMessage: string,
-    errorMessage: string,
+    errorMessage: string
   ): Promise<void> {
     try {
       await action();
@@ -164,9 +164,7 @@ export class PaymentMethodHandler {
       this.notification.success(successMessage);
     } catch (error) {
       console.error(`${errorMessage}:`, error);
-      this.notification.error(
-        error instanceof Error ? error.message : errorMessage,
-      );
+      this.notification.error(error instanceof Error ? error.message : errorMessage);
     }
   }
 
@@ -186,10 +184,10 @@ export class PaymentMethodHandler {
 
       if (type === 'paypal') {
         this.form.get('paypalEmail')?.setValidators([Validators.required, Validators.email]);
-        cardFields.forEach(f => this.form.get(f)?.clearValidators());
+        cardFields.forEach((f) => this.form.get(f)?.clearValidators());
       } else {
         this.form.get('paypalEmail')?.clearValidators();
-        cardFields.forEach(f => {
+        cardFields.forEach((f) => {
           const v = cardValidators[f];
           if (v) {
             this.form.get(f)?.setValidators(v);
@@ -197,9 +195,7 @@ export class PaymentMethodHandler {
         });
       }
 
-      ['paypalEmail', ...cardFields].forEach(f =>
-        this.form.get(f)?.updateValueAndValidity(),
-      );
+      ['paypalEmail', ...cardFields].forEach((f) => this.form.get(f)?.updateValueAndValidity());
     });
   }
 }

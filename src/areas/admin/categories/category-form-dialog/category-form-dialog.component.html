@@ -1,7 +1,4 @@
-<app-dialog
-  (submitDialog)="onSubmit()"
-  (cancelDialog)="onCancel()"
->
+<app-dialog (submitDialog)="onSubmit()" (cancelDialog)="onCancel()">
   <form [formGroup]="form" class="category-form">
     <app-form-field
       [label]="'Name'"

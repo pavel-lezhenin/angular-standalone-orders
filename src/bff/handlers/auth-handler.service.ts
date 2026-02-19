@@ -52,13 +52,13 @@ export class AuthHandlerService {
       // In real implementation, would extract user ID from JWT token
       // For demo, get userId from localStorage
       const userId = localStorage.getItem('currentUserId');
-      
+
       if (!userId) {
         return new UnauthorizedResponse('No session found');
       }
 
       const user = await this.userRepo.getById(userId);
-      
+
       if (!user) {
         return new UnauthorizedResponse('User not found');
       }

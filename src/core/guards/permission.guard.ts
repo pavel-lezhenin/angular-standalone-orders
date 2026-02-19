@@ -6,7 +6,7 @@ import { PermissionService } from '../services/permission.service';
 /**
  * Permission-based guard.
  * Protects routes based on custom permission checks.
- * 
+ *
  * Usage:
  * ```typescript
  * {

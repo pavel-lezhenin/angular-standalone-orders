@@ -5,8 +5,19 @@ import { CategoryRepository } from '../repositories/category.repository';
 import { ProductRepository } from '../repositories/product.repository';
 import { randomDelay } from '../utils';
 import type { Category } from '../models';
-import { OkResponse, CreatedResponse, NoContentResponse, BadRequestResponse, NotFoundResponse, ServerErrorResponse } from './http-responses';
-import { parsePaginationParams, applyPagination, createPaginatedResponse } from '../../core/types/pagination';
+import {
+  OkResponse,
+  CreatedResponse,
+  NoContentResponse,
+  BadRequestResponse,
+  NotFoundResponse,
+  ServerErrorResponse,
+} from './http-responses';
+import {
+  parsePaginationParams,
+  applyPagination,
+  createPaginatedResponse,
+} from '../../core/types/pagination';
 
 /**
  * Category Handler Service
@@ -32,9 +43,10 @@ export class CategoryHandlerService {
       // Apply search filter
       if (search) {
         const searchLower = search.toLowerCase();
-        categories = categories.filter(category => 
-          category.name.toLowerCase().includes(searchLower) ||
-          category.description.toLowerCase().includes(searchLower)
+        categories = categories.filter(
+          (category) =>
+            category.name.toLowerCase().includes(searchLower) ||
+            category.description.toLowerCase().includes(searchLower)
         );
       }
 
@@ -42,9 +54,7 @@ export class CategoryHandlerService {
       const total = categories.length;
       const paginatedCategories = applyPagination(categories, page, limit);
 
-      return new OkResponse(
-        createPaginatedResponse(paginatedCategories, total, page, limit)
-      );
+      return new OkResponse(createPaginatedResponse(paginatedCategories, total, page, limit));
     } catch (err) {
       console.error('Failed to fetch categories:', err);
       return new ServerErrorResponse('Failed to fetch categories');
@@ -58,7 +68,7 @@ export class CategoryHandlerService {
     await randomDelay();
     try {
       const body = req.body as Partial<Category>;
-      
+
       // Validate required fields
       if (!body.name || !body.description) {
         return new BadRequestResponse('Name and description are required');
@@ -72,7 +82,7 @@ export class CategoryHandlerService {
       if (body.description.length > 128) {
         return new BadRequestResponse('Description must not exceed 128 characters');
       }
-      
+
       const categoryData: Category = {
         id: uuidv4(),
         name: body.name.trim(),
@@ -80,7 +90,7 @@ export class CategoryHandlerService {
       };
 
       await this.categoryRepo.create(categoryData);
-      
+
       return new CreatedResponse(categoryData);
     } catch (err) {
       console.error('Failed to create category:', err);
@@ -119,7 +129,7 @@ export class CategoryHandlerService {
       }
 
       await this.categoryRepo.update(id, updates);
-      
+
       const updatedCategory = await this.categoryRepo.getById(id);
       if (!updatedCategory) {
         return new NotFoundResponse('Category not found');

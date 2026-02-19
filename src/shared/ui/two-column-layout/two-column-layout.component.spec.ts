@@ -23,5 +23,4 @@ describe('TwoColumnLayoutComponent', () => {
   it('uses default sidebarWidth', () => {
     expect(component.sidebarWidth()).toBe('var(--cart-sidebar-width)');
   });
-
 });

@@ -49,7 +49,7 @@
       [rows]="3"
       [placeholder]="'Example: Item unavailable in warehouse, initiate refund'"
       [fieldClass]="'comment-field'"
-      [customErrorMessages]="{'minlength': 'Comment must be at least 3 characters'}"
+      [customErrorMessages]="{ minlength: 'Comment must be at least 3 characters' }"
     />
 
     <button mat-flat-button type="button" (click)="addComment()" [disabled]="isSavingComment()">

@@ -29,11 +29,7 @@
           </div>
 
           <div class="pagination-controls">
-            <app-pagination
-              [currentPage]="currentPage()"
-              [totalPages]="totalPages()"
-              (pageChange)="goToPage($event)"
-            />
+            <app-pagination [currentPage]="currentPage()" [totalPages]="totalPages()" (pageChange)="goToPage($event)" />
             <span class="pagination-caption">Page {{ currentPage() }} of {{ totalPages() }}</span>
           </div>
         </section>

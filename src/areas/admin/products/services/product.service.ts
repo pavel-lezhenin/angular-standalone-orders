@@ -87,10 +87,7 @@ export class ProductService {
   /**
    * Update existing product
    */
-  async updateProduct(
-    productId: string,
-    product: UpdateProductDTO
-  ): Promise<ProductDTO> {
+  async updateProduct(productId: string, product: UpdateProductDTO): Promise<ProductDTO> {
     const response = await firstValueFrom(
       this.http.put<{ product: ProductDTO }>(`${this.apiUrl}/${productId}`, product)
     );

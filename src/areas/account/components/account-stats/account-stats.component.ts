@@ -4,7 +4,7 @@ import { MatCardModule } from '@angular/material/card';
 
 /**
  * Account Statistics Component
- * 
+ *
  * Displays user account statistics
  */
 @Component({

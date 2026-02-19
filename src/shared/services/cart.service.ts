@@ -15,10 +15,10 @@ interface CartResponse {
 
 /**
  * Service for managing shopping cart with hybrid persistence.
- * 
+ *
  * Guest users: cart stored in localStorage
  * Authenticated users: cart stored in IndexedDB via HTTP API
- * 
+ *
  * Automatic cart migration:
  * - On login: merges guest cart into authenticated cart
  * - On logout: migrates authenticated cart to guest localStorage
@@ -32,13 +32,11 @@ export class CartService {
   private isBrowser = isPlatformBrowser(this.platformId);
   private previousUserId: string | null = null;
   private restorePromise: Promise<void> = Promise.resolve();
-  
+
   /**
    * Computed signal for total item count
    */
-  itemCount = computed(() => 
-    this.cartItems().reduce((sum, item) => sum + item.quantity, 0)
-  );
+  itemCount = computed(() => this.cartItems().reduce((sum, item) => sum + item.quantity, 0));
 
   private readonly http = inject(HttpClient);
   private readonly authService = inject(AuthService);
@@ -46,21 +44,21 @@ export class CartService {
   constructor() {
     // Restore cart on service initialization
     this.restorePromise = this.restoreCart();
-    
+
     // Initialize previousUserId to track actual auth changes
     const initialUser = this.authService.currentUser();
     this.previousUserId = initialUser?.id ?? null;
-    
+
     // Watch for authentication changes (login/logout)
     effect(() => {
       const user = this.authService.currentUser();
       const currentUserId = user?.id ?? null;
-      
+
       // Skip if this is the first run (no actual change)
       if (this.previousUserId === currentUserId) {
         return;
       }
-      
+
       if (currentUserId && !this.previousUserId) {
         // User logged in - merge guest cart to authenticated
         void this.mergeGuestCartOnLogin(currentUserId);
@@ -68,7 +66,7 @@ export class CartService {
         // User logged out - migrate to guest cart
         this.migrateToGuestOnLogout();
       }
-      
+
       // Update previous user ID
       this.previousUserId = currentUserId;
     });
@@ -79,17 +77,13 @@ export class CartService {
    */
   addItem(item: CartItemDTO): void {
     const currentItems = this.cartItems();
-    const existingIndex = currentItems.findIndex(
-      i => i.productId === item.productId
-    );
+    const existingIndex = currentItems.findIndex((i) => i.productId === item.productId);
 
     let updatedItems: CartItemDTO[];
     if (existingIndex >= 0) {
       // Increment quantity
       updatedItems = currentItems.map((i, idx) =>
-        idx === existingIndex
-          ? { ...i, quantity: i.quantity + item.quantity }
-          : i
+        idx === existingIndex ? { ...i, quantity: i.quantity + item.quantity } : i
       );
     } else {
       // Add new item
@@ -104,9 +98,7 @@ export class CartService {
    * Removes item from cart
    */
   removeItem(productId: string): void {
-    const updatedItems = this.cartItems().filter(
-      item => item.productId !== productId
-    );
+    const updatedItems = this.cartItems().filter((item) => item.productId !== productId);
     this.cartItems.set(updatedItems);
     this.persistCart();
   }
@@ -120,7 +112,7 @@ export class CartService {
       return;
     }
 
-    const updatedItems = this.cartItems().map(item =>
+    const updatedItems = this.cartItems().map((item) =>
       item.productId === productId ? { ...item, quantity } : item
     );
     this.cartItems.set(updatedItems);
@@ -155,7 +147,7 @@ export class CartService {
    */
   private async restoreCart(): Promise<void> {
     const user = this.authService.currentUser();
-    
+
     if (user) {
       // Restore from IndexedDB for authenticated user
       await this.restoreAuthenticatedCart(user.id);
@@ -170,7 +162,7 @@ export class CartService {
    */
   private restoreGuestCart(): void {
     if (!this.isBrowser) return;
-    
+
     try {
       const stored = localStorage.getItem(GUEST_CART_KEY);
       if (stored) {
@@ -188,9 +180,7 @@ export class CartService {
    */
   private async restoreAuthenticatedCart(userId: string): Promise<void> {
     try {
-      const cart = await firstValueFrom(
-        this.http.get<CartResponse>(`/api/users/${userId}/cart`)
-      );
+      const cart = await firstValueFrom(this.http.get<CartResponse>(`/api/users/${userId}/cart`));
       if (cart?.items) {
         this.cartItems.set(cart.items);
       }
@@ -204,7 +194,7 @@ export class CartService {
    */
   private persistCart(): void {
     const user = this.authService.currentUser();
-    
+
     if (user) {
       void this.syncToIndexedDB(user.id);
     } else {
@@ -217,7 +207,7 @@ export class CartService {
    */
   private syncToLocalStorage(): void {
     if (!this.isBrowser) return;
-    
+
     try {
       const items = this.cartItems();
       if (items.length > 0) {
@@ -236,7 +226,7 @@ export class CartService {
   private async syncToIndexedDB(userId: string): Promise<void> {
     try {
       const items = this.cartItems();
-      
+
       // PUT request to update cart (creates if doesn't exist)
       await firstValueFrom(
         this.http.put<CartResponse>(`/api/users/${userId}/cart`, {
@@ -257,7 +247,7 @@ export class CartService {
       await this.restoreAuthenticatedCart(userId);
       return;
     }
-    
+
     try {
       // Get guest cart from localStorage
       const guestCartRaw = localStorage.getItem(GUEST_CART_KEY);
@@ -268,7 +258,7 @@ export class CartService {
       }
 
       const guestItems = JSON.parse(guestCartRaw) as CartItemDTO[];
-      
+
       // Get authenticated cart from backend via HTTP
       let authItems: CartItemDTO[] = [];
       try {
@@ -283,14 +273,14 @@ export class CartService {
 
       // Merge: combine quantities for duplicate products
       const mergedMap = new Map<string, CartItemDTO>();
-      
+
       // Add authenticated items first
-      authItems.forEach(item => {
+      authItems.forEach((item) => {
         mergedMap.set(item.productId, { ...item });
       });
 
       // Merge guest items
-      guestItems.forEach(guestItem => {
+      guestItems.forEach((guestItem) => {
         const existing = mergedMap.get(guestItem.productId);
         if (existing) {
           existing.quantity += guestItem.quantity;
@@ -300,13 +290,13 @@ export class CartService {
       });
 
       const mergedItems = Array.from(mergedMap.values());
-      
+
       // Update signal
       this.cartItems.set(mergedItems);
-      
+
       // Persist to IndexedDB
       await this.syncToIndexedDB(userId);
-      
+
       // Clear guest cart from localStorage
       if (this.isBrowser) {
         localStorage.removeItem(GUEST_CART_KEY);
@@ -321,15 +311,15 @@ export class CartService {
    */
   private migrateToGuestOnLogout(): void {
     if (!this.isBrowser) return;
-    
+
     try {
       const currentItems = this.cartItems();
-      
+
       // Save current items to localStorage for guest use
       if (currentItems.length > 0) {
         localStorage.setItem(GUEST_CART_KEY, JSON.stringify(currentItems));
       }
-      
+
       // Note: IndexedDB cart will be cleared by logout handler if needed
       // We keep the signal state so user doesn't lose cart items visually
     } catch (error) {

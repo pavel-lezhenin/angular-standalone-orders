@@ -23,11 +23,7 @@ export class CartRepository {
     await this.db.write(this.storeName, cart, 'put');
   }
 
-  async addItem(
-    userId: string,
-    productId: string,
-    quantity: number,
-  ): Promise<void> {
+  async addItem(userId: string, productId: string, quantity: number): Promise<void> {
     const cart = await this.getByUserId(userId);
 
     if (!cart) {

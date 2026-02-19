@@ -1,20 +1,9 @@
 <mat-form-field class="search-input-field">
   <mat-label>{{ label() }}</mat-label>
-  <input
-    matInput
-    type="text"
-    [formControl]="searchControl()"
-    [placeholder]="placeholder()"
-  />
+  <input matInput type="text" [formControl]="searchControl()" [placeholder]="placeholder()" />
   <mat-icon matPrefix>search</mat-icon>
   @if (currentValue) {
-    <button
-      mat-icon-button
-      matSuffix
-      type="button"
-      (click)="onClear()"
-      aria-label="Clear search"
-    >
+    <button mat-icon-button matSuffix type="button" (click)="onClear()" aria-label="Clear search">
       <mat-icon>close</mat-icon>
     </button>
   }

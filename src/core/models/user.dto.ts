@@ -71,4 +71,3 @@ export interface UserDTO {
   profile: UserProfileDTO;
   createdAt: number;
 }
-

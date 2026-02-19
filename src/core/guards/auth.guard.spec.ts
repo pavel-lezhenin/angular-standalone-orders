@@ -7,9 +7,7 @@ import { AuthService } from '../services/auth.service';
 describe('authGuard', () => {
   it('allows navigation during SSR', () => {
     TestBed.configureTestingModule({
-      providers: [
-        { provide: PLATFORM_ID, useValue: 'server' },
-      ],
+      providers: [{ provide: PLATFORM_ID, useValue: 'server' }],
     });
 
     const result = TestBed.runInInjectionContext(() =>

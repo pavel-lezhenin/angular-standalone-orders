@@ -13,29 +13,29 @@ import { TopBarComponent } from '../top-bar/top-bar.component';
   imports: [RouterOutlet, TopBarComponent],
   template: `
     <div class="main-layout">
-      <app-top-bar 
-        [title]="layoutService.title()" 
-        [navItems]="layoutService.navItems()" />
-      
+      <app-top-bar [title]="layoutService.title()" [navItems]="layoutService.navItems()" />
+
       <main class="main-content">
         <router-outlet />
       </main>
     </div>
   `,
-  styles: [`
-    .main-layout {
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
+  styles: [
+    `
+      .main-layout {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
 
-    .main-content {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      background-color: var(--mat-sys-surface-container);
-    }
-  `],
+      .main-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        background-color: var(--mat-sys-surface-container);
+      }
+    `,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainLayoutComponent {

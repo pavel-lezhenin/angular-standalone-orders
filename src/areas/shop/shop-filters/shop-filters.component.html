@@ -1,8 +1,4 @@
-<app-filter-container
-  [isLoading]="isLoading()"
-  [actions]="filterActions()"
-  (action)="onFilterAction($event)"
->
+<app-filter-container [isLoading]="isLoading()" [actions]="filterActions()" (action)="onFilterAction($event)">
   <app-search-input
     [label]="'Search products'"
     [placeholder]="'Search by name...'"

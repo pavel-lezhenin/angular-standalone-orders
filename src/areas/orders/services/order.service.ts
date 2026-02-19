@@ -1,7 +1,12 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
-import type { AddOrderCommentDTO, OrderDTO, CreateOrderDTO, UpdateOrderStatusDTO } from '@core/models';
+import type {
+  AddOrderCommentDTO,
+  OrderDTO,
+  CreateOrderDTO,
+  UpdateOrderStatusDTO,
+} from '@core/models';
 
 /**
  * Order Service

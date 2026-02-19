@@ -13,7 +13,7 @@ export interface OrderItemDTO {
  * Payment information DTO (sanitized - no sensitive data)
  */
 export interface PaymentInfoDTO {
-  cardNumber: string;      // Last 4 digits only (e.g., "**** 4242")
+  cardNumber: string; // Last 4 digits only (e.g., "**** 4242")
   cardHolder: string;
   expiryMonth: number;
   expiryYear: number;
@@ -91,10 +91,10 @@ export interface CreateOrderDTO {
  * Used only during checkout, NOT stored
  */
 export interface PaymentRequestDTO {
-  cardNumber: string;       // Full card number (for validation only)
+  cardNumber: string; // Full card number (for validation only)
   cardHolder: string;
   expiryMonth: number;
   expiryYear: number;
-  cvv: string;              // CVV code (for validation only)
+  cvv: string; // CVV code (for validation only)
   paymentMethod: 'card' | 'paypal' | 'cash_on_delivery';
 }

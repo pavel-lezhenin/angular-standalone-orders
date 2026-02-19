@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-import type { FormGroup} from '@angular/forms';
+import type { FormGroup } from '@angular/forms';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { FormFieldComponent, type SelectOption } from '@shared/ui/form-field/form-field.component';
@@ -9,13 +9,13 @@ import { FormFieldComponent, type SelectOption } from '@shared/ui/form-field/for
  *
  * Account settings payment method form wrapper.
  * Uses shared PaymentFormComponent for card fields.
- * 
+ *
  * Features:
  * - Payment type selection (Card/PayPal)
  * - Label field for naming saved methods
  * - No CVV field (not needed for saved methods)
  * - Save/Cancel actions
- * 
+ *
  * This is a DUMB component:
  * - Receives FormGroup via input
  * - NO validation logic (parent responsibility)
@@ -24,11 +24,7 @@ import { FormFieldComponent, type SelectOption } from '@shared/ui/form-field/for
 @Component({
   selector: 'app-account-payment-form',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    MatButtonModule,
-    FormFieldComponent,
-  ],
+  imports: [ReactiveFormsModule, MatButtonModule, FormFieldComponent],
   templateUrl: './account-payment-form.component.html',
   styleUrl: './account-payment-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

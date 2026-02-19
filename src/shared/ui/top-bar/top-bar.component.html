@@ -1,7 +1,7 @@
 <mat-toolbar class="top-bar">
-  <div class="top-bar-content flex justify-between items-center">
+  <div class="top-bar-content flex items-center justify-between">
     <!-- Left: Logo + Title + Navigation -->
-    <div class="left-section flex items-center gap-2xl">
+    <div class="left-section gap-2xl flex items-center">
       @if (showSidenavToggle) {
         <button
           mat-icon-button
@@ -14,18 +14,15 @@
         </button>
       }
 
-      <a routerLink="/" class="logo-section flex items-center gap-xxs">
+      <a routerLink="/" class="logo-section gap-xxs flex items-center">
         <mat-icon class="logo-icon">shopping_bag</mat-icon>
         <span class="title">{{ title }}</span>
       </a>
 
       <!-- Desktop navigation -->
-      <nav class="desktop-nav flex items-center gap-xxs">
+      <nav class="desktop-nav gap-xxs flex items-center">
         @for (item of navItems; track item.label) {
-          <button 
-            mat-button 
-            [class.nav-active]="isActive(item)"
-            (click)="handleNavClick(item)">
+          <button mat-button [class.nav-active]="isActive(item)" (click)="handleNavClick(item)">
             @if (item.icon) {
               <mat-icon>{{ item.icon }}</mat-icon>
             }
@@ -36,10 +33,7 @@
 
       <!-- Mobile hamburger menu -->
       @if (navItems.length > 0) {
-        <button 
-          mat-icon-button 
-          [matMenuTriggerFor]="mobileMenu" 
-          class="mobile-menu-button">
+        <button mat-icon-button [matMenuTriggerFor]="mobileMenu" class="mobile-menu-button">
           <mat-icon>menu</mat-icon>
         </button>
       }
@@ -55,10 +49,7 @@
 <!-- Mobile navigation menu -->
 <mat-menu #mobileMenu="matMenu">
   @for (item of navItems; track item.label) {
-    <button 
-      mat-menu-item 
-      [class.nav-active]="isActive(item)"
-      (click)="handleNavClick(item)">
+    <button mat-menu-item [class.nav-active]="isActive(item)" (click)="handleNavClick(item)">
       @if (item.icon) {
         <mat-icon>{{ item.icon }}</mat-icon>
       }

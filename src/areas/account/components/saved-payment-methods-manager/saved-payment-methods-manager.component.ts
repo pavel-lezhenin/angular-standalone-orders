@@ -9,7 +9,7 @@ import type { PaymentMethodDTO } from '@core/models';
 
 /**
  * Saved Payment Methods Manager Component
- * 
+ *
  * Manages user's saved payment methods with selection, addition, and deletion
  */
 @Component({

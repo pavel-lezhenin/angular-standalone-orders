@@ -1,8 +1,6 @@
 <div class="image-zoom-dialog">
   <div class="dialog-header">
-    <div class="image-counter">
-      {{ currentIndex + 1 }} / {{ data.images.length }}
-    </div>
+    <div class="image-counter">{{ currentIndex + 1 }} / {{ data.images.length }}</div>
     <button mat-icon-button (click)="close()" class="close-button" aria-label="Close image preview">
       <mat-icon>close</mat-icon>
     </button>
@@ -11,33 +9,19 @@
   <div class="dialog-content">
     <!-- Previous button -->
     @if (canGoPrevious) {
-      <button 
-        mat-icon-button 
-        class="nav-button nav-previous"
-        (click)="previous()"
-        aria-label="Previous image"
-      >
+      <button mat-icon-button class="nav-button nav-previous" (click)="previous()" aria-label="Previous image">
         <mat-icon>chevron_left</mat-icon>
       </button>
     }
 
     <!-- Main image -->
     <div class="image-container">
-      <img 
-        [src]="currentImage" 
-        [alt]="data.productName"
-        class="zoom-image"
-      />
+      <img [src]="currentImage" [alt]="data.productName" class="zoom-image" />
     </div>
 
     <!-- Next button -->
     @if (canGoNext) {
-      <button 
-        mat-icon-button 
-        class="nav-button nav-next"
-        (click)="next()"
-        aria-label="Next image"
-      >
+      <button mat-icon-button class="nav-button nav-next" (click)="next()" aria-label="Next image">
         <mat-icon>chevron_right</mat-icon>
       </button>
     }

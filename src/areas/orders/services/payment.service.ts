@@ -28,17 +28,17 @@ export interface ProcessPaymentOptions {
    * Skip processing delay (for tests)
    */
   skipDelay?: boolean;
-  
+
   /**
    * Force specific result (for tests)
    */
   forceResult?: 'success' | 'failure';
-  
+
   /**
    * Custom error message (for tests)
    */
   customErrorMessage?: string;
-  
+
   /**
    * Custom transaction ID (for tests)
    */
@@ -47,7 +47,7 @@ export interface ProcessPaymentOptions {
 
 /**
  * Payment Service
- * 
+ *
  * Simulates payment processing with realistic bank behavior:
  * - Random processing delay (2-3 seconds)
  * - 90% success rate for card payments
@@ -74,12 +74,12 @@ export class PaymentService {
 
   /**
    * Process payment with simulation
-   * 
+   *
    * @param request - Payment request data
    * @param options - Optional parameters for testing (skipDelay, forceResult, etc.)
    */
   async processPayment(
-    request: PaymentRequest, 
+    request: PaymentRequest,
     options: ProcessPaymentOptions = {}
   ): Promise<PaymentResult> {
     // Simulate network delay (skip in tests)
@@ -92,13 +92,13 @@ export class PaymentService {
     switch (request.method) {
       case 'card':
         return this.processCardPayment(request, processingTime, options);
-      
+
       case 'paypal':
         return this.processPayPalPayment(request, processingTime, options);
-      
+
       case 'cash_on_delivery':
         return this.processCODPayment(request, processingTime, options);
-      
+
       default:
         return {
           success: false,
@@ -113,12 +113,12 @@ export class PaymentService {
    * Process card payment (90% success rate)
    */
   private processCardPayment(
-    request: PaymentRequest, 
+    request: PaymentRequest,
     processingTime: number,
     options: ProcessPaymentOptions
   ): PaymentResult {
     // Allow tests to force specific result
-    const isSuccess = options.forceResult 
+    const isSuccess = options.forceResult
       ? options.forceResult === 'success'
       : Math.random() < this.SUCCESS_RATE;
 
@@ -143,14 +143,14 @@ export class PaymentService {
    * Process PayPal payment (always successful - would redirect in real app)
    */
   private processPayPalPayment(
-    request: PaymentRequest, 
+    request: PaymentRequest,
     processingTime: number,
     options: ProcessPaymentOptions
   ): PaymentResult {
     // In real app, this would redirect to PayPal
     // For simulation, always succeed (unless forced to fail in tests)
     const isSuccess = options.forceResult !== 'failure';
-    
+
     if (isSuccess) {
       return {
         success: true,
@@ -171,13 +171,13 @@ export class PaymentService {
    * Process Cash on Delivery (always successful - no actual payment)
    */
   private processCODPayment(
-    request: PaymentRequest, 
+    request: PaymentRequest,
     processingTime: number,
     options: ProcessPaymentOptions
   ): PaymentResult {
     // COD always succeeds (unless forced to fail in tests)
     const isSuccess = options.forceResult !== 'failure';
-    
+
     if (isSuccess) {
       return {
         success: true,
@@ -222,7 +222,7 @@ export class PaymentService {
    * Delay helper
    */
   private delay(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   /**
@@ -234,7 +234,13 @@ export class PaymentService {
     }
 
     if (data.method === 'card') {
-      if (!data.cardNumber || !data.cardholderName || !data.expiryMonth || !data.expiryYear || !data.cvv) {
+      if (
+        !data.cardNumber ||
+        !data.cardholderName ||
+        !data.expiryMonth ||
+        !data.expiryYear ||
+        !data.cvv
+      ) {
         return { valid: false, error: 'All card details are required' };
       }
 

@@ -32,7 +32,6 @@ export class LandingComponent implements OnInit {
   private readonly scrollService = inject(ScrollService);
 
   ngOnInit(): void {
-
     this.layoutService.setTitle('Orders Platform');
     this.layoutService.setNavItems([
       { label: 'Shop', route: '/shop', icon: 'storefront' },

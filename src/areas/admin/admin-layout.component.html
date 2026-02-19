@@ -8,11 +8,7 @@
   />
   <mat-sidenav-container class="admin-container">
     <!-- Sidebar -->
-    <mat-sidenav
-      [mode]="isMobile() ? 'over' : 'side'"
-      [opened]="isSidenavOpened()"
-      class="admin-sidenav"
-    >
+    <mat-sidenav [mode]="isMobile() ? 'over' : 'side'" [opened]="isSidenavOpened()" class="admin-sidenav">
       <mat-nav-list>
         @for (item of visibleMenuItems(); track item.route) {
           <a

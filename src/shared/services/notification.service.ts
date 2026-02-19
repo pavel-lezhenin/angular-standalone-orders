@@ -22,7 +22,7 @@ export class NotificationService {
   success(message: string, duration: number = 3000): void {
     // Dismiss any existing snackbars first
     this.snackBar.dismiss();
-    
+
     this.snackBar.open(message, 'Close', {
       duration,
       panelClass: ['snackbar-success'],
@@ -40,7 +40,7 @@ export class NotificationService {
   error(message: string, duration: number = 3000): void {
     // Dismiss any existing snackbars first
     this.snackBar.dismiss();
-    
+
     this.snackBar.open(message, 'Close', {
       duration,
       panelClass: ['snackbar-error'],

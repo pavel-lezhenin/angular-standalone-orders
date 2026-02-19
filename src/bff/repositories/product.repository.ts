@@ -18,33 +18,31 @@ export class ProductRepository extends BaseRepository<Product> {
   async search(query: string): Promise<Product[]> {
     const allProducts = await this.getAll();
     const searchLower = query.toLowerCase();
-    
-    return allProducts.filter(product =>
-      product.id.toLowerCase().includes(searchLower) ||
-      product.name.toLowerCase().includes(searchLower)
+
+    return allProducts.filter(
+      (product) =>
+        product.id.toLowerCase().includes(searchLower) ||
+        product.name.toLowerCase().includes(searchLower)
     );
   }
 
   /**
    * Filter products with multiple criteria
    */
-  async filter(options: {
-    categoryId?: string;
-    search?: string;
-  }): Promise<Product[]> {
+  async filter(options: { categoryId?: string; search?: string }): Promise<Product[]> {
     let products = await this.getAll();
 
     // Filter by category
     if (options.categoryId) {
-      products = products.filter(p => p.categoryId === options.categoryId);
+      products = products.filter((p) => p.categoryId === options.categoryId);
     }
 
     // Filter by search query
     if (options.search) {
       const searchLower = options.search.toLowerCase();
-      products = products.filter(p =>
-        p.id.toLowerCase().includes(searchLower) ||
-        p.name.toLowerCase().includes(searchLower)
+      products = products.filter(
+        (p) =>
+          p.id.toLowerCase().includes(searchLower) || p.name.toLowerCase().includes(searchLower)
       );
     }
 

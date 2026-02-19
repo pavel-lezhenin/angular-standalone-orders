@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/angular';
-import type { FormGroup} from '@angular/forms';
+import type { FormGroup } from '@angular/forms';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AddressFormComponent } from './address-form.component';
 
@@ -72,7 +72,7 @@ export const WithErrors: Story = {
         phone: 'invalid',
       });
       // Mark all controls as touched to show validation errors
-      Object.keys(form.controls).forEach(key => {
+      Object.keys(form.controls).forEach((key) => {
         form.get(key)?.markAsTouched();
       });
       return form;

@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, computed, inject, input, output, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  computed,
+  inject,
+  input,
+  output,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -49,7 +58,7 @@ export class ShopFiltersComponent {
 
   readonly categorySelectOptions = computed<SelectOption[]>(() => [
     { value: undefined, label: 'All Categories' },
-    ...this.categories().map(c => ({ value: c.id, label: c.name })),
+    ...this.categories().map((c) => ({ value: c.id, label: c.name })),
   ]);
 
   readonly searchControl = new FormControl<string>('');

@@ -1,22 +1,18 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-import type { FormGroup} from '@angular/forms';
+import type { FormGroup } from '@angular/forms';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { FormFieldComponent } from '@shared/ui/form-field/form-field.component';
 
 /**
  * Address Form Component
- * 
+ *
  * Reusable form for creating/editing shipping addresses
  */
 @Component({
   selector: 'app-address-form',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    MatButtonModule,
-    FormFieldComponent,
-  ],
+  imports: [ReactiveFormsModule, MatButtonModule, FormFieldComponent],
   templateUrl: './address-form.component.html',
   styleUrl: './address-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

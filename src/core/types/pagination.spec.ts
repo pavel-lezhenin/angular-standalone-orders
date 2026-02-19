@@ -48,7 +48,9 @@ describe('pagination utilities', () => {
   // ─── parsePaginationParams ────────────────────────────────────────────────
 
   it('parsePaginationParams parses page and limit from params', () => {
-    const params = { get: (name: string) => (name === 'page' ? '3' : name === 'limit' ? '15' : null) };
+    const params = {
+      get: (name: string) => (name === 'page' ? '3' : name === 'limit' ? '15' : null),
+    };
 
     const result = parsePaginationParams(params);
 

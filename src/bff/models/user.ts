@@ -2,7 +2,7 @@ import type { UserRole } from '@core/types';
 
 /**
  * User entity
- * 
+ *
  * DESIGN NOTES:
  * - Profile contains only identity/contact fields
  * - Addresses and payment methods are normalized into dedicated stores
@@ -20,4 +20,3 @@ export interface User {
   createdAt: number;
   updatedAt: number;
 }
-

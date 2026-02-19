@@ -5,10 +5,10 @@ import { MatIconModule } from '@angular/material/icon';
 
 /**
  * Reusable empty state component
- * 
+ *
  * Displays empty state with icon, title, message and optional action button.
  * Used throughout the app when there's no data to display.
- * 
+ *
  * @example
  * <app-empty-state
  *   [icon]="'shopping_cart'"
@@ -22,11 +22,7 @@ import { MatIconModule } from '@angular/material/icon';
 @Component({
   selector: 'app-empty-state',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    MatIconModule,
-  ],
+  imports: [CommonModule, MatButtonModule, MatIconModule],
   templateUrl: './empty-state.component.html',
   styleUrl: './empty-state.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,4 +1,4 @@
-import type { OnInit} from '@angular/core';
+import type { OnInit } from '@angular/core';
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -7,28 +7,19 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import type { PageEvent } from '@angular/material/paginator';
 
-import type { UserDTO} from '@core';
+import type { UserDTO } from '@core';
 import { BaseComponent } from '@core';
 import { generateDeleteMessage } from '@shared/utils';
 import { ConfirmDialogService } from '@shared/ui/dialog';
 import { PageLoaderComponent } from '@shared/ui/page-loader';
 import { NotificationService } from '@shared/services/notification.service';
-import {
-  createFormDialogConfig,
-  editFormDialogConfig,
-} from '@shared/ui/dialog/dialog.config';
+import { createFormDialogConfig, editFormDialogConfig } from '@shared/ui/dialog/dialog.config';
 import { CustomerService } from './services/customer.service';
-import type {
-  CustomerFormDialogData} from './customer-form-dialog/customer-form-dialog.component';
-import {
-  CustomerFormDialogComponent
-} from './customer-form-dialog/customer-form-dialog.component';
+import type { CustomerFormDialogData } from './customer-form-dialog/customer-form-dialog.component';
+import { CustomerFormDialogComponent } from './customer-form-dialog/customer-form-dialog.component';
 import { CustomerTableComponent } from './customer-table/customer-table.component';
-import type {
-  CustomerFilters} from './customer-filters/customer-filters.component';
-import {
-  CustomerFiltersComponent
-} from './customer-filters/customer-filters.component';
+import type { CustomerFilters } from './customer-filters/customer-filters.component';
+import { CustomerFiltersComponent } from './customer-filters/customer-filters.component';
 import type { CustomerFormData } from './model';
 
 /**
@@ -205,7 +196,7 @@ export class CustomersComponent extends BaseComponent implements OnInit {
   protected deleteUser(user: UserDTO): void {
     const fullName = `${user.profile.firstName} ${user.profile.lastName}`;
     const message = generateDeleteMessage(fullName, user.email);
-    
+
     this.confirmDialogService.openDeleteConfirm(
       message,
       async () => {

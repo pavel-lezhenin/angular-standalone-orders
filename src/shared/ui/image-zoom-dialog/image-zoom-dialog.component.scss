@@ -24,7 +24,7 @@
 
 .close-button {
   color: var(--text-secondary);
-  
+
   &:hover {
     background: var(--surface-secondary);
   }
@@ -66,21 +66,21 @@
   background: var(--surface-secondary);
   color: var(--text-primary);
   z-index: 10;
-  
+
   &:hover {
     background: var(--surface-tertiary);
   }
-  
+
   mat-icon {
     font-size: var(--spacing-2xl);
     width: var(--spacing-2xl);
     height: var(--spacing-2xl);
   }
-  
+
   &.nav-previous {
     left: var(--spacing-md);
   }
-  
+
   &.nav-next {
     right: var(--spacing-md);
   }
@@ -95,7 +95,7 @@
   flex-wrap: wrap;
   max-height: var(--size-image-preview);
   overflow-x: auto;
-  
+
   img {
     width: 60px;
     height: 60px;
@@ -104,12 +104,12 @@
     border: var(--spacing-2px) solid transparent;
     cursor: pointer;
     transition: all 0.2s;
-    
+
     &:hover {
       border-color: var(--app-primary);
       opacity: 0.8;
     }
-    
+
     &.active {
       border-color: var(--app-primary);
     }

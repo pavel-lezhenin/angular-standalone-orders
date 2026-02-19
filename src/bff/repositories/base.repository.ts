@@ -23,15 +23,11 @@ export abstract class BaseRepository<T extends { id: string }> {
     try {
       // Ensure DB is initialized
       await this.db.initialize();
-      
+
       await this.db.write(this.storeName, item, 'add');
-      
     } catch (error: unknown) {
       // If item already exists, log and skip (don't throw)
-      if (
-        error instanceof DOMException
-        && error.name === 'ConstraintError'
-      ) {
+      if (error instanceof DOMException && error.name === 'ConstraintError') {
         return;
       }
       console.error(`❌ Failed to create item in ${this.storeName}:`, error);

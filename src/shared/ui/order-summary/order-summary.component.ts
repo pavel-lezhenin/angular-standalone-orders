@@ -21,10 +21,10 @@ export interface SummaryLine {
 
 /**
  * Reusable order summary component
- * 
+ *
  * Displays order summary with line items and total.
  * Used in cart, checkout, and payment flows.
- * 
+ *
  * @example
  * <app-order-summary
  *   [title]="'Order Summary'"
@@ -40,10 +40,7 @@ export interface SummaryLine {
 @Component({
   selector: 'app-order-summary',
   standalone: true,
-  imports: [
-    CommonModule,
-    CurrencyPipe,
-  ],
+  imports: [CommonModule, CurrencyPipe],
   templateUrl: './order-summary.component.html',
   styleUrl: './order-summary.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -5,7 +5,13 @@ import { OrderRepository } from '../repositories/order.repository';
 import type { Order, OrderStatusChangeActor } from '../models';
 import type { AddOrderCommentDTO, CreateOrderDTO, UpdateOrderStatusDTO } from '@core/models';
 import type { OrderStatus, PaymentStatus } from '@core/types';
-import { OkResponse, CreatedResponse, NotFoundResponse, ServerErrorResponse, BadRequestResponse } from './http-responses';
+import {
+  OkResponse,
+  CreatedResponse,
+  NotFoundResponse,
+  ServerErrorResponse,
+  BadRequestResponse,
+} from './http-responses';
 
 /**
  * Order Handler Service
@@ -60,9 +66,12 @@ export class OrderHandlerService {
     try {
       const createOrderData = req.body as CreateOrderDTO;
       const initialStatus = createOrderData.status ?? ('paid' as OrderStatus);
-      const initialPaymentStatus = createOrderData.paymentStatus
-        ?? (initialStatus === 'pending_payment' ? ('pending' as PaymentStatus) : ('approved' as PaymentStatus));
-      
+      const initialPaymentStatus =
+        createOrderData.paymentStatus ??
+        (initialStatus === 'pending_payment'
+          ? ('pending' as PaymentStatus)
+          : ('approved' as PaymentStatus));
+
       // Build complete Order entity with all required fields
       const order: Order = {
         id: uuidv4(),

@@ -6,9 +6,15 @@ import { TwoColumnLayoutComponent } from './two-column-layout.component';
   selector: 'app-story-panel',
   standalone: true,
   template: `
-    <div [style.background]="bg()" [style.padding]="'var(--spacing-xl)'" [style.borderRadius]="'var(--border-radius-md)'">
+    <div
+      [style.background]="bg()"
+      [style.padding]="'var(--spacing-xl)'"
+      [style.borderRadius]="'var(--border-radius-md)'"
+    >
       <strong>{{ label() }}</strong>
-      <p style="margin: var(--spacing-xs) 0 0; font-size: var(--font-size-sm); color: var(--text-secondary);">
+      <p
+        style="margin: var(--spacing-xs) 0 0; font-size: var(--font-size-sm); color: var(--text-secondary);"
+      >
         {{ description() }}
       </p>
     </div>

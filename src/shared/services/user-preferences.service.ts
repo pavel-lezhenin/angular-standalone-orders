@@ -37,7 +37,7 @@ export interface CreatePaymentMethodRequest {
 
 /**
  * User Preferences Service
- * 
+ *
  * Manages user's saved addresses and payment methods.
  * Provides CRUD operations for both authenticated users.
  */
@@ -77,7 +77,7 @@ export class UserPreferencesService {
    */
   async getDefaultAddress(): Promise<AddressDTO | null> {
     const addresses = await this.getSavedAddresses();
-    return addresses.find(a => a.isDefault) ?? addresses[0] ?? null;
+    return addresses.find((a) => a.isDefault) ?? addresses[0] ?? null;
   }
 
   /**
@@ -164,9 +164,7 @@ export class UserPreferencesService {
       }
     }
 
-    await firstValueFrom(
-      this.http.delete(`/api/users/${user.id}/addresses/${addressId}`)
-    );
+    await firstValueFrom(this.http.delete(`/api/users/${user.id}/addresses/${addressId}`));
   }
 
   // ============================================
@@ -200,7 +198,7 @@ export class UserPreferencesService {
    */
   async getDefaultPaymentMethod(): Promise<SavedPaymentMethodDTO | null> {
     const methods = await this.getSavedPaymentMethods();
-    return methods.find(m => m.isDefault) ?? methods[0] ?? null;
+    return methods.find((m) => m.isDefault) ?? methods[0] ?? null;
   }
 
   /**
@@ -221,15 +219,17 @@ export class UserPreferencesService {
 
       if (request.type === 'card') {
         return (
-          method.last4Digits === request.last4Digits
-          && method.cardholderName === request.cardholderName
-          && method.expiryMonth === request.expiryMonth
-          && method.expiryYear === request.expiryYear
+          method.last4Digits === request.last4Digits &&
+          method.cardholderName === request.cardholderName &&
+          method.expiryMonth === request.expiryMonth &&
+          method.expiryYear === request.expiryYear
         );
       }
 
       if (request.type === 'paypal') {
-        return (method.paypalEmail ?? '').toLowerCase() === (request.paypalEmail ?? '').toLowerCase();
+        return (
+          (method.paypalEmail ?? '').toLowerCase() === (request.paypalEmail ?? '').toLowerCase()
+        );
       }
 
       return false;
@@ -239,7 +239,9 @@ export class UserPreferencesService {
       if (request.setAsDefault && !duplicateMethod.isDefault) {
         await this.setDefaultPaymentMethod(duplicateMethod.id);
         const refreshedMethods = await this.getSavedPaymentMethods();
-        return refreshedMethods.find((method) => method.id === duplicateMethod.id) ?? duplicateMethod;
+        return (
+          refreshedMethods.find((method) => method.id === duplicateMethod.id) ?? duplicateMethod
+        );
       }
 
       return duplicateMethod;
@@ -313,8 +315,6 @@ export class UserPreferencesService {
       }
     }
 
-    await firstValueFrom(
-      this.http.delete(`/api/users/${user.id}/payment-methods/${methodId}`)
-    );
+    await firstValueFrom(this.http.delete(`/api/users/${user.id}/payment-methods/${methodId}`));
   }
 }

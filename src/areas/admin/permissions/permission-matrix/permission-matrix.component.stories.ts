@@ -100,10 +100,28 @@ export const MixedPermissions: Story = {
       {
         role: 'manager',
         permissions: [
-          { id: 'perm-mgr-1', role: 'manager', section: 'orders_all', action: 'view', granted: true },
-          { id: 'perm-mgr-2', role: 'manager', section: 'orders_all', action: 'edit', granted: false },
+          {
+            id: 'perm-mgr-1',
+            role: 'manager',
+            section: 'orders_all',
+            action: 'view',
+            granted: true,
+          },
+          {
+            id: 'perm-mgr-2',
+            role: 'manager',
+            section: 'orders_all',
+            action: 'edit',
+            granted: false,
+          },
           { id: 'perm-mgr-3', role: 'manager', section: 'products', action: 'view', granted: true },
-          { id: 'perm-mgr-4', role: 'manager', section: 'products', action: 'edit', granted: false },
+          {
+            id: 'perm-mgr-4',
+            role: 'manager',
+            section: 'products',
+            action: 'edit',
+            granted: false,
+          },
         ],
       },
       {

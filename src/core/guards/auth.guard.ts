@@ -7,7 +7,7 @@ import { AuthService } from '../services/auth.service';
 /**
  * Authentication guard.
  * Protects routes that require user to be logged in.
- * 
+ *
  * During SSR: always passes (no localStorage on server).
  * Session is restored via APP_INITIALIZER before guards run in browser.
  */

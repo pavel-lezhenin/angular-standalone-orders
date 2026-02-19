@@ -21,7 +21,7 @@ export class FileRepository extends BaseRepository<StoredFile> {
     if (!file) {
       return null;
     }
-    
+
     // Create object URL from blob
     const url = URL.createObjectURL(file.blob);
     return url;
@@ -32,14 +32,14 @@ export class FileRepository extends BaseRepository<StoredFile> {
    */
   async getFileUrls(fileIds: string[]): Promise<Map<string, string>> {
     const urlMap = new Map<string, string>();
-    
+
     for (const id of fileIds) {
       const url = await this.getFileUrl(id);
       if (url) {
         urlMap.set(id, url);
       }
     }
-    
+
     return urlMap;
   }
 

@@ -124,10 +124,7 @@ describe('AuthService', () => {
     const restorePromise = service.restoreSession();
 
     const req = httpTesting.expectOne('/api/auth/me');
-    req.flush(
-      { message: 'Unauthorized' },
-      { status: 401, statusText: 'Unauthorized' }
-    );
+    req.flush({ message: 'Unauthorized' }, { status: 401, statusText: 'Unauthorized' });
 
     await expect(restorePromise).resolves.toBeUndefined();
     expect(service.currentUser()).toBeNull();

@@ -11,21 +11,11 @@
 
     <div class="action-buttons">
       @if (canSetAsDefault()) {
-        <button
-          mat-stroked-button
-          color="primary"
-          (click)="setAsDefault.emit()"
-        >
-          Set as Default
-        </button>
+        <button mat-stroked-button color="primary" (click)="setAsDefault.emit()">Set as Default</button>
       }
 
       @if (canDeleteSelected()) {
-        <button
-          mat-stroked-button
-          color="warn"
-          (click)="deleteSelected.emit()"
-        >
+        <button mat-stroked-button color="warn" (click)="deleteSelected.emit()">
           <mat-icon>delete</mat-icon>
           Delete
         </button>
@@ -36,7 +26,9 @@
   @if (selectedAddress(); as address) {
     <div class="selected-address-display">
       <div class="address-details">
-        <p><strong>{{ address.label }}</strong></p>
+        <p>
+          <strong>{{ address.label }}</strong>
+        </p>
         <p>{{ address.recipientName }}</p>
         <p>{{ address.addressLine1 }}</p>
         @if (address.addressLine2) {

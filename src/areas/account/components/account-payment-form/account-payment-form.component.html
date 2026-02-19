@@ -1,21 +1,18 @@
 <div class="account-payment-form">
   <!-- Payment Type Selection -->
-  <app-form-field 
-    [label]="'Payment Type'" 
-    [control]="getControl('type')" 
+  <app-form-field
+    [label]="'Payment Type'"
+    [control]="getControl('type')"
     [type]="'select'"
     [selectOptions]="paymentTypeOptions"
-    (selectionChange)="paymentTypeChange.emit($any($event.value))">
+    (selectionChange)="paymentTypeChange.emit($any($event.value))"
+  >
   </app-form-field>
 
   <!-- Card Payment Fields -->
   @if (selectedPaymentType() === 'card') {
     <!-- Label field (not in shared component) -->
-    <app-form-field 
-      [label]="'Label'" 
-      [control]="getControl('label')" 
-      [placeholder]="'e.g., My Visa'" 
-    />
+    <app-form-field [label]="'Label'" [control]="getControl('label')" [placeholder]="'e.g., My Visa'" />
 
     <!-- Cardholder Name -->
     <app-form-field
@@ -49,11 +46,7 @@
     </div>
   } @else {
     <!-- PayPal: Label + Email -->
-    <app-form-field 
-      [label]="'Label'" 
-      [control]="getControl('label')" 
-      [placeholder]="'e.g., My PayPal'" 
-    />
+    <app-form-field [label]="'Label'" [control]="getControl('label')" [placeholder]="'e.g., My PayPal'" />
 
     <app-form-field
       [label]="'PayPal Email'"
@@ -65,9 +58,7 @@
 
   <!-- Action Buttons -->
   <div class="form-actions">
-    <button mat-stroked-button type="button" (click)="cancelPayment.emit()">
-      Cancel
-    </button>
+    <button mat-stroked-button type="button" (click)="cancelPayment.emit()">Cancel</button>
     <button
       mat-raised-button
       color="primary"

@@ -3,7 +3,13 @@ import type { HttpRequest, HttpResponse } from '@angular/common/http';
 import { v4 as uuidv4 } from 'uuid';
 import { PaymentMethodRepository } from '../repositories/payment-method.repository';
 import type { PaymentMethod } from '../models/payment-method';
-import { BadRequestResponse, CreatedResponse, NoContentResponse, OkResponse, ServerErrorResponse } from './http-responses';
+import {
+  BadRequestResponse,
+  CreatedResponse,
+  NoContentResponse,
+  OkResponse,
+  ServerErrorResponse,
+} from './http-responses';
 
 @Injectable({
   providedIn: 'root',
@@ -129,7 +135,11 @@ export class PaymentMethodHandlerService {
         const remaining = await this.paymentMethodRepo.getByUserId(userId);
         const first = remaining[0];
         if (first) {
-          await this.paymentMethodRepo.updateFull({ ...first, isDefault: true, updatedAt: Date.now() });
+          await this.paymentMethodRepo.updateFull({
+            ...first,
+            isDefault: true,
+            updatedAt: Date.now(),
+          });
         }
       }
 
@@ -140,26 +150,34 @@ export class PaymentMethodHandlerService {
     }
   }
 
-  private findDuplicate(methods: PaymentMethod[], body: Partial<PaymentMethod>): PaymentMethod | undefined {
+  private findDuplicate(
+    methods: PaymentMethod[],
+    body: Partial<PaymentMethod>
+  ): PaymentMethod | undefined {
     const normalize = (value?: string): string => (value ?? '').trim().toLowerCase();
 
     if (body.type === 'paypal') {
-      return methods.find(method =>
-        method.type === 'paypal' &&
-        normalize(method.paypalEmail) === normalize(body.paypalEmail)
+      return methods.find(
+        (method) =>
+          method.type === 'paypal' && normalize(method.paypalEmail) === normalize(body.paypalEmail)
       );
     }
 
-    return methods.find(method =>
-      method.type === 'card' &&
-      normalize(method.last4Digits) === normalize(body.last4Digits) &&
-      normalize(method.cardholderName) === normalize(body.cardholderName) &&
-      normalize(method.expiryMonth) === normalize(body.expiryMonth) &&
-      normalize(method.expiryYear) === normalize(body.expiryYear)
+    return methods.find(
+      (method) =>
+        method.type === 'card' &&
+        normalize(method.last4Digits) === normalize(body.last4Digits) &&
+        normalize(method.cardholderName) === normalize(body.cardholderName) &&
+        normalize(method.expiryMonth) === normalize(body.expiryMonth) &&
+        normalize(method.expiryYear) === normalize(body.expiryYear)
     );
   }
 
-  private async ensureSingleDefault(userId: string, targetId: string, shouldBeDefault: boolean): Promise<void> {
+  private async ensureSingleDefault(
+    userId: string,
+    targetId: string,
+    shouldBeDefault: boolean
+  ): Promise<void> {
     if (!shouldBeDefault) {
       return;
     }
@@ -169,8 +187,10 @@ export class PaymentMethodHandlerService {
 
     await Promise.all(
       methods
-        .filter(method => method.id !== targetId && method.isDefault)
-        .map(method => this.paymentMethodRepo.updateFull({ ...method, isDefault: false, updatedAt: now }))
+        .filter((method) => method.id !== targetId && method.isDefault)
+        .map((method) =>
+          this.paymentMethodRepo.updateFull({ ...method, isDefault: false, updatedAt: now })
+        )
     );
   }
 }

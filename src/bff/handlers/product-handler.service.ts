@@ -92,9 +92,7 @@ export class ProductHandlerService {
       const total = productsWithCategory.length;
       const paginatedProducts = applyPagination(productsWithCategory, page, limit);
 
-      return new OkResponse(
-        createPaginatedResponse(paginatedProducts, total, page, limit)
-      );
+      return new OkResponse(createPaginatedResponse(paginatedProducts, total, page, limit));
     } catch {
       return new ServerErrorResponse('Failed to fetch products');
     }
@@ -143,13 +141,13 @@ export class ProductHandlerService {
   async handleGetProductsByIds(req: HttpRequest<unknown>): Promise<HttpResponse<unknown>> {
     try {
       const body = req.body as { productIds: string[] };
-      
+
       if (!body?.productIds || !Array.isArray(body.productIds)) {
         return new BadRequestResponse('productIds array is required');
       }
 
       // Fetch all products in parallel
-      const productPromises = body.productIds.map(id => this.productRepo.getById(id));
+      const productPromises = body.productIds.map((id) => this.productRepo.getById(id));
       const products = await Promise.all(productPromises);
 
       // Filter out null results and resolve image URLs
@@ -157,7 +155,7 @@ export class ProductHandlerService {
         .filter((p): p is Product => p !== null)
         .map(async (product) => {
           const imageUrls = await this.resolveImageUrls(product.imageIds);
-          
+
           return {
             id: product.id,
             name: product.name,
@@ -260,7 +258,8 @@ export class ProductHandlerService {
       const updatedProduct: Product = {
         ...existingProduct,
         name: body.name || existingProduct.name,
-        description: body.description !== undefined ? body.description : existingProduct.description,
+        description:
+          body.description !== undefined ? body.description : existingProduct.description,
         price: body.price !== undefined ? body.price : existingProduct.price,
         categoryId: body.categoryId || existingProduct.categoryId,
         stock: body.stock !== undefined ? body.stock : existingProduct.stock,
@@ -304,14 +303,10 @@ export class ProductHandlerService {
 
       // Check if product has associated orders
       const orders = await this.orderRepo.getAll();
-      const hasOrders = orders.some((order) =>
-        order.items.some((item) => item.productId === id)
-      );
+      const hasOrders = orders.some((order) => order.items.some((item) => item.productId === id));
 
       if (hasOrders) {
-        return new ConflictResponse(
-          'Cannot delete product: It has associated orders'
-        );
+        return new ConflictResponse('Cannot delete product: It has associated orders');
       }
 
       // Delete product

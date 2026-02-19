@@ -1,4 +1,4 @@
-import type { OnInit} from '@angular/core';
+import type { OnInit } from '@angular/core';
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -16,17 +16,13 @@ import { NotificationService } from '@shared/services/notification.service';
 import { ProductService } from './services/product.service';
 import { CategoryService } from '../categories/services/category.service';
 import { ProductTableComponent } from './product-table/product-table.component';
-import type {
-  ProductFilters} from './product-filters/product-filters.component';
-import {
-  ProductFiltersComponent
-} from './product-filters/product-filters.component';
+import type { ProductFilters } from './product-filters/product-filters.component';
+import { ProductFiltersComponent } from './product-filters/product-filters.component';
 import type {
   ProductFormDialogData,
-  ProductFormResult} from './product-form-dialog/product-form-dialog.component';
-import {
-  ProductFormDialogComponent
+  ProductFormResult,
 } from './product-form-dialog/product-form-dialog.component';
+import { ProductFormDialogComponent } from './product-form-dialog/product-form-dialog.component';
 import type { CreateProductDTO, UpdateProductDTO } from './model/types';
 
 /**
@@ -182,19 +178,18 @@ export class ProductsComponent extends BaseComponent implements OnInit {
    * Open create dialog
    */
   protected openCreateDialog(): void {
-    this.dialog.open<
+    this.dialog.open<ProductFormDialogComponent, ProductFormDialogData, ProductFormResult>(
       ProductFormDialogComponent,
-      ProductFormDialogData,
-      ProductFormResult
-    >(ProductFormDialogComponent, {
-      data: {
-        categories: this.categories(),
-        onSave: async (formValue: ProductFormResult) => {
-          await this.createProduct(formValue);
+      {
+        data: {
+          categories: this.categories(),
+          onSave: async (formValue: ProductFormResult) => {
+            await this.createProduct(formValue);
+          },
         },
-      },
-      disableClose: true,
-    });
+        disableClose: true,
+      }
+    );
   }
 
   /**
@@ -205,20 +200,19 @@ export class ProductsComponent extends BaseComponent implements OnInit {
       // Load full product data
       const product = await this.productService.getProduct(productId);
 
-      this.dialog.open<
+      this.dialog.open<ProductFormDialogComponent, ProductFormDialogData, ProductFormResult>(
         ProductFormDialogComponent,
-        ProductFormDialogData,
-        ProductFormResult
-      >(ProductFormDialogComponent, {
-        data: {
-          product,
-          categories: this.categories(),
-          onSave: async (formValue: ProductFormResult) => {
-            await this.updateProduct(productId, formValue);
+        {
+          data: {
+            product,
+            categories: this.categories(),
+            onSave: async (formValue: ProductFormResult) => {
+              await this.updateProduct(productId, formValue);
+            },
           },
-        },
-        disableClose: true,
-      });
+          disableClose: true,
+        }
+      );
     } catch (err: unknown) {
       console.error('Failed to load product:', err);
       this.notificationService.error('Failed to load product data');
@@ -262,10 +256,7 @@ export class ProductsComponent extends BaseComponent implements OnInit {
   /**
    * Update product
    */
-  private async updateProduct(
-    productId: string,
-    formData: ProductFormResult
-  ): Promise<void> {
+  private async updateProduct(productId: string, formData: ProductFormResult): Promise<void> {
     this.startLoading();
     try {
       const productDTO: UpdateProductDTO = {
@@ -300,7 +291,7 @@ export class ProductsComponent extends BaseComponent implements OnInit {
    * Prevents deletion if product has associated orders
    */
   protected async deleteProduct(productId: string): Promise<void> {
-    const product = this.products().find(item => item.id === productId);
+    const product = this.products().find((item) => item.id === productId);
     const message = generateDeleteMessage(product?.name ?? 'Product', productId.slice(0, 8));
 
     this.confirmDialogService.openDeleteConfirm(
@@ -318,13 +309,10 @@ export class ProductsComponent extends BaseComponent implements OnInit {
       (err: unknown) => {
         console.error('Failed to delete product:', err);
 
-        const errorMessage =
-          err instanceof Error ? err.message : 'Failed to delete product';
+        const errorMessage = err instanceof Error ? err.message : 'Failed to delete product';
 
         if (errorMessage.includes('order') || errorMessage.includes('Order')) {
-          this.notificationService.error(
-            'Cannot delete product: It has associated orders'
-          );
+          this.notificationService.error('Cannot delete product: It has associated orders');
           return;
         }
 

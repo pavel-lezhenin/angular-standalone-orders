@@ -1,4 +1,11 @@
-import { afterNextRender, ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import {
+  afterNextRender,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { MatCardModule } from '@angular/material/card';
@@ -18,13 +25,7 @@ interface DashboardStat {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatCardModule,
-    MatIconModule,
-    EmptyStateComponent,
-    PageLoaderComponent,
-  ],
+  imports: [CommonModule, MatCardModule, MatIconModule, EmptyStateComponent, PageLoaderComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -71,18 +72,25 @@ export class DashboardComponent {
 
       const orders = [...ordersResponse.orders].sort((a, b) => b.createdAt - a.createdAt);
       const revenue = orders
-        .filter(order => order.status !== 'cancelled')
+        .filter((order) => order.status !== 'cancelled')
         .reduce((sum, order) => sum + order.total, 0);
 
       this.stats.set([
         { label: 'Total Orders', value: orders.length, icon: 'shopping_cart', color: 'primary' },
-        { label: 'Total Products', value: productsResponse.total, icon: 'inventory_2', color: 'success' },
+        {
+          label: 'Total Products',
+          value: productsResponse.total,
+          icon: 'inventory_2',
+          color: 'success',
+        },
         { label: 'Total Customers', value: usersResponse.total, icon: 'people', color: 'warning' },
         {
           label: 'Total Revenue',
-          value: new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(
-            revenue
-          ),
+          value: new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            maximumFractionDigits: 0,
+          }).format(revenue),
           icon: 'attach_money',
           color: 'info',
         },

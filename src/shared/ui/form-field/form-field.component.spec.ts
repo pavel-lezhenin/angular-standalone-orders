@@ -1,4 +1,4 @@
-import type { ComponentFixture} from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import { FormControl, Validators } from '@angular/forms';
 import { FormFieldComponent } from './form-field.component';
@@ -161,7 +161,9 @@ describe('FormFieldComponent', () => {
       const event = { target: inputEl } as unknown as Event;
 
       let emittedEvent: Event | undefined;
-      const sub = component.inputChange.subscribe((e) => { emittedEvent = e; });
+      const sub = component.inputChange.subscribe((e) => {
+        emittedEvent = e;
+      });
       component.onInputChange(event);
       expect(control.value).toBe('new value');
       expect(emittedEvent).toBe(event);

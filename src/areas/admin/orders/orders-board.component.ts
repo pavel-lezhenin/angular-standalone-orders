@@ -1,8 +1,8 @@
-import type { OnDestroy, OnInit} from '@angular/core';
+import type { OnDestroy, OnInit } from '@angular/core';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import type { CdkDragDrop} from '@angular/cdk/drag-drop';
+import type { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,7 +13,12 @@ import { NotificationService } from '@shared/services/notification.service';
 import { OrderService } from '@areas/orders/services/order.service';
 import { DialogComponent } from '@shared/ui/dialog';
 import { EmptyStateComponent, PageLoaderComponent } from '@shared/ui';
-import type { AddOrderCommentDTO, OrderDTO, OrderStatusChangeActorDTO, UserDTO } from '@core/models';
+import type {
+  AddOrderCommentDTO,
+  OrderDTO,
+  OrderStatusChangeActorDTO,
+  UserDTO,
+} from '@core/models';
 import type { OrderStatus, PaginatedResponse } from '@core/types';
 import { AuthService } from '@core/services/auth.service';
 import { OrderDetailsDialogComponent } from './order-details-dialog/order-details-dialog.component';
@@ -105,25 +110,30 @@ export class OrdersBoardComponent implements OnInit, OnDestroy {
   protected readonly customerLabels = signal<Record<string, string>>({});
   protected readonly movingOrderIds = signal<readonly string[]>([]);
   protected readonly lastUpdatedAt = signal<number | null>(null);
-  protected readonly connectedDropListIds = computed(() => this.columns.map(column => this.getDropListId(column.status)));
+  protected readonly connectedDropListIds = computed(() =>
+    this.columns.map((column) => this.getDropListId(column.status))
+  );
 
   protected readonly ordersByStatus = computed(() => {
     const currentOrders = this.orders();
 
-    return this.columns.reduce<Record<OrderStatus, OrderDTO[]>>((acc, column) => {
-      acc[column.status] = currentOrders
-        .filter(order => order.status === column.status)
-        .sort((left, right) => right.createdAt - left.createdAt);
-      return acc;
-    }, {
-      pending_payment: [],
-      paid: [],
-      warehouse: [],
-      courier_pickup: [],
-      in_transit: [],
-      delivered: [],
-      cancelled: [],
-    });
+    return this.columns.reduce<Record<OrderStatus, OrderDTO[]>>(
+      (acc, column) => {
+        acc[column.status] = currentOrders
+          .filter((order) => order.status === column.status)
+          .sort((left, right) => right.createdAt - left.createdAt);
+        return acc;
+      },
+      {
+        pending_payment: [],
+        paid: [],
+        warehouse: [],
+        courier_pickup: [],
+        in_transit: [],
+        delivered: [],
+        cancelled: [],
+      }
+    );
   });
 
   ngOnInit(): void {
@@ -174,7 +184,10 @@ export class OrdersBoardComponent implements OnInit, OnDestroy {
     this.setDraggingCursor(false);
   }
 
-  protected async onDropOrder(event: CdkDragDrop<OrderDTO[]>, newStatus: OrderStatus): Promise<void> {
+  protected async onDropOrder(
+    event: CdkDragDrop<OrderDTO[]>,
+    newStatus: OrderStatus
+  ): Promise<void> {
     const movedOrder = event.item.data as OrderDTO | undefined;
     if (!movedOrder || movedOrder.status === newStatus || this.isMoving(movedOrder.id)) {
       return;
@@ -189,12 +202,10 @@ export class OrdersBoardComponent implements OnInit, OnDestroy {
     const actor = this.getCurrentActor();
     const now = Date.now();
 
-    this.movingOrderIds.update(ids => [...ids, movedOrder.id]);
-    this.orders.update(currentOrders =>
-      currentOrders.map(order =>
-        order.id === movedOrder.id
-          ? { ...order, status: newStatus, updatedAt: now }
-          : order
+    this.movingOrderIds.update((ids) => [...ids, movedOrder.id]);
+    this.orders.update((currentOrders) =>
+      currentOrders.map((order) =>
+        order.id === movedOrder.id ? { ...order, status: newStatus, updatedAt: now } : order
       )
     );
 
@@ -204,8 +215,8 @@ export class OrdersBoardComponent implements OnInit, OnDestroy {
         actor,
       });
 
-      this.orders.update(currentOrders =>
-        currentOrders.map(order => (order.id === updatedOrder.id ? updatedOrder : order))
+      this.orders.update((currentOrders) =>
+        currentOrders.map((order) => (order.id === updatedOrder.id ? updatedOrder : order))
       );
       this.lastUpdatedAt.set(Date.now());
     } catch (error) {
@@ -213,7 +224,7 @@ export class OrdersBoardComponent implements OnInit, OnDestroy {
       const message = error instanceof Error ? error.message : 'Failed to move order';
       this.notification.error(message);
     } finally {
-      this.movingOrderIds.update(ids => ids.filter(id => id !== movedOrder.id));
+      this.movingOrderIds.update((ids) => ids.filter((id) => id !== movedOrder.id));
     }
   }
 
@@ -231,8 +242,8 @@ export class OrdersBoardComponent implements OnInit, OnDestroy {
           onAddComment: (orderId: string, payload: AddOrderCommentDTO) =>
             this.orderService.addOrderComment(orderId, payload),
           onOrderUpdated: (updatedOrder: OrderDTO) => {
-            this.orders.update(currentOrders =>
-              currentOrders.map(item => (item.id === updatedOrder.id ? updatedOrder : item))
+            this.orders.update((currentOrders) =>
+              currentOrders.map((item) => (item.id === updatedOrder.id ? updatedOrder : item))
             );
             this.lastUpdatedAt.set(Date.now());
           },
@@ -309,7 +320,7 @@ export class OrdersBoardComponent implements OnInit, OnDestroy {
           },
         })
       );
-      const neededUserIds = new Set(orders.map(order => order.userId));
+      const neededUserIds = new Set(orders.map((order) => order.userId));
       const labels: Record<string, string> = {};
 
       for (const user of response.data) {

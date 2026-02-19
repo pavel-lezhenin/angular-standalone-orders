@@ -7,7 +7,7 @@ import { AuthService } from '../services/auth.service';
 /**
  * Admin/Manager guard.
  * Protects routes that require admin or manager role.
- * 
+ *
  * During SSR: always passes (no localStorage on server).
  * Session is restored via APP_INITIALIZER before guards run in browser.
  */
@@ -23,7 +23,7 @@ export const adminGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
 
   const user = authService.currentUser();
-  
+
   if (user && (user.role === 'admin' || user.role === 'manager')) {
     return true;
   }

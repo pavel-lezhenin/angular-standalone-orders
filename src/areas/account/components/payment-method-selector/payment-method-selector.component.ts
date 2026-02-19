@@ -56,14 +56,14 @@ export class PaymentMethodSelectorComponent {
    */
   readonly selectedPaymentMethod = computed(() => {
     const methods = this.savedPaymentMethods();
-    return methods.find(method => method.id === this.selectedPaymentMethodId()) ?? null;
+    return methods.find((method) => method.id === this.selectedPaymentMethodId()) ?? null;
   });
 
   /**
    * Select options computed from saved payment methods
    */
   readonly paymentMethodOptions = computed<SelectOption[]>(() =>
-    this.savedPaymentMethods().map(method => ({
+    this.savedPaymentMethods().map((method) => ({
       value: method.id,
       label: method.isDefault ? `${method.label} (Default)` : method.label,
     }))

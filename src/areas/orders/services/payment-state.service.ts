@@ -9,7 +9,7 @@ export interface PendingPaymentData {
 
 /**
  * Payment State Service
- * 
+ *
  * Stores pending payment data when navigating from checkout to payment page.
  * This avoids passing sensitive order data through URL params.
  */

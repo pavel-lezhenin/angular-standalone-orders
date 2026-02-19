@@ -61,14 +61,14 @@
     <div class="section">
       <h3>Product Images</h3>
       <p class="hint">First image will be used as primary. Leave empty to use default placeholder.</p>
-      
+
       @if (isUploadingImage()) {
         <div class="upload-progress">
           <mat-spinner diameter="24"></mat-spinner>
           <span>Uploading image...</span>
         </div>
       }
-      
+
       <app-image-gallery
         [images]="images()"
         [maxImages]="10"
@@ -85,12 +85,7 @@
     <div class="section">
       <div class="section-header">
         <h3>Technical Specifications</h3>
-        <button
-          mat-stroked-button
-          type="button"
-          (click)="addSpecification()"
-          [disabled]="isSubmitting()"
-        >
+        <button mat-stroked-button type="button" (click)="addSpecification()" [disabled]="isSubmitting()">
           <mat-icon>add</mat-icon>
           Add Specification
         </button>
@@ -134,19 +129,8 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button
-    mat-button
-    (click)="onCancel()"
-    [disabled]="isSubmitting()"
-  >
-    Cancel
-  </button>
-  <button
-    mat-raised-button
-    color="primary"
-    (click)="onSubmit()"
-    [disabled]="isSubmitting() || productForm.invalid"
-  >
+  <button mat-button (click)="onCancel()" [disabled]="isSubmitting()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="isSubmitting() || productForm.invalid">
     @if (isSubmitting()) {
       <mat-spinner diameter="20"></mat-spinner>
       <span>Saving...</span>

@@ -1,4 +1,4 @@
-import type { OnInit} from '@angular/core';
+import type { OnInit } from '@angular/core';
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
@@ -13,11 +13,8 @@ import { ConfirmDialogService } from '@shared/ui/dialog';
 import { createFormDialogConfig } from '@shared/ui/dialog/dialog.config';
 import { PermissionManagementService } from './services/permission-management.service';
 import { PermissionMatrixComponent } from './permission-matrix/permission-matrix.component';
-import type {
-  PermissionFormDialogData} from './permission-form-dialog/permission-form-dialog.component';
-import {
-  PermissionFormDialogComponent
-} from './permission-form-dialog/permission-form-dialog.component';
+import type { PermissionFormDialogData } from './permission-form-dialog/permission-form-dialog.component';
+import { PermissionFormDialogComponent } from './permission-form-dialog/permission-form-dialog.component';
 import type { PermissionsByRole } from './model';
 import type { UserRole } from '@core/types';
 
@@ -106,10 +103,10 @@ export class PermissionsComponent extends BaseComponent implements OnInit {
         event.action,
         event.granted
       );
-      
+
       // Reload permissions to reflect changes
       await this.loadPermissions();
-      
+
       this.notificationService.success(
         `Permission ${event.granted ? 'granted' : 'revoked'} successfully`
       );
@@ -161,10 +158,7 @@ export class PermissionsComponent extends BaseComponent implements OnInit {
   /**
    * Handle permission deletion
    */
-  protected onPermissionDelete(event: {
-    permissionId: string;
-    role: UserRole;
-  }): void {
+  protected onPermissionDelete(event: { permissionId: string; role: UserRole }): void {
     this.confirmDialogService.openDeleteConfirm(
       `Are you sure you want to delete this custom permission?`,
       async () => {

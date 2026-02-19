@@ -14,22 +14,25 @@ import { CartService } from '@shared/services/cart.service';
   standalone: true,
   imports: [CommonModule, MatButtonModule, MatIconModule, MatBadgeModule],
   template: `
-    <button 
-      mat-icon-button 
+    <button
+      mat-icon-button
       [matBadge]="cartService.itemCount()"
       [matBadgeHidden]="cartService.itemCount() === 0"
       matBadgeColor="accent"
       matBadgeSize="small"
       (click)="navigateToCart()"
-      aria-label="Shopping cart">
+      aria-label="Shopping cart"
+    >
       <mat-icon>shopping_cart</mat-icon>
     </button>
   `,
-  styles: [`
-    :host {
-      display: inline-flex;
-    }
-  `],
+  styles: [
+    `
+      :host {
+        display: inline-flex;
+      }
+    `,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CartButtonComponent {

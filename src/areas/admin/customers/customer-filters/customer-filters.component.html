@@ -1,8 +1,4 @@
-<app-filter-container
-  [isLoading]="isLoading()"
-  [actions]="filterActions()"
-  (action)="onFilterAction($event)"
->
+<app-filter-container [isLoading]="isLoading()" [actions]="filterActions()" (action)="onFilterAction($event)">
   <app-search-input
     [label]="'Search users'"
     [placeholder]="'Email or name...'"

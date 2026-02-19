@@ -1,9 +1,17 @@
 import type { OnInit } from '@angular/core';
-import { ChangeDetectionStrategy, Component, signal, computed, inject, PLATFORM_ID, DestroyRef } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  signal,
+  computed,
+  inject,
+  PLATFORM_ID,
+  DestroyRef,
+} from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router, RouterLink, NavigationEnd } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import type { FormGroup} from '@angular/forms';
+import type { FormGroup } from '@angular/forms';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, firstValueFrom, filter } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -25,7 +33,13 @@ import { UserPreferencesService } from '@shared/services/user-preferences.servic
 import { NotificationService } from '@shared/services/notification.service';
 import { AuthService } from '@core/services/auth.service';
 import { FormValidators } from '@shared/validators/form-validators';
-import type { CartItemDTO, ProductDTO, CreateOrderDTO, OrderItemDTO, AddressDTO } from '@core/models';
+import type {
+  CartItemDTO,
+  ProductDTO,
+  CreateOrderDTO,
+  OrderItemDTO,
+  AddressDTO,
+} from '@core/models';
 import type { SelectOption } from '@shared/ui/form-field/form-field.component';
 import { OrderItemsListComponent, type OrderItem } from '../ui';
 
@@ -133,7 +147,7 @@ export default class CheckoutComponent implements OnInit {
   protected isGuest = computed(() => !this.authService.currentUser());
   protected hasSavedAddresses = computed(() => !this.isGuest() && this.savedAddresses().length > 0);
   protected addressSelectOptions = computed<SelectOption[]>(() =>
-    this.savedAddresses().map(address => ({
+    this.savedAddresses().map((address) => ({
       value: address.id,
       label: `${address.label} — ${address.addressLine1}, ${address.city}${address.isDefault ? ' (Default)' : ''}`,
     }))
@@ -182,7 +196,7 @@ export default class CheckoutComponent implements OnInit {
    * Order items for display component
    */
   protected orderItems = computed<OrderItem[]>(() =>
-    this.cartItems().map(item => ({
+    this.cartItems().map((item) => ({
       productId: item.cartItem.productId,
       quantity: item.cartItem.quantity,
       price: item.product.price,
@@ -203,7 +217,7 @@ export default class CheckoutComponent implements OnInit {
     // Reload cart items when navigating back from payment
     this.router.events
       .pipe(
-        filter(event => event instanceof NavigationEnd),
+        filter((event) => event instanceof NavigationEnd),
         filter((event: NavigationEnd) => event.url === '/orders/checkout'),
         takeUntilDestroyed(this.destroyRef)
       )
@@ -221,7 +235,8 @@ export default class CheckoutComponent implements OnInit {
 
     this.savedAddresses.set(savedAddresses);
 
-    const defaultAddress = savedAddresses.find((address: AddressDTO) => address.isDefault) ?? savedAddresses[0];
+    const defaultAddress =
+      savedAddresses.find((address: AddressDTO) => address.isDefault) ?? savedAddresses[0];
     if (defaultAddress) {
       this.applySavedAddress(defaultAddress);
       this.checkoutForm.patchValue({ selectedAddressId: defaultAddress.id });
@@ -249,19 +264,20 @@ export default class CheckoutComponent implements OnInit {
         firstName: ['', [Validators.required, Validators.minLength(2)]],
         lastName: ['', [Validators.required, Validators.minLength(2)]],
         phone: ['', [Validators.required, FormValidators.phone]],
-        
+
         // Delivery address fields
         addressLine1: ['', [Validators.required, Validators.minLength(5)]],
         addressLine2: [''],
         city: ['', [Validators.required, Validators.minLength(2)]],
         postalCode: ['', [Validators.required, FormValidators.postalCode]],
-        
+
         // Address will be saved automatically for new users
       });
 
       // Watch email field for availability check
-      this.checkoutForm.get('email')?.valueChanges
-        .pipe(
+      this.checkoutForm
+        .get('email')
+        ?.valueChanges.pipe(
           debounceTime(300),
           distinctUntilChanged(),
           takeUntilDestroyed(this.destroyRef)
@@ -296,8 +312,9 @@ export default class CheckoutComponent implements OnInit {
       });
 
       // Watch selectedAddressId for saved address changes
-      this.checkoutForm.get('selectedAddressId')?.valueChanges
-        .pipe(takeUntilDestroyed(this.destroyRef))
+      this.checkoutForm
+        .get('selectedAddressId')
+        ?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe((addressId) => {
           if (addressId) {
             this.onSavedAddressChange(addressId);
@@ -442,7 +459,7 @@ export default class CheckoutComponent implements OnInit {
 
         // Auto-login the new user
         await this.authService.login(formValue.email, formValue.password);
-        
+
         this.notification.success('Account created successfully!');
       } else {
         // Use current authenticated user
@@ -460,7 +477,6 @@ export default class CheckoutComponent implements OnInit {
 
       // Step 2: Prepare payment data and navigate to payment page
       await this.preparePayment(userId, formValue);
-
     } catch (err) {
       console.error('Failed to prepare order:', err);
       this.error.set(
@@ -495,9 +511,7 @@ export default class CheckoutComponent implements OnInit {
       },
     };
 
-    const response = await firstValueFrom(
-      this.http.post<{ id: string }>('/api/users', userData)
-    );
+    const response = await firstValueFrom(this.http.post<{ id: string }>('/api/users', userData));
 
     if (!response || !response.id) {
       console.error('Invalid response from user creation:', response);
@@ -526,9 +540,10 @@ export default class CheckoutComponent implements OnInit {
    */
   private async preparePayment(userId: string, formValue: CheckoutAddressFormValue): Promise<void> {
     const isGuest = !this.authService.currentUser();
-    const selectedAddress = !isGuest && !this.shouldShowAddressForm()
-      ? this.savedAddresses().find(address => address.id === formValue.selectedAddressId)
-      : null;
+    const selectedAddress =
+      !isGuest && !this.shouldShowAddressForm()
+        ? this.savedAddresses().find((address) => address.id === formValue.selectedAddressId)
+        : null;
 
     // Build delivery address from form fields
     const deliveryAddress = isGuest
@@ -580,7 +595,10 @@ export default class CheckoutComponent implements OnInit {
   /**
    * Updates user's address in profile
    */
-  private async updateUserAddress(userId: string, formValue: CheckoutAddressFormValue): Promise<void> {
+  private async updateUserAddress(
+    userId: string,
+    formValue: CheckoutAddressFormValue
+  ): Promise<void> {
     try {
       await this.userPreferencesService.addAddress({
         label: 'Home',
@@ -602,7 +620,7 @@ export default class CheckoutComponent implements OnInit {
   }
 
   protected onSavedAddressChange(addressId: string): void {
-    const selectedAddress = this.savedAddresses().find(address => address.id === addressId);
+    const selectedAddress = this.savedAddresses().find((address) => address.id === addressId);
     if (!selectedAddress) {
       return;
     }
@@ -627,10 +645,12 @@ export default class CheckoutComponent implements OnInit {
       return;
     }
 
-    const selectedAddressId = this.checkoutForm.get('selectedAddressId')?.value as string | undefined;
+    const selectedAddressId = this.checkoutForm.get('selectedAddressId')?.value as
+      | string
+      | undefined;
     const selectedAddress = selectedAddressId
-      ? this.savedAddresses().find(address => address.id === selectedAddressId)
-      : this.savedAddresses().find(address => address.isDefault) ?? this.savedAddresses()[0];
+      ? this.savedAddresses().find((address) => address.id === selectedAddressId)
+      : (this.savedAddresses().find((address) => address.isDefault) ?? this.savedAddresses()[0]);
 
     if (selectedAddress) {
       this.checkoutForm.patchValue({ selectedAddressId: selectedAddress.id });
@@ -663,4 +683,3 @@ export default class CheckoutComponent implements OnInit {
     void this.router.navigate(['/shop']);
   }
 }
-

@@ -10,11 +10,7 @@
     </mat-card-header>
 
     <mat-card-content>
-      <form
-        [formGroup]="loginForm"
-        (ngSubmit)="onSubmit()"
-        aria-label="Login form"
-      >
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" aria-label="Login form">
         <!-- Email Field -->
         <app-form-field
           [label]="'Email'"
@@ -56,14 +52,12 @@
 
         <!-- Remember Me Checkbox -->
         <div class="remember-me">
-          <mat-checkbox formControlName="rememberMe">
-            Remember me
-          </mat-checkbox>
+          <mat-checkbox formControlName="rememberMe"> Remember me </mat-checkbox>
         </div>
 
         <!-- Error Message -->
         @if (errorMessage()) {
-          <mat-error role="alert" aria-live="polite" class="global-error flex items-center gap-xxs">
+          <mat-error role="alert" aria-live="polite" class="global-error gap-xxs flex items-center">
             <mat-icon>error</mat-icon>
             {{ errorMessage() }}
           </mat-error>
@@ -91,8 +85,8 @@
         <div class="divider flex items-center">
           <span>Demo Accounts</span>
         </div>
-        
-        <div class="demo-users flex-col gap-sm">
+
+        <div class="demo-users gap-sm flex-col">
           @for (user of demoUsers; track user.email) {
             <button
               mat-stroked-button
@@ -102,7 +96,7 @@
               [disabled]="isLoading()"
             >
               <mat-icon>person</mat-icon>
-              <div class="demo-user-info flex items-center gap-xs">
+              <div class="demo-user-info gap-xs flex items-center">
                 <span>{{ user.role }}</span>
                 <small>{{ user.email }}</small>
               </div>

@@ -16,16 +16,16 @@ export interface Product {
   price: number;
   categoryId: string;
   stock: number;
-  
+
   // Image gallery - array of file IDs referencing files store
   imageIds: string[];
-  
+
   // Technical specifications
   specifications: ProductSpecification[];
-  
+
   // Legacy field for backward compatibility
   imageUrl?: string;
-  
+
   createdAt: number;
   updatedAt?: number;
 }
@@ -41,15 +41,15 @@ export interface ProductWithCategoryResponse {
   price: number;
   categoryId: string;
   stock: number;
-  
+
   // Resolved image URLs (from imageIds)
   imageUrls: string[];
-  
+
   // Technical specifications
   specifications: ProductSpecification[];
-  
+
   categoryName?: string;
-  
+
   // Legacy support
   imageUrl?: string;
 }

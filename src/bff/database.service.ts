@@ -161,13 +161,13 @@ export class DatabaseService {
     if (!this.isBrowser) {
       return Promise.resolve();
     }
-    
+
     if (!this.db) {
       const error = new Error('Database not initialized. Call initialize() first.');
       console.error('❌ write error:', error.message);
       throw error;
     }
-    
+
     return new Promise((resolve, reject) => {
       const transaction = this.db!.transaction([storeName], 'readwrite');
       const store = transaction.objectStore(storeName);
@@ -258,7 +258,7 @@ export class DatabaseService {
   async getOneByIndex<T>(
     storeName: string,
     indexName: string,
-    value: IDBValidKey,
+    value: IDBValidKey
   ): Promise<T | undefined> {
     if (!this.isBrowser || !this.db) {
       return undefined;
@@ -266,14 +266,14 @@ export class DatabaseService {
     return new Promise((resolve, reject) => {
       const transaction = this.db!.transaction([storeName], 'readonly');
       const store = transaction.objectStore(storeName);
-      
+
       // Check if index exists
       if (!store.indexNames.contains(indexName)) {
         console.error(`❌ Index '${indexName}' does not exist in store '${storeName}'`);
         resolve(undefined);
         return;
       }
-      
+
       const index = store.index(indexName);
       const request = index.get(value);
 

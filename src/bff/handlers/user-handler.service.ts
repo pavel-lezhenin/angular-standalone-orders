@@ -4,8 +4,18 @@ import { v4 as uuidv4 } from 'uuid';
 import { UserRepository } from '../repositories/user.repository';
 import { randomDelay } from '../utils';
 import type { User } from '../models';
-import { OkResponse, CreatedResponse, NoContentResponse, NotFoundResponse, ServerErrorResponse } from './http-responses';
-import { parsePaginationParams, applyPagination, createPaginatedResponse } from '../../core/types/pagination';
+import {
+  OkResponse,
+  CreatedResponse,
+  NoContentResponse,
+  NotFoundResponse,
+  ServerErrorResponse,
+} from './http-responses';
+import {
+  parsePaginationParams,
+  applyPagination,
+  createPaginatedResponse,
+} from '../../core/types/pagination';
 
 /**
  * User Handler Service
@@ -30,17 +40,18 @@ export class UserHandlerService {
       // Apply filters
       if (search) {
         const searchLower = search.toLowerCase();
-        users = users.filter(user => 
-          user.id.toLowerCase().includes(searchLower) ||
-          user.email.toLowerCase().includes(searchLower) ||
-          user.profile.firstName.toLowerCase().includes(searchLower) ||
-          user.profile.lastName.toLowerCase().includes(searchLower) ||
-          user.profile.phone.toLowerCase().includes(searchLower)
+        users = users.filter(
+          (user) =>
+            user.id.toLowerCase().includes(searchLower) ||
+            user.email.toLowerCase().includes(searchLower) ||
+            user.profile.firstName.toLowerCase().includes(searchLower) ||
+            user.profile.lastName.toLowerCase().includes(searchLower) ||
+            user.profile.phone.toLowerCase().includes(searchLower)
         );
       }
 
       if (role) {
-        users = users.filter(user => user.role === role);
+        users = users.filter((user) => user.role === role);
       }
 
       // Apply pagination
@@ -50,10 +61,8 @@ export class UserHandlerService {
       // Map to DTO (exclude password)
       const data = paginatedUsers.map(({ password: _p, ...user }) => user);
 
-      return new OkResponse(
-        createPaginatedResponse(data, total, page, limit)
-      );
-      } catch (err) {
+      return new OkResponse(createPaginatedResponse(data, total, page, limit));
+    } catch (err) {
       console.error('Failed to fetch users:', err);
       return new ServerErrorResponse('Failed to fetch users');
     }
@@ -88,13 +97,13 @@ export class UserHandlerService {
   async handleCheckEmail(req: HttpRequest<unknown>): Promise<HttpResponse<unknown>> {
     try {
       const email = req.params.get('email');
-      
+
       if (!email) {
         return new OkResponse({ exists: false });
       }
 
       const user = await this.userRepo.getByEmail(email);
-      
+
       return new OkResponse({
         exists: !!user,
         userId: user?.id,
@@ -112,7 +121,7 @@ export class UserHandlerService {
     await randomDelay();
     try {
       const body = req.body as Partial<User>;
-      
+
       const userData: User = {
         ...(body as User),
         id: body.id || uuidv4(),
@@ -121,7 +130,7 @@ export class UserHandlerService {
       };
 
       await this.userRepo.create(userData);
-      
+
       // Return without password
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password: _p2, ...userWithoutPassword } = userData;
@@ -145,7 +154,7 @@ export class UserHandlerService {
       };
 
       await this.userRepo.update(id, updates);
-      
+
       const updatedUser = await this.userRepo.getById(id);
       if (!updatedUser) {
         return new NotFoundResponse('User not found');

@@ -3,21 +3,12 @@
     <h1>Permissions Management</h1>
     <div class="header-actions">
       @if (canCreate()) {
-        <button 
-          mat-raised-button 
-          color="primary"
-          (click)="openCreateDialog()"
-          [disabled]="isLoading()"
-        >
+        <button mat-raised-button color="primary" (click)="openCreateDialog()" [disabled]="isLoading()">
           <mat-icon>add</mat-icon>
           Add Permission
         </button>
       }
-      <button 
-        mat-raised-button 
-        (click)="refresh()"
-        [disabled]="isLoading()"
-      >
+      <button mat-raised-button (click)="refresh()" [disabled]="isLoading()">
         <mat-icon>refresh</mat-icon>
         Refresh
       </button>
@@ -49,4 +40,3 @@
 
   <app-page-loader [isLoading]="isLoading()" />
 </div>
-

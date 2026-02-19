@@ -1,5 +1,12 @@
-import type { OnInit} from '@angular/core';
-import { ChangeDetectionStrategy, Component, signal, computed, inject, PLATFORM_ID } from '@angular/core';
+import type { OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  signal,
+  computed,
+  inject,
+  PLATFORM_ID,
+} from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -41,7 +48,6 @@ import { ProfileHandler, AddressHandler, PaymentMethodHandler } from './handlers
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountComponent implements OnInit {
-
   readonly profile = inject(ProfileHandler);
   readonly addresses = inject(AddressHandler);
   readonly payments = inject(PaymentMethodHandler);
@@ -75,10 +81,7 @@ export class AccountComponent implements OnInit {
         return;
       }
 
-      await Promise.all([
-        this.addresses.load(),
-        this.payments.load(),
-      ]);
+      await Promise.all([this.addresses.load(), this.payments.load()]);
     } finally {
       this.isLoading.set(false);
     }

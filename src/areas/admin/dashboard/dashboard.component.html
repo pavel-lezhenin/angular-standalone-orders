@@ -7,59 +7,60 @@
   </div>
 
   @if (error()) {
-      <mat-card>
-        <mat-card-content>
-          <p class="error">{{ error() }}</p>
-        </mat-card-content>
-      </mat-card>
-    } @else if (hasData()) {
-      <div class="stats-grid">
-        @for (stat of stats(); track stat.label) {
-          <mat-card class="stat-card" [class]="'stat-' + stat.color">
-            <mat-card-content>
-              <div class="stat-icon">
-                <mat-icon>{{ stat.icon }}</mat-icon>
-              </div>
-              <div class="stat-info">
-                <div class="stat-value" [title]="stat.value">{{ stat.value }}</div>
-                <div class="stat-label">{{ stat.label }}</div>
-              </div>
-            </mat-card-content>
-          </mat-card>
-        }
-      </div>
-
-      <div class="recent-section">
-        <mat-card>
-          <mat-card-header>
-            <mat-card-title>Recent Orders</mat-card-title>
-          </mat-card-header>
+    <mat-card>
+      <mat-card-content>
+        <p class="error">{{ error() }}</p>
+      </mat-card-content>
+    </mat-card>
+  } @else if (hasData()) {
+    <div class="stats-grid">
+      @for (stat of stats(); track stat.label) {
+        <mat-card class="stat-card" [class]="'stat-' + stat.color">
           <mat-card-content>
-            @if (recentOrders().length === 0) {
-              <app-empty-state
-                [icon]="'receipt_long'"
-                [title]="'No orders yet'"
-                [message]="'Orders will appear here as they are placed.'"
-                [size]="'small'" />
-            } @else {
-              <div class="recent-orders-list">
-                @for (order of recentOrders(); track order.id) {
-                  <div class="recent-order-item">
-                    <div class="order-main">
-                      <span class="order-id">#{{ order.id.slice(0, 8) }}</span>
-                      <span class="order-status">{{ order.status }}</span>
-                    </div>
-                    <div class="order-meta">
-                      <span>{{ order.total | currency }}</span>
-                      <span>{{ formatDate(order.createdAt) }}</span>
-                    </div>
-                  </div>
-                }
-              </div>
-            }
+            <div class="stat-icon">
+              <mat-icon>{{ stat.icon }}</mat-icon>
+            </div>
+            <div class="stat-info">
+              <div class="stat-value" [title]="stat.value">{{ stat.value }}</div>
+              <div class="stat-label">{{ stat.label }}</div>
+            </div>
           </mat-card-content>
         </mat-card>
-      </div>
+      }
+    </div>
+
+    <div class="recent-section">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Recent Orders</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          @if (recentOrders().length === 0) {
+            <app-empty-state
+              [icon]="'receipt_long'"
+              [title]="'No orders yet'"
+              [message]="'Orders will appear here as they are placed.'"
+              [size]="'small'"
+            />
+          } @else {
+            <div class="recent-orders-list">
+              @for (order of recentOrders(); track order.id) {
+                <div class="recent-order-item">
+                  <div class="order-main">
+                    <span class="order-id">#{{ order.id.slice(0, 8) }}</span>
+                    <span class="order-status">{{ order.status }}</span>
+                  </div>
+                  <div class="order-meta">
+                    <span>{{ order.total | currency }}</span>
+                    <span>{{ formatDate(order.createdAt) }}</span>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </mat-card-content>
+      </mat-card>
+    </div>
   }
 
   <app-page-loader [isLoading]="loading()" />

@@ -1,6 +1,6 @@
 /**
  * Format timestamp to localized date string
- * 
+ *
  * @param timestamp - Date or timestamp
  * @param locale - Locale string (default: 'en-US')
  * @returns Formatted date string

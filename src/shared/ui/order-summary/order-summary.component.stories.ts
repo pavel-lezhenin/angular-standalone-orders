@@ -5,7 +5,7 @@ import { OrderSummaryComponent } from './order-summary.component';
 const defaultLines: SummaryLine[] = [
   { label: 'Subtotal', value: 249.97 },
   { label: 'Shipping', value: 9.99 },
-  { label: 'Tax (10%)', value: 25.00 },
+  { label: 'Tax (10%)', value: 25.0 },
 ];
 
 const meta: Meta<OrderSummaryComponent> = {
@@ -82,7 +82,7 @@ export const FreeShipping: Story = {
     summaryLines: [
       { label: 'Subtotal', value: 249.97 },
       { label: 'Shipping', value: 0 },
-      { label: 'Tax (10%)', value: 25.00 },
+      { label: 'Tax (10%)', value: 25.0 },
     ],
     total: 274.97,
   },
@@ -95,9 +95,9 @@ export const WithDiscount: Story = {
   args: {
     summaryLines: [
       { label: 'Subtotal', value: 499.99 },
-      { label: 'Discount (20%)', value: -100.00, class: 'discount' },
+      { label: 'Discount (20%)', value: -100.0, class: 'discount' },
       { label: 'Shipping', value: 0 },
-      { label: 'Tax (8%)', value: 32.00 },
+      { label: 'Tax (8%)', value: 32.0 },
     ],
     total: 431.99,
   },
@@ -111,7 +111,7 @@ export const CustomLabels: Story = {
     title: 'Payment Summary',
     summaryLines: [
       { label: 'Items (3)', value: 149.97 },
-      { label: 'Service Fee', value: 5.00 },
+      { label: 'Service Fee', value: 5.0 },
     ],
     total: 154.97,
     totalLabel: 'Amount Due',
@@ -138,7 +138,7 @@ export const LargeOrder: Story = {
       { label: 'Subtotal (12 items)', value: 1299.88 },
       { label: 'Shipping (Express)', value: 24.99 },
       { label: 'Insurance', value: 12.99 },
-      { label: 'Coupon (SAVE20)', value: -260.00, class: 'discount' },
+      { label: 'Coupon (SAVE20)', value: -260.0, class: 'discount' },
       { label: 'Tax (10%)', value: 107.79 },
     ],
     total: 1185.65,

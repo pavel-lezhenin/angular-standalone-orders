@@ -17,10 +17,12 @@ const angularApp = new AngularNodeAppEngine();
  * Enable gzip/brotli compression for all responses
  * This reduces payload size significantly (Est. savings: ~70%)
  */
-app.use(compression({
-  level: 6, // Balance between compression ratio and CPU usage
-  threshold: 1024, // Only compress responses larger than 1KB
-}));
+app.use(
+  compression({
+    level: 6, // Balance between compression ratio and CPU usage
+    threshold: 1024, // Only compress responses larger than 1KB
+  })
+);
 
 /**
  * Example Express Rest API endpoints can be defined here.
@@ -50,7 +52,7 @@ app.use(
       if (path.match(/\.(js|css|woff2?|ttf|eot|svg|png|jpg|jpeg|gif|webp|ico)$/)) {
         res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
       }
-      
+
       // SEO files should not be cached aggressively
       if (path.match(/\/(robots\.txt|sitemap\.xml)$/)) {
         res.setHeader('Cache-Control', 'public, max-age=3600'); // Cache for 1 hour

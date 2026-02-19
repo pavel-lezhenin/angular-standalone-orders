@@ -3,20 +3,12 @@
     <h3>Payment Methods</h3>
     <div class="header-actions">
       @if (!showPaymentMethodForm() && isEditMode()) {
-        <button
-          mat-raised-button
-          color="primary"
-          (click)="toggleForm.emit()"
-        >
+        <button mat-raised-button color="primary" (click)="toggleForm.emit()">
           <mat-icon>add</mat-icon>
           Add Payment Method
         </button>
       }
-      <button
-        mat-raised-button
-        [color]="isEditMode() ? 'accent' : 'primary'"
-        (click)="toggleEditMode.emit()"
-      >
+      <button mat-raised-button [color]="isEditMode() ? 'accent' : 'primary'" (click)="toggleEditMode.emit()">
         <mat-icon>{{ isEditMode() ? 'check' : 'edit' }}</mat-icon>
         {{ isEditMode() ? 'Done' : 'Edit' }}
       </button>

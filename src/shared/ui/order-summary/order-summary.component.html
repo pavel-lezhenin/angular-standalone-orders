@@ -1,21 +1,21 @@
 <div class="order-summary" [class]="variant()">
   <h2>{{ title() }}</h2>
-  
+
   @for (line of summaryLines(); track line.label) {
-    <div class="summary-row flex justify-between items-center" [class]="line.class || ''">
+    <div class="summary-row flex items-center justify-between" [class]="line.class || ''">
       <span>{{ line.label }}:</span>
       <span class="amount">{{ line.value | currency }}</span>
     </div>
   }
-  
+
   @if (showDivider()) {
     <div class="summary-divider"></div>
   }
-  
-  <div class="summary-row total flex justify-between items-center">
+
+  <div class="summary-row total flex items-center justify-between">
     <span>{{ totalLabel() }}:</span>
     <span class="amount">{{ total() | currency }}</span>
   </div>
-  
+
   <ng-content></ng-content>
 </div>

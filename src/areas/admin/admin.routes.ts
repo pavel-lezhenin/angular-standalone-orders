@@ -11,32 +11,32 @@ export const adminRoutes: Routes = [
       {
         path: '',
         loadComponent: () =>
-          import('./dashboard/dashboard.component').then(m => m.DashboardComponent),
+          import('./dashboard/dashboard.component').then((m) => m.DashboardComponent),
       },
       {
         path: 'orders',
         loadComponent: () =>
-          import('./orders/orders-board.component').then(m => m.OrdersBoardComponent),
+          import('./orders/orders-board.component').then((m) => m.OrdersBoardComponent),
       },
       {
         path: 'products',
         loadComponent: () =>
-          import('./products/products.component').then(m => m.ProductsComponent),
+          import('./products/products.component').then((m) => m.ProductsComponent),
       },
       {
         path: 'categories',
         loadComponent: () =>
-          import('./categories/categories.component').then(m => m.CategoriesComponent),
+          import('./categories/categories.component').then((m) => m.CategoriesComponent),
       },
       {
         path: 'customers',
         loadComponent: () =>
-          import('./customers/customers.component').then(m => m.CustomersComponent),
+          import('./customers/customers.component').then((m) => m.CustomersComponent),
       },
       {
         path: 'permissions',
         loadComponent: () =>
-          import('./permissions/permissions.component').then(m => m.PermissionsComponent),
+          import('./permissions/permissions.component').then((m) => m.PermissionsComponent),
       },
     ],
   },

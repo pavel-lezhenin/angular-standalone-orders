@@ -14,11 +14,8 @@ import { LayoutService } from '@/shared/services/layout.service';
 import { PageLoaderComponent } from '@shared/ui/page-loader';
 import type { ProductWithCategoryDTO, CategoryDTO } from '@core';
 import { NotificationService } from '@shared/services/notification.service';
-import type {
-  ShopFilters} from './shop-filters/shop-filters.component';
-import {
-  ShopFiltersComponent
-} from './shop-filters/shop-filters.component';
+import type { ShopFilters } from './shop-filters/shop-filters.component';
+import { ShopFiltersComponent } from './shop-filters/shop-filters.component';
 import { ShopProductListComponent } from './shop-product-list/shop-product-list.component';
 
 /**
@@ -39,11 +36,7 @@ import { ShopProductListComponent } from './shop-product-list/shop-product-list.
   selector: 'app-shop',
   standalone: true,
   providers: [ProductService, CategoryService],
-  imports: [
-    ShopFiltersComponent,
-    ShopProductListComponent,
-    PageLoaderComponent,
-  ],
+  imports: [ShopFiltersComponent, ShopProductListComponent, PageLoaderComponent],
   templateUrl: './shop.component.html',
   styleUrl: './shop.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -78,14 +71,12 @@ export default class ShopComponent {
     });
 
     // Auto-reload when page changes
-    effect(
-      () => {
-        const page = this.currentPage();
-        if (page > 1) {
-          void this.loadProducts();
-        }
+    effect(() => {
+      const page = this.currentPage();
+      if (page > 1) {
+        void this.loadProducts();
       }
-    );
+    });
   }
 
   private async loadCategories(): Promise<void> {

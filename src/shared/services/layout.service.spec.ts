@@ -31,7 +31,10 @@ describe('LayoutService', () => {
 
   describe('setNavItems()', () => {
     it('updates the navItems signal', () => {
-      const items = [{ label: 'Home', route: '/' }, { label: 'Shop', route: '/shop' }];
+      const items = [
+        { label: 'Home', route: '/' },
+        { label: 'Shop', route: '/shop' },
+      ];
       service.setNavItems(items);
       expect(service.navItems()).toEqual(items);
     });

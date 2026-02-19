@@ -27,27 +27,13 @@
             <h3>Personal Information</h3>
             <div class="header-actions">
               @if (!profile.isEditMode()) {
-                <button
-                  mat-raised-button
-                  color="primary"
-                  (click)="profile.toggleEditMode()"
-                >
+                <button mat-raised-button color="primary" (click)="profile.toggleEditMode()">
                   <mat-icon>edit</mat-icon>
                   Edit
                 </button>
               } @else {
-                <button
-                  mat-button
-                  (click)="profile.toggleEditMode()"
-                >
-                  Cancel
-                </button>
-                <button
-                  mat-raised-button
-                  color="accent"
-                  (click)="profile.save()"
-                  [disabled]="!profile.form.valid"
-                >
+                <button mat-button (click)="profile.toggleEditMode()">Cancel</button>
+                <button mat-raised-button color="accent" (click)="profile.save()" [disabled]="!profile.form.valid">
                   <mat-icon>save</mat-icon>
                   Save
                 </button>
@@ -55,10 +41,7 @@
             </div>
           </div>
 
-          <app-profile-info
-            [profileForm]="profile.form"
-            [isEditMode]="profile.isEditMode()"
-          />
+          <app-profile-info [profileForm]="profile.form" [isEditMode]="profile.isEditMode()" />
         </div>
 
         <mat-divider class="section-divider" />
@@ -100,10 +83,6 @@
     </mat-card>
 
     <!-- Account Stats -->
-    <app-account-stats
-      [totalOrders]="totalOrders()"
-      [totalSpent]="totalSpent()"
-      [loyaltyPoints]="loyaltyPoints()"
-    />
+    <app-account-stats [totalOrders]="totalOrders()" [totalSpent]="totalSpent()" [loyaltyPoints]="loyaltyPoints()" />
   }
 </div>

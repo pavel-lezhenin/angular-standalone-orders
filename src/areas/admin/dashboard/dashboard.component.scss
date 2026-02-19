@@ -79,19 +79,35 @@
   }
 
   &.stat-primary .stat-icon {
-    background: linear-gradient(135deg, var(--color-gradient-primary-1) 0%, var(--color-gradient-primary-2) 100%);
+    background: linear-gradient(
+      135deg,
+      var(--color-gradient-primary-1) 0%,
+      var(--color-gradient-primary-2) 100%
+    );
   }
 
   &.stat-success .stat-icon {
-    background: linear-gradient(135deg, var(--color-gradient-success-1) 0%, var(--color-gradient-success-2) 100%);
+    background: linear-gradient(
+      135deg,
+      var(--color-gradient-success-1) 0%,
+      var(--color-gradient-success-2) 100%
+    );
   }
 
   &.stat-warning .stat-icon {
-    background: linear-gradient(135deg, var(--color-gradient-warning-1) 0%, var(--color-gradient-warning-2) 100%);
+    background: linear-gradient(
+      135deg,
+      var(--color-gradient-warning-1) 0%,
+      var(--color-gradient-warning-2) 100%
+    );
   }
 
   &.stat-info .stat-icon {
-    background: linear-gradient(135deg, var(--color-gradient-info-1) 0%, var(--color-gradient-info-2) 100%);
+    background: linear-gradient(
+      135deg,
+      var(--color-gradient-info-1) 0%,
+      var(--color-gradient-info-2) 100%
+    );
   }
 }
 

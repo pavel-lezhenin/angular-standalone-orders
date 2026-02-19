@@ -45,7 +45,12 @@ describe('FilterContainerComponent', () => {
   });
 
   it('isActionDisabled returns true when action.disabled is true', () => {
-    const action: FilterAction = { id: 'export', icon: 'download', ariaLabel: 'Export', disabled: true };
+    const action: FilterAction = {
+      id: 'export',
+      icon: 'download',
+      ariaLabel: 'Export',
+      disabled: true,
+    };
     expect(component.isActionDisabled(action)).toBe(true);
   });
 
@@ -59,7 +64,12 @@ describe('FilterContainerComponent', () => {
   it('isActionDisabled returns true when both isLoading and action.disabled are true', () => {
     fixture.componentRef.setInput('isLoading', true);
     fixture.detectChanges();
-    const action: FilterAction = { id: 'exp', icon: 'download', ariaLabel: 'Export', disabled: true };
+    const action: FilterAction = {
+      id: 'exp',
+      icon: 'download',
+      ariaLabel: 'Export',
+      disabled: true,
+    };
     expect(component.isActionDisabled(action)).toBe(true);
   });
 });

@@ -1,19 +1,15 @@
 import { Injectable, inject } from '@angular/core';
-import type {
-  HttpRequest,
-  HttpHandler,
-  HttpEvent,
-  HttpInterceptor} from '@angular/common/http';
+import type { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
 import { Observable, from } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { FakeBFFService } from '@bff';
 
 /**
  * API Interceptor
- * 
+ *
  * In development: Routes /api/* requests to FakeBFFService (mock backend)
  * In production: Would pass through to real backend
- * 
+ *
  * Usage:
  * - Services make normal HTTP requests: this.http.post('/api/auth/login', ...)
  * - Interceptor automatically routes to FakeBFF in dev
@@ -33,7 +29,7 @@ export class APIInterceptor implements HttpInterceptor {
             observer.next(response);
             observer.complete();
           });
-        }),
+        })
       );
     }
 

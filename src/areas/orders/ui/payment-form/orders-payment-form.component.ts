@@ -1,15 +1,8 @@
-import type { OnInit} from '@angular/core';
+import type { OnInit } from '@angular/core';
 import { ChangeDetectionStrategy, Component, inject, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import type {
-  FormGroup,
-  AbstractControl,
-  ValidationErrors} from '@angular/forms';
-import {
-  ReactiveFormsModule,
-  FormBuilder,
-  Validators
-} from '@angular/forms';
+import type { FormGroup, AbstractControl, ValidationErrors } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatIconModule } from '@angular/material/icon';
@@ -21,11 +14,11 @@ export type PaymentMethod = 'card' | 'paypal' | 'cash_on_delivery';
 export interface PaymentFormData {
   method: PaymentMethod;
   shouldSaveMethod: boolean;
-  
+
   // Optional: for saved payment methods
   useSavedMethod?: boolean;
   savedMethodId?: string;
-  
+
   // Card fields
   cardNumber?: string;
   cardholderName?: string;
@@ -36,16 +29,16 @@ export interface PaymentFormData {
 
 /**
  * Orders Payment Form Component (Smart)
- * 
+ *
  * Checkout-specific payment form with full orchestration.
- * 
+ *
  * Features:
  * - Payment method selection (Card, PayPal, COD)
  * - Card validation with Luhn check
  * - CVV validation
  * - "Save method for future" option
  * - Form data extraction for order processing
- * 
+ *
  * This is a SMART component:
  * - Creates own FormGroup
  * - Handles validation logic
@@ -103,8 +96,9 @@ export class OrdersPaymentFormComponent implements OnInit {
     });
 
     // Watch payment method changes
-    this.paymentForm.get('method')?.valueChanges
-      .pipe(takeUntilDestroyed(this.destroyRef))
+    this.paymentForm
+      .get('method')
+      ?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((method) => {
         this.updateCardFieldsValidators(method);
       });

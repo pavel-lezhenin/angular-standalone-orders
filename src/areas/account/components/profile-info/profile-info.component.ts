@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import type { FormGroup} from '@angular/forms';
+import type { FormGroup } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -8,7 +8,7 @@ import { FormFieldComponent } from '@shared/ui/form-field/form-field.component';
 
 /**
  * Profile Information Component
- * 
+ *
  * Displays and allows editing of user's personal and contact information
  */
 @Component({

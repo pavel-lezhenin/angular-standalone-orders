@@ -46,7 +46,7 @@
 
 .permissions-table {
   width: 100%;
-  
+
   th {
     font-weight: var(--font-weight-semibold);
     color: var(--text-secondary);
@@ -101,8 +101,9 @@
 
   .permissions-table {
     font-size: var(--font-size-sm);
-    
-    th, td {
+
+    th,
+    td {
       padding: var(--spacing-xs);
     }
   }

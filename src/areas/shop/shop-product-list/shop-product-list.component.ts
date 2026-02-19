@@ -13,11 +13,7 @@ import { EmptyStateComponent } from '@shared/ui';
 @Component({
   selector: 'app-shop-product-list',
   standalone: true,
-  imports: [
-    ProductCardComponent,
-    PaginationComponent,
-    EmptyStateComponent,
-  ],
+  imports: [ProductCardComponent, PaginationComponent, EmptyStateComponent],
   templateUrl: './shop-product-list.component.html',
   styleUrl: './shop-product-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

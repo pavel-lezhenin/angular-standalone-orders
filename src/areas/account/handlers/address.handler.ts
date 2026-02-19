@@ -1,5 +1,5 @@
 import { Injectable, inject, signal } from '@angular/core';
-import type { FormGroup} from '@angular/forms';
+import type { FormGroup } from '@angular/forms';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '@core/services/auth.service';
 import { UserPreferencesService } from '@shared/services/user-preferences.service';
@@ -42,7 +42,7 @@ export class AddressHandler {
     const addresses = await this.preferencesService.getSavedAddresses();
     this.items.set(addresses);
 
-    const defaultItem = addresses.find(a => a.isDefault) ?? addresses[0] ?? null;
+    const defaultItem = addresses.find((a) => a.isDefault) ?? addresses[0] ?? null;
     this.selectedId.set(defaultItem?.id ?? '');
     this.showForm.set(false);
   }
@@ -52,7 +52,7 @@ export class AddressHandler {
   }
 
   toggleForm(): void {
-    this.showForm.update(v => !v);
+    this.showForm.update((v) => !v);
 
     if (this.showForm()) {
       const user = this.authService.currentUser();
@@ -65,7 +65,7 @@ export class AddressHandler {
   }
 
   toggleEditMode(): void {
-    this.isEditMode.update(v => !v);
+    this.isEditMode.update((v) => !v);
 
     if (!this.isEditMode()) {
       this.showForm.set(false);
@@ -106,7 +106,7 @@ export class AddressHandler {
     await this.withNotification(
       () => this.preferencesService.deleteAddress(id),
       'Address deleted',
-      'Failed to delete address',
+      'Failed to delete address'
     );
   }
 
@@ -119,7 +119,7 @@ export class AddressHandler {
     await this.withNotification(
       () => this.preferencesService.setDefaultAddress(id),
       'Default address updated',
-      'Failed to set default address',
+      'Failed to set default address'
     );
   }
 
@@ -128,7 +128,7 @@ export class AddressHandler {
   private async withNotification(
     action: () => Promise<unknown>,
     successMessage: string,
-    errorMessage: string,
+    errorMessage: string
   ): Promise<void> {
     try {
       await action();
@@ -136,9 +136,7 @@ export class AddressHandler {
       this.notification.success(successMessage);
     } catch (error) {
       console.error(`${errorMessage}:`, error);
-      this.notification.error(
-        error instanceof Error ? error.message : errorMessage,
-      );
+      this.notification.error(error instanceof Error ? error.message : errorMessage);
     }
   }
 }

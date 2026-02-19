@@ -1,5 +1,12 @@
-import type { OnInit} from '@angular/core';
-import { ChangeDetectionStrategy, Component, signal, computed, inject, PLATFORM_ID } from '@angular/core';
+import type { OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  signal,
+  computed,
+  inject,
+  PLATFORM_ID,
+} from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -115,7 +122,7 @@ export default class CartComponent implements OnInit {
    * Toggle item selection
    */
   protected onItemSelectionChange(event: { productId: string; selected: boolean }): void {
-    this.selectedItems.update(selected => {
+    this.selectedItems.update((selected) => {
       const newSelected = new Set(selected);
       if (event.selected) {
         newSelected.add(event.productId);
@@ -131,7 +138,7 @@ export default class CartComponent implements OnInit {
    */
   protected onAllSelectionChange(selectAll: boolean): void {
     if (selectAll) {
-      const allIds = this.cartItems().map(item => item.productId);
+      const allIds = this.cartItems().map((item) => item.productId);
       this.selectedItems.set(new Set(allIds));
     } else {
       this.selectedItems.set(new Set());
@@ -154,7 +161,7 @@ export default class CartComponent implements OnInit {
       }
 
       // Initialize items with loading state
-      const itemsWithDetails: CartItemWithDetails[] = items.map(item => ({
+      const itemsWithDetails: CartItemWithDetails[] = items.map((item) => ({
         ...item,
         loading: true,
       }));
@@ -162,20 +169,18 @@ export default class CartComponent implements OnInit {
       this.cartItems.set(itemsWithDetails);
 
       // Fetch all product details in ONE request
-      const productIds = items.map(item => item.productId);
+      const productIds = items.map((item) => item.productId);
       const response = await firstValueFrom(
         this.http.post<{ products: ProductDTO[] }>('/api/products/batch', { productIds })
       );
 
       // Create a map for O(1) lookup
-      const productsMap = new Map(
-        response.products.map(product => [product.id, product])
-      );
+      const productsMap = new Map(response.products.map((product) => [product.id, product]));
 
       // Update items with product details
-      const updatedItems: CartItemWithDetails[] = items.map(item => {
+      const updatedItems: CartItemWithDetails[] = items.map((item) => {
         const product = productsMap.get(item.productId);
-        
+
         if (product) {
           return {
             productId: item.productId,
@@ -200,9 +205,8 @@ export default class CartComponent implements OnInit {
       this.cartItems.set(updatedItems);
 
       // Auto-select all items
-      const allIds = items.map(item => item.productId);
+      const allIds = items.map((item) => item.productId);
       this.selectedItems.set(new Set(allIds));
-
     } catch (error) {
       console.error('Failed to load cart items:', error);
       this.notification.error('Failed to load cart items');
@@ -224,10 +228,8 @@ export default class CartComponent implements OnInit {
    * Updates local item quantity without reloading
    */
   private updateLocalItem(productId: string, quantity: number): void {
-    this.cartItems.update(items =>
-      items.map(item =>
-        item.productId === productId ? { ...item, quantity } : item
-      )
+    this.cartItems.update((items) =>
+      items.map((item) => (item.productId === productId ? { ...item, quantity } : item))
     );
   }
 
@@ -236,8 +238,8 @@ export default class CartComponent implements OnInit {
    */
   protected removeItem(productId: string): void {
     this.cartService.removeItem(productId);
-    this.cartItems.update(items => items.filter(item => item.productId !== productId));
-    this.selectedItems.update(selected => {
+    this.cartItems.update((items) => items.filter((item) => item.productId !== productId));
+    this.selectedItems.update((selected) => {
       const newSelected = new Set(selected);
       newSelected.delete(productId);
       return newSelected;

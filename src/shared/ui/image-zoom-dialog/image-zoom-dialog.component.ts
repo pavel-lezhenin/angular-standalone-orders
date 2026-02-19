@@ -15,7 +15,7 @@ export interface ImageZoomDialogData {
 
 /**
  * Image Zoom Dialog Component
- * 
+ *
  * Full-screen modal for viewing product images
  * Features:
  * - Navigation between images (arrows, keyboard)
@@ -25,12 +25,7 @@ export interface ImageZoomDialogData {
 @Component({
   selector: 'app-image-zoom-dialog',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatIconModule,
-  ],
+  imports: [CommonModule, MatDialogModule, MatButtonModule, MatIconModule],
   templateUrl: './image-zoom-dialog.component.html',
   styleUrl: './image-zoom-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

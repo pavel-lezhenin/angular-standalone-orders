@@ -44,7 +44,7 @@ export class PermissionMatrixComponent {
     action: string;
     granted: boolean;
   }>();
-  
+
   readonly permissionDelete = output<{
     permissionId: string;
     role: UserRole;
@@ -65,14 +65,9 @@ export class PermissionMatrixComponent {
   /**
    * Handle checkbox toggle
    */
-  protected onToggle(
-    role: UserRole,
-    section: string,
-    action: string,
-    granted: boolean
-  ): void {
+  protected onToggle(role: UserRole, section: string, action: string, granted: boolean): void {
     if (!this.canEdit()) return;
-    
+
     this.permissionToggle.emit({ role, section, action, granted });
   }
 
@@ -82,7 +77,7 @@ export class PermissionMatrixComponent {
   protected formatSectionName(section: string): string {
     return section
       .split('_')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
   }
 
@@ -97,7 +92,7 @@ export class PermissionMatrixComponent {
    * Get granted permissions count for a role
    */
   protected getGrantedCount(permissions: PermissionDTO[]): number {
-    return permissions.filter(p => p.granted).length;
+    return permissions.filter((p) => p.granted).length;
   }
 
   /**
@@ -112,7 +107,7 @@ export class PermissionMatrixComponent {
    */
   protected onDelete(permissionId: string, role: UserRole): void {
     if (!this.canEdit()) return;
-    
+
     this.permissionDelete.emit({ permissionId, role });
   }
 }

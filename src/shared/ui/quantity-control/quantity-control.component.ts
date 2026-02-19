@@ -4,10 +4,10 @@ import { MatIconModule } from '@angular/material/icon';
 
 /**
  * Reusable quantity control component
- * 
+ *
  * Provides increment/decrement buttons with quantity display.
  * Used in cart, product cards, and order management.
- * 
+ *
  * @example
  * <app-quantity-control
  *   [quantity]="5"
@@ -19,10 +19,7 @@ import { MatIconModule } from '@angular/material/icon';
 @Component({
   selector: 'app-quantity-control',
   standalone: true,
-  imports: [
-    MatButtonModule,
-    MatIconModule,
-  ],
+  imports: [MatButtonModule, MatIconModule],
   templateUrl: './quantity-control.component.html',
   styleUrl: './quantity-control.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

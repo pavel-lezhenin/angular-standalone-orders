@@ -6,7 +6,8 @@
           [checked]="allSelected()"
           [indeterminate]="someSelected()"
           (change)="onToggleAll()"
-          aria-label="Select all items">
+          aria-label="Select all items"
+        >
         </mat-checkbox>
       </th>
       <th>Product</th>
@@ -18,20 +19,17 @@
   </thead>
   <tbody>
     @for (item of items(); track item.productId) {
-      <tr 
-        class="cart-item-row" 
-        [class.selected]="isItemSelected(item.productId)">
-        
+      <tr class="cart-item-row" [class.selected]="isItemSelected(item.productId)">
         @if (item.loading) {
           <td colspan="6">
-            <div class="item-loading flex items-center gap-md">
+            <div class="item-loading gap-md flex items-center">
               <mat-spinner diameter="30"></mat-spinner>
               <span>Loading product details...</span>
             </div>
           </td>
         } @else if (item.error) {
           <td colspan="6">
-            <div class="item-error flex items-center gap-md">
+            <div class="item-error gap-md flex items-center">
               <mat-icon>error</mat-icon>
               <span>{{ item.error }}</span>
             </div>
@@ -42,18 +40,16 @@
             <mat-checkbox
               [checked]="isItemSelected(item.productId)"
               (change)="onItemSelectionChange(item.productId, $event.checked)"
-              [attr.aria-label]="'Select ' + item.product.name">
+              [attr.aria-label]="'Select ' + item.product.name"
+            >
             </mat-checkbox>
           </td>
 
           <!-- Product Info -->
           <td class="product-cell">
-            <div class="product-info flex items-center gap-md">
+            <div class="product-info gap-md flex items-center">
               @if (item.product.imageUrls && item.product.imageUrls.length > 0) {
-                <img 
-                  [src]="item.product.imageUrls[0]" 
-                  [alt]="item.product.name"
-                  class="product-image">
+                <img [src]="item.product.imageUrls[0]" [alt]="item.product.name" class="product-image" />
               }
               <div class="product-details">
                 <h3>{{ item.product.name }}</h3>
@@ -83,11 +79,7 @@
 
           <!-- Remove Button -->
           <td class="actions-cell">
-            <button 
-              mat-icon-button 
-              color="warn"
-              (click)="onItemRemove(item.productId)"
-              aria-label="Remove item">
+            <button mat-icon-button color="warn" (click)="onItemRemove(item.productId)" aria-label="Remove item">
               <mat-icon>delete</mat-icon>
             </button>
           </td>

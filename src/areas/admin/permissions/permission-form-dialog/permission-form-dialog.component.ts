@@ -1,7 +1,7 @@
-import type { OnInit} from '@angular/core';
+import type { OnInit } from '@angular/core';
 import { ChangeDetectionStrategy, Component, inject, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import type { FormGroup} from '@angular/forms';
+import type { FormGroup } from '@angular/forms';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -52,7 +52,7 @@ export class PermissionFormDialogComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly dialogRef = inject(MatDialogRef<PermissionFormDialogComponent>);
   protected readonly data = inject<PermissionFormDialogData>(MAT_DIALOG_DATA);
-  
+
   /**
    * Reference to the dialog component
    */
@@ -99,7 +99,10 @@ export class PermissionFormDialogComponent implements OnInit {
   private initForm(): void {
     this.form = this.fb.group({
       role: [this.data.permission?.role || 'user', [Validators.required]],
-      section: [this.data.permission?.section || '', [Validators.required, Validators.minLength(2)]],
+      section: [
+        this.data.permission?.section || '',
+        [Validators.required, Validators.minLength(2)],
+      ],
       action: [this.data.permission?.action || '', [Validators.required, Validators.minLength(2)]],
       granted: [this.data.permission?.granted ?? true],
     });
@@ -149,7 +152,7 @@ export class PermissionFormDialogComponent implements OnInit {
    */
   protected getErrorMessage(controlName: string): string {
     const control = this.form.get(controlName);
-    
+
     if (!control?.errors || !control.touched) {
       return '';
     }

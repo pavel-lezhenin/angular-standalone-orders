@@ -15,13 +15,13 @@ export interface FilterAction {
 
 /**
  * Reusable filter container component with responsive grid layout
- * 
+ *
  * Provides:
  * - 4 columns on desktop, 2 on tablet, 1 on mobile
  * - Action buttons with icons (reset, export, etc)
  * - Loading/disabled states
  * - Consistent styling across the application
- * 
+ *
  * @example
  * <app-filter-container
  *   [isLoading]="isLoading()"

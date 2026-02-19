@@ -4,20 +4,13 @@
       <mat-icon>contact_mail</mat-icon>
       Request a Demo
     </mat-card-title>
-    <mat-card-subtitle>
-      Choose your preferred way to connect with us
-    </mat-card-subtitle>
+    <mat-card-subtitle> Choose your preferred way to connect with us </mat-card-subtitle>
   </mat-card-header>
 
   <mat-card-content>
     <form [formGroup]="leadForm" (ngSubmit)="onSubmit()">
       <!-- Name -->
-      <app-form-field
-        [label]="'Full Name'"
-        [control]="getControl('name')"
-        [prefixIcon]="'person'"
-        [required]="true"
-      />
+      <app-form-field [label]="'Full Name'" [control]="getControl('name')" [prefixIcon]="'person'" [required]="true" />
 
       <!-- Email -->
       <app-form-field
@@ -30,11 +23,7 @@
       />
 
       <!-- Company -->
-      <app-form-field
-        [label]="'Company Name'"
-        [control]="getControl('company')"
-        [prefixIcon]="'business'"
-      />
+      <app-form-field [label]="'Company Name'" [control]="getControl('company')" [prefixIcon]="'business'" />
 
       <!-- Contact Channel Selection -->
       <div class="channel-selection">
@@ -82,7 +71,7 @@
       <!-- Privacy Consent -->
       <div class="consent-section">
         <mat-checkbox formControlName="consent" required>
-          I agree to the <a href="#privacy" target="_blank">Privacy Policy</a> 
+          I agree to the <a href="#privacy" target="_blank">Privacy Policy</a>
           and consent to being contacted
         </mat-checkbox>
         @if (leadForm.get('consent')?.invalid && leadForm.get('consent')?.touched) {
@@ -91,12 +80,7 @@
       </div>
 
       <!-- Submit Button -->
-      <button 
-        mat-raised-button 
-        color="primary" 
-        type="submit"
-        [disabled]="leadForm.invalid"
-        class="submit-button">
+      <button mat-raised-button color="primary" type="submit" [disabled]="leadForm.invalid" class="submit-button">
         <mat-icon>send</mat-icon>
         Request Demo
       </button>

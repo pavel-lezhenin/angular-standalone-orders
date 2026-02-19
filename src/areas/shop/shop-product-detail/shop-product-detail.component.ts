@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  signal,
-  afterNextRender,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal, afterNextRender } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -68,12 +62,12 @@ export default class ShopProductDetailComponent {
   protected get allImages(): string[] {
     const product = this.product();
     if (!product) return [];
-    
+
     const images = product.imageUrls || [];
     if (images.length > 0) return images;
-    
+
     if (product.imageUrl) return [product.imageUrl];
-    
+
     return [];
   }
 
@@ -83,12 +77,12 @@ export default class ShopProductDetailComponent {
   protected get currentImage(): string {
     const product = this.product();
     if (!product) return DEFAULT_PRODUCT_IMAGE;
-    
+
     const images = this.allImages;
     if (images.length === 0) {
       return DEFAULT_PRODUCT_IMAGE;
     }
-    
+
     return images[this.selectedImageIndex()] || images[0] || DEFAULT_PRODUCT_IMAGE;
   }
 
@@ -132,7 +126,7 @@ export default class ShopProductDetailComponent {
   protected openImageZoom(): void {
     const product = this.product();
     if (!product) return;
-    
+
     const images = this.allImages;
     if (!images || images.length === 0) return;
 

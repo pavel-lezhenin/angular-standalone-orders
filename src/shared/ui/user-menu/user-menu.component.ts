@@ -16,13 +16,7 @@ import { AuthService } from '@core/services/auth.service';
 @Component({
   selector: 'app-user-menu',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    MatIconModule,
-    MatMenuModule,
-    MatDividerModule,
-  ],
+  imports: [CommonModule, MatButtonModule, MatIconModule, MatMenuModule, MatDividerModule],
   templateUrl: './user-menu.component.html',
   styleUrl: './user-menu.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

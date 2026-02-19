@@ -23,7 +23,7 @@ import type { OrderStatus, PaymentStatus, UserRole } from '@core/types';
  * FakeBFF Service
  * Simulates a real backend API using IndexedDB + repositories
  * In production, this will be replaced with actual HTTP calls to a real backend
- * 
+ *
  * Usage: Injected into HTTP Interceptor to handle /api/* requests
  */
 @Injectable({
@@ -61,7 +61,7 @@ export class FakeBFFService {
 
     // Initialize database first
     await this.db.initialize();
-    
+
     // Always reseed in development to ensure latest data
     // Check if data exists, if not or if incomplete - reseed
     const productCount = await this.productRepo.count();
@@ -91,18 +91,18 @@ export class FakeBFFService {
       const rawStatus = String(currentOrder.status);
 
       let normalizedStatus: OrderStatus = (oldStatusMap[rawStatus] ?? rawStatus) as OrderStatus;
-      let normalizedPaymentStatus: PaymentStatus = (
-        currentOrder.paymentStatus as PaymentStatus | undefined
-      ) ?? (normalizedStatus === 'pending_payment' ? 'pending' : 'approved');
+      let normalizedPaymentStatus: PaymentStatus =
+        (currentOrder.paymentStatus as PaymentStatus | undefined) ??
+        (normalizedStatus === 'pending_payment' ? 'pending' : 'approved');
 
       if (normalizedStatus === 'pending_payment' && normalizedPaymentStatus === 'approved') {
         normalizedStatus = 'paid';
       }
 
       if (
-        normalizedPaymentStatus === 'pending'
-        && normalizedStatus !== 'pending_payment'
-        && normalizedStatus !== 'cancelled'
+        normalizedPaymentStatus === 'pending' &&
+        normalizedStatus !== 'pending_payment' &&
+        normalizedStatus !== 'cancelled'
       ) {
         normalizedPaymentStatus = 'approved';
       }
@@ -118,10 +118,10 @@ export class FakeBFFService {
       const statusHistory = [...(order.statusHistory ?? [])];
       if (statusChanged) {
         const hasMigrationTransition = statusHistory.some(
-          entry =>
-            entry.actor.id === 'system-migration'
-            && entry.fromStatus === rawStatus
-            && entry.toStatus === normalizedStatus
+          (entry) =>
+            entry.actor.id === 'system-migration' &&
+            entry.fromStatus === rawStatus &&
+            entry.toStatus === normalizedStatus
         );
 
         if (!hasMigrationTransition) {
@@ -140,7 +140,7 @@ export class FakeBFFService {
 
       const comments = [...(order.comments ?? [])];
       const migrationCommentText = 'Legacy migration applied: order status/payment normalized';
-      const hasMigrationComment = comments.some(comment => comment.text === migrationCommentText);
+      const hasMigrationComment = comments.some((comment) => comment.text === migrationCommentText);
 
       if (!hasMigrationComment && (statusChanged || paymentChanged)) {
         comments.push({
@@ -284,10 +284,18 @@ export class FakeBFFService {
     if (req.method === 'POST' && req.url.endsWith('/api/users')) {
       return this.userHandler.handleCreateUser(req);
     }
-    if (req.method === 'PUT' && req.url.match(/\/api\/users\/[\w-]+$/) && !req.url.includes('/cart')) {
+    if (
+      req.method === 'PUT' &&
+      req.url.match(/\/api\/users\/[\w-]+$/) &&
+      !req.url.includes('/cart')
+    ) {
       return this.userHandler.handleUpdateUser(req);
     }
-    if (req.method === 'DELETE' && req.url.match(/\/api\/users\/[\w-]+$/) && !req.url.includes('/cart')) {
+    if (
+      req.method === 'DELETE' &&
+      req.url.match(/\/api\/users\/[\w-]+$/) &&
+      !req.url.includes('/cart')
+    ) {
       return this.userHandler.handleDeleteUser(req);
     }
 
@@ -315,7 +323,10 @@ export class FakeBFFService {
     if (req.method === 'PATCH' && req.url.match(/\/api\/users\/[\w-]+\/payment-methods\/[\w-]+$/)) {
       return this.paymentMethodHandler.handleUpdatePaymentMethod(req);
     }
-    if (req.method === 'DELETE' && req.url.match(/\/api\/users\/[\w-]+\/payment-methods\/[\w-]+$/)) {
+    if (
+      req.method === 'DELETE' &&
+      req.url.match(/\/api\/users\/[\w-]+\/payment-methods\/[\w-]+$/)
+    ) {
       return this.paymentMethodHandler.handleDeletePaymentMethod(req);
     }
 
@@ -351,18 +362,12 @@ export class FakeBFFService {
   }
 
   private isPrivilegedEndpoint(req: HttpRequest<unknown>): boolean {
-    const isUsersList =
-      req.method === 'GET'
-      && req.url.endsWith('/api/users');
-    const isOrdersList =
-      req.method === 'GET'
-      && req.url.endsWith('/api/orders');
+    const isUsersList = req.method === 'GET' && req.url.endsWith('/api/users');
+    const isOrdersList = req.method === 'GET' && req.url.endsWith('/api/orders');
     const isOrderStatusUpdate =
-      req.method === 'PATCH'
-      && req.url.match(/\/api\/orders\/[\w-]+\/status$/) !== null;
+      req.method === 'PATCH' && req.url.match(/\/api\/orders\/[\w-]+\/status$/) !== null;
     const isOrderComment =
-      req.method === 'POST'
-      && req.url.match(/\/api\/orders\/[\w-]+\/comments$/) !== null;
+      req.method === 'POST' && req.url.match(/\/api\/orders\/[\w-]+\/comments$/) !== null;
 
     return isUsersList || isOrdersList || isOrderStatusUpdate || isOrderComment;
   }

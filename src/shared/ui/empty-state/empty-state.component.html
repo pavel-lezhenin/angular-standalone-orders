@@ -5,10 +5,7 @@
     <p>{{ message() }}</p>
   }
   @if (actionLabel()) {
-    <button 
-      mat-raised-button 
-      [color]="actionColor()"
-      (click)="action.emit()">
+    <button mat-raised-button [color]="actionColor()" (click)="action.emit()">
       @if (actionIcon()) {
         <mat-icon>{{ actionIcon() }}</mat-icon>
       }

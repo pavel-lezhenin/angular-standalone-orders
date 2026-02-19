@@ -17,13 +17,13 @@ export interface ProductDTO {
   price: number;
   categoryId: string;
   stock: number;
-  
+
   // Image URLs (resolved from imageIds)
   imageUrls: string[];
-  
+
   // Technical specifications
   specifications: ProductSpecificationDTO[];
-  
+
   // Legacy support
   imageUrl?: string;
 }

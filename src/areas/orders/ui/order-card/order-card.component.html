@@ -1,14 +1,21 @@
-<div class="order-card flex-col gap-md" (click)="onCardClick()" (keydown.enter)="onCardClick()" (keydown.space)="onCardClick()" tabindex="0" role="button">
-  <div class="order-header flex justify-between items-start flex justify-between items-start">
-    <div class="order-id-date flex-col gap-xs">
+<div
+  class="order-card gap-md flex-col"
+  (click)="onCardClick()"
+  (keydown.enter)="onCardClick()"
+  (keydown.space)="onCardClick()"
+  tabindex="0"
+  role="button"
+>
+  <div class="order-header flex items-start justify-between">
+    <div class="order-id-date gap-xs flex-col">
       <h3 class="order-id">#{{ order().id.slice(0, 8) }}</h3>
-      <span class="order-date">{{ order().createdAt | date:'short' }}</span>
+      <span class="order-date">{{ order().createdAt | date: 'short' }}</span>
     </div>
     <span [class]="'order-status ' + getStatusClass()">
       {{ getStatusLabel() }}
     </span>
   </div>
-  
+
   <div class="order-body">
     <div class="order-info-row">
       <div class="info-item">
@@ -18,7 +25,7 @@
           <span class="info-value">{{ order().total | currency }}</span>
         </div>
       </div>
-      
+
       <div class="info-item">
         <mat-icon class="info-icon">location_on</mat-icon>
         <div class="info-content">
@@ -28,24 +35,21 @@
       </div>
     </div>
   </div>
-  
+
   <div class="order-footer">
-    <button 
-      mat-button 
-      color="primary"
-      class="view-details-btn"
-      (click)="onCardClick()">
+    <button mat-button color="primary" class="view-details-btn" (click)="onCardClick()">
       <mat-icon>visibility</mat-icon>
       View Details
     </button>
-    
+
     @if (canCancel()) {
       <button
         mat-stroked-button
         color="warn"
         class="cancel-btn"
         (click)="onCancelClick($event)"
-        [disabled]="canceling()">
+        [disabled]="canceling()"
+      >
         <mat-icon>cancel</mat-icon>
         {{ canceling() ? 'Canceling...' : 'Cancel Order' }}
       </button>

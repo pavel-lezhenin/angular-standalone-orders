@@ -9,7 +9,7 @@ import type { AddressDTO } from '@core/models';
 
 /**
  * Saved Addresses Manager Component
- * 
+ *
  * Manages user's saved shipping addresses with selection, addition, and deletion
  */
 @Component({

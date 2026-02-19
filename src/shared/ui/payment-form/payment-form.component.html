@@ -6,7 +6,7 @@
       [control]="getControl('label')"
       [placeholder]="'e.g., My Visa'"
       [customErrorMessages]="{
-        'required': 'Label is required'
+        required: 'Label is required',
       }"
     />
   }
@@ -18,8 +18,8 @@
     [type]="'text'"
     [placeholder]="'Name on card'"
     [customErrorMessages]="{
-      'required': 'Cardholder name is required',
-      'minlength': 'Name must be at least 2 characters'
+      required: 'Cardholder name is required',
+      minlength: 'Name must be at least 2 characters',
     }"
   />
 
@@ -32,9 +32,9 @@
     [maxLength]="19"
     (inputChange)="formatCardNumber($event)"
     [customErrorMessages]="{
-      'required': 'Card number is required',
-      'pattern': 'Card must be 13-19 digits',
-      'invalidCard': getControl('cardNumber').errors?.['invalidCard'] || ''
+      required: 'Card number is required',
+      pattern: 'Card must be 13-19 digits',
+      invalidCard: getControl('cardNumber').errors?.['invalidCard'] || '',
     }"
   />
 
@@ -45,7 +45,7 @@
       [control]="getControl('expiryMonth')"
       [type]="'select'"
       [selectOptions]="months"
-      [customErrorMessages]="{'required': 'Month required'}"
+      [customErrorMessages]="{ required: 'Month required' }"
     />
 
     <app-form-field
@@ -53,7 +53,7 @@
       [control]="getControl('expiryYear')"
       [type]="'select'"
       [selectOptions]="years"
-      [customErrorMessages]="{'required': 'Year required'}"
+      [customErrorMessages]="{ required: 'Year required' }"
     />
   </div>
 
@@ -66,8 +66,8 @@
       [placeholder]="'123'"
       [maxLength]="4"
       [customErrorMessages]="{
-        'required': 'CVV required',
-        'pattern': 'Must be 3-4 digits'
+        required: 'CVV required',
+        pattern: 'Must be 3-4 digits',
       }"
     />
   }

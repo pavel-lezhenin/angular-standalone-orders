@@ -5,16 +5,16 @@ import type { FileMetadataDTO, UploadResultDTO } from '../models';
 
 /**
  * File Storage Service (S3 Emulation)
- * 
+ *
  * Infrastructure service providing S3-like API for file management:
  * - Upload files (returns fileId)
  * - Get file URLs (object URLs from blobs)
  * - Delete files
  * - Get metadata
- * 
+ *
  * Files are stored in IndexedDB as Blobs
  * Products reference files by ID only (imageIds: string[])
- * 
+ *
  * This is an infrastructure service, not BFF layer!
  */
 @Injectable({
@@ -27,10 +27,7 @@ export class FileStorageService {
    * Upload file to storage
    * Returns file ID and preview URL
    */
-  async uploadFile(
-    file: File,
-    uploadedBy?: string
-  ): Promise<UploadResultDTO> {
+  async uploadFile(file: File, uploadedBy?: string): Promise<UploadResultDTO> {
     try {
       const fileId = uuidv4();
       const now = Date.now();

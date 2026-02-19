@@ -15,10 +15,7 @@ describe('APIInterceptor', () => {
     };
 
     TestBed.configureTestingModule({
-      providers: [
-        APIInterceptor,
-        { provide: FakeBFFService, useValue: fakeBFFMock },
-      ],
+      providers: [APIInterceptor, { provide: FakeBFFService, useValue: fakeBFFMock }],
     });
 
     interceptor = TestBed.inject(APIInterceptor);

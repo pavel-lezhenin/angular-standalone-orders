@@ -1,7 +1,7 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
-import type { FormGroup} from '@angular/forms';
+import type { FormGroup } from '@angular/forms';
 import { FormBuilder, Validators } from '@angular/forms';
 import type { PaymentMethodDTO } from '@core/models';
 import { SavedPaymentMethodsManagerComponent } from './saved-payment-methods-manager.component';

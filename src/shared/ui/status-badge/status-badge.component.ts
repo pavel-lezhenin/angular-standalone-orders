@@ -9,10 +9,10 @@ export type StatusBadgeVariant = 'success' | 'warning' | 'error' | 'info' | 'neu
 
 /**
  * Reusable status badge component
- * 
+ *
  * Displays status indicators with consistent styling across the application.
  * Used for order statuses, stock levels, user roles, and other categorical states.
- * 
+ *
  * @example
  * <app-status-badge
  *   [label]="'In Stock'"
@@ -23,10 +23,7 @@ export type StatusBadgeVariant = 'success' | 'warning' | 'error' | 'info' | 'neu
 @Component({
   selector: 'app-status-badge',
   standalone: true,
-  imports: [
-    MatChipsModule,
-    MatIconModule,
-  ],
+  imports: [MatChipsModule, MatIconModule],
   templateUrl: './status-badge.component.html',
   styleUrl: './status-badge.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -11,7 +11,10 @@ describe('ConfirmDialogService', () => {
     startLoading: ReturnType<typeof vi.fn>;
     stopLoading: ReturnType<typeof vi.fn>;
   };
-  let mockDialogRef: { close: ReturnType<typeof vi.fn>; componentInstance: typeof mockDialogInstance };
+  let mockDialogRef: {
+    close: ReturnType<typeof vi.fn>;
+    componentInstance: typeof mockDialogInstance;
+  };
   let matDialogMock: { open: ReturnType<typeof vi.fn> };
 
   beforeEach(() => {
@@ -30,10 +33,7 @@ describe('ConfirmDialogService', () => {
     matDialogMock = { open: vi.fn().mockReturnValue(mockDialogRef) };
 
     TestBed.configureTestingModule({
-      providers: [
-        ConfirmDialogService,
-        { provide: MatDialog, useValue: matDialogMock },
-      ],
+      providers: [ConfirmDialogService, { provide: MatDialog, useValue: matDialogMock }],
     });
 
     service = TestBed.inject(ConfirmDialogService);
@@ -50,7 +50,9 @@ describe('ConfirmDialogService', () => {
   // ─── openDeleteConfirm ───────────────────────────────────────────────────
 
   it('openDeleteConfirm opens a dialog with the given message', () => {
-    service.openDeleteConfirm('Delete this?', async () => { /* noop */ });
+    service.openDeleteConfirm('Delete this?', async () => {
+      /* noop */
+    });
     expect(matDialogMock.open).toHaveBeenCalled();
   });
 
@@ -92,12 +94,16 @@ describe('ConfirmDialogService', () => {
   // ─── openConfirm ─────────────────────────────────────────────────────────
 
   it('openConfirm opens a dialog', () => {
-    service.openConfirm('Title', 'Message', 'OK', async () => { /* noop */ });
+    service.openConfirm('Title', 'Message', 'OK', async () => {
+      /* noop */
+    });
     expect(matDialogMock.open).toHaveBeenCalled();
   });
 
   it('openConfirm uses default submitLabel "Confirm"', () => {
-    service.openConfirm('Title', 'Message', 'Confirm', async () => { /* noop */ });
+    service.openConfirm('Title', 'Message', 'Confirm', async () => {
+      /* noop */
+    });
     expect(matDialogMock.open).toHaveBeenCalled();
   });
 
