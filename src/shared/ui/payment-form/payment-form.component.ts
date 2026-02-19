@@ -69,7 +69,7 @@ export class PaymentFormComponent {
   /**
    * Month options (01-12)
    */
-  protected readonly months: SelectOption[] = Array.from({ length: 12 }, (_, i) => {
+  readonly months: SelectOption[] = Array.from({ length: 12 }, (_, i) => {
     const month = (i + 1).toString().padStart(2, '0');
     return { value: month, label: month };
   });
@@ -77,7 +77,7 @@ export class PaymentFormComponent {
   /**
    * Year options (current year + 15 years)
    */
-  protected readonly years: SelectOption[] = (() => {
+  readonly years: SelectOption[] = (() => {
     const currentYear = new Date().getFullYear();
     return Array.from({ length: 16 }, (_, i) => {
       const year = currentYear + i;
@@ -93,7 +93,7 @@ export class PaymentFormComponent {
    * Format card number as user types (4-4-4-4)
    * Only if enableFormatting is true
    */
-  protected formatCardNumber(event: Event): void {
+  formatCardNumber(event: Event): void {
     if (!this.enableFormatting()) return;
 
     const input = event.target as HTMLInputElement;
@@ -115,7 +115,7 @@ export class PaymentFormComponent {
   /**
    * Get FormControl by name with type safety
    */
-  protected getControl(name: string): FormControl {
+  getControl(name: string): FormControl {
     return this.formGroup().get(name) as FormControl;
   }
 }

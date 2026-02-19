@@ -25,7 +25,7 @@ export abstract class BaseComponent {
   /**
    * Loading state signal
    */
-  protected readonly isLoading = signal(false);
+  readonly isLoading = signal(false);
   get loading(): boolean {
     return this.isLoading();
   }

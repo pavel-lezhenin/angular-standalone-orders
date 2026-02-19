@@ -24,7 +24,11 @@ export default defineConfig({
         // Pure TypeScript interface / type-alias files — compile to nothing
         'src/**/*.dto.ts',
         'src/core/types/shared-types.ts',
+        // Storybook stories — not part of production code
+        'src/**/*.stories.ts',
         'src/bff/**/*.ts',
+        // Interface-only model files — compile to nothing
+        'src/shared/models/nav.ts',
       ],
       thresholds: {
         lines: 4,

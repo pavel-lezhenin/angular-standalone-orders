@@ -1,22 +1,25 @@
-import { signal } from '@angular/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import type { FormGroup} from '@angular/forms';
 import { FormBuilder, Validators } from '@angular/forms';
 import type { PaymentMethodDTO } from '@core/models';
 import { SavedPaymentMethodsManagerComponent } from './saved-payment-methods-manager.component';
 
-const setSignalInput = (component: SavedPaymentMethodsManagerComponent, inputName: string, value: unknown): void => {
-  (component as unknown as Record<string, unknown>)[inputName] = signal(value);
-};
-
 describe('SavedPaymentMethodsManagerComponent', () => {
   let component: SavedPaymentMethodsManagerComponent;
+  let fixture: ComponentFixture<SavedPaymentMethodsManagerComponent>;
   let paymentMethodForm: FormGroup;
   let mockPaymentMethods: PaymentMethodDTO[];
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    component = TestBed.runInInjectionContext(() => new SavedPaymentMethodsManagerComponent());
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [SavedPaymentMethodsManagerComponent],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(SavedPaymentMethodsManagerComponent);
+    component = fixture.componentInstance;
 
     const fb = new FormBuilder();
     paymentMethodForm = fb.group({
@@ -41,12 +44,12 @@ describe('SavedPaymentMethodsManagerComponent', () => {
       },
     ];
 
-    setSignalInput(component, 'savedPaymentMethods', mockPaymentMethods);
-    setSignalInput(component, 'selectedPaymentMethodId', '1');
-    setSignalInput(component, 'showPaymentMethodForm', false);
-    setSignalInput(component, 'paymentMethodForm', paymentMethodForm);
-    setSignalInput(component, 'selectedPaymentType', 'card');
-    setSignalInput(component, 'isEditMode', true);
+    fixture.componentRef.setInput('savedPaymentMethods', mockPaymentMethods);
+    fixture.componentRef.setInput('selectedPaymentMethodId', '1');
+    fixture.componentRef.setInput('showPaymentMethodForm', false);
+    fixture.componentRef.setInput('paymentMethodForm', paymentMethodForm);
+    fixture.componentRef.setInput('selectedPaymentType', 'card');
+    fixture.componentRef.setInput('isEditMode', true);
   });
 
   it('should create', () => {

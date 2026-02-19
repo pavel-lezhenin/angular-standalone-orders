@@ -1,22 +1,25 @@
-import { signal } from '@angular/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import type { FormGroup} from '@angular/forms';
 import { FormBuilder, Validators } from '@angular/forms';
 import type { AddressDTO } from '@core/models';
 import { SavedAddressesManagerComponent } from './saved-addresses-manager.component';
 
-const setSignalInput = (component: SavedAddressesManagerComponent, inputName: string, value: unknown): void => {
-  (component as unknown as Record<string, unknown>)[inputName] = signal(value);
-};
-
 describe('SavedAddressesManagerComponent', () => {
   let component: SavedAddressesManagerComponent;
+  let fixture: ComponentFixture<SavedAddressesManagerComponent>;
   let addressForm: FormGroup;
   let mockAddresses: AddressDTO[];
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    component = TestBed.runInInjectionContext(() => new SavedAddressesManagerComponent());
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [SavedAddressesManagerComponent],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(SavedAddressesManagerComponent);
+    component = fixture.componentInstance;
 
     const fb = new FormBuilder();
     addressForm = fb.group({
@@ -43,11 +46,11 @@ describe('SavedAddressesManagerComponent', () => {
       },
     ];
 
-    setSignalInput(component, 'savedAddresses', mockAddresses);
-    setSignalInput(component, 'selectedAddressId', '1');
-    setSignalInput(component, 'showAddressForm', false);
-    setSignalInput(component, 'addressForm', addressForm);
-    setSignalInput(component, 'isEditMode', true);
+    fixture.componentRef.setInput('savedAddresses', mockAddresses);
+    fixture.componentRef.setInput('selectedAddressId', '1');
+    fixture.componentRef.setInput('showAddressForm', false);
+    fixture.componentRef.setInput('addressForm', addressForm);
+    fixture.componentRef.setInput('isEditMode', true);
   });
 
   it('should create', () => {

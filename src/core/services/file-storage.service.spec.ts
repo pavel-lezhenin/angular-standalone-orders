@@ -14,6 +14,8 @@ describe('FileStorageService', () => {
     new File(['content'], name, { type, lastModified: Date.now() });
 
   beforeEach(() => {
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+
     fileRepoMock = {
       create: vi.fn().mockResolvedValue(undefined),
       getFileUrl: vi.fn().mockResolvedValue('blob:http://localhost/123'),
