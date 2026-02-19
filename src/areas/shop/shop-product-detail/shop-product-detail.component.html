@@ -1,0 +1,118 @@
+@if (isLoading()) {
+  <app-page-loader [isLoading]="true" />
+}
+
+@if (product(); as product) {
+  <div class="product-detail">
+    <!-- Breadcrumb / Back Button -->
+    <div class="breadcrumb">
+      <button mat-button (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+        Back to Shop
+      </button>
+    </div>
+
+    <div class="product-content">
+      <!-- Image Gallery (Amazon-style) -->
+      <div class="image-section">
+        <div class="gallery-container gap-sm flex">
+          <!-- Thumbnails (vertical on left) -->
+          @if (allImages.length > 1) {
+            <div class="thumbnail-list gap-xs flex-col">
+              @for (imageUrl of allImages; track $index) {
+                <div
+                  class="thumbnail-wrapper"
+                  [class.active]="selectedImageIndex() === $index"
+                  (click)="selectImage($index)"
+                  (keydown.enter)="selectImage($index)"
+                  (keydown.space)="selectImage($index)"
+                  tabindex="0"
+                  role="button"
+                >
+                  <img [src]="imageUrl" [alt]="product.name + ' - ' + ($index + 1)" />
+                </div>
+              }
+            </div>
+          }
+
+          <!-- Main image (fixed size container) -->
+          <div
+            class="main-image"
+            (click)="openImageZoom()"
+            (keydown.enter)="openImageZoom()"
+            (keydown.space)="openImageZoom()"
+            tabindex="0"
+            role="button"
+          >
+            <img [src]="currentImage" [alt]="product.name" />
+            <div class="zoom-hint gap-xs flex items-center">
+              <mat-icon>search</mat-icon>
+              Click to zoom
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Information -->
+      <div class="info-section gap-md flex-col">
+        <h1>{{ product.name }}</h1>
+
+        <div class="price-stock gap-md flex items-center">
+          <div class="price">${{ product.price.toFixed(2) }}</div>
+
+          <div class="stock-status">
+            @if (isOutOfStock) {
+              <mat-chip class="badge-danger">Out of Stock</mat-chip>
+            } @else if (isLowStock) {
+              <mat-chip class="badge-warning">Only {{ product.stock }} left</mat-chip>
+            } @else {
+              <mat-chip class="badge-success">In Stock ({{ product.stock }})</mat-chip>
+            }
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <!-- Description -->
+        <div class="description-section">
+          <h2>Description</h2>
+          <p>{{ product.description }}</p>
+        </div>
+
+        <!-- Specifications -->
+        @if (product.specifications && product.specifications.length > 0) {
+          <div class="specifications-section gap-sm flex-col">
+            <h2>Specifications</h2>
+            <mat-divider></mat-divider>
+            <dl class="specs-list">
+              @for (spec of product.specifications; track spec.name) {
+                <dt>{{ spec.name }}</dt>
+                <dd>{{ spec.value }}</dd>
+              }
+            </dl>
+          </div>
+        }
+
+        <!-- Actions -->
+        <div class="actions gap-sm flex">
+          <button
+            mat-raised-button
+            color="primary"
+            [disabled]="isOutOfStock"
+            (click)="addToCart()"
+            class="add-to-cart-btn"
+          >
+            <mat-icon>shopping_cart</mat-icon>
+            @if (isOutOfStock) {
+              Out of Stock
+            } @else {
+              Add to Cart
+            }
+          </button>
+
+          <button mat-stroked-button (click)="goBack()">Continue Shopping</button>
+        </div>
+      </div>
+    </div>
+  </div>
+}

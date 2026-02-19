@@ -1,0 +1,42 @@
+<div class="address-selector">
+  <div class="selection-controls">
+    <app-form-field
+      [label]="'Selected Address'"
+      [control]="addressSelectControl"
+      [type]="'select'"
+      [fieldClass]="'address-select'"
+      [selectOptions]="addressOptions()"
+    >
+    </app-form-field>
+
+    <div class="action-buttons">
+      @if (canSetAsDefault()) {
+        <button mat-stroked-button color="primary" (click)="setAsDefault.emit()">Set as Default</button>
+      }
+
+      @if (canDeleteSelected()) {
+        <button mat-stroked-button color="warn" (click)="deleteSelected.emit()">
+          <mat-icon>delete</mat-icon>
+          Delete
+        </button>
+      }
+    </div>
+  </div>
+
+  @if (selectedAddress(); as address) {
+    <div class="selected-address-display">
+      <div class="address-details">
+        <p>
+          <strong>{{ address.label }}</strong>
+        </p>
+        <p>{{ address.recipientName }}</p>
+        <p>{{ address.addressLine1 }}</p>
+        @if (address.addressLine2) {
+          <p>{{ address.addressLine2 }}</p>
+        }
+        <p>{{ address.city }}, {{ address.postalCode }}</p>
+        <p>{{ address.phone }}</p>
+      </div>
+    </div>
+  }
+</div>

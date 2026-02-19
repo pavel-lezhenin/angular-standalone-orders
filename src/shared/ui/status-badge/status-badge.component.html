@@ -1,0 +1,6 @@
+<mat-chip [class]="'status-' + variant() + ' size-' + size()">
+  @if (icon()) {
+    <mat-icon>{{ icon() }}</mat-icon>
+  }
+  {{ label() }}
+</mat-chip>

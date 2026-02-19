@@ -1,0 +1,23 @@
+<app-dialog (submitDialog)="onSubmit()" (cancelDialog)="onCancel()">
+  <form [formGroup]="form" class="category-form">
+    <app-form-field
+      [label]="'Name'"
+      [control]="getControl('name')"
+      [placeholder]="'Enter category name'"
+      [maxLength]="32"
+      [showCharacterCount]="true"
+      [required]="true"
+    />
+
+    <app-form-field
+      [label]="'Description'"
+      [control]="getControl('description')"
+      [type]="'textarea'"
+      [placeholder]="'Enter category description'"
+      [rows]="3"
+      [maxLength]="128"
+      [showCharacterCount]="true"
+      [required]="true"
+    />
+  </form>
+</app-dialog>

@@ -1,0 +1,15 @@
+#!/bin/sh
+set -e
+
+echo "🔍 Running pre-commit checks..."
+
+echo "\n📐 Validating design system..."
+pnpm validate:design-system
+
+echo "\n🔎 Running ESLint..."
+pnpm run lint:check
+
+echo "\n🧪 Running unit tests..."
+pnpm run test:unit
+
+echo "\n✅ All checks passed! Proceeding with commit..."

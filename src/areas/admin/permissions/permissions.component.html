@@ -1,0 +1,42 @@
+<div class="permissions-container">
+  <div class="page-header">
+    <h1>Permissions Management</h1>
+    <div class="header-actions">
+      @if (canCreate()) {
+        <button mat-raised-button color="primary" (click)="openCreateDialog()" [disabled]="isLoading()">
+          <mat-icon>add</mat-icon>
+          Add Permission
+        </button>
+      }
+      <button mat-raised-button (click)="refresh()" [disabled]="isLoading()">
+        <mat-icon>refresh</mat-icon>
+        Refresh
+      </button>
+    </div>
+  </div>
+
+  <div class="permissions-info">
+    <mat-card>
+      <mat-card-content>
+        <p class="info-text">
+          <mat-icon>info</mat-icon>
+          This page displays the Role-Based Access Control (RBAC) matrix for all user roles.
+          @if (canEdit()) {
+            You can toggle permissions by clicking the checkboxes.
+          } @else {
+            You have view-only access.
+          }
+        </p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <app-permission-matrix
+    [permissionsByRole]="permissionsByRole()"
+    [canEdit]="canEdit()"
+    (permissionToggle)="onPermissionToggle($event)"
+    (permissionDelete)="onPermissionDelete($event)"
+  />
+
+  <app-page-loader [isLoading]="isLoading()" />
+</div>

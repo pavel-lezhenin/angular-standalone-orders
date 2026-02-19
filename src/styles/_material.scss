@@ -1,0 +1,144 @@
+/* ============================================
+ * Material 3 Custom Theme
+ *
+ * Seed: #4B6F00 | Font: Raleway
+ * Palette generated via @material/material-color-utilities
+ * 
+ * mat.theme() emits --mat-sys-* CSS variables AND
+ * all component tokens — icons, form fields, buttons, etc.
+ * are properly themed automatically.
+ * ============================================ */
+@use '@angular/material' as mat;
+@use 'sass:map';
+@use 'variables/config' as config;
+@use 'variables/palette' as palette;
+
+/* Neutral tones extracted from palette for surface-container overrides */
+$neutral: map.get(palette.$primary-palette, neutral);
+
+/* Material core styles (includes CDK overlay structural styles) */
+@include mat.core();
+
+@mixin apply-light-theme {
+  @include mat.theme(
+    (
+      color: (
+        theme-type: light,
+        primary: palette.$primary-palette,
+        tertiary: palette.$tertiary-palette,
+      ),
+      typography: (
+        brand-family: config.$base-font-family,
+        plain-family: config.$base-font-family,
+      ),
+      density: (
+        scale: 0,
+      ),
+    )
+  );
+
+  @include mat.form-field-overrides(
+    (
+      container-height: config.$component-height,
+      container-vertical-padding: config.$component-vertical-padding,
+    )
+  );
+
+  @include mat.button-overrides(
+    (
+      filled-container-height: config.$component-height,
+      outlined-container-height: config.$component-height,
+      text-container-height: config.$component-height,
+      tonal-container-height: config.$component-height,
+      protected-container-height: config.$component-height,
+    )
+  );
+
+  @include mat.menu-overrides(
+    (
+      container-shape: 12px,
+    )
+  );
+
+  --mat-sys-surface-container-lowest: #{map.get($neutral, 100)};
+  --mat-sys-surface-container-low: #{map.get($neutral, 99)};
+  --mat-sys-surface-container: #{map.get($neutral, 98)};
+  --mat-sys-surface-container-high: #{map.get($neutral, 95)};
+  --mat-sys-surface-container-highest: #{map.get($neutral, 90)};
+}
+
+@mixin apply-dark-theme {
+  @include mat.theme(
+    (
+      color: (
+        theme-type: dark,
+        primary: palette.$primary-palette,
+        tertiary: palette.$tertiary-palette,
+      ),
+    )
+  );
+
+  --mat-sys-surface-container-lowest: #{map.get($neutral, 0)};
+  --mat-sys-surface-container-low: #{map.get($neutral, 10)};
+  --mat-sys-surface-container: #{map.get($neutral, 20)};
+  --mat-sys-surface-container-high: #{map.get($neutral, 25)};
+  --mat-sys-surface-container-highest: #{map.get($neutral, 30)};
+}
+
+/* ============================================
+ * Light Theme (default)
+ * ============================================ */
+html {
+  @include apply-light-theme;
+}
+
+/* ============================================
+ * Dark Theme (auto via prefers-color-scheme)
+ * ============================================ */
+@media (prefers-color-scheme: dark) {
+  html {
+    @include apply-dark-theme;
+  }
+}
+
+html.theme-light {
+  @include apply-light-theme;
+}
+
+html.theme-dark {
+  @include apply-dark-theme;
+}
+
+/* ============================================
+ * Global Material Button Styles
+ * ============================================ */
+.mat-mdc-button,
+.mat-mdc-raised-button,
+.mat-mdc-outlined-button,
+.mat-mdc-unelevated-button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: var(--spacing-xs) !important;
+
+  .mdc-button__label {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: var(--spacing-xs) !important;
+  }
+
+  mat-icon {
+    vertical-align: middle !important;
+    line-height: 1 !important;
+  }
+}
+
+.mat-mdc-icon-button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.mat-icon {
+  vertical-align: middle !important;
+}

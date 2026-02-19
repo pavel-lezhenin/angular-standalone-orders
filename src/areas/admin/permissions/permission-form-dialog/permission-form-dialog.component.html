@@ -1,0 +1,61 @@
+<app-dialog (submitDialog)="onSubmit()">
+  <form [formGroup]="form" class="permission-form">
+    <!-- Role Selection -->
+    <mat-form-field>
+      <mat-label>Role</mat-label>
+      <mat-select formControlName="role">
+        @for (role of roles; track role) {
+          <mat-option [value]="role">{{ role | titlecase }}</mat-option>
+        }
+      </mat-select>
+      @if (getErrorMessage('role')) {
+        <mat-error>{{ getErrorMessage('role') }}</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Section Input with Suggestions -->
+    <mat-form-field>
+      <mat-label>Section</mat-label>
+      <input
+        matInput
+        formControlName="section"
+        placeholder="e.g., products, orders, custom_section"
+        [matAutocomplete]="sectionAuto"
+      />
+      <mat-autocomplete #sectionAuto="matAutocomplete">
+        @for (section of commonSections; track section) {
+          <mat-option [value]="section">{{ section }}</mat-option>
+        }
+      </mat-autocomplete>
+      @if (getErrorMessage('section')) {
+        <mat-error>{{ getErrorMessage('section') }}</mat-error>
+      }
+      <mat-hint>Use lowercase with underscores (e.g., orders_all)</mat-hint>
+    </mat-form-field>
+
+    <!-- Action Input with Suggestions -->
+    <mat-form-field>
+      <mat-label>Action</mat-label>
+      <input
+        matInput
+        formControlName="action"
+        placeholder="e.g., view, create, edit, delete"
+        [matAutocomplete]="actionAuto"
+      />
+      <mat-autocomplete #actionAuto="matAutocomplete">
+        @for (action of commonActions; track action) {
+          <mat-option [value]="action">{{ action }}</mat-option>
+        }
+      </mat-autocomplete>
+      @if (getErrorMessage('action')) {
+        <mat-error>{{ getErrorMessage('action') }}</mat-error>
+      }
+      <mat-hint>Use lowercase (e.g., view, edit, delete)</mat-hint>
+    </mat-form-field>
+
+    <!-- Granted Checkbox -->
+    <div class="checkbox-field">
+      <mat-checkbox formControlName="granted"> Grant this permission </mat-checkbox>
+    </div>
+  </form>
+</app-dialog>

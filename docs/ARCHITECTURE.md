@@ -9,32 +9,32 @@ The application follows a **layered architecture** with clear separation of conc
 ```
 ┌─────────────────────────────────────────────────────┐
 │                    UI LAYER                         │
-│  Components (Pages, Features, Shared UI)            │
+│  Components (Areas, Shared UI)                      │
 │  Reactive Forms, Signals, Change Detection          │
 └────────────────────┬────────────────────────────────┘
                      │
 ┌────────────────────▼────────────────────────────────┐
-│                 FEATURE LAYER                       │
-│  Auth, Shop, Admin Modules                          │
-│  Feature Services, Route Guards, Interceptors       │
+│                 AREAS LAYER                         │
+│  Auth (public), Shop (user), Admin (manager/admin)  │
+│  Area Services, Route Guards, Lazy Loading          │
 └────────────────────┬────────────────────────────────┘
                      │
 ┌────────────────────▼────────────────────────────────┐
 │               SHARED LAYER                          │
-│  Reusable Components, Utilities, Types              │
+│  Reusable Components, Services, Utilities           │
 │  NOT singleton, imported where needed               │
 └────────────────────┬────────────────────────────────┘
                      │
 ┌────────────────────▼────────────────────────────────┐
-│           CORE / BFF LAYER                          │
-│  Data Access, Business Logic, Services              │
+│                 CORE LAYER                          │
+│  DTOs, Services, Guards, Interceptors               │
 │  Singleton - imported once at root                  │
-│  ┌──────────────────────────────────────────────┐   │
-│  │  Database Service (IndexedDB)                │   │
-│  │  Repositories (CRUD Operations)              │   │
-│  │  Services (Auth, Permission, Seed)           │   │
-│  │  Guards & Interceptors                       │   │
-│  └──────────────────────────────────────────────┘   │
+└────────────────────┬────────────────────────────────┘
+                     │
+┌────────────────────▼────────────────────────────────┐
+│                 BFF LAYER                           │
+│  Database Service, Repositories, Domain Models      │
+│  FakeBFFService (dev only)                          │
 └────────────────────┬────────────────────────────────┘
                      │
 ┌────────────────────▼────────────────────────────────┐
@@ -48,67 +48,116 @@ The application follows a **layered architecture** with clear separation of conc
 
 ## 📂 Layer Structure
 
-### Core/BFF Layer (`app/core/bff/`)
+### Areas Layer (`areas/`)
 
-**Purpose:** Encapsulate all data operations and business logic. IndexedDB is the single source of truth.
+**Purpose:** User-facing areas with different access levels based on RBAC.
 
 ```
-bff/
-├── models/
-│   └── index.ts              # TypeScript types (User, Product, Order, etc)
+areas/
+├── auth/                     # Public area (authentication)
+│   ├── auth.routes.ts
+│   └── login/
+│       ├── login.component.ts
+│       ├── login.component.html
+│       └── login.component.scss
 │
-├── database.service.ts       # IndexedDB initialization & lifecycle
+├── shop/                     # User area (shopping)
+│   ├── shop.routes.ts
+│   ├── shop-layout.component.ts
+│   ├── products/
+│   ├── cart/
+│   └── checkout/
 │
-├── fake-bff.service.ts       # Mock REST API (development only!)
-│
-├── repositories/             # Data access objects (CRUD operations)
-│   ├── base.repository.ts    # Abstract base with standard CRUD
-│   ├── user.repository.ts    # User CRUD + role management
-│   ├── product.repository.ts # Product CRUD
-│   ├── order.repository.ts   # Order CRUD + status management
-│   ├── category.repository.ts# Category CRUD
-│   └── cart.repository.ts    # Cart operations (add, remove, clear)
-│
-├── services/                 # Business logic & cross-cutting concerns
-│   ├── seed.service.ts       # Initialize demo data
+└── admin/                    # Admin area (manager/admin roles)
+    ├── admin.routes.ts
+    ├── admin-layout.component.ts
+    ├── dashboard/
+    ├── customers/
+    ├── orders/
+    ├── products/
+    ├── categories/
+    └── permissions/
+```
+
+**Key Principles:**
+- ✅ Areas are **lazy-loaded** — loaded only when accessed
+- ✅ Areas have **route guards** — authGuard, adminGuard, permissionGuard
+- ✅ Each area has its own **routing module** and **layout component**
+- ✅ RBAC segregation: Auth (public) → Shop (user) → Admin (manager/admin)
+
+### Core Layer (`src/core/`)
+
+**Purpose:** Application DTOs, services, guards, interceptors.
+
+```
+core/
+├── models/                   # DTOs for application layer
+│   ├── user.dto.ts           # UserDTO, UserProfileDTO
+│   ├── permission.dto.ts     # PermissionDTO
+│   ├── cart.dto.ts           # CartItemDTO, CartDTO
 │   └── index.ts              # Barrel export
+│
+├── types/                    # Shared types
+│   └── shared-types.ts       # UserRole, OrderStatus
+│
+├── services/                 # Application services
+│   ├── auth.service.ts       # Session, login/logout
+│   └── permission.service.ts # RBAC checks
+│
+├── guards/                   # Route guards
+│   └── index.ts              # authGuard, adminGuard, permissionGuard
+│
+├── interceptors/             # HTTP interceptors
+│   └── api.interceptor.ts    # Routes /api/* to FakeBFFService (dev only)
 │
 └── index.ts                  # Export all public APIs
 ```
 
+### BFF Layer (`src/bff/`)
+
+**Purpose:** Backend-for-Frontend simulation. IndexedDB operations, repositories, fake API.
+
+```
+bff/
+├── models/                   # BFF domain models
+│   ├── user.ts               # User (with password, full data)
+│   ├── permission.ts         # Permission
+│   ├── cart.ts               # CartItem, Cart
+│   ├── product.ts            # Product
+│   ├── order.ts              # Order, OrderItem
+│   └── index.ts              # Barrel export
+│
+├── database.service.ts       # IndexedDB initialization
+│
+├── fake-bff.service.ts       # Mock REST API (development only!)
+│
+├── repositories/             # Data access (CRUD operations)
+│   ├── base.repository.ts    # Abstract base
+│   ├── user.repository.ts    
+│   ├── product.repository.ts 
+│   ├── order.repository.ts   
+│   ├── category.repository.ts
+│   └── cart.repository.ts    
+│
+└── index.ts                  # Export public APIs
+```
+
 **Key Principles:**
-- ✅ Repositories follow **data mapper pattern** — clean separation between data & domain
-- ✅ FakeBFF simulates **REST API** during development — easy testing without backend
-- ✅ All operations are **async** — IndexedDB is promise-based
-- ✅ Single **IndexedDB instance** — initialized once, reused throughout app
+- ✅ Core uses DTOs (clean, no sensitive data)
+- ✅ BFF has full models (with password, etc)
+- ✅ Repositories handle IndexedDB operations
 
 **Development vs Production:**
 
-In **development** (current):
+In **development**:
 ```
-Angular Service → HTTP Request
-    ↓
-APIInterceptor
-    ↓
-FakeBFFService (mock-bff.service.ts)
-    ↓
-Repositories + IndexedDB
+Angular Service → HTTP Request → APIInterceptor → FakeBFFService → Repositories → IndexedDB
 ```
 
-In **production** (planned):
+In **production**:
 ```
-Angular Service → HTTP Request
-    ↓
-Real Backend (orders-bff package)
-    ↓
-Real Database (PostgreSQL/MongoDB)
+Angular Service → HTTP Request → Real Backend → Database
 ```
-
-**Key Principles:**
-- ✅ Repositories follow **data mapper pattern** — clean separation between data & domain
-- ✅ FakeBFF simulates **REST API** during development — easy testing without backend
-- ✅ All operations are **async** — IndexedDB is promise-based
-- ✅ Single **IndexedDB instance** — initialized once, reused throughout app
 
 ---
 
@@ -118,188 +167,70 @@ When ready for production, create a separate `packages/orders-bff/` (Node.js + E
 
 ```
 packages/
-├── angular-standalone-orders/      # Frontend (Vue/React/Angular)
-│   └── src/app/core/
-│       ├── bff/ (mock-bff removed)
-│       └── services/
+├── angular-standalone-orders/      # Frontend
+│   └── src/
+│       ├── core/                    # DTOs, services, guards
+│       ├── bff/                     # (removed in production)
+│       └── areas/
 │
-└── orders-bff/                     # ← Real Backend-For-Frontend
+└── orders-bff/                      # Real Backend-For-Frontend
     ├── src/
     │   ├── routes/
-    │   │   ├── auth.routes.ts       # POST /api/auth/login, etc
-    │   │   ├── products.routes.ts   # GET /api/products, etc
-    │   │   ├── orders.routes.ts     # GET/POST /api/orders
-    │   │   └── cart.routes.ts       # Cart operations
+    │   │   ├── auth.routes.ts       
+    │   │   ├── products.routes.ts   
+    │   │   └── orders.routes.ts     
     │   │
     │   ├── controllers/
-    │   │   ├── auth.controller.ts   # Login logic, JWT generation
-    │   │   ├── products.controller.ts
-    │   │   └── orders.controller.ts
+    │   │   ├── auth.controller.ts   
+    │   │   └── products.controller.ts
     │   │
     │   ├── middleware/
-    │   │   ├── auth.middleware.ts   # JWT verification
-    │   │   └── error-handler.ts
+    │   │   └── auth.middleware.ts   
     │   │
     │   ├── database/
-    │   │   ├── models/
-    │   │   │   ├── User.ts          # Sequelize/TypeORM models
-    │   │   │   ├── Product.ts
-    │   │   │   └── Order.ts
-    │   │   └── connection.ts
+    │   │   └── models/
+    │   │       ├── User.ts          
+    │   │       └── Product.ts
     │   │
-    │   └── index.ts                 # Express app server
+    │   └── index.ts                 
     │
-    ├── package.json
-    ├── .env.example
-    └── README.md
+    └── package.json
 ```
 
 **Migration Steps:**
-1. Create `packages/orders-bff/` with Express server
-2. Implement `/api/*` endpoints matching FakeBFFService
+1. Create `packages/orders-bff/` with Express
+2. Implement `/api/*` endpoints
 3. Remove APIInterceptor from `app.config.ts`
-4. Update API base URL: `provideHttpClient(withBaseUrl('http://localhost:3000'))`
-5. Delete `src/app/core/bff/fake-bff.service.ts`
-6. Frontend code stays **unchanged** — services still call `/api/*`
-
-### Core/Application Services Layer (`app/core/services/`)
-
-**Purpose:** Business logic and application state management.
-
-```
-core/services/
-├── auth.service.ts          # Session management, login/logout
-├── permission.service.ts    # RBAC: hasAccess(section, action)
-└── index.ts                 # Barrel export
-```
-
-**Key Principles:**
-- ✅ Services make **HTTP requests** to `/api/*` endpoints
-- ✅ Services are **intercepted** by APIInterceptor in development
-- ✅ In production, real backend handles requests
-- ✅ No coupling to mock layer — services don't know about FakeBFF
-
-### Route Guards & Interceptors (`app/core/guards/` & `app/core/interceptors/`)
-
-```
-core/
-├── guards/
-│   ├── auth.guard.ts        # Require authentication
-│   ├── admin.guard.ts       # Require admin/manager role
-│   └── permission.guard.ts  # Custom permission checking
-│
-└── interceptors/
-    └── api.interceptor.ts   # Routes /api/* to FakeBFFService (dev only!)
-```
-
-**Key Principles:**
-- ✅ Guards implement **access control** — checked before route activation
-- ✅ APIInterceptor is **development-only** — removed in production
+4. Delete `src/bff/`
+5. Frontend stays unchanged
 
 ---
 
-### Features Layer (`features/`)
-
-Each feature is **self-contained and independently lazy-loaded**. Features can import from Core and Shared, but NOT from other features.
-
-```
-features/
-├── auth/
-│   ├── login.component.ts         # Form with email/password
-│   ├── login.component.html       # Template
-│   ├── login.component.scss       # Styles
-│   ├── login.component.spec.ts    # Unit tests
-│   └── auth.routes.ts             # Auth feature routing
-│
-├── shop/
-│   ├── shop.routes.ts             # Shop feature routing
-│   ├── products-list.component.ts # Grid with category filter
-│   ├── product-detail.component.ts# Modal or detail page
-│   ├── cart.component.ts          # Shopping cart + checkout
-│   ├── user-profile.component.ts  # Orders history + profile
-│   ├── category-filter.component.ts# Reactive filter sidebar
-│   └── (+ *.html, *.scss, *.spec.ts for each)
-│
-└── admin/
-    ├── admin-layout.component.ts  # Container with sidebar
-    ├── admin.routes.ts            # Admin feature routing
-    ├── dashboard/                 # Dashboard feature
-    ├── customers/                 # Customer management
-    ├── permissions/               # RBAC matrix UI
-    ├── orders/                    # Trello-like orders board
-    ├── products/                  # Product manager
-    └── categories/                # Category manager
-```
-
-**Route Configuration Pattern:**
-```typescript
-// Feature route definition
-{
-  path: 'shop',
-  loadComponent: () => import('./shop-layout.component'),
-  canActivate: [authGuard],
-  children: [
-    { path: '', loadComponent: () => import('./products-list.component') },
-    { path: 'product/:id', loadComponent: () => import('./product-detail.component') },
-    { path: 'cart', loadComponent: () => import('./cart.component') },
-  ]
-}
-```
-
-**Key Principles:**
-- ✅ Each feature is **independently routable** — lazy loaded on demand
-- ✅ Features own their **routing, state, and UI** — encapsulation
-- ✅ Features **cannot import from other features** — prevents coupling
-- ✅ Features inject from **Core & Shared** — unidirectional dependency
-
 ### Shared Layer (`shared/`)
 
-Reusable, non-singleton components and utilities that any feature can use.
+Reusable components, services, and utilities used across areas.
 
 ```
 shared/
-├── ui/
-│   ├── table.component.ts         # Generic data table (header, rows, pagination)
-│   ├── modal.component.ts         # Modal wrapper with overlay
-│   ├── sidebar.component.ts       # Navigation sidebar
-│   ├── filter-panel.component.ts  # Filter controls with checkboxes
-│   ├── trello-board.component.ts  # Drag-drop board (CDK)
-│   ├── button.component.ts        # Button wrapper with variants
-│   ├── form-field.component.ts    # Form field wrapper
-│   └── badge.component.ts         # Badge/tag component
+├── ui/                            # UI components
+│   └── ...
 │
-├── utils/
-│   ├── permission.utils.ts        # hasAccess(), getRolePermissions() helpers
-│   ├── validation.utils.ts        # Custom form validators
-│   └── formatting.utils.ts        # formatPrice(), formatDate()
+├── services/                      # Shared services
+│   ├── cart.service.ts            # Cart state management
+│   └── layout.service.ts          # Layout state
 │
-├── types/
-│   └── index.ts                   # Shared TypeScript types & constants
+├── models/                        # UI-specific models
+│   └── nav.ts                     # Navigation types
 │
-└── index.ts                       # Barrel export
+└── utils/                         # Utilities
+    └── ...
 ```
 
 **Key Principles:**
-- ✅ Components are **NOT singletons** — instantiated per feature
+- ✅ Components are **NOT singletons** — instantiated per area
 - ✅ Components are **stateless** — accept inputs, emit outputs
 - ✅ Utilities are **pure functions** — no side effects
-- ✅ All reusable across features — high modularity
-
-### Pages Layer (`pages/`)
-
-Route components that orchestrate features, NOT business logic.
-
-```
-pages/
-├── landing.component.ts  # Home page - no business logic
-├── landing.component.html
-└── landing.component.scss
-```
-
-**Key Principle:**
-- ✅ Pages **compose features**, never implement logic directly
-- ✅ Pages route to feature components
-- ✅ Pages check auth status but delegate to services
+- ✅ All reusable across areas
 
 ---
 
@@ -310,14 +241,18 @@ pages/
 ```
 User Interaction
     ↓
-  Component
+  Component (in Area)
     ├─ Input: User data
     ├─ Updates form or signal
     └─ Calls service method
     ↓
-  Feature Service (if needed)
-    ├─ Implements feature-specific logic
-    └─ Calls repository
+  Core Service (auth, permission)
+  or Shared Service (cart, layout)
+    ├─ Makes HTTP request to /api/*
+    └─ APIInterceptor routes to FakeBFF
+    ↓
+  FakeBFFService
+    └─ Calls appropriate repository
     ↓
   Repository
     ├─ Maps to/from IndexedDB
@@ -328,7 +263,7 @@ User Interaction
     └─ Persists data
     ↓
   Response travels back up
-    ├─ Repository returns data
+    ├─ Service returns DTOs
     ├─ Signal updates in component
     └─ UI re-renders
 ```
@@ -651,7 +586,7 @@ Total (gzipped): ~65KB
 
 ### Optimization Strategies
 
-1. **Lazy Loading** — All features load on demand
+1. **Lazy Loading** — All areas load on demand
 2. **Tree Shaking** — Unused code removed in build
 3. **OnPush Detection** — All components use it
 4. **Signals** — More efficient than observables
@@ -687,7 +622,7 @@ Total (gzipped): ~65KB
 
      /\
     /  \       Integration Tests
-   /    \      Features + Services
+   /    \      Areas + Services
   /______\
 ```
 
@@ -754,7 +689,7 @@ class OrderService {
 
 ```
 Without: All code loaded at startup (250KB)
-With: Core loaded (~80KB) + features on-demand (30-50KB each)
+With: Core loaded (~80KB) + areas on-demand (30-50KB each)
 ```
 
 - Better startup performance
@@ -766,21 +701,21 @@ With: Core loaded (~80KB) + features on-demand (30-50KB each)
 ## 🔗 Architecture Dependencies
 
 ```
-                  Pages
-                    ↓
-            ┌───────┴───────┐
+            ┌───────────────┐
             ↓               ↓
           Admin           Shop
             ↓               ↓
-      (Feature Layer)  (Feature Layer)
+        (Area Layer)   (Area Layer)
             ↓               ↓
         Shared UI Components
             ↓
     ┌───────┴───────────────────────┐
     ↓                               ↓
-  Core/BFF              PermissionService
-    ↓                        ↓
- IndexedDB          (Auth + RBAC)
+   Core                            BFF
+    ↓                               ↓
+  Services                    Repositories
+    ↓                               ↓
+ PermissionService              IndexedDB
 ```
 
 **Rule:** No circular dependencies, only top-to-bottom
@@ -821,8 +756,8 @@ admin@demo          | demo     | Admin
 
 This architecture provides:
 
-- ✅ **Clear separation of concerns** — Core, Features, Shared, Pages
-- ✅ **Scalability** — Easy to add new features
+- ✅ **Clear separation of concerns** — Core, BFF, Areas, Shared
+- ✅ **Scalability** — Easy to add new areas
 - ✅ **Testability** — Isolated layers, mockable dependencies
 - ✅ **Maintainability** — Single responsibility principle
 - ✅ **Performance** — Lazy loading, tree shaking, signals

@@ -1,0 +1,292 @@
+.checkout-container {
+  h1 {
+    margin: 0 0 var(--spacing-2xl) 0;
+    color: var(--text-heading);
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-bold);
+  }
+}
+
+/* ============================================
+ * Checkout Content Layout
+ * ============================================ */
+
+mat-card {
+  border: var(--spacing-1px) solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  box-shadow: none;
+}
+
+mat-card > mat-card-content {
+  padding: var(--spacing-xl);
+}
+
+mat-card > mat-card-header {
+  padding: var(--spacing-xl) var(--spacing-xl) 0;
+}
+
+/* ============================================
+ * Delivery Form Styles
+ * ============================================ */
+
+.delivery-form {
+  .form-field {
+    width: 100%;
+  }
+}
+
+.saved-address-controls {
+  margin-bottom: var(--spacing-md);
+}
+
+.using-saved-address-note {
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius-sm);
+  background: var(--surface-secondary);
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+
+  mat-icon {
+    color: var(--app-primary);
+  }
+}
+
+/* Account & Address Sections */
+.account-section,
+.address-section {
+  margin-bottom: var(--spacing-2xl);
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  .section-description {
+    margin: 0 0 var(--spacing-lg) 0;
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+  }
+
+  h2 {
+    margin: 0 0 var(--spacing-md) 0;
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-heading);
+  }
+}
+
+/* Login Link */
+.login-link-container {
+  margin-top: var(--spacing-lg);
+  padding-top: var(--spacing-md);
+  border-top: var(--spacing-1px) solid var(--color-border);
+  text-align: center;
+
+  p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+
+    a {
+      color: var(--app-primary);
+      text-decoration: none;
+      font-weight: var(--font-weight-semibold);
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+/* Save Address Checkbox */
+.save-address-container {
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: var(--surface-secondary);
+  border-radius: var(--border-radius-sm);
+
+  mat-checkbox {
+    width: 100%;
+
+    ::ng-deep .mdc-label {
+      color: var(--text-primary);
+      font-size: var(--font-size-sm);
+    }
+  }
+}
+
+/* ============================================
+ * Order Items Styles
+ * ============================================ */
+
+/* Order Items */
+.order-items {
+  max-height: var(--size-image-large);
+  overflow-y: auto;
+  margin-bottom: var(--spacing-xl);
+  padding-right: var(--spacing-xs);
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--surface-secondary);
+    border-radius: var(--border-radius-xs);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: var(--border-radius-xs);
+
+    &:hover {
+      background: var(--color-border-dark);
+    }
+  }
+}
+
+.order-item {
+  display: flex;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  border-bottom: var(--spacing-1px) solid var(--color-border);
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .item-image {
+    flex-shrink: 0;
+    width: var(--spacing-5xl);
+    height: var(--spacing-5xl);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: var(--border-radius-sm);
+      background: var(--surface-secondary);
+    }
+  }
+
+  .item-details {
+    flex: 1;
+    min-width: 0;
+
+    h3 {
+      margin: 0 0 var(--spacing-xs) 0;
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      color: var(--text-primary);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .item-quantity {
+      margin: 0;
+      font-size: var(--font-size-xs);
+      color: var(--text-secondary);
+    }
+  }
+
+  .item-price {
+    flex-shrink: 0;
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+  }
+}
+
+/* Order Totals */
+.order-totals {
+  padding: var(--spacing-md) 0;
+
+  .total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-sm) 0;
+    font-size: var(--font-size-md);
+    color: var(--text-primary);
+
+    &.grand-total {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-bold);
+      color: var(--text-heading);
+    }
+
+    .amount {
+      font-weight: var(--font-weight-semibold);
+    }
+  }
+
+  .total-divider {
+    height: 1px;
+    background: var(--color-border);
+    margin: var(--spacing-md) 0;
+  }
+}
+
+/* Error Message */
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  margin-top: var(--spacing-md);
+  background: var(--error-container);
+  color: var(--on-error-container);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-sm);
+
+  mat-icon {
+    font-size: var(--font-size-xl);
+    width: var(--font-size-xl);
+    height: var(--font-size-xl);
+  }
+}
+
+/* Checkout Actions */
+.checkout-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-xl);
+
+  button {
+    width: 100%;
+
+    &[disabled] {
+      opacity: 0.6;
+    }
+
+    mat-spinner {
+      display: inline-block;
+      margin-right: var(--spacing-xs);
+      vertical-align: middle;
+    }
+  }
+}
+
+/* ============================================
+ * Responsive Styles
+ * ============================================ */
+
+/* Tablet Styles — handled by app-two-column-layout */
+
+/* Mobile Styles */
+:host-context(.mobile) {
+  .checkout-page {
+    padding: var(--spacing-md);
+  }
+
+  .checkout-container h1 {
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .order-items {
+    max-height: var(--size-filter-width);
+  }
+}

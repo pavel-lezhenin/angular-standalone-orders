@@ -1,0 +1,72 @@
+<div class="account-payment-form">
+  <!-- Payment Type Selection -->
+  <app-form-field
+    [label]="'Payment Type'"
+    [control]="getControl('type')"
+    [type]="'select'"
+    [selectOptions]="paymentTypeOptions"
+    (selectionChange)="paymentTypeChange.emit($any($event.value))"
+  >
+  </app-form-field>
+
+  <!-- Card Payment Fields -->
+  @if (selectedPaymentType() === 'card') {
+    <!-- Label field (not in shared component) -->
+    <app-form-field [label]="'Label'" [control]="getControl('label')" [placeholder]="'e.g., My Visa'" />
+
+    <!-- Cardholder Name -->
+    <app-form-field
+      [label]="'Cardholder Name'"
+      [control]="getControl('cardholderName')"
+      [placeholder]="'Name on card'"
+    />
+
+    <!-- Card Number -->
+    <app-form-field
+      [label]="'Card Number'"
+      [control]="getControl('cardNumber')"
+      [placeholder]="'1234 5678 9012 3456'"
+    />
+
+    <!-- Expiry Date Row -->
+    <div class="form-row">
+      <app-form-field
+        [label]="'Expiry Month'"
+        [control]="getControl('expiryMonth')"
+        [type]="'select'"
+        [selectOptions]="monthOptions"
+      />
+
+      <app-form-field
+        [label]="'Expiry Year'"
+        [control]="getControl('expiryYear')"
+        [type]="'select'"
+        [selectOptions]="yearOptions"
+      />
+    </div>
+  } @else {
+    <!-- PayPal: Label + Email -->
+    <app-form-field [label]="'Label'" [control]="getControl('label')" [placeholder]="'e.g., My PayPal'" />
+
+    <app-form-field
+      [label]="'PayPal Email'"
+      [control]="getControl('paypalEmail')"
+      [type]="'email'"
+      [placeholder]="'your@email.com'"
+    />
+  }
+
+  <!-- Action Buttons -->
+  <div class="form-actions">
+    <button mat-stroked-button type="button" (click)="cancelPayment.emit()">Cancel</button>
+    <button
+      mat-raised-button
+      color="primary"
+      type="button"
+      [disabled]="paymentMethodForm().invalid"
+      (click)="savePayment.emit()"
+    >
+      Save Payment Method
+    </button>
+  </div>
+</div>

@@ -1,0 +1,17 @@
+<div class="order-items-list gap-md flex-col">
+  @if (showTitle()) {
+    <h3 class="list-title">{{ title() }}</h3>
+  }
+
+  <div class="items-container gap-md flex-col">
+    @for (item of items(); track item.productId) {
+      <app-order-item-row [item]="item" />
+    } @empty {
+      <div class="empty-message">No items in this order</div>
+    }
+  </div>
+
+  @if (items().length > 0) {
+    <div class="items-count">{{ items().length }} {{ items().length === 1 ? 'item' : 'items' }}</div>
+  }
+</div>

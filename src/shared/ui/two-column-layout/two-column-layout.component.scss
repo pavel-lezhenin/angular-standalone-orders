@@ -1,0 +1,38 @@
+.two-col-layout {
+  --sidebar-width: var(--cart-sidebar-width);
+
+  display: grid;
+  grid-template-columns: 1fr var(--sidebar-width);
+  gap: var(--spacing-2xl);
+  align-items: start;
+}
+
+.two-col-main,
+.two-col-aside {
+  min-width: 0;
+}
+
+/* ============================================
+ * Responsive Styles
+ * ============================================ */
+
+/* Tablet: flex-wrap so columns reflow when sidebar doesn't fit */
+:host-context(.tablet) .two-col-layout {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+:host-context(.tablet) .two-col-main {
+  flex: 999 1 var(--size-filter-width);
+  min-width: 0;
+}
+
+:host-context(.tablet) .two-col-aside {
+  flex: 1 1 var(--sidebar-width);
+  min-width: 0;
+}
+
+/* Mobile: single column */
+:host-context(.mobile) .two-col-layout {
+  grid-template-columns: 1fr;
+}

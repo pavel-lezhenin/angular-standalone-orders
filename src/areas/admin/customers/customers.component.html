@@ -1,0 +1,28 @@
+<div class="customers-container">
+  <div class="page-header">
+    <h1>Customers Management</h1>
+    @if (canCreate()) {
+      <button mat-raised-button color="primary" (click)="openCreateDialog()" [disabled]="isLoading()">
+        <mat-icon>add</mat-icon>
+        Add Customer
+      </button>
+    }
+  </div>
+
+  <app-customer-filters (filtersChange)="onFiltersChange($event)" />
+
+  <app-customer-table
+    [users]="users()"
+    [totalUsers]="totalUsers()"
+    [currentPage]="currentPage()"
+    [pageSize]="pageSize()"
+    [pageSizeOptions]="pageSizeOptions"
+    [canEdit]="canEdit()"
+    [canDelete]="canDelete()"
+    (pageChange)="onPageChange($event)"
+    (editClick)="openEditDialog($event)"
+    (deleteClick)="deleteUser($event)"
+  />
+
+  <app-page-loader [isLoading]="isLoading()" />
+</div>

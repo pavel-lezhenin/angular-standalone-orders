@@ -1,0 +1,64 @@
+<div class="cart-page page-wrapper">
+  <div class="cart-container page-container">
+    <h1>Shopping Cart</h1>
+
+    <app-page-loader [isLoading]="loading()" />
+
+    @if (hasLoaded() && isEmpty()) {
+      <app-empty-state
+        [icon]="'shopping_cart'"
+        [title]="'Your cart is empty'"
+        [message]="'Add some products to get started!'"
+        [actionLabel]="'Continue Shopping'"
+        (action)="continueShopping()"
+      />
+    } @else if (hasLoaded()) {
+      <app-two-column-layout sidebarWidth="var(--cart-sidebar-width)">
+        <!-- Cart Items Table -->
+        <mat-card main>
+          <mat-card-content>
+            <app-cart-items-table
+              [items]="cartItems()"
+              [selectedItemIds]="selectedItems()"
+              (itemSelectionChange)="onItemSelectionChange($event)"
+              (allSelectionChange)="onAllSelectionChange($event)"
+              (quantityChange)="onQuantityChange($event)"
+              (itemRemove)="removeItem($event)"
+            />
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Cart Summary -->
+        <mat-card aside class="summary-card">
+          <mat-card-content>
+            @if (hasSelectedItems()) {
+              <div class="summary-info">
+                <span class="selected-count">{{ selectedItems().size }} item(s) selected</span>
+              </div>
+            } @else {
+              <div class="summary-info warning gap-sm flex items-center">
+                <mat-icon>info</mat-icon>
+                <span>Select items to proceed</span>
+              </div>
+            }
+
+            <app-order-summary [title]="'Order Summary'" [summaryLines]="summaryLines()" [total]="total()">
+              <div class="summary-actions gap-md flex-col">
+                <button mat-stroked-button (click)="continueShopping()" class="continue-btn">Continue Shopping</button>
+                <button
+                  mat-raised-button
+                  color="primary"
+                  (click)="proceedToCheckout()"
+                  [disabled]="!hasSelectedItems()"
+                  class="checkout-btn"
+                >
+                  Proceed to Checkout
+                </button>
+              </div>
+            </app-order-summary>
+          </mat-card-content>
+        </mat-card>
+      </app-two-column-layout>
+    }
+  </div>
+</div>

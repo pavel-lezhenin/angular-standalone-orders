@@ -1,0 +1,229 @@
+/* ============================================
+ * Design System - CSS Variables
+ * 
+ * Single source of truth for all design tokens.
+ *
+ * Material 3 color tokens (--mat-sys-*) are generated
+ * automatically by mat.theme() in _material.scss.
+ * This file defines app-level aliases and non-color tokens.
+ * DO NOT split into multiple :root {} declarations!
+ * ============================================ */
+
+@use 'config' as config;
+
+:root {
+  /* ============================================
+   * Base Configuration
+   * ============================================ */
+  --app-spacing: #{config.$base-spacing};
+  --app-font-family: #{config.$base-font-family};
+
+  /* ============================================
+   * Layout Sizing
+   * ============================================ */
+  --top-bar-height: #{config.$top-bar-height};
+
+  /* ============================================
+   * App Color Aliases (reference --mat-sys-* from Material theme)
+   * These change automatically in dark mode.
+   * ============================================ */
+  --app-primary: var(--mat-sys-primary);
+  --app-secondary: var(--mat-sys-secondary);
+  --app-tertiary: var(--mat-sys-tertiary);
+  --app-error: var(--mat-sys-error);
+  --app-warning: #f59e0b;
+  --app-success: #22c55e;
+  --app-info: var(--mat-sys-tertiary);
+  --app-background: var(--mat-sys-background);
+  --app-surface: var(--mat-sys-surface);
+
+  /* Surface hierarchy */
+  --surface-primary: var(--mat-sys-surface);
+  --surface-secondary: var(--mat-sys-surface-container-low);
+  --surface-tertiary: var(--mat-sys-surface-container);
+  --surface-gradient-start: var(--mat-sys-surface-container);
+  --surface-gradient-end: var(--mat-sys-outline-variant);
+
+  /* ============================================
+   * Status State Colors
+   * ============================================ */
+  --error-container: var(--mat-sys-error-container);
+  --on-error-container: var(--mat-sys-on-error-container);
+
+  /* ============================================
+   * Text Colors (reference Material system tokens)
+   * ============================================ */
+  --text-primary: var(--mat-sys-on-surface);
+  --text-secondary: var(--mat-sys-on-surface-variant);
+  --text-muted: var(--mat-sys-outline-variant);
+  --text-heading: var(--mat-sys-on-background);
+  --text-inverse: var(--mat-sys-inverse-on-surface);
+  --text-on-primary: var(--mat-sys-on-primary);
+  --text-on-error: var(--mat-sys-on-error);
+  --text-on-warning: #ffffff;
+  --text-on-success: #ffffff;
+
+  /* ============================================
+   * Border & Separator Colors
+   * ============================================ */
+  --color-border: var(--mat-sys-outline-variant);
+  --color-border-dark: var(--mat-sys-outline);
+
+  /* ============================================
+   * Utility Colors
+   * ============================================ */
+  --color-overlay-dark: rgba(0, 0, 0, 0.6);
+  --color-overlay-light: rgba(255, 255, 255, 0.1);
+  --color-text-light: var(--mat-sys-surface-bright);
+  --color-text-gray: var(--mat-sys-outline);
+
+  /* Semi-transparent colors */
+  --color-white: #ffffff;
+  --color-black-04: rgba(0, 0, 0, 0.04);
+  --color-black-06: rgba(0, 0, 0, 0.06);
+  --color-black-08: rgba(0, 0, 0, 0.08);
+  --color-black-10: rgba(0, 0, 0, 0.1);
+  --color-black-12: rgba(0, 0, 0, 0.12);
+  --color-black-30: rgba(0, 0, 0, 0.3);
+  --color-black-40: rgba(0, 0, 0, 0.4);
+  --color-black-60: rgba(0, 0, 0, 0.6);
+  /* White with transparency */
+  --color-white-20: rgba(255, 255, 255, 0.2);
+  --color-white-70: rgba(255, 255, 255, 0.7);
+  --color-white-95: rgba(255, 255, 255, 0.95);
+  /* Dark theme */
+  --color-dark-95: rgba(30, 30, 30, 0.95);
+
+  /* ============================================
+   * Gradient Colors (Dashboard Stats)
+   * ============================================ */
+  --color-gradient-primary-1: #667eea;
+  --color-gradient-primary-2: #764ba2;
+  --color-gradient-success-1: #84fab0;
+  --color-gradient-success-2: #8fd3f4;
+  --color-gradient-warning-1: #fa709a;
+  --color-gradient-warning-2: #fee140;
+  --color-gradient-info-1: #30cfd0;
+  --color-gradient-info-2: #330867;
+
+  /* ============================================
+   * Spacing Scale (calculated from --app-spacing)
+   * ============================================ */
+  --spacing-1px: 1px; /* Use for minimal spacing/borders */
+  --spacing-2px: 2px; /* Use for minimal spacing */
+  --spacing-xs: calc(var(--app-spacing) * 0.25); /* 4px */
+  --spacing-2xs: calc(var(--app-spacing) * 0.375); /* 6px */
+  --spacing-xxs: calc(var(--app-spacing) * 0.5); /* 8px */
+  --spacing-sm: calc(var(--app-spacing) * 0.75); /* 12px */
+  --spacing-md: var(--app-spacing); /* 16px */
+  --spacing-lg: calc(var(--app-spacing) * 1.25); /* 20px */
+  --spacing-xl: calc(var(--app-spacing) * 1.5); /* 24px */
+  --spacing-2xl: calc(var(--app-spacing) * 2); /* 32px */
+  --spacing-3xl: calc(var(--app-spacing) * 2.5); /* 40px */
+  --spacing-4xl: calc(var(--app-spacing) * 3); /* 48px */
+  --spacing-5xl: calc(var(--app-spacing) * 4); /* 64px */
+  --spacing-6xl: calc(var(--app-spacing) * 5); /* 80px */
+  --spacing-7xl: calc(var(--app-spacing) * 6); /* 96px */
+
+  /* ============================================
+   * Typography - Font Sizes
+   * ============================================ */
+  --font-size-xxs: 0.75rem; /* 12px */
+  --font-size-xs: 0.8125rem; /* 13px */
+  --font-size-sm: 0.875rem; /* 14px */
+  --font-size-base: 0.9rem; /* 14.4px */
+  --font-size-md: 1rem; /* 16px */
+  --font-size-lg: 1.125rem; /* 18px */
+  --font-size-xl: 1.25rem; /* 20px */
+  --font-size-1xl: 1.5rem; /* 24px */
+  --font-size-2xl: 1.75rem; /* 28px */
+  --font-size-3xl: 2rem; /* 32px */
+  --font-size-4xl: 2.5rem; /* 40px */
+  --font-size-5xl: 3rem; /* 48px */
+  --font-size-6xl: 3.5rem; /* 56px */
+
+  /* ============================================
+   * Typography - Font Weights
+   * ============================================ */
+  --font-weight-light: 300;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+
+  /* ============================================
+   * Component Sizes
+   * ============================================ */
+  /* Product Cards */
+  --product-card-min-width: 15.625rem; /* 250px - desktop */
+  --product-card-min-width-tablet: 13.75rem; /* 220px - tablet */
+
+  /* Product Gallery */
+  --gallery-container-width: 28.125rem; /* 450px - product detail gallery */
+
+  /* Cart & Checkout Sidebar */
+  --cart-sidebar-width: 23.75rem; /* 380px - cart summary sidebar */
+  --checkout-sidebar-width: 26.25rem; /* 420px - checkout summary sidebar */
+
+  /* ============================================
+   * Shadows
+   * ============================================ */
+  --shadow-sm:
+    0 1px 2px color-mix(in srgb, var(--mat-sys-shadow) 20%, transparent),
+    0 2px 6px 2px color-mix(in srgb, var(--mat-sys-shadow) 8%, transparent);
+  --shadow-md:
+    0 1px 2px color-mix(in srgb, var(--mat-sys-shadow) 25%, transparent),
+    0 4px 8px 3px color-mix(in srgb, var(--mat-sys-shadow) 10%, transparent);
+  --shadow-lg:
+    0 4px 8px 3px color-mix(in srgb, var(--mat-sys-shadow) 20%, transparent),
+    0 6px 12px 4px color-mix(in srgb, var(--mat-sys-shadow) 10%, transparent);
+  /* Note: prefer border over box-shadow inside surface containers */
+
+  /* ============================================
+   * Border Radius
+   * ============================================ */
+  --border-radius-xs: 0.25rem; /* 4px */
+  --border-radius-sm: 0.5rem; /* 8px */
+  --border-radius-md: 0.75rem; /* 12px */
+
+  /* ============================================
+   * Icon Sizes
+   * ============================================ */
+  --icon-size-xs: calc(var(--app-spacing) * 0.75); /* 12px */
+  --icon-size-sm: calc(var(--app-spacing) * 1); /* 16px */
+  --icon-size-md: calc(var(--app-spacing) * 1.125); /* 18px */
+  --icon-size-lg: calc(var(--app-spacing) * 1.5); /* 24px */
+  --icon-size-xl: calc(var(--app-spacing) * 1.75); /* 28px */
+  --icon-size-2xl: calc(var(--app-spacing) * 2); /* 32px */
+  --icon-size-3xl: calc(var(--app-spacing) * 2.5); /* 40px */
+  --icon-size-4xl: calc(var(--app-spacing) * 3); /* 48px */
+  --icon-size-5xl: calc(var(--app-spacing) * 3.125); /* 50px */
+  --icon-size-6xl: calc(var(--app-spacing) * 3.5); /* 56px */
+
+  /* ============================================
+   * Layout Widths
+   * ============================================ */
+  --container-width-xs: 25rem; /* 400px */
+  --container-width-sm: 31.25rem; /* 500px */
+  --container-width-md: 37.5rem; /* 600px */
+  --container-width-lg: 56.25rem; /* 900px */
+  --container-width-xl: 75rem; /* 1200px */
+  --container-width-2xl: 87.5rem; /* 1400px */
+
+  /* ============================================
+   * Common Component Sizes
+   * ============================================ */
+  --size-thumbnail: calc(var(--app-spacing) * 3.125); /* 50px */
+  --size-avatar: calc(var(--app-spacing) * 2.5); /* 40px */
+  --size-button-icon: calc(var(--app-spacing) * 3); /* 48px */
+  --size-small-card: 15.625rem; /* 250px */
+  --size-sidebar: 16.25rem; /* 260px */
+  --size-filter-width: 18.75rem; /* 300px */
+  --size-image-preview: 7.5rem; /* 120px */
+  --size-image-small: 12.5rem; /* 200px */
+  --size-image-medium: 18.75rem; /* 300px */
+  --size-image-large: 25rem; /* 400px */
+  --size-min-width-xs: 6.25rem; /* 100px */
+  --size-min-width-sm: 9.375rem; /* 150px */
+  --size-min-width-md: 11.25rem; /* 180px */
+}

@@ -1,0 +1,12 @@
+.user-name {
+  margin: 0 var(--spacing-xs);
+}
+
+/* ============================================
+ * Responsive Styles
+ * ============================================ */
+
+/* Mobile Styles */
+:host-context(.mobile) .user-name {
+  display: none;
+}

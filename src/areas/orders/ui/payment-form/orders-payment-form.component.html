@@ -1,0 +1,52 @@
+<div class="orders-payment-form">
+  <form [formGroup]="paymentForm">
+    <!-- Payment Method Selection -->
+    <div class="form-section">
+      <h3>Payment Method</h3>
+      <mat-radio-group formControlName="method" class="payment-methods">
+        @for (method of paymentMethods; track method.value) {
+          <mat-radio-button [value]="method.value">
+            {{ method.label }}
+          </mat-radio-button>
+        }
+      </mat-radio-group>
+    </div>
+
+    <!-- Card Payment Fields -->
+    @if (paymentForm.get('method')?.value === 'card') {
+      <div class="form-section card-details">
+        <h3>Card Details</h3>
+
+        <!-- Use shared PaymentFormComponent -->
+        <app-payment-form
+          [formGroup]="$any(paymentForm.get('cardFields'))"
+          [showCvv]="true"
+          [enableFormatting]="true"
+        />
+
+        <!-- Save Method Checkbox (checkout-specific) -->
+        <div class="save-method-option">
+          <mat-checkbox formControlName="shouldSaveMethod">
+            <span class="save-label">Save this payment method for future orders</span>
+          </mat-checkbox>
+        </div>
+      </div>
+    }
+
+    <!-- PayPal Message -->
+    @if (paymentForm.get('method')?.value === 'paypal') {
+      <div class="payment-info-message">
+        <mat-icon>info</mat-icon>
+        <p>You will be redirected to PayPal to complete your payment.</p>
+      </div>
+    }
+
+    <!-- Cash on Delivery Message -->
+    @if (paymentForm.get('method')?.value === 'cash_on_delivery') {
+      <div class="payment-info-message">
+        <mat-icon>info</mat-icon>
+        <p>Pay with cash when your order is delivered.</p>
+      </div>
+    }
+  </form>
+</div>

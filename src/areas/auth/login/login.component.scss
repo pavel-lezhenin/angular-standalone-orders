@@ -1,0 +1,54 @@
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: var(--app-spacing);
+  background: var(--app-background);
+}
+
+.login-container {
+  max-width: var(--container-width-xs);
+}
+
+.login-subtitle {
+  margin: calc(var(--app-spacing) * 1.5) 0;
+}
+
+button {
+  gap: var(--spacing-xxs);
+}
+
+.divider {
+  text-align: center;
+  margin: var(--spacing-xl) 0;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    border-bottom: var(--spacing-1px) solid;
+    opacity: 0.2;
+  }
+
+  span {
+    padding: 0 var(--spacing-md);
+  }
+}
+
+.demo-users {
+}
+
+.demo-user-info {
+  text-align: left;
+}
+
+.global-error {
+  margin-bottom: var(--spacing-md);
+
+  mat-icon {
+    font-size: var(--font-size-xl);
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+}

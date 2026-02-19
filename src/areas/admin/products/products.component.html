@@ -1,0 +1,28 @@
+<div class="products-container">
+  <div class="page-header">
+    <h1>Products Management</h1>
+    @if (canCreate()) {
+      <button mat-raised-button color="primary" (click)="openCreateDialog()" [disabled]="isLoading()">
+        <mat-icon>add</mat-icon>
+        Add Product
+      </button>
+    }
+  </div>
+
+  <app-product-filters [categories]="categories()" (filtersChange)="onFiltersChange($event)" />
+
+  <app-product-table
+    [products]="products()"
+    [totalProducts]="totalProducts()"
+    [currentPage]="currentPage()"
+    [pageSize]="pageSize()"
+    [pageSizeOptions]="pageSizeOptions"
+    [canEdit]="canEdit()"
+    [canDelete]="canDelete()"
+    (pageChange)="onPageChange($event)"
+    (editClick)="openEditDialog($event)"
+    (deleteClick)="deleteProduct($event)"
+  />
+
+  <app-page-loader [isLoading]="isLoading()" />
+</div>

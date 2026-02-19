@@ -1,0 +1,45 @@
+<app-section-wrapper>
+  <h2 class="section-title">Frequently Asked Questions</h2>
+
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title> How does offline mode work? </mat-panel-title>
+      </mat-expansion-panel-header>
+      <p>
+        Our platform uses IndexedDB to store your data locally in the browser, allowing you to continue working even
+        without an internet connection. All changes are automatically synchronized when you're back online.
+      </p>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title> What user roles are supported? </mat-panel-title>
+      </mat-expansion-panel-header>
+      <p>
+        We support three main roles: Users (view and create orders), Managers (approve and modify orders), and
+        Administrators (full system access including user management and configuration).
+      </p>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title> Can I integrate with my existing systems? </mat-panel-title>
+      </mat-expansion-panel-header>
+      <p>
+        Yes! Our platform provides a comprehensive REST API that allows you to integrate with your existing CRM, ERP, or
+        other business systems. We also support webhooks for real-time event notifications.
+      </p>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title> Is my data secure? </mat-panel-title>
+      </mat-expansion-panel-header>
+      <p>
+        Absolutely. We use industry-standard encryption for data at rest and in transit. Role-based access control
+        ensures that users only see data they're authorized to access. Regular security audits keep your data protected.
+      </p>
+    </mat-expansion-panel>
+  </mat-accordion>
+</app-section-wrapper>

@@ -1,0 +1,17 @@
+/* Base Styles */
+/* Fonts are now loaded via <link> tags in index.html for better performance */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: var(--app-font-family);
+}
+
+app-root {
+  display: block;
+}

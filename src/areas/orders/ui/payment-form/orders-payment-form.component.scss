@@ -1,0 +1,91 @@
+.orders-payment-form {
+  width: 100%;
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+  }
+}
+
+/* ============================================
+ * Form Sections
+ * ============================================ */
+
+.form-section {
+  h3 {
+    margin: 0 0 var(--spacing-md) 0;
+    color: var(--text-heading);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+  }
+}
+
+/* ============================================
+ * Payment Method Selection
+ * ============================================ */
+
+.payment-methods {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+
+  mat-radio-button {
+    ::ng-deep .mdc-label {
+      color: var(--text-primary);
+      font-size: var(--font-size-md);
+    }
+  }
+}
+
+/* ============================================
+ * Card Details
+ * ============================================ */
+
+.card-details {
+  .save-method-option {
+    margin-top: var(--spacing-lg);
+    padding: var(--spacing-md);
+    background-color: var(--surface-secondary);
+    border-radius: var(--border-radius-sm);
+
+    .save-label {
+      color: var(--text-primary);
+      font-size: var(--font-size-sm);
+    }
+  }
+}
+
+/* ============================================
+ * Info Messages
+ * ============================================ */
+
+.payment-info-message {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: var(--surface-secondary);
+  border-radius: var(--border-radius-sm);
+  border-left: var(--spacing-xs) solid var(--app-info);
+
+  mat-icon {
+    color: var(--app-info);
+    flex-shrink: 0;
+  }
+
+  p {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: var(--font-size-sm);
+  }
+}
+
+/* ============================================
+ * Responsive Styles
+ * ============================================ */
+
+/* Mobile Styles */
+:host-context(.mobile) .payment-methods {
+  gap: var(--spacing-xs);
+}

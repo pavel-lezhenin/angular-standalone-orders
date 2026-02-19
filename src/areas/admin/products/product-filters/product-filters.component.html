@@ -1,0 +1,17 @@
+<app-filter-container [isLoading]="isLoading()" [actions]="filterActions()" (action)="onFilterAction($event)">
+  <app-search-input
+    [label]="'Search products'"
+    [placeholder]="'Search by name...'"
+    [searchControl]="searchControl"
+    (searchChange)="onSearch($event)"
+    (clear)="onSearchClear()"
+  />
+
+  <app-form-field
+    [label]="'Category'"
+    [control]="categoryControl"
+    [type]="'select'"
+    [fieldClass]="'category-field'"
+    [selectOptions]="categorySelectOptions()"
+  />
+</app-filter-container>

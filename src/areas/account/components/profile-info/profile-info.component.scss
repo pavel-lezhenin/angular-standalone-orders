@@ -1,0 +1,44 @@
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin: 0;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+
+  mat-icon {
+    color: var(--app-primary);
+  }
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md);
+}
+
+.form-field {
+  width: 100%;
+}
+
+/* ============================================
+ * Responsive Styles
+ * ============================================ */
+
+/* Mobile Styles */
+:host-context(.mobile) .form-row {
+  grid-template-columns: 1fr;
+}

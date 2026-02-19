@@ -1,0 +1,62 @@
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import type { OrderDTO } from '@core/models';
+import type { OrderStatus } from '@core/types';
+
+/**
+ * Order Card Component
+ *
+ * Displays an order in card format with:
+ * - Order ID and date
+ * - Status badge
+ * - Total amount
+ * - Delivery address
+ * - Action buttons (view details, cancel)
+ *
+ * Features:
+ * - Click to view details
+ * - Cancel button for cancellable orders
+ * - Responsive layout
+ * - Status-based styling
+ */
+@Component({
+  selector: 'app-order-card',
+  standalone: true,
+  imports: [CommonModule, CurrencyPipe, DatePipe, MatButtonModule, MatIconModule],
+  templateUrl: './order-card.component.html',
+  styleUrl: './order-card.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class OrderCardComponent {
+  order = input.required<OrderDTO>();
+  canceling = input<boolean>(false);
+
+  cardClick = output<string>();
+  cancelOrder = output<OrderDTO>();
+
+  private readonly cancellableStatuses: readonly OrderStatus[] = ['pending_payment', 'paid'];
+
+  protected canCancel(): boolean {
+    return this.cancellableStatuses.includes(this.order().status);
+  }
+
+  protected onCardClick(): void {
+    this.cardClick.emit(this.order().id);
+  }
+
+  protected onCancelClick(event: Event): void {
+    event.stopPropagation();
+    this.cancelOrder.emit(this.order());
+  }
+
+  protected getStatusClass(): string {
+    return `status-${this.order().status}`;
+  }
+
+  protected getStatusLabel(): string {
+    const status = this.order().status;
+    return status.replace('_', ' ').toUpperCase();
+  }
+}

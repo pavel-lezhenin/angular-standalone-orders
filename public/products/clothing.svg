@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <rect fill="#fce4ec" width="200" height="200"/>
+  <g transform="translate(100, 100)">
+    <!-- T-shirt icon -->
+    <path d="M-40,-20 L-30,-30 L-10,-30 L0,-40 L10,-30 L30,-30 L40,-20 L40,20 L30,40 L-30,40 L-40,20 Z" fill="#c2185b" opacity="0.3"/>
+    <circle cx="0" cy="0" r="20" fill="#c2185b" opacity="0.2"/>
+  </g>
+  <text x="50%" y="85%" text-anchor="middle" font-size="14" fill="#ad1457" font-family="Arial">Clothing</text>
+</svg>

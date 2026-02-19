@@ -1,0 +1,12 @@
+:host {
+  display: block;
+}
+
+mat-form-field {
+  width: 100%;
+
+  mat-icon[matPrefix],
+  mat-icon[matSuffix] {
+    color: var(--text-secondary);
+  }
+}

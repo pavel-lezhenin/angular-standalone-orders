@@ -1,0 +1,43 @@
+<article
+  class="product-card flex-col"
+  (click)="onClick()"
+  (keydown.enter)="onClick()"
+  (keydown.space)="onClick()"
+  tabindex="0"
+>
+  <div class="product-card__image">
+    <img [src]="productImage" [alt]="product().name" loading="lazy" />
+    @if (isOutOfStock) {
+      <span class="product-card__badge product-card__badge--out-of-stock"> Out of Stock </span>
+    } @else if (isLowStock) {
+      <span class="product-card__badge product-card__badge--low-stock"> Low Stock </span>
+    }
+  </div>
+
+  <div class="product-card__content gap-xs flex-col">
+    <h3 class="product-card__title">{{ product().name }}</h3>
+
+    @if (product().categoryName) {
+      <p class="product-card__category">{{ product().categoryName }}</p>
+    }
+
+    <div class="product-card__footer flex items-center justify-between">
+      <span class="product-card__price">${{ product().price | number: '1.2-2' }}</span>
+
+      @if (showAddToCart() && !isOutOfStock) {
+        <button
+          mat-mini-fab
+          color="primary"
+          class="product-card__cart-btn"
+          (click)="onAddToCart($event)"
+          [disabled]="isOutOfStock"
+          aria-label="Add to cart"
+        >
+          <mat-icon>add_shopping_cart</mat-icon>
+        </button>
+      } @else {
+        <span class="product-card__stock"> Stock: {{ product().stock }} </span>
+      }
+    </div>
+  </div>
+</article>

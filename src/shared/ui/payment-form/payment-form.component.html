@@ -1,0 +1,74 @@
+<div class="payment-form">
+  <!-- Label Field (Account Settings) -->
+  @if (showLabel()) {
+    <app-form-field
+      [label]="'Label'"
+      [control]="getControl('label')"
+      [placeholder]="'e.g., My Visa'"
+      [customErrorMessages]="{
+        required: 'Label is required',
+      }"
+    />
+  }
+
+  <!-- Cardholder Name -->
+  <app-form-field
+    [label]="'Cardholder Name'"
+    [control]="getControl('cardholderName')"
+    [type]="'text'"
+    [placeholder]="'Name on card'"
+    [customErrorMessages]="{
+      required: 'Cardholder name is required',
+      minlength: 'Name must be at least 2 characters',
+    }"
+  />
+
+  <!-- Card Number -->
+  <app-form-field
+    [label]="'Card Number'"
+    [control]="getControl('cardNumber')"
+    [type]="'text'"
+    [placeholder]="'1234 5678 9012 3456'"
+    [maxLength]="19"
+    (inputChange)="formatCardNumber($event)"
+    [customErrorMessages]="{
+      required: 'Card number is required',
+      pattern: 'Card must be 13-19 digits',
+      invalidCard: getControl('cardNumber').errors?.['invalidCard'] || '',
+    }"
+  />
+
+  <!-- Expiry Date Row -->
+  <div class="card-expiry-row">
+    <app-form-field
+      [label]="'Expiry Month'"
+      [control]="getControl('expiryMonth')"
+      [type]="'select'"
+      [selectOptions]="months"
+      [customErrorMessages]="{ required: 'Month required' }"
+    />
+
+    <app-form-field
+      [label]="'Expiry Year'"
+      [control]="getControl('expiryYear')"
+      [type]="'select'"
+      [selectOptions]="years"
+      [customErrorMessages]="{ required: 'Year required' }"
+    />
+  </div>
+
+  <!-- CVV Field (Checkout Only) -->
+  @if (showCvv()) {
+    <app-form-field
+      [label]="'CVV'"
+      [control]="getControl('cvv')"
+      [type]="'password'"
+      [placeholder]="'123'"
+      [maxLength]="4"
+      [customErrorMessages]="{
+        required: 'CVV required',
+        pattern: 'Must be 3-4 digits',
+      }"
+    />
+  }
+</div>

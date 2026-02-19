@@ -1,0 +1,26 @@
+<div class="categories-container">
+  <div class="page-header">
+    <h1>Categories Management</h1>
+    @if (canCreate()) {
+      <button mat-raised-button color="primary" (click)="openCreateDialog()" [disabled]="isLoading()">
+        <mat-icon>add</mat-icon>
+        Add Category
+      </button>
+    }
+  </div>
+
+  <app-category-table
+    [categories]="categories()"
+    [totalCategories]="totalCategories()"
+    [currentPage]="currentPage()"
+    [pageSize]="pageSize()"
+    [pageSizeOptions]="pageSizeOptions"
+    [canEdit]="canEdit()"
+    [canDelete]="canDelete()"
+    (pageChange)="onPageChange($event)"
+    (editClick)="openEditDialog($event)"
+    (deleteClick)="deleteCategory($event)"
+  />
+
+  <app-page-loader [isLoading]="isLoading()" />
+</div>

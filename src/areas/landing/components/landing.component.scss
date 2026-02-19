@@ -1,0 +1,16 @@
+:host {
+  display: flex;
+  width: 100%;
+  flex-grow: 1;
+  flex-direction: column;
+
+  ::ng-deep {
+    app-hero-section,
+    app-features-section,
+    app-use-cases-section,
+    app-contact-section,
+    app-faq-section {
+      scroll-margin-top: var(--spacing-6xl); // Space to account for sticky top bar
+    }
+  }
+}

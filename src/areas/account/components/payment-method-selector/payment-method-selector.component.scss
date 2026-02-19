@@ -1,0 +1,58 @@
+.payment-method-selector {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+
+  .payment-method-select {
+    width: 100%;
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+  }
+}
+
+.payment-method-display {
+  padding: var(--spacing-md);
+  border: var(--spacing-1px) solid var(--color-border);
+  border-radius: var(--border-radius-base);
+  background-color: var(--surface-secondary);
+
+  .card-details,
+  .paypal-details {
+    p {
+      margin: var(--spacing-xs) 0;
+
+      &:first-child {
+        margin-top: 0;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    mat-chip {
+      margin-right: var(--spacing-xs);
+    }
+  }
+}
+
+/* ============================================
+ * Responsive Styles
+ * ============================================ */
+
+/* Mobile Styles */
+:host-context(.mobile) {
+  .payment-method-selector {
+    .action-buttons {
+      flex-direction: column;
+
+      button {
+        width: 100%;
+      }
+    }
+  }
+}

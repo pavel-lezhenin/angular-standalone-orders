@@ -1,0 +1,62 @@
+<app-dialog (submitDialog)="onSubmit()" (cancelDialog)="onCancel()">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-content">
+      <!-- Email -->
+      <app-form-field
+        [label]="'Email'"
+        [control]="getControl('email')"
+        [type]="'email'"
+        [placeholder]="'user@example.com'"
+        [required]="true"
+        [autocomplete]="'email'"
+      />
+
+      <!-- Password -->
+      <app-form-field
+        [label]="data.mode === 'create' ? 'Password' : 'Password (leave empty to keep current)'"
+        [control]="getControl('password')"
+        [type]="'password'"
+        [placeholder]="'Enter password'"
+        [required]="data.mode === 'create'"
+        [autocomplete]="'new-password'"
+      />
+
+      <!-- Role -->
+      <app-form-field
+        [label]="'Role'"
+        [control]="getControl('role')"
+        [type]="'select'"
+        [required]="true"
+        [selectOptions]="roleSelectOptions"
+      />
+
+      <!-- First Name -->
+      <app-form-field
+        [label]="'First Name'"
+        [control]="getControl('firstName')"
+        [placeholder]="'John'"
+        [required]="true"
+        [autocomplete]="'given-name'"
+      />
+
+      <!-- Last Name -->
+      <app-form-field
+        [label]="'Last Name'"
+        [control]="getControl('lastName')"
+        [placeholder]="'Doe'"
+        [required]="true"
+        [autocomplete]="'family-name'"
+      />
+
+      <!-- Phone -->
+      <app-form-field
+        [label]="'Phone'"
+        [control]="getControl('phone')"
+        [type]="'tel'"
+        [placeholder]="'+1 234 567 8900'"
+        [required]="true"
+        [autocomplete]="'tel'"
+      />
+    </div>
+  </form>
+</app-dialog>

@@ -1,0 +1,119 @@
+<app-page-loader [isLoading]="loading()" />
+
+<div class="confirmation-page page-wrapper">
+  <div class="confirmation-container">
+    @if (error()) {
+      <div class="error-state flex-col items-center justify-center">
+        <mat-icon class="error-icon">error</mat-icon>
+        <h2>Failed to Load Order</h2>
+        <p>{{ error() }}</p>
+        <button mat-raised-button color="primary" routerLink="/shop">Back to Shop</button>
+      </div>
+    } @else if (order()) {
+      <!-- Breadcrumb Navigation -->
+      <div class="breadcrumb gap-sm flex items-center">
+        <button mat-icon-button (click)="viewOrders()" class="back-btn" aria-label="Back to orders">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <span class="breadcrumb-text">Back to My Orders</span>
+      </div>
+
+      <!-- Success Header -->
+      <div class="success-header card-shadow">
+        <div class="success-icon-wrapper">
+          <mat-icon class="success-icon">check_circle</mat-icon>
+        </div>
+        <h1>Order Confirmed!</h1>
+        <p class="order-number">Order #{{ order()!.id }}</p>
+        <p class="success-message">Thank you for your order. We'll send you a confirmation email shortly.</p>
+      </div>
+
+      <!-- Order Details -->
+      <div class="order-details gap-xl flex-col">
+        <!-- Delivery Information -->
+        <div class="detail-section card-shadow">
+          <h2 class="gap-sm flex items-center">
+            <mat-icon>local_shipping</mat-icon>
+            Delivery Information
+          </h2>
+          <div class="detail-content">
+            <p class="delivery-address">{{ order()!.deliveryAddress }}</p>
+            @if (estimatedDelivery()) {
+              <p class="estimated-delivery">
+                <strong>Estimated Delivery:</strong>
+                {{ estimatedDelivery()! | date: 'fullDate' }}
+              </p>
+            }
+          </div>
+        </div>
+
+        <!-- Order Items -->
+        <div class="detail-section card-shadow">
+          <h2 class="gap-sm flex items-center">
+            <mat-icon>shopping_bag</mat-icon>
+            Order Items
+          </h2>
+          <div class="order-items gap-md flex-col">
+            @for (item of orderItems(); track item.productId) {
+              <div class="order-item gap-md flex">
+                <div class="item-image">
+                  @if (item.product && item.product.imageUrls && item.product.imageUrls.length > 0) {
+                    <img [src]="item.product.imageUrls[0]" [alt]="item.product.name" />
+                  } @else {
+                    <div class="no-image flex items-center justify-center">
+                      <mat-icon>image</mat-icon>
+                    </div>
+                  }
+                </div>
+                <div class="item-details">
+                  <h3>{{ item.product?.name || 'Product' }}</h3>
+                  <p class="item-quantity">Quantity: {{ item.quantity }}</p>
+                  <p class="item-price">{{ item.price | currency }} each</p>
+                </div>
+                <div class="item-total">
+                  {{ item.price * item.quantity | currency }}
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="detail-section card-shadow">
+          <h2 class="gap-sm flex items-center">
+            <mat-icon>receipt</mat-icon>
+            Order Summary
+          </h2>
+          <div class="order-summary">
+            <div class="summary-row flex items-center justify-between">
+              <span>Order Total:</span>
+              <span class="amount">{{ order()!.total | currency }}</span>
+            </div>
+            <div class="summary-row flex items-center justify-between">
+              <span>Status:</span>
+              <span class="status-badge" [attr.data-status]="order()!.status">
+                {{ order()!.status }}
+              </span>
+            </div>
+            <div class="summary-row flex items-center justify-between">
+              <span>Order Date:</span>
+              <span>{{ order()!.createdAt | date: 'short' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="confirmation-actions gap-md flex justify-center">
+        <button mat-stroked-button (click)="continueShopping()" class="continue-btn">
+          <mat-icon>shopping_cart</mat-icon>
+          Continue Shopping
+        </button>
+        <button mat-raised-button color="primary" (click)="viewOrders()" class="orders-btn">
+          <mat-icon>list_alt</mat-icon>
+          View My Orders
+        </button>
+      </div>
+    }
+  </div>
+</div>

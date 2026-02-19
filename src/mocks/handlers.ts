@@ -19,10 +19,7 @@ export const handlers = [
       });
     }
 
-    return HttpResponse.json(
-      { message: 'Invalid credentials' },
-      { status: 401 },
-    );
+    return HttpResponse.json({ message: 'Invalid credentials' }, { status: 401 });
   }),
 
   // Orders endpoints

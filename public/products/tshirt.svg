@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <rect width="300" height="300" fill="#faf5ff"/>
+  
+  <!-- T-shirt body -->
+  <path d="M 100 100 L 100 220 Q 100 230 110 230 L 190 230 Q 200 230 200 220 L 200 100 Z" fill="#9f7aea"/>
+  
+  <!-- T-shirt sleeves -->
+  <path d="M 100 100 L 70 120 L 70 140 L 100 130 Z" fill="#805ad5"/>
+  <path d="M 200 100 L 230 120 L 230 140 L 200 130 Z" fill="#805ad5"/>
+  
+  <!-- Collar -->
+  <path d="M 130 100 Q 150 110 170 100 L 170 105 Q 150 115 130 105 Z" fill="#6b46c1"/>
+  
+  <!-- Neck opening -->
+  <ellipse cx="150" cy="100" rx="20" ry="8" fill="#553c9a"/>
+  
+  <!-- Design element - stripes -->
+  <rect x="110" y="140" width="80" height="3" fill="rgba(255,255,255,0.3)"/>
+  <rect x="110" y="150" width="80" height="3" fill="rgba(255,255,255,0.3)"/>
+  <rect x="110" y="160" width="80" height="3" fill="rgba(255,255,255,0.3)"/>
+  
+  <!-- Shadow/depth -->
+  <path d="M 100 100 L 100 220 Q 100 230 110 230 L 115 230 L 115 105 Z" fill="rgba(0,0,0,0.1)"/>
+  
+  <!-- Product label -->
+  <text x="150" y="260" font-family="Arial, sans-serif" font-size="16" fill="#2d3748" text-anchor="middle" font-weight="bold">Classic T-Shirt</text>
+  <text x="150" y="280" font-family="Arial, sans-serif" font-size="12" fill="#718096" text-anchor="middle">100% Cotton • Size M</text>
+</svg>

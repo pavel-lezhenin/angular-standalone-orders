@@ -1,0 +1,87 @@
+:host {
+  display: flex;
+  flex-direction: column;
+}
+
+.customers-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.customers-table {
+  width: 100%;
+  min-width: calc(var(--app-spacing) * 44);
+
+  th {
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-sm);
+    white-space: nowrap;
+  }
+
+  td {
+    font-size: var(--font-size-sm);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // Column widths
+  .mat-column-email {
+    width: 30%;
+  }
+
+  .mat-column-role {
+    width: 14%;
+    min-width: calc(var(--app-spacing) * 6);
+  }
+
+  td.mat-column-role {
+    overflow: visible;
+    text-overflow: clip;
+
+    mat-chip {
+      min-width: calc(var(--app-spacing) * 4.5);
+      justify-content: center;
+      white-space: nowrap;
+    }
+  }
+
+  .mat-column-profile {
+    width: 25%;
+  }
+
+  .mat-column-createdAt {
+    width: 18%;
+  }
+
+  .mat-column-actions {
+    width: 15%;
+    text-align: center;
+  }
+}
+
+// Role badge colors using CSS theme variables
+.badge-admin {
+  background-color: var(--app-error);
+  color: var(--color-white);
+}
+
+.badge-manager {
+  background-color: var(--app-primary);
+  color: var(--color-white);
+}
+
+.badge-user {
+  background-color: var(--app-tertiary);
+  color: var(--color-white);
+}
+
+.mat-mdc-no-data-row {
+  text-align: center;
+  padding: var(--spacing-2xl);
+  color: var(--text-muted);
+}
+
+mat-paginator {
+  margin-top: auto;
+}

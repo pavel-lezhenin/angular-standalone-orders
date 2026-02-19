@@ -1,0 +1,81 @@
+@if (order(); as currentOrder) {
+  <div class="summary">
+    <span>Status: {{ currentOrder.status }}</span>
+    <span>Total: {{ currentOrder.total | currency }}</span>
+    <span>Payment: {{ currentOrder.paymentStatus }}</span>
+  </div>
+
+  <div class="products">
+    <h3>Order Items</h3>
+
+    @if (loadingProducts()) {
+      <p class="empty">Loading product details...</p>
+    } @else if (productsError()) {
+      <p class="empty">{{ productsError() }}</p>
+    } @else if (productLines().length === 0) {
+      <p class="empty">No items in order</p>
+    } @else {
+      <div class="products-list">
+        @for (line of productLines(); track line.productId) {
+          <article class="product-item">
+            <div class="product-header">
+              <strong>{{ line.product?.name ?? 'Unknown product' }}</strong>
+              <span>{{ line.quantity }} × {{ line.orderPrice | currency }}</span>
+            </div>
+            <p>ID: {{ line.productId }}</p>
+            @if (line.product) {
+              <p>Category: {{ line.product.categoryId }}</p>
+              <p>Current stock: {{ line.product.stock }}</p>
+            }
+          </article>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="comment-box">
+    <div class="quick-actions">
+      @for (note of quickActionNotes; track note) {
+        <button mat-stroked-button type="button" (click)="addQuickActionNote(note)" [disabled]="isSavingComment()">
+          {{ note }}
+        </button>
+      }
+    </div>
+
+    <app-form-field
+      [label]="'Add manager comment'"
+      [control]="commentControl"
+      [type]="'textarea'"
+      [rows]="3"
+      [placeholder]="'Example: Item unavailable in warehouse, initiate refund'"
+      [fieldClass]="'comment-field'"
+      [customErrorMessages]="{ minlength: 'Comment must be at least 3 characters' }"
+    />
+
+    <button mat-flat-button type="button" (click)="addComment()" [disabled]="isSavingComment()">
+      <mat-icon>note_add</mat-icon>
+      Add Comment
+    </button>
+  </div>
+
+  <div class="history">
+    <h3>Order History</h3>
+
+    @if (timeline().length === 0) {
+      <p class="empty">No history events</p>
+    } @else {
+      <div class="timeline-list">
+        @for (item of timeline(); track item.id) {
+          <article class="timeline-item" [class]="'type-' + item.type">
+            <div class="timeline-header">
+              <strong>{{ item.title }}</strong>
+              <span>{{ item.createdAt | date: 'short' }}</span>
+            </div>
+            <p>{{ item.description }}</p>
+            <small>By: {{ item.actor }}</small>
+          </article>
+        }
+      </div>
+    }
+  </div>
+}

@@ -1,0 +1,21 @@
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+import { StatusBadgeComponent } from './status-badge.component';
+
+describe('StatusBadgeComponent', () => {
+  let component: StatusBadgeComponent;
+  let fixture: ComponentFixture<StatusBadgeComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [StatusBadgeComponent],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(StatusBadgeComponent);
+    component = fixture.componentInstance;
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

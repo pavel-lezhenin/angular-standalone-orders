@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <rect width="300" height="300" fill="#edf2f7"/>
+  
+  <!-- Laptop base -->
+  <rect x="40" y="190" width="220" height="15" fill="#2d3748" rx="2"/>
+  <rect x="35" y="200" width="230" height="8" fill="#1a202c" rx="1"/>
+  
+  <!-- Laptop screen bezel -->
+  <rect x="60" y="70" width="180" height="125" fill="#2d3748" rx="4"/>
+  
+  <!-- Screen -->
+  <rect x="70" y="80" width="160" height="105" fill="#4a5568" rx="2"/>
+  
+  <!-- Screen content - gradient -->
+  <defs>
+    <linearGradient id="screenGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4299e1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#667eea;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect x="75" y="85" width="150" height="95" fill="url(#screenGradient)" rx="1"/>
+  
+  <!-- Screen details - windows -->
+  <rect x="85" y="95" width="45" height="35" fill="rgba(255,255,255,0.2)" rx="2"/>
+  <rect x="140" y="95" width="45" height="35" fill="rgba(255,255,255,0.2)" rx="2"/>
+  <rect x="195" y="95" width="20" height="35" fill="rgba(255,255,255,0.15)" rx="2"/>
+  
+  <!-- Keyboard hint -->
+  <rect x="90" y="200" width="120" height="2" fill="#4a5568" opacity="0.5"/>
+  
+  <!-- Camera -->
+  <circle cx="150" cy="78" r="2" fill="#4a5568"/>
+  
+  <!-- Product label -->
+  <text x="150" y="250" font-family="Arial, sans-serif" font-size="16" fill="#2d3748" text-anchor="middle" font-weight="bold">Pro Laptop</text>
+  <text x="150" y="270" font-family="Arial, sans-serif" font-size="12" fill="#718096" text-anchor="middle">15" • i7 • 16GB RAM</text>
+</svg>

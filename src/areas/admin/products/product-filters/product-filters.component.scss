@@ -1,0 +1,48 @@
+:host {
+  display: block;
+}
+
+.product-filters {
+  margin-bottom: var(--spacing-md);
+
+  .filters-row {
+    display: flex;
+    gap: var(--spacing-sm);
+    align-items: flex-start;
+    flex-wrap: wrap;
+
+    .search-field {
+      flex: 1;
+      min-width: var(--size-small-card);
+    }
+
+    .category-field {
+      min-width: var(--size-image-small);
+    }
+
+    .reset-button {
+      margin-top: var(--spacing-2xs);
+    }
+  }
+}
+
+/* ============================================
+ * Responsive Styles
+ * ============================================ */
+
+/* Mobile Styles */
+:host-context(.mobile) .product-filters {
+  .filters-row {
+    flex-direction: column;
+
+    .search-field,
+    .category-field {
+      width: 100%;
+    }
+
+    .reset-button {
+      width: 100%;
+      margin-top: 0;
+    }
+  }
+}

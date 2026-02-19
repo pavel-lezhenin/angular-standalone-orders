@@ -1,0 +1,60 @@
+<div class="dialog-container" [class.loading]="isLoading()">
+  <!-- Dialog Header -->
+  <div class="dialog-header">
+    <h2 mat-dialog-title>{{ config.title }}</h2>
+
+    <!-- Close button -->
+    <button
+      mat-icon-button
+      class="close-button"
+      (click)="handleClose()"
+      [disabled]="!canClose()"
+      aria-label="Close dialog"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Dialog Content -->
+  <mat-dialog-content class="dialog-content custom-scrollbar">
+    @if (config.message) {
+      <div class="dialog-message">
+        {{ config.message }}
+      </div>
+    } @else if (config.contentComponent) {
+      <ng-container *ngComponentOutlet="config.contentComponent; inputs: config.contentInputs"></ng-container>
+    } @else {
+      <ng-content></ng-content>
+    }
+  </mat-dialog-content>
+
+  <!-- Dialog Actions (for form/confirm types) -->
+  @if (isForm()) {
+    <mat-dialog-actions class="dialog-actions">
+      <!-- Cancel button -->
+      <button mat-stroked-button (click)="handleCancel()" [disabled]="!canClose()" type="button">
+        {{ cancelLabel() }}
+      </button>
+
+      <!-- Submit button with loading spinner -->
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="handleSubmit()"
+        [disabled]="!canClose()"
+        type="submit"
+        class="submit-button"
+      >
+        {{ submitLabel() }}
+      </button>
+    </mat-dialog-actions>
+  }
+
+  <!-- Loading overlay (optional visual indicator) -->
+  @if (isLoading()) {
+    <div class="loading-overlay" aria-live="polite" aria-busy="true">
+      <mat-spinner diameter="40"></mat-spinner>
+      <span class="visually-hidden">Loading, please wait...</span>
+    </div>
+  }
+</div>

@@ -1,0 +1,17 @@
+<app-filter-container [isLoading]="isLoading()" [actions]="filterActions()" (action)="onFilterAction($event)">
+  <app-search-input
+    [label]="'Search users'"
+    [placeholder]="'Email or name...'"
+    [searchControl]="searchControl"
+    (searchChange)="onSearch($event)"
+    (clear)="onSearchClear()"
+  />
+
+  <app-form-field
+    [label]="'Filter by role'"
+    [control]="roleControl"
+    [type]="'select'"
+    [fieldClass]="'role-field'"
+    [selectOptions]="roleSelectOptions"
+  />
+</app-filter-container>

@@ -1,0 +1,88 @@
+<div class="account-page">
+  @if (isLoading()) {
+    <app-page-loader [isLoading]="true" />
+  } @else if (user(); as currentUser) {
+    <mat-card class="profile-card">
+      <mat-card-header>
+        <div class="header-content">
+          <div class="header-left">
+            <mat-icon class="profile-icon">account_circle</mat-icon>
+            <div class="header-text">
+              <mat-card-title>My Account</mat-card-title>
+              <mat-card-subtitle>Manage your profile information</mat-card-subtitle>
+            </div>
+          </div>
+          <mat-chip [color]="profile.getRoleBadgeColor(currentUser.role)" highlighted>
+            {{ profile.getRoleDisplayName(currentUser.role) }}
+          </mat-chip>
+        </div>
+      </mat-card-header>
+
+      <mat-divider />
+
+      <mat-card-content>
+        <!-- Profile Information -->
+        <div class="profile-section">
+          <div class="section-header">
+            <h3>Personal Information</h3>
+            <div class="header-actions">
+              @if (!profile.isEditMode()) {
+                <button mat-raised-button color="primary" (click)="profile.toggleEditMode()">
+                  <mat-icon>edit</mat-icon>
+                  Edit
+                </button>
+              } @else {
+                <button mat-button (click)="profile.toggleEditMode()">Cancel</button>
+                <button mat-raised-button color="accent" (click)="profile.save()" [disabled]="!profile.form.valid">
+                  <mat-icon>save</mat-icon>
+                  Save
+                </button>
+              }
+            </div>
+          </div>
+
+          <app-profile-info [profileForm]="profile.form" [isEditMode]="profile.isEditMode()" />
+        </div>
+
+        <mat-divider class="section-divider" />
+
+        <!-- Payment Methods -->
+        <app-saved-payment-methods-manager
+          [savedPaymentMethods]="payments.items()"
+          [selectedPaymentMethodId]="payments.selectedId()"
+          [showPaymentMethodForm]="payments.showForm()"
+          [paymentMethodForm]="payments.form"
+          [selectedPaymentType]="payments.selectedType()"
+          [isEditMode]="payments.isEditMode()"
+          (paymentMethodSelectionChange)="payments.onSelectionChange($event)"
+          (toggleForm)="payments.toggleForm()"
+          (toggleEditMode)="payments.toggleEditMode()"
+          (paymentTypeChange)="payments.onTypeChange($event)"
+          (savePaymentMethod)="payments.save()"
+          (deleteSelected)="payments.deleteSelected()"
+          (setAsDefault)="payments.setAsDefault()"
+        />
+
+        <mat-divider class="section-divider" />
+
+        <!-- Shipping Addresses -->
+        <app-saved-addresses-manager
+          [savedAddresses]="addresses.items()"
+          [selectedAddressId]="addresses.selectedId()"
+          [showAddressForm]="addresses.showForm()"
+          [addressForm]="addresses.form"
+          [isEditMode]="addresses.isEditMode()"
+          (addressSelectionChange)="addresses.onSelectionChange($event)"
+          (toggleForm)="addresses.toggleForm()"
+          (toggleEditMode)="addresses.toggleEditMode()"
+          (saveAddress)="addresses.save()"
+          (deleteSelected)="addresses.deleteSelected()"
+          (setAsDefault)="addresses.setAsDefault()"
+        />
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Account Stats -->
+    <app-account-stats [totalOrders]="totalOrders()" [totalSpent]="totalSpent()" [loyaltyPoints]="loyaltyPoints()" />
+  }
+</div>

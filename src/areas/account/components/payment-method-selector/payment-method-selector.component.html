@@ -1,0 +1,50 @@
+<div class="payment-method-selector">
+  <app-form-field
+    [label]="'Selected Payment Method'"
+    [control]="paymentMethodSelectControl"
+    [type]="'select'"
+    [fieldClass]="'payment-method-select'"
+    [selectOptions]="paymentMethodOptions()"
+  >
+  </app-form-field>
+
+  <div class="action-buttons">
+    @if (canSetAsDefault()) {
+      <button mat-stroked-button color="primary" (click)="setAsDefault.emit()">Set as Default</button>
+    }
+
+    @if (canDeleteSelected()) {
+      <button mat-stroked-button color="warn" (click)="deleteSelected.emit()">
+        <mat-icon>delete</mat-icon>
+        Delete
+      </button>
+    }
+  </div>
+
+  @if (selectedPaymentMethod(); as method) {
+    <div class="payment-method-display">
+      @if (method.type === 'card' && method.cardDetails) {
+        <div class="card-details">
+          <p>
+            <strong>{{ method.label }}</strong>
+          </p>
+          <p>
+            <mat-chip>Card</mat-chip>
+            **** **** **** {{ method.cardDetails.lastFourDigits }}
+          </p>
+          <p>Expires: {{ method.cardDetails.expiryMonth }}/{{ method.cardDetails.expiryYear }}</p>
+        </div>
+      } @else if (method.type === 'paypal') {
+        <div class="paypal-details">
+          <p>
+            <strong>{{ method.label }}</strong>
+          </p>
+          <p>
+            <mat-chip color="primary">PayPal</mat-chip>
+          </p>
+          <p>{{ method.paypalEmail }}</p>
+        </div>
+      }
+    </div>
+  }
+</div>

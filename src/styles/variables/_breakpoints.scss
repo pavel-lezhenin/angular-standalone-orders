@@ -1,0 +1,17 @@
+/* Responsive Breakpoints
+ * 
+ * This application uses dynamic CSS classes for responsive design.
+ * Classes are added to the <html> element based on viewport width:
+ * 
+ * - .mobile:  max-width: 600px
+ * - .tablet:  min-width: 601px and max-width: 960px
+ * - .desktop: min-width: 961px
+ * 
+ * Usage in component styles:
+ * :host-context(.mobile) .element { ... }
+ * :host-context(.tablet) .element { ... }
+ * :host-context(.desktop) .element { ... }
+ * 
+ * These classes are managed by app.ts initBreakpoints() method.
+ * DO NOT use @media queries directly - always use these classes!
+ */

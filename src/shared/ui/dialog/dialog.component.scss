@@ -1,0 +1,130 @@
+.dialog-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  max-height: 80vh;
+
+  &.loading {
+    pointer-events: none;
+    user-select: none;
+  }
+}
+
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+  padding: var(--spacing-md) var(--spacing-xl) var(--spacing-sm) var(--spacing-xl);
+  border-bottom: var(--spacing-1px) solid var(--color-black-12);
+
+  h2[mat-dialog-title] {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-medium);
+    flex: 1;
+    color: var(--text-heading);
+  }
+
+  .close-button {
+    margin-left: var(--spacing-md);
+    transition: all 0.2s ease;
+
+    &:hover:not(:disabled) {
+      background-color: var(--color-black-04);
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.dialog-content {
+  overflow-y: auto;
+  padding: var(--spacing-lg) var(--spacing-xl);
+  margin: 0;
+  color: var(--text-secondary);
+
+  .dialog-message {
+    text-align: center;
+    white-space: pre-wrap;
+    word-break: break-word;
+    line-height: 1.6;
+  }
+}
+
+.dialog-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  gap: var(--spacing-sm);
+  padding: var(--spacing-lg) var(--spacing-xl);
+  margin: 0;
+  border-top: var(--spacing-1px) solid var(--color-black-12);
+  min-height: auto;
+
+  button {
+    margin: 0;
+    transition: all 0.2s ease;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  .submit-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* ============================================
+ * Responsive Styles
+ * ============================================ */
+
+/* Mobile Styles */
+:host-context(.mobile) .dialog-actions {
+  grid-template-columns: 1fr;
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-white-70);
+  backdrop-filter: blur(var(--spacing-2px));
+  z-index: 10;
+  pointer-events: all;
+  cursor: wait;
+}
+
+// Accessibility helper
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: calc(var(--spacing-1px) * -1);
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// Focus styles for accessibility
+button:focus-visible {
+  outline: calc(var(--spacing-xs) / 2) solid var(--app-primary);
+  outline-offset: calc(var(--spacing-xs) / 2);
+}

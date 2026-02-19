@@ -1,0 +1,114 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+import type { FormGroup } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
+import type { PaymentMethodDTO } from '@core/models';
+import { SavedPaymentMethodsManagerComponent } from './saved-payment-methods-manager.component';
+
+describe('SavedPaymentMethodsManagerComponent', () => {
+  let component: SavedPaymentMethodsManagerComponent;
+  let fixture: ComponentFixture<SavedPaymentMethodsManagerComponent>;
+  let paymentMethodForm: FormGroup;
+  let mockPaymentMethods: PaymentMethodDTO[];
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [SavedPaymentMethodsManagerComponent],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(SavedPaymentMethodsManagerComponent);
+    component = fixture.componentInstance;
+
+    const fb = new FormBuilder();
+    paymentMethodForm = fb.group({
+      cardholderName: ['', Validators.required],
+      cardNumber: ['', Validators.required],
+      expiryMonth: [null, Validators.required],
+      expiryYear: [null, Validators.required],
+      paypalEmail: [''],
+    });
+
+    mockPaymentMethods = [
+      {
+        id: '1',
+        label: 'Personal Card',
+        type: 'card',
+        isDefault: true,
+        cardDetails: {
+          lastFourDigits: '4242',
+          expiryMonth: 12,
+          expiryYear: 2025,
+        },
+      },
+    ];
+
+    fixture.componentRef.setInput('savedPaymentMethods', mockPaymentMethods);
+    fixture.componentRef.setInput('selectedPaymentMethodId', '1');
+    fixture.componentRef.setInput('showPaymentMethodForm', false);
+    fixture.componentRef.setInput('paymentMethodForm', paymentMethodForm);
+    fixture.componentRef.setInput('selectedPaymentType', 'card');
+    fixture.componentRef.setInput('isEditMode', true);
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should store required inputs', () => {
+    expect(component.savedPaymentMethods()).toEqual(mockPaymentMethods);
+    expect(component.selectedPaymentMethodId()).toBe('1');
+    expect(component.paymentMethodForm()).toBe(paymentMethodForm);
+    expect(component.selectedPaymentType()).toBe('card');
+  });
+
+  it('should emit toggleForm event', () => {
+    let emitted = false;
+    component.toggleForm.subscribe(() => (emitted = true));
+    component.toggleForm.emit();
+    expect(emitted).toBe(true);
+  });
+
+  it('should emit savePaymentMethod event', () => {
+    let emitted = false;
+    component.savePaymentMethod.subscribe(() => (emitted = true));
+    component.savePaymentMethod.emit();
+    expect(emitted).toBe(true);
+  });
+
+  it('should emit paymentMethodSelectionChange with selected id', () => {
+    let emittedValue = '';
+    component.paymentMethodSelectionChange.subscribe((value) => (emittedValue = value));
+    component.paymentMethodSelectionChange.emit('1');
+    expect(emittedValue).toBe('1');
+  });
+
+  it('should emit paymentTypeChange event', () => {
+    let emittedValue: 'card' | 'paypal' = 'card';
+    component.paymentTypeChange.subscribe((value) => (emittedValue = value));
+    component.paymentTypeChange.emit('paypal');
+    expect(emittedValue).toBe('paypal');
+  });
+
+  it('should emit deleteSelected event', () => {
+    let emitted = false;
+    component.deleteSelected.subscribe(() => (emitted = true));
+    component.deleteSelected.emit();
+    expect(emitted).toBe(true);
+  });
+
+  it('should emit setAsDefault event', () => {
+    let emitted = false;
+    component.setAsDefault.subscribe(() => (emitted = true));
+    component.setAsDefault.emit();
+    expect(emitted).toBe(true);
+  });
+
+  it('should emit toggleEditMode event', () => {
+    let emitted = false;
+    component.toggleEditMode.subscribe(() => (emitted = true));
+    component.toggleEditMode.emit();
+    expect(emitted).toBe(true);
+  });
+});

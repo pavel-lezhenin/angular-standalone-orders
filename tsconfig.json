@@ -36,11 +36,12 @@
     "paths": {
       "@/*": ["./src/*"],
       "@app/*": ["./src/app/*"],
-      "@core/*": ["./src/app/core/*"],
-      "@shared/*": ["./src/app/shared/*"],
-      "@features/*": ["./src/app/features/*"],
-      "@entities/*": ["./src/app/entities/*"],
-      "@pages/*": ["./src/app/pages/*"]
+      "@core": ["./src/core"],
+      "@core/*": ["./src/core/*"],
+      "@shared/*": ["./src/shared/*"],
+      "@areas/*": ["./src/areas/*"],
+      "@bff": ["./src/bff"],
+      "@bff/*": ["./src/bff/*"]
     },
 
     // Other
@@ -48,5 +49,9 @@
     "resolveJsonModule": true,
     "allowJs": false,
     "types": ["vitest/globals"]
+  },
+  "angularCompilerOptions": {
+    "strictTemplates": true,
+    "strictInjectionParameters": true
   }
 }

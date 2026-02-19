@@ -1,0 +1,23 @@
+<mat-card class="stats-card">
+  <mat-card-header>
+    <mat-card-title>Account Statistics</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-label">Total Orders</div>
+        <div class="stat-value">{{ totalOrders() }}</div>
+      </div>
+
+      <div class="stat-item">
+        <div class="stat-label">Total Spent</div>
+        <div class="stat-value">${{ totalSpent() | number: '1.2-2' }}</div>
+      </div>
+
+      <div class="stat-item">
+        <div class="stat-label">Loyalty Points</div>
+        <div class="stat-value">{{ loyaltyPoints() }}</div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

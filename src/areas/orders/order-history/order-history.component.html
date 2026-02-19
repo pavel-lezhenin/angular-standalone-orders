@@ -1,0 +1,39 @@
+<div class="order-history-page page-wrapper">
+  <div class="order-history-container">
+    <h1>Your Orders</h1>
+
+    @if (loading()) {
+      <p class="loading">Loading orders...</p>
+    } @else if (error()) {
+      <p class="error">{{ error() }}</p>
+    } @else {
+      @if (orders().length === 0) {
+        <app-empty-state
+          [icon]="'receipt_long'"
+          [title]="'No orders found'"
+          [message]="'Start shopping to create your first order!'"
+          [actionLabel]="'Browse Products'"
+          (action)="goToShop()"
+        />
+      } @else {
+        <section class="orders-section">
+          <div class="orders-grid">
+            @for (order of paginatedOrders(); track order.id) {
+              <app-order-card
+                [order]="order"
+                [canceling]="isCanceling(order.id)"
+                (cardClick)="onOrderClick($event)"
+                (cancelOrder)="onCancelOrder($event)"
+              />
+            }
+          </div>
+
+          <div class="pagination-controls">
+            <app-pagination [currentPage]="currentPage()" [totalPages]="totalPages()" (pageChange)="goToPage($event)" />
+            <span class="pagination-caption">Page {{ currentPage() }} of {{ totalPages() }}</span>
+          </div>
+        </section>
+      }
+    }
+  </div>
+</div>

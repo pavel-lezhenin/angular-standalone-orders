@@ -1,0 +1,112 @@
+.lead-form-card {
+  max-width: var(--container-width-md);
+  margin: 0 auto;
+  padding: var(--spacing-md);
+}
+
+::ng-deep .lead-form-card .mat-mdc-card-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+::ng-deep .lead-form-card .mat-mdc-card-title {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xxs);
+  font-size: var(--font-size-1xl);
+  margin-bottom: var(--spacing-xxs);
+
+  mat-icon {
+    color: var(--app-primary);
+  }
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxs);
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.channel-selection {
+  margin: var(--spacing-xxs) 0;
+
+  .section-label {
+    display: block;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  mat-radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xxs);
+  }
+}
+
+.consent-section {
+  margin: var(--spacing-xxs) 0;
+
+  a {
+    color: var(--app-primary);
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .consent-error {
+    color: var(--app-error);
+    font-size: var(--font-size-xxs);
+    margin-top: var(--spacing-xs);
+  }
+}
+
+.submit-button {
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-2xl);
+  font-size: var(--font-size-md);
+
+  mat-icon {
+    margin-right: var(--spacing-xxs);
+  }
+}
+
+/* ============================================
+ * Responsive Styles
+ * ============================================ */
+
+/* Mobile Styles */
+:host-context(.mobile) {
+  .lead-form-card {
+    padding: var(--spacing-xxs);
+  }
+
+  ::ng-deep .lead-form-card .mat-mdc-card-title {
+    font-size: var(--font-size-xl);
+  }
+
+  .channel-selection mat-radio-group {
+    gap: var(--spacing-xxs);
+  }
+}
+
+/* ============================================
+ * Theme Styles
+ * ============================================ */
+
+/* Dark Mode */
+:host-context(.dark-mode) {
+  .channel-selection .section-label {
+    color: var(--text-secondary);
+  }
+}

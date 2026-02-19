@@ -1,0 +1,89 @@
+<mat-card class="lead-form-card">
+  <mat-card-header>
+    <mat-card-title>
+      <mat-icon>contact_mail</mat-icon>
+      Request a Demo
+    </mat-card-title>
+    <mat-card-subtitle> Choose your preferred way to connect with us </mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <form [formGroup]="leadForm" (ngSubmit)="onSubmit()">
+      <!-- Name -->
+      <app-form-field [label]="'Full Name'" [control]="getControl('name')" [prefixIcon]="'person'" [required]="true" />
+
+      <!-- Email -->
+      <app-form-field
+        [label]="'Work Email'"
+        [control]="getControl('email')"
+        [type]="'email'"
+        [prefixIcon]="'email'"
+        [required]="true"
+        [autocomplete]="'email'"
+      />
+
+      <!-- Company -->
+      <app-form-field [label]="'Company Name'" [control]="getControl('company')" [prefixIcon]="'business'" />
+
+      <!-- Contact Channel Selection -->
+      <div class="channel-selection">
+        <span id="channel-label" class="section-label">Preferred Contact Method</span>
+        <mat-radio-group formControlName="channel" aria-labelledby="channel-label">
+          <mat-radio-button value="email">Email</mat-radio-button>
+          <mat-radio-button value="telegram">Telegram</mat-radio-button>
+          <mat-radio-button value="whatsapp">WhatsApp</mat-radio-button>
+          <mat-radio-button value="phone">Phone Call</mat-radio-button>
+        </mat-radio-group>
+      </div>
+
+      <!-- Conditional Channel Value -->
+      @if (selectedChannel === 'telegram') {
+        <app-form-field
+          [label]="'Telegram Username'"
+          [control]="getControl('channelValue')"
+          [placeholder]="'@username'"
+          [prefixIcon]="'send'"
+          [required]="true"
+        />
+      }
+
+      @if (selectedChannel === 'whatsapp' || selectedChannel === 'phone') {
+        <app-form-field
+          [label]="'Phone Number'"
+          [control]="getControl('channelValue')"
+          [type]="'tel'"
+          [placeholder]="'+1234567890'"
+          [prefixIcon]="'phone'"
+          [required]="true"
+          [autocomplete]="'tel'"
+        />
+      }
+
+      <!-- Message -->
+      <app-form-field
+        [label]="'Message (Optional)'"
+        [control]="getControl('message')"
+        [type]="'textarea'"
+        [rows]="3"
+        [placeholder]="'Tell us about your needs...'"
+      />
+
+      <!-- Privacy Consent -->
+      <div class="consent-section">
+        <mat-checkbox formControlName="consent" required>
+          I agree to the <a href="#privacy" target="_blank">Privacy Policy</a>
+          and consent to being contacted
+        </mat-checkbox>
+        @if (leadForm.get('consent')?.invalid && leadForm.get('consent')?.touched) {
+          <mat-error class="consent-error">You must agree to continue</mat-error>
+        }
+      </div>
+
+      <!-- Submit Button -->
+      <button mat-raised-button color="primary" type="submit" [disabled]="leadForm.invalid" class="submit-button">
+        <mat-icon>send</mat-icon>
+        Request Demo
+      </button>
+    </form>
+  </mat-card-content>
+</mat-card>

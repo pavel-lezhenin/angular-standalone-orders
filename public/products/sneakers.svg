@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <rect width="300" height="300" fill="#fef2f2"/>
+  
+  <!-- Sole -->
+  <ellipse cx="150" cy="220" rx="90" ry="20" fill="#1a202c"/>
+  <ellipse cx="150" cy="218" rx="88" ry="18" fill="#2d3748"/>
+  
+  <!-- Shoe body -->
+  <path d="M 80 220 L 90 180 L 110 160 L 140 150 L 180 155 L 210 170 L 220 200 L 220 220 Z" fill="#dc2626"/>
+  
+  <!-- Shoe side panel -->
+  <path d="M 100 200 L 110 175 L 140 165 L 170 168 L 190 180 L 200 200 Z" fill="#991b1b"/>
+  
+  <!-- Sole edge highlight -->
+  <path d="M 85 220 Q 150 215 215 220" stroke="#4a5568" stroke-width="2" fill="none"/>
+  
+  <!-- Laces area -->
+  <ellipse cx="145" cy="165" rx="25" ry="15" fill="#991b1b"/>
+  
+  <!-- Lace holes -->
+  <circle cx="130" cy="163" r="3" fill="#1a202c"/>
+  <circle cx="140" cy="161" r="3" fill="#1a202c"/>
+  <circle cx="150" cy="161" r="3" fill="#1a202c"/>
+  <circle cx="160" cy="163" r="3" fill="#1a202c"/>
+  
+  <!-- Laces -->
+  <path d="M 130 163 L 160 163" stroke="#f3f4f6" stroke-width="2" fill="none"/>
+  <path d="M 133 166 L 157 166" stroke="#f3f4f6" stroke-width="2" fill="none"/>
+  <path d="M 136 169 L 154 169" stroke="#f3f4f6" stroke-width="2" fill="none"/>
+  
+  <!-- Swoosh/logo -->
+  <path d="M 120 185 Q 150 175 180 185" stroke="#fef2f2" stroke-width="4" fill="none" stroke-linecap="round"/>
+  
+  <!-- Heel -->
+  <rect x="75" y="190" width="25" height="30" fill="#7f1d1d" rx="3"/>
+  
+  <!-- Toe cap -->
+  <ellipse cx="200" cy="200" rx="20" ry="25" fill="#991b1b"/>
+  
+  <!-- Product label -->
+  <text x="150" y="260" font-family="Arial, sans-serif" font-size="16" fill="#2d3748" text-anchor="middle" font-weight="bold">Sport Sneakers</text>
+  <text x="150" y="280" font-family="Arial, sans-serif" font-size="12" fill="#718096" text-anchor="middle">Running • Size 42 • Red</text>
+</svg>

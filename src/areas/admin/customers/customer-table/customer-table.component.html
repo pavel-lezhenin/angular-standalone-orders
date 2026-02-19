@@ -1,0 +1,63 @@
+<div class="customers-table-wrapper">
+  <table mat-table [dataSource]="users()" class="customers-table">
+    <!-- Email Column -->
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef>Email</th>
+      <td mat-cell *matCellDef="let user">{{ user.email }}</td>
+    </ng-container>
+
+    <!-- Role Column -->
+    <ng-container matColumnDef="role">
+      <th mat-header-cell *matHeaderCellDef>Role</th>
+      <td mat-cell *matCellDef="let user">
+        <app-status-badge [label]="getRoleLabel(user.role)" [variant]="getRoleVariant(user.role)" />
+      </td>
+    </ng-container>
+
+    <!-- Profile Column -->
+    <ng-container matColumnDef="profile">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let user">{{ user.profile.firstName }} {{ user.profile.lastName }}</td>
+    </ng-container>
+
+    <!-- Created At Column -->
+    <ng-container matColumnDef="createdAt">
+      <th mat-header-cell *matHeaderCellDef>Created</th>
+      <td mat-cell *matCellDef="let user">
+        {{ formatDate(user.createdAt) }}
+      </td>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let user">
+        <app-table-action-buttons
+          [canEdit]="canEdit()"
+          [canDelete]="canDelete()"
+          [editTooltip]="'Edit user'"
+          [deleteTooltip]="'Delete user'"
+          (edit)="editClick.emit(user)"
+          (delete)="deleteClick.emit(user)"
+        />
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+    <!-- No data row -->
+    <tr class="mat-mdc-no-data-row" *matNoDataRow>
+      <td [attr.colspan]="displayedColumns.length">No customers found</td>
+    </tr>
+  </table>
+</div>
+
+<mat-paginator
+  [length]="totalUsers()"
+  [pageSize]="pageSize()"
+  [pageIndex]="currentPage() - 1"
+  [pageSizeOptions]="pageSizeOptions()"
+  (page)="pageChange.emit($event)"
+  showFirstLastButtons
+/>

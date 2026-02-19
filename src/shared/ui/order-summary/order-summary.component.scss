@@ -1,0 +1,70 @@
+:host {
+  display: block;
+}
+
+.order-summary {
+  h2 {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    margin: 0 0 var(--spacing-sm);
+    color: var(--text-primary);
+  }
+
+  .summary-row {
+    padding: var(--spacing-sm) 0;
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+
+    .amount {
+      font-weight: var(--font-weight-medium);
+      color: var(--text-primary);
+    }
+
+    &.total {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-bold);
+      color: var(--text-primary);
+      margin-top: var(--spacing-sm);
+
+      .amount {
+        font-size: var(--font-size-xl);
+        color: var(--app-primary);
+      }
+    }
+  }
+
+  .summary-divider {
+    height: var(--border-width, 1px);
+    background-color: var(--border-primary);
+    margin: var(--spacing-md) 0;
+  }
+
+  /* Variant: compact */
+  &.compact {
+    h2 {
+      font-size: var(--font-size-base);
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .summary-row {
+      padding: var(--spacing-xs) 0;
+      font-size: var(--font-size-xs);
+
+      &.total {
+        font-size: var(--font-size-base);
+
+        .amount {
+          font-size: var(--font-size-lg);
+        }
+      }
+    }
+  }
+
+  /* Variant: card */
+  &.card {
+    background-color: var(--surface-secondary);
+    border: var(--border-width) solid var(--border-primary);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-lg);
+  }
+}

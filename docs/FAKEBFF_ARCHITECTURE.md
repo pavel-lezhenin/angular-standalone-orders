@@ -1,85 +1,37 @@
 # FakeBFF Architecture
 
-> **Frontend Backend-For-Frontend Pattern** — Simulating a real REST API using Angular services and IndexedDB
+> Simulating REST API using Angular services and IndexedDB
 
-## Overview
+## Flow
 
 ```
-┌─────────────────────────────────────┐
-│   Angular Components/Services        │
-│   (make normal HTTP requests)        │
-└──────────────┬──────────────────────┘
-               │ /api/auth/login
-               │ POST
-               ↓
-┌─────────────────────────────────────┐
-│   APIInterceptor                     │
-│   (intercepts /api/* requests)       │
-└──────────────┬──────────────────────┘
-               │ redirect to
-               ↓
-┌─────────────────────────────────────┐
-│   FakeBFFService                     │
-│   (simulates REST API)               │
-│   - Validates requests               │
-│   - Routes to handlers               │
-└──────────────┬──────────────────────┘
-               │ read/write
-               ↓
-┌─────────────────────────────────────┐
-│   Repositories + Database            │
-│   (IndexedDB operations)             │
-│   - DatabaseService                  │
-│   - UserRepository                   │
-│   - ProductRepository                │
-│   - OrderRepository, etc.            │
-└─────────────────────────────────────┘
+Components → HTTP /api/* → APIInterceptor → FakeBFFService → Repositories → IndexedDB
 ```
+
+**Production:** Remove interceptor, same HTTP calls go to real backend.
+
+---
 
 ## Key Components
 
-### 1. **APIInterceptor** (`core/interceptors/api.interceptor.ts`)
+**1. APIInterceptor** (`src/core/interceptors/api.interceptor.ts`)  
+Intercepts `/api/*` requests, routes to FakeBFFService
 
-Intercepts all HTTP requests to `/api/*` endpoints and routes them to FakeBFFService.
+**2. FakeBFFService** (`src/bff/fake-bff.service.ts`)  
+Simulates REST API, validates requests, returns standard HTTP responses
 
-```typescript
-// Service makes normal HTTP request
-this.http.post('/api/auth/login', { email, password })
+**3. Repositories** (`src/bff/repositories/`)  
+CRUD operations: User, Product, Order, Category, Cart
 
-// Interceptor catches it
-if (request.url.startsWith('/api/')) {
-  return from(this.fakeBFF.handleRequest(request))
-}
-```
+**4. DatabaseService** (`src/bff/database.service.ts`)  
+IndexedDB wrapper (7 stores: users, products, orders, categories, cart, order_items, permissions)
 
-**In production:**
-- Remove APIInterceptor from app.config
-- Change API base URL to real backend
-- Everything else stays the same!
+**5. AuthService** (`src/core/services/auth.service.ts`)  
+Makes HTTP requests (intercepted → FakeBFF in dev, real backend in prod)
 
-### 2. **FakeBFFService** (`core/bff/fake-bff.service.ts`)
+---
 
-Simulates a real REST API server. Routes requests to appropriate handlers.
-
-```typescript
-// Handles: POST /api/auth/login
-async handleAuthLogin(req: HttpRequest)
-  → Finds user in UserRepository
-  → Validates password
-  → Returns user + mock JWT token
-
-// Handles: GET /api/products
-async handleGetProducts(req: HttpRequest)
-  → Queries ProductRepository.getAll()
-  → Returns product list
-
-// Handles: POST /api/orders
-async handleCreateOrder(req: HttpRequest)
-  → Creates order in OrderRepository
-  → Returns created order
-```
-
-**API Endpoints Implemented:**
+## API Endpoints
 
 ```
 Auth:
@@ -105,48 +57,9 @@ Cart:
   DELETE /api/users/{userId}/cart/items/{id}   → { cart }
 ```
 
-### 3. **Repositories** (`core/bff/repositories/`)
+---
 
-Handle all data persistence in IndexedDB.
-
-- **BaseRepository<T>** — Abstract class with standard CRUD
-- **UserRepository** — User queries + email index
-- **ProductRepository** — Product queries + category index
-- **OrderRepository** — Order queries + user/status indexes
-- **CategoryRepository** — Category CRUD
-- **CartRepository** — Cart operations (special: userId as key)
-
-### 4. **DatabaseService** (`core/bff/database.service.ts`)
-
-Wrapper around IndexedDB API with promise-based interface.
-
-```typescript
-// Initialize DB (called on app bootstrap)
-await db.initialize()
-  → Creates stores: users, products, orders, categories, cart, permissions
-
-// Query operations
-const user = await db.read('users', userId)
-const products = await db.getAll('products')
-const count = await db.count('users')
-```
-
-### 5. **AuthService** (`core/bff/services/auth.service.ts`)
-
-Makes HTTP requests (intercepted by APIInterceptor → FakeBFF).
-
-```typescript
-// Service code stays the same!
-async login(email: string, password: string) {
-  return this.http
-    .post('/api/auth/login', { email, password })
-    .toPromise()
-}
-
-// In production: just remove APIInterceptor, points to real backend
-```
-
-## Migration Path: Development → Production
+## Migration: Dev → Production
 
 ### Development (Current)
 
@@ -170,102 +83,52 @@ Real HTTP Backend (Express, NestJS, etc.)
 Real Database (PostgreSQL, MongoDB, etc.)
 ```
 
-**What changes?**
-1. ✅ Remove `{ provide: HTTP_INTERCEPTORS, useClass: APIInterceptor }` from `app.config.ts`
-2. ✅ Add API base URL: `provideHttpClient(withBaseUrl('https://api.example.com'))`
-3. ✅ Nothing else! Services stay identical
-
-## Benefits
-
-✅ **Zero coupling** — Services don't know about IndexedDB  
-✅ **Easy testing** — Mock FakeBFF response without changing services  
-✅ **Production-ready structure** — Mirrors real REST API  
-✅ **Offline-first** — Demo works without backend  
-✅ **Smooth migration** — Switch backends by removing interceptor  
-
-## Demo Data Initialization
-
-First app load triggers:
-
-```
-AuthService.initialize()
-  → FakeBFF.initialize()
-    → Check user count
-      → If 0: run SeedService.seedAll()
-        → seedUsers() + seedCategories() + seedProducts()
-        → Populates IndexedDB with demo data
-```
-
-Demo users created:
-- `user@demo` / password: `demo` (User role)
-- `manager@demo` / password: `demo` (Manager role)
-- `admin@demo` / password: `demo` (Admin role)
-
-## Error Handling
-
-FakeBFF returns standard HTTP responses:
-
-```typescript
-// Success
-new HttpResponse({ status: 200, body: { products } })
-
-// Not found
-new HttpResponse({ status: 404, body: { error: 'Not found' } })
-
-// Validation error
-new HttpResponse({ status: 400, body: { error: 'Invalid parameters' } })
-
-// Server error
-new HttpResponse({ status: 500, body: { error: 'Internal server error' } })
-```
-
-## When to Use FakeBFF?
-
-✅ **Great for:**
-- Development & testing without backend
-- UI component development
-- Learning Angular patterns
-- Prototypes & MVPs
-- Demo environments
-
-❌ **NOT suitable for:**
-- Production (use real backend!)
-- Real-time sync (doesn't handle concurrent updates)
-- Large datasets (IndexedDB isn't optimized for heavy data)
-
-## Real Backend Implementation
-
-When you create a real backend, follow the same structure:
-
-```typescript
-// Express example (packages/orders-bff/)
-app.post('/api/auth/login', async (req, res) => {
-  const user = await User.findOne({ email: req.body.email })
-  if (!user || user.password !== req.body.password) {
-    return res.status(401).json({ error: 'Invalid credentials' })
-  }
-  const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET)
-  res.json({ user, token })
-})
-
-// Same /api/* endpoints as FakeBFFService!
-// Frontend code stays IDENTICAL
-```
+**Steps:**
+1. Create `packages/orders-bff/` (Express.js backend)
+2. Implement same `/api/*` endpoints as FakeBFFService
+3. Remove APIInterceptor from `app.config.ts`
+4. Update API base URL in providers
+5. Delete `src/bff/` folder
+6. Services stay unchanged ✅
 
 ---
 
-## Real BFF Architecture Example
+## Benefits
 
-When ready for production, create `packages/orders-bff/` (Node.js Backend):
+✅ Zero coupling — Services don't know about IndexedDB  
+✅ Production-ready — Mirrors real REST API  
+✅ Offline-first — Demo works without backend  
+✅ Smooth migration — Switch by removing interceptor
+
+**Demo users:** user@demo, manager@demo, admin@demo (password: demo)
+
+---
+
+## When to Use
+
+✅ Development, prototypes, MVPs, learning  
+❌ Production, real-time sync, large datasets
+
+---
+
+## Real Backend Structure
+
+When ready for production, create `packages/orders-bff/`:
 
 ```
 packages/
 ├── angular-standalone-orders/     # This package (frontend)
-│   ├── src/app/
-│   │   ├── core/
-│   │   │   ├── bff/              # ← Delete after migrating!
-│   │   │   └── services/
-│   │   ├── features/
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── core/
+│   │   │   │   ├── bff/              # ← Delete after migrating!
+│   │   │   │   ├── guards/
+│   │   │   │   └── interceptors/
+│   │   │   └── shared/
+│   │   ├── areas/                     # User areas (RBAC)
+│   │   │   ├── auth/                  # Public: login
+│   │   │   ├── shop/                  # User: products, cart
+│   │   │   └── admin/                 # Manager/Admin: dashboard, orders
 │   │   └── pages/
 │   └── package.json
 │
@@ -306,73 +169,22 @@ packages/
     └── README.md
 ```
 
-### Migration Steps (Detailed)
+### Migration Steps
 
-**Step 1: Create Backend Package**
-```bash
-cd packages/
-mkdir orders-bff
-cd orders-bff
-pnpm init
-npm install express cors jsonwebtoken sequelize pg
-touch src/index.ts
-```
+1. **Create backend package:** `mkdir packages/orders-bff && cd packages/orders-bff`
+2. **Install deps:** `pnpm add express cors jsonwebtoken sequelize pg`
+3. **Implement endpoints:** Copy structure from FakeBFFService (same `/api/*` routes)
+4. **Update frontend config:** Remove APIInterceptor, add `withBaseUrl('http://localhost:3000')`
+5. **Delete mock layer:** `rm -rf src/bff/ src/core/interceptors/api.interceptor.ts`
 
-**Step 2: Implement Same Endpoints**
-```typescript
-// Copy endpoint structure from FakeBFFService
-// POST /api/auth/login
-// GET /api/products
-// GET /api/orders
-// POST /api/orders
-// etc.
-```
-
-**Step 3: Update Frontend Config**
-```typescript
-// app.config.ts (remove APIInterceptor)
-import { provideHttpClient, withBaseUrl } from '@angular/common/http'
-
-export function appConfig(): ApplicationConfig {
-  return {
-    providers: [
-      provideHttpClient(
-        withBaseUrl('http://localhost:3000')  // ← Point to real backend
-      ),
-      // Remove: { provide: HTTP_INTERCEPTORS, useClass: APIInterceptor }
-    ]
-  }
-}
-```
-
-**Step 4: Delete Mock Layer**
-```bash
-rm -rf src/app/core/bff/fake-bff.service.ts
-rm -rf src/app/core/interceptors/api.interceptor.ts
-```
-
-**Step 5: Start Both Servers**
-```bash
-# Terminal 1: Frontend
-cd packages/angular-standalone-orders && pnpm dev
-
-# Terminal 2: Backend  
-cd packages/orders-bff && pnpm dev
-
-# All endpoints work identically! ✅
-```
-
-### Comparison Table
+### Comparison
 
 | Aspect | FakeBFF (Dev) | Real Backend (Prod) |
 |--------|--------------|---------------------|
-| **Location** | `src/app/core/bff/` | `packages/orders-bff/` |
-| **Technology** | Angular + IndexedDB | Express/NestJS + PostgreSQL |
+| **Location** | `src/bff/` | `packages/orders-bff/` |
+| **Technology** | Angular + IndexedDB | Express + PostgreSQL |
 | **Persistence** | Browser storage | Real database |
-| **Data** | Single user/browser | Multi-user/multi-node |
-| **Offline** | ✅ Works without internet | ❌ Requires connection |
 | **API Endpoints** | Identical | Identical |
-| **Service Code** | Unchanged | Unchanged ✅ |
 
 ---
 

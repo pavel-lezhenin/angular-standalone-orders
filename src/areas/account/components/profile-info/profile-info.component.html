@@ -1,0 +1,54 @@
+<form [formGroup]="profileForm()" class="profile-form">
+  <!-- Personal Information Section -->
+  <section class="form-section">
+    <h3 class="section-title">
+      <mat-icon>person</mat-icon>
+      Personal Information
+    </h3>
+
+    <div class="form-row">
+      <app-form-field
+        [label]="'First Name'"
+        [control]="$any(profileForm().controls['firstName'])"
+        [readonly]="!isEditMode()"
+        [suffixIcon]="isEditMode() ? '' : 'lock'"
+        [fieldClass]="'form-field'"
+      />
+
+      <app-form-field
+        [label]="'Last Name'"
+        [control]="$any(profileForm().controls['lastName'])"
+        [readonly]="!isEditMode()"
+        [suffixIcon]="isEditMode() ? '' : 'lock'"
+        [fieldClass]="'form-field'"
+      />
+    </div>
+  </section>
+
+  <!-- Contact Information Section -->
+  <section class="form-section">
+    <h3 class="section-title">
+      <mat-icon>contact_mail</mat-icon>
+      Contact Information
+    </h3>
+
+    <div class="form-row">
+      <app-form-field
+        [label]="'Email'"
+        [control]="$any(profileForm().controls['email'])"
+        [readonly]="true"
+        [suffixIcon]="'lock'"
+        [hint]="'Email cannot be changed'"
+        [fieldClass]="'form-field'"
+      />
+
+      <app-form-field
+        [label]="'Phone'"
+        [control]="$any(profileForm().controls['phone'])"
+        [readonly]="!isEditMode()"
+        [suffixIcon]="isEditMode() ? '' : 'lock'"
+        [fieldClass]="'form-field'"
+      />
+    </div>
+  </section>
+</form>

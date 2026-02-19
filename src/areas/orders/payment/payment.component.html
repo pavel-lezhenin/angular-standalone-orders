@@ -1,0 +1,143 @@
+<app-page-loader [isLoading]="false" />
+
+<div class="payment-page">
+  <div class="payment-container">
+    <h1>Payment</h1>
+
+    <!-- Order Summary -->
+    <mat-card>
+      <mat-card-content>
+        <app-order-summary
+          [title]="'Order Summary'"
+          [summaryLines]="[{ label: 'Items', value: itemCount() }]"
+          [total]="total()"
+          [showDivider]="false"
+          [variant]="'compact'"
+        >
+        </app-order-summary>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Payment Form State -->
+    @if (state() === 'form') {
+      <mat-card>
+        <mat-card-content>
+          <div class="payment-form-section gap-xl flex-col">
+            @if (usingSavedPaymentMethod()) {
+              <div class="saved-payment-controls gap-md flex-col">
+                <app-form-field
+                  [label]="'Payment Method'"
+                  [control]="savedMethodSelectControl"
+                  [type]="'select'"
+                  [prefixIcon]="'credit_card'"
+                  [fieldClass]="'form-field'"
+                  [selectOptions]="paymentMethodSelectOptions()"
+                />
+
+                @if (selectedSavedMethodType() === 'card') {
+                  <app-form-field
+                    [label]="'CVV'"
+                    [control]="savedMethodCvv"
+                    [type]="'password'"
+                    [placeholder]="'123'"
+                    [maxLength]="4"
+                    [prefixIcon]="'lock'"
+                    [fieldClass]="'form-field'"
+                  />
+                }
+
+                <button mat-stroked-button type="button" (click)="toggleNewPaymentForm()">
+                  Add New Payment Method
+                </button>
+
+                <button
+                  mat-stroked-button
+                  color="warn"
+                  type="button"
+                  [disabled]="!canDeleteSelectedSavedMethod()"
+                  (click)="deleteSelectedSavedMethod()"
+                >
+                  Delete Selected Method
+                </button>
+              </div>
+            } @else {
+              <app-orders-payment-form />
+
+              @if (hasSavedPaymentMethods()) {
+                <button mat-stroked-button type="button" class="use-saved-btn" (click)="toggleNewPaymentForm()">
+                  Back to Saved Methods
+                </button>
+              }
+            }
+
+            <div class="payment-actions gap-md flex justify-between">
+              <button mat-stroked-button (click)="cancelPayment()" class="cancel-btn">
+                <mat-icon>arrow_back</mat-icon>
+                Back to Cart
+              </button>
+              <button mat-raised-button color="primary" (click)="processPayment()" class="pay-btn">
+                <mat-icon>payment</mat-icon>
+                Pay Now
+              </button>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    }
+
+    <!-- Processing State -->
+    @if (state() === 'processing') {
+      <div class="processing-state">
+        <mat-spinner diameter="60"></mat-spinner>
+        <h2>Processing Payment...</h2>
+        <p>Please wait while we process your payment. This may take a few seconds.</p>
+        <div class="security-note">
+          <mat-icon>lock</mat-icon>
+          <span>Your payment is secure and encrypted</span>
+        </div>
+      </div>
+    }
+
+    <!-- Success State -->
+    @if (state() === 'success') {
+      <div class="success-state">
+        <div class="success-icon-wrapper">
+          <mat-icon class="success-icon">check_circle</mat-icon>
+        </div>
+        <h2>Payment Successful!</h2>
+        <p class="transaction-id">Transaction ID: {{ transactionId() }}</p>
+        <p class="success-message">Your payment has been processed successfully. We're creating your order now...</p>
+        <div class="processing-indicator">
+          <mat-spinner diameter="30"></mat-spinner>
+          <span>Processing order...</span>
+        </div>
+      </div>
+    }
+
+    <!-- Failure State -->
+    @if (state() === 'failure') {
+      <div class="failure-state">
+        <div class="error-icon-wrapper">
+          <mat-icon class="error-icon">cancel</mat-icon>
+        </div>
+        <h2>Payment Failed</h2>
+        <p class="error-message">{{ errorMessage() }}</p>
+        <p class="help-text">
+          Please check your payment details and try again. If the problem persists, contact your bank or try a different
+          payment method.
+        </p>
+
+        <div class="failure-actions">
+          <button mat-stroked-button (click)="cancelPayment()" class="cancel-btn">
+            <mat-icon>arrow_back</mat-icon>
+            Back to Cart
+          </button>
+          <button mat-raised-button color="primary" (click)="retryPayment()" class="retry-btn">
+            <mat-icon>refresh</mat-icon>
+            Try Again
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+</div>

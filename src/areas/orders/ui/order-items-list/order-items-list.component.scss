@@ -1,0 +1,29 @@
+.order-items-list {
+}
+
+.list-title {
+  margin: 0 0 var(--spacing-sm) 0;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+}
+
+.items-container {
+}
+
+.items-count {
+  padding: var(--spacing-sm) var(--spacing-md);
+  text-align: right;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  border-top: var(--spacing-1px) solid var(--border-primary);
+}
+
+.empty-message {
+  padding: var(--spacing-xl);
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: var(--font-size-md);
+  background: var(--surface-secondary);
+  border-radius: var(--border-radius-md);
+}

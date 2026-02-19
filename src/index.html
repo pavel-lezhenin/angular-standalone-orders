@@ -2,12 +2,91 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>AngularStandaloneOrders</title>
+    <title>Shop - Angular Standalone Orders</title>
+    <meta
+      name="description"
+      content="Discover our curated collection of products. Browse, compare, and order with ease using our modern shopping platform."
+    />
+    <meta name="keywords" content="shop, products, e-commerce, orders, online store" />
+    <meta name="author" content="Angular Standalone Orders" />
+    <meta name="robots" content="index, follow" />
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="canonical" href="https://example.com" />
+
+    <!-- Open Graph meta tags for social sharing -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Shop - Angular Standalone Orders" />
+    <meta
+      property="og:description"
+      content="Discover our curated collection of products. Browse, compare, and order with ease using our modern shopping platform."
+    />
+    <meta property="og:url" content="https://example.com" />
+    <meta property="og:site_name" content="Angular Standalone Orders" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter Card meta tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Shop - Angular Standalone Orders" />
+    <meta
+      name="twitter:description"
+      content="Discover our curated collection of products. Browse, compare, and order with ease using our modern shopping platform."
+    />
+
+    <!-- Additional SEO meta tags -->
+    <meta name="theme-color" content="#1976d2" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+    <!-- JSON-LD Structured Data for Search Engines -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Angular Standalone Orders",
+        "url": "https://example.com",
+        "logo": "https://example.com/favicon.ico",
+        "description": "Discover our curated collection of products. Browse, compare, and order with ease using our modern shopping platform.",
+        "sameAs": [
+          "https://www.facebook.com/example",
+          "https://www.twitter.com/example",
+          "https://www.linkedin.com/company/example"
+        ]
+      }
+    </script>
+
+    <!-- JSON-LD Structured Data for e-commerce -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Angular Standalone Orders",
+        "url": "https://example.com",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://example.com/shop?q={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        }
+      }
+    </script>
+
+    <!-- Preconnect to Google Fonts for faster font loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Load fonts with font-display: swap for better performance -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons&display=block" rel="stylesheet" />
   </head>
   <body>
     <app-root></app-root>
+    <!-- CDK Overlay Container for Material components (dropdowns, dialogs, etc.) -->
+    <div class="cdk-overlay-container"></div>
   </body>
 </html>

@@ -1,0 +1,23 @@
+<div class="quantity-control" [class]="'size-' + size()">
+  <button
+    mat-icon-button
+    [disabled]="isDecrementDisabled()"
+    (click)="decrement()"
+    [attr.aria-label]="'Decrease quantity'"
+  >
+    <mat-icon>{{ decrementIcon() }}</mat-icon>
+  </button>
+
+  <span class="quantity" [attr.aria-label]="'Quantity: ' + quantity()">
+    {{ quantity() }}
+  </span>
+
+  <button
+    mat-icon-button
+    [disabled]="isIncrementDisabled()"
+    (click)="increment()"
+    [attr.aria-label]="'Increase quantity'"
+  >
+    <mat-icon>{{ incrementIcon() }}</mat-icon>
+  </button>
+</div>

@@ -1,0 +1,22 @@
+<div class="filter-container gap-md flex items-start">
+  <div class="filter-fields">
+    <ng-content></ng-content>
+  </div>
+
+  <div class="filter-actions gap-xs flex-col items-end">
+    @for (filterAction of actions(); track filterAction.id) {
+      <button
+        mat-icon-button
+        [disabled]="isActionDisabled(filterAction)"
+        (click)="onActionClick(filterAction.id)"
+        [attr.aria-label]="filterAction.ariaLabel"
+        [matTooltip]="filterAction.tooltip || ''"
+        class="action-button"
+      >
+        <mat-icon [class.loading]="isLoading()">
+          {{ filterAction.icon }}
+        </mat-icon>
+      </button>
+    }
+  </div>
+</div>

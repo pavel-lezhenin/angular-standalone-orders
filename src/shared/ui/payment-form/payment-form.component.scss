@@ -1,0 +1,25 @@
+.payment-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+/* ============================================
+ * Card Expiry Row
+ * ============================================ */
+
+.card-expiry-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md);
+}
+
+/* ============================================
+ * Responsive Styles
+ * ============================================ */
+
+/* Mobile Styles */
+:host-context(.mobile) .card-expiry-row {
+  grid-template-columns: 1fr;
+}

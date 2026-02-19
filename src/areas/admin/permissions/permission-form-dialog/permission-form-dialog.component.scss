@@ -1,0 +1,14 @@
+.permission-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) 0;
+
+  mat-form-field {
+    width: 100%;
+  }
+
+  .checkbox-field {
+    padding: var(--spacing-sm) 0;
+  }
+}
