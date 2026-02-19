@@ -1,0 +1,30 @@
+# Notify Parent Repo — Auto Submodule Update
+#
+# Triggers after CI passes on main and notifies the front-templates
+# parent repo to update its submodule reference automatically.
+#
+# Requires secret: GH_PAT (Personal Access Token with repo scope on front-templates)
+
+name: Notify Parent Repo
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  notify:
+    name: Dispatch submodule-updated to parent
+    runs-on: ubuntu-latest
+    # Only run after all CI checks would have passed on this push.
+    # If you have a CI workflow, consider using workflow_run trigger instead.
+    steps:
+      - name: Send repository_dispatch to front-templates
+        run: |
+          gh api repos/${{ github.repository_owner }}/front-templates/dispatches \
+            -f event_type=submodule-updated \
+            -F client_payload[submodule]=angular-standalone-orders \
+            -F client_payload[sha]=${{ github.sha }} \
+            -F client_payload[ref]=${{ github.ref_name }} \
+            -F client_payload[run_url]=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
