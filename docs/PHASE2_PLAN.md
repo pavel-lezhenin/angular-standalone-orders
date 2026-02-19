@@ -13,7 +13,7 @@
 
 **BFF Layer:** `src/bff/` - Repositories, FakeBFFService, domain models  
 **Core Layer:** `src/core/` - DTOs, services (auth, permission), guards, interceptors  
-**Areas Layer:** `src/areas/` - auth (public), shop (user), admin (manager/admin)  
+**Areas Layer:** `src/areas/` - auth (public), landing (public), shop (user), orders (user), account (user), admin (manager/admin)  
 **Shared Layer:** `src/shared/` - Reusable UI components, services, utils
 
 See [ARCHITECTURE.md](./ARCHITECTURE.md) for complete details.
@@ -53,15 +53,24 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for complete details.
 /auth
   /login                    → Login form
 
-/shop                       → Guard: authGuard
+/shop                       → Public (no auth needed — guests can browse)
   /                         → Products list + filter
-  /product/:id              → Product detail modal
-  /cart                     → Shopping cart
-  /profile                  → User profile + orders history
+  /product/:id              → Product detail
+
+/orders                     → Mixed access
+  /                         → Order history (authGuard)
+  /cart                     → Shopping cart (public)
+  /checkout                 → Checkout (public — auth at submit)
+  /payment                  → Payment (public)
+  /details/:id              → Order details (authGuard)
+  /confirmation/:id         → Order confirmation (authGuard)
+
+/account                    → Guard: authGuard
+                            → Profile, addresses, payment methods
 
 /admin                      → Guard: authGuard + (admin || manager)
   /                         → Admin layout (sidebar + outlet)
-  /dashboard                → Dashboard (5 latest orders, stats)
+  /dashboard                → Dashboard (latest orders, stats)
   /customers                → Customers table (admin only)
   /permissions              → Permissions matrix (admin only)
   /orders                   → Trello orders board (drag-drop)
@@ -90,7 +99,7 @@ For detailed implementation steps, deliverables, and code examples, see **[IMPLE
 | 2.7 | Dashboard | 1h | ⏸️ Partial | 30% (needs widgets) |
 | 2.8 | Customers | 1h | ✅ Done | 100% |
 | 2.9 | Permissions | 1.5h | ✅ Done | 95% |
-| 2.10 | Orders Board | 2.5h | ⏸️ Partial | 45% (UI + live loading, no drag-drop yet) |
+| 2.10 | Orders Board | 2.5h | ✅ Done | 100% (Kanban + drag-drop + validation) |
 | 2.11 | Products | 1.5h | ✅ Done | 100% |
 | 2.12 | Categories | 1h | ✅ Done | 100% |
 | 2.13 | Seed Data | 1h | ✅ Done | 100% |

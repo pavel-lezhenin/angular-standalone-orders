@@ -61,12 +61,26 @@ areas/
 │       ├── login.component.html
 │       └── login.component.scss
 │
-├── shop/                     # User area (shopping)
-│   ├── shop.routes.ts
-│   ├── shop-layout.component.ts
-│   ├── products/
+├── landing/                  # Public home page
+│   └── components/
+│       └── landing.component.ts
+│
+├── shop/                     # User area (product browsing)
+│   ├── shop.component.ts
+│   ├── shop-product-detail/
+│   └── ...
+│
+├── orders/                   # User area (cart, checkout, payment, history)
 │   ├── cart/
-│   └── checkout/
+│   ├── checkout/
+│   ├── payment/
+│   ├── order-history/
+│   ├── order-confirmation/
+│   ├── services/
+│   └── ui/
+│
+├── account/                  # User area (profile, addresses, payment methods)
+│   └── account.component.ts
 │
 └── admin/                    # Admin area (manager/admin roles)
     ├── admin.routes.ts
@@ -82,8 +96,8 @@ areas/
 **Key Principles:**
 - ✅ Areas are **lazy-loaded** — loaded only when accessed
 - ✅ Areas have **route guards** — authGuard, adminGuard, permissionGuard
-- ✅ Each area has its own **routing module** and **layout component**
-- ✅ RBAC segregation: Auth (public) → Shop (user) → Admin (manager/admin)
+- ✅ Each area is a standalone component tree (no NgModules)
+- ✅ RBAC segregation: Auth/Landing (public) → Shop/Orders/Account (user) → Admin (manager/admin)
 
 ### Core Layer (`src/core/`)
 
@@ -701,21 +715,20 @@ With: Core loaded (~80KB) + areas on-demand (30-50KB each)
 ## 🔗 Architecture Dependencies
 
 ```
-            ┌───────────────┐
-            ↓               ↓
-          Admin           Shop
-            ↓               ↓
-        (Area Layer)   (Area Layer)
-            ↓               ↓
-        Shared UI Components
-            ↓
-    ┌───────┴───────────────────────┐
-    ↓                               ↓
-   Core                            BFF
-    ↓                               ↓
-  Services                    Repositories
-    ↓                               ↓
- PermissionService              IndexedDB
+            ┌───────────────────────────────────────────────────────┐
+            │          Area Layer (lazy-loaded)                    │
+            │  Auth  Landing  Shop  Orders  Account  Admin         │
+            └─────────────────────────────┬────────────────────────┘
+                                      ↓
+                             Shared UI Components
+                                      ↓
+                    ┌───────┬─────────────────────┐
+                    ↓              ↓             ┃
+                   Core            BFF            ┃
+                    ↓              ↓             ┃
+                 Services     Repositories        ┃
+                    ↓              ↓             ┃
+              PermissionService  IndexedDB   (area services)
 ```
 
 **Rule:** No circular dependencies, only top-to-bottom

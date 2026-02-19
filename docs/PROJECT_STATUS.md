@@ -8,7 +8,7 @@
 
 ---
 
-## ✅ Completed Features (82%)
+## ✅ Completed Features (~90%)
 
 ### Infrastructure & Core (100%)
 - ✅ IndexedDB BFF layer with repositories
@@ -187,13 +187,15 @@
 
 ## 🎯 Priority Order (Top → Bottom)
 
-1. **Orders Board** (admin core feature)
-2. **Dashboard Widgets** (admin overview)
-3. **User Orders History** (essential for users)
-4. **Unit Tests** (quality & stability)
-5. **E2E Tests** (integration coverage)
-6. **Account Profile Save** (minor enhancement)
-7. **Permission Persistence** (minor enhancement)
+> ~~**Orders Board**~~ ✅ Done  
+> ~~**User Orders History**~~ ✅ Done
+
+1. **AccountPaymentFormComponent refactor** (DRY violation, ~1-2h)
+2. **Dashboard Widgets** (admin overview — empty shell, needs real stats)
+3. **Unit Tests** (quality & stability — target 80%+)
+4. **E2E Tests** (integration coverage — 2 basic tests exist)
+5. **Account Profile Save** (form ready, just needs BFF call ~1h)
+6. **Permission Persistence** (repository exists, just wire it ~30min)
 
 ---
 
@@ -209,56 +211,26 @@
 
 ## � Known Architecture Issues
 
-### 1. Payment Forms Duplication (HIGH PRIORITY)
+### 1. AccountPaymentFormComponent — не использует shared PaymentFormComponent
 
-**Status:** 🔴 Open — [PAYMENT_FORMS_REFACTORING.md](./PAYMENT_FORMS_REFACTORING.md)  
-**Estimated Effort:** 4-6 hours
-
-**Problem:**
-- `shared/ui/payment-form/` (270 lines, Smart)
-- `areas/account/ui/payment-method-form/` (85 lines, Dumb)
-- ~60% code duplication (card inputs, validation, formatting)
-
-**Impact:**
-- Violates DRY principle
-- Maintenance burden (changes need 2 locations)
-- Unclear responsibility boundaries
-
-**Proposed Solution:**
-1. Extract `shared/ui/payment-card-fields/` (Dumb UI component)
-2. Refactor both components to use shared UI
-3. Move orchestration to domain layers
-
-**Blocker:** None — can be done anytime  
-**Recommendation:** Complete after orders area decomposition
-
----
-
-### 2. Orders Area Decomposition (CRITICAL)
-
-**Status:** 🔴 Open — Needs analysis  
-**Estimated Effort:** 8-12 hours
+**Status:** 🔴 Open  
+**Estimated Effort:** 1-2 hours
 
 **Problem:**
-- Orders domain lacks proper layered decomposition
-- Mixed concerns and responsibilities
-- `PaymentFormComponent` in `shared/ui/` should be in `areas/orders/ui/`
+- `shared/ui/payment-form/PaymentFormComponent` — корректно расположен в shared, используется `areas/orders/`
+- `areas/account/components/account-payment-form/AccountPaymentFormComponent` — **дублирует** поля карточки (cardholderName, cardNumber, expiryMonth, expiryYear) вместо использования `PaymentFormComponent`
+- JSDoc-комментарий говорит "Uses shared PaymentFormComponent" — **неверен**, компонент не импортирует его
 
 **Impact:**
-- Harder to maintain and extend
-- Violates layered architecture boundaries (Areas → Shared → Core → BFF)
-- Confusing for new developers
+- Нарушен DRY: изменения в card fields нужно делать в 2 местах
+- Стейл JSDoc вводит в заблуждение разработчиков
 
 **Proposed Solution:**
-1. Analyze orders flow and components
-2. Refactor into proper layered structure within `areas/orders/`
-3. Move checkout-specific components from `shared/` to `areas/orders/`
-4. Separate concerns: layout, components, services
+1. В `AccountPaymentFormComponent` заменить дублированные card-поля на `<app-payment-form>` с `[showLabel]="true"` и `[showCvv]="false"`
+2. Обновить JSDoc и imports
+3. Убедиться что form group structure совместима
 
-**Blocker:** Requires architectural planning  
-**Recommendation:** Complete BEFORE payment forms refactoring
-
-**Related:** See [UI_DECOMPOSITION_ANALYSIS.md](./UI_DECOMPOSITION_ANALYSIS.md)
+**Blocker:** None — изолированное изменение
 
 ---
 
@@ -266,10 +238,10 @@
 
 Easy tasks that add value:
 
-1. **Account profile save** (~1h) - Form ready, just needs BFF call
-2. **Permission persistence** (~30min) - Repository exists, just wire it
-3. **Dashboard basic stats** (~1h) - Simple count queries
-4. **Orders mock → real data** (~1h) - Connect existing BFF
+1. **AccountPaymentFormComponent refactor** (~1-2h) — использовать shared PaymentFormComponent вместо дублированных полей
+2. **Account profile save** (~1h) — Form ready, just needs BFF call
+3. **Permission persistence** (~30min) — Repository exists, just wire it
+4. **Dashboard basic stats** (~1h) — Simple count queries
 
 ---
 

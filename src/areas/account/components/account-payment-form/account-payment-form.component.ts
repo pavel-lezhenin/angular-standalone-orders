@@ -8,13 +8,16 @@ import { FormFieldComponent, type SelectOption } from '@shared/ui/form-field/for
  * Account Payment Form Component (Dumb)
  *
  * Account settings payment method form wrapper.
- * Uses shared PaymentFormComponent for card fields.
  *
  * Features:
  * - Payment type selection (Card/PayPal)
+ * - Card fields: cardholderName, cardNumber, expiryMonth/Year
  * - Label field for naming saved methods
  * - No CVV field (not needed for saved methods)
  * - Save/Cancel actions
+ *
+ * TODO (TD): Replace duplicated card fields with shared PaymentFormComponent
+ * using [showLabel]="true" [showCvv]="false" to eliminate DRY violation.
  *
  * This is a DUMB component:
  * - Receives FormGroup via input

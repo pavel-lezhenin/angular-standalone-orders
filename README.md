@@ -9,7 +9,7 @@
 A **mid-sized Angular application template** demonstrating:
 
 - ✅ **Modern Angular 21** — Standalone components, signals, reactive patterns
-- ✅ **Layered architecture** — Core/Features/Shared/Pages with clear boundaries
+- ✅ **Layered architecture** — Areas/Shared/Core/BFF with clear boundaries
 - ✅ **Role-based access control** — RBAC system with 3 roles (user/manager/admin)
 - ✅ **IndexedDB BFF layer** — Offline-first with repositories pattern
 - ✅ **Enterprise patterns** — Guards, interceptors, error handling, testing
@@ -22,13 +22,13 @@ A **mid-sized Angular application template** demonstrating:
 ## 🚀 Quick Start
 
 ```bash
-# Clone, install root deps
-git clone --recursive <repo> && cd front-templates && pnpm install
+# Clone the repo
+git clone --recursive <repo>
 
-# Navigate to package (IMPORTANT!)
-cd packages/angular-standalone-orders
+# Navigate INTO the package (IMPORTANT! Never run commands from root)
+cd front-templates/packages/angular-standalone-orders
 
-# Install package deps (separate pnpm-lock.yaml)
+# Install package deps (isolated pnpm-lock.yaml)
 pnpm install
 
 # Start dev server
@@ -55,7 +55,7 @@ admin@demo / demo       (Admin role)
 
 ### 💻 Development (Current)
 ```
-UI Components (Pages, Features, Shared)
+UI Components (Areas, Shared)
     ↓
 Feature Services (make HTTP requests to /api/*)
     ↓
@@ -70,7 +70,7 @@ IndexedDB (Single Source of Truth)
 
 ### 🚀 Production (Future)
 ```
-UI Components (Pages, Features, Shared)
+UI Components (Areas, Shared)
     ↓
 Feature Services (make HTTP requests to /api/*)
     ↓
@@ -133,9 +133,12 @@ src/
 │       └── product.repository.ts
 │
 ├── areas/                             # Lazy-loaded modules
-│   ├── auth/                          # Login
-│   ├── shop/                          # Products + Cart
-│   └── admin/                         # Dashboard + Management
+│   ├── auth/                          # Login, register
+│   ├── shop/                          # Products, search
+│   ├── orders/                        # Cart, checkout, payment, history
+│   ├── account/                       # Profile, addresses, payment methods
+│   ├── admin/                         # Dashboard + Management
+│   └── landing/                       # Public home page
 │
 ├── shared/                            # Reusable components & utils
 ├── app/                               # App root config
@@ -154,19 +157,20 @@ See [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) for full details.
 | Orders (All) | — | ✅ | ✅ |
 | Customers, Products, Categories | — | ✅/— | ✅ |
 
-## 📋 Phase 2 Includes
+## ✅ What Was Built (Phase 2)
 
-- **BFF Layer** — IndexedDB with 5 repositories (user, product, order, category, cart)
+- **BFF Layer** — IndexedDB with 8 repositories (user, product, order, category, cart, address, payment-method, file)
 - **Auth Module** — Login, session, guards, 3 demo users
-- **Shop** — Products with filter, cart, checkout
-- **Admin Dashboard** — Stats, 5 latest orders
-- **Orders Board** — Trello-like with drag-drop (CDK)
+- **Shop** — Products with filter, cart, checkout, payment
+- **Orders** — Cart, checkout, payment, order history, order confirmation
+- **Account** — Profile, address management, payment methods
+- **Admin Dashboard** — Layout with sidebar, orders board (Kanban + drag-drop CDK)
 - **Customers, Products, Categories** — Full CRUD
 - **Permissions Matrix** — RBAC UI
 - **Shared Components** — Table, modal, sidebar, filter-panel, trello-board
-- **Tests** — 80%+ coverage target
+- **Tests** — In progress (target 80%+ coverage)
 
-**Duration:** ~21 hours (14 sequential phases)
+**See [PROJECT_STATUS.md](./docs/PROJECT_STATUS.md) for remaining tasks.**
 
 ## � Commands
 
